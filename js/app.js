@@ -276,6 +276,7 @@
         var row = el("div", "node-row"), x = 50 + Math.sin(i * 0.9) * 26;
         var unl = S.unlocked(lv), stars = st.stars[lv.id] || 0, isBoss = lv.kind === "boss" || lv.kind === "khatam";
         var n = el("button", "node" + (stars ? " done" : "") + (!unl ? " lock" : "") + (lv === cur ? " cur" : "") + (isBoss ? " boss" : ""));
+        n.setAttribute("aria-label", "Level " + lv.id + " · " + levelName(lv) + (stars ? " · " + stars + "/3" : "") + (!unl ? " · " + t("locked") : ""));
         n.style.left = x + "%";
         var label = lv.kind === "surah" ? HJ.surah(lv.surah).arabicName : (typeof lv.title === "string" ? lv.title : null);
         if (!unl) n.innerHTML = ic("lock");
