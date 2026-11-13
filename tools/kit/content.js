@@ -28,12 +28,12 @@ const SHOTS = [
   { key: "ayah", mo: "thank-you",
     id: { k: "AL-QUR'AN", t1: "Baca surat", t2: "langsung dari mushaf", sub: "Al-Fatihah dan 14 surat Juz 'Amma, dengan murottal" },
     en: { k: "AL-QUR'AN", t1: "Read real surahs", t2: "from the mushaf", sub: "Al-Fatihah and 14 surahs of Juz 'Amma, with recitation" } },
-  { key: "parents", mo: "yes",
-    id: { k: "UNTUK ABI & UMI", t1: "Tashih bersama", t2: "Abi & Umi", sub: "Laporan belajar dan cek bacaan di setiap level" },
-    en: { k: "FOR PARENTS", t1: "Check the reading", t2: "together", sub: "A progress report and a parent check in every level" } },
+  { key: "trace", mo: "yes",
+    id: { k: "MENULIS", t1: "Menulis huruf", t2: "dengan cara yang benar", sub: "Ikuti panahnya — hurufnya berubah jadi emas!" },
+    en: { k: "WRITING", t1: "Trace each letter", t2: "the right way", sub: "Follow the arrows — the letter turns to gold!" } },
   { key: "dark", mo: "pose-12",
-    id: { k: "UNTUK ABI & UMI", t1: "Aman untuk si kecil,", t2: "tanpa iklan & akun", sub: "Tanpa pelacakan · progres tersimpan di perangkat", pills: ["Tanpa iklan", "Tanpa akun", "Bisa offline"] },
-    en: { k: "FOR PARENTS", t1: "Safe for kids,", t2: "no ads or accounts", sub: "No tracking · progress stays on the device", pills: ["No ads", "No account", "Offline"] } }
+    id: { k: "UNTUK ABI & UMI", t1: "Aman untuk si kecil,", t2: "tanpa iklan & akun", sub: "Laporan belajar & tashih bersama Abi/Umi · progres hanya di perangkat", pills: ["Tanpa iklan", "Tanpa akun", "Bisa offline"] },
+    en: { k: "FOR PARENTS", t1: "Safe for kids,", t2: "no ads or accounts", sub: "Progress report & reading checks with you · data stays on the device", pills: ["No ads", "No account", "Offline"] } }
 ];
 
 const LISTING = {
@@ -60,7 +60,7 @@ Urutan materinya mengikuti Iqra jilid 1–6 (langsung bunyi, tanpa dieja, langka
 • Al-Qur'an · Al-Fatihah dan 14 surat Juz 'Amma, lalu wisuda dengan sertifikat
 
 GAME DI SETIAP LANGKAH
-Tebalkan huruf, pecahkan balon, naik kereta baca, bantu Mo menyeberang jembatan, cari pasangan kartu, susun kata dan ayat, kelompokkan hukum tajwid — semuanya dengan suara Arab yang direkam.
+Tebalkan huruf, pecahkan balon, naik kereta baca, bantu Mo menyeberang jembatan, cari pasangan kartu, susun kata dan ayat, kelompokkan hukum tajwid — semuanya dengan suara Arab yang jelas.
 
 HADIAH YANG BIKIN SEMANGAT
 Bintang di setiap level, buku stiker, kombo, peta pulau yang terbuka satu per satu, misi harian, hari beruntun, dan ujian jilid dengan 3 hati. Yang tadi salah diulang lagi dengan lembut di akhir level.
@@ -87,7 +87,7 @@ The lessons follow the Iqra order, books 1–6 (sounds first, no spelling out, s
 • Al-Qur'an · Al-Fatihah and 14 surahs of Juz 'Amma, then a graduation certificate
 
 A GAME IN EVERY STEP
-Trace letters, pop balloons, ride the reading train, help Mo cross the bridge, match cards, build words and verses, sort the tajwid rules — all with recorded Arabic audio.
+Trace letters, pop balloons, ride the reading train, help Mo cross the bridge, match cards, build words and verses, sort the tajwid rules — all with clear Arabic audio.
 
 REWARDS THAT KEEP THEM GOING
 Stars in every level, a sticker book, combos, an island map that opens step by step, daily missions, streaks, and book tests with 3 hearts. Anything missed comes back gently at the end of the level.

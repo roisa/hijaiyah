@@ -207,7 +207,7 @@
         HJ.juice.burst(r.left + r.width / 2, r.top + r.height / 2, 22, true); A.fx.win(); HJ.juice.buzz([20, 30, 40]);
         setTimeout(function () {
           if (!ctx.alive()) return;
-          clean.classList.add("tr-fade"); glyph.classList.add("on");
+          clean.classList.add("tr-fade"); road.classList.add("tr-fade"); glyph.classList.add("on");
           A.say(letter ? letter.n : "أَلِف");
           var msg = stars === 3 ? t("traceNeat") : t("traceGood");
           ctx.cheer(msg);

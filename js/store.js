@@ -71,7 +71,7 @@
     mLevel: ["Main 1 level", "Play 1 level"], mTashih: ["Tashih bersama Abi/Umi", "Reading check with a parent"],
     mTashihSub: ["Baca sendiri, Abi/Umi mencentang", "Read alone, a parent ticks"],
     mission: ["Misi Hari Ini", "Today's Missions"], missionAll: ["Semua misi selesai! Masya Allah", "All missions done! Masha Allah"],
-    missionSub: ["Selesaikan {n} misi lagi", "{n} missions to go"], missionSub1: ["Selesaikan 1 misi lagi", "1 mission to go"], streak1: ["hari berturut-turut", "day in a row"], bonusStar: ["bintang murajaah", "review star"], day: ["hari", "days"], day1: ["hari", "day"], doneToday: ["Selesai hari ini ✓", "Done today ✓"],
+    missionSub: ["Selesaikan {n} misi lagi", "{n} missions to go"], missionSub1: ["Selesaikan 1 misi lagi", "1 mission to go"], streak1: ["hari berturut-turut", "day in a row"], bonusStar: ["bintang murajaah", "review star"], bonusStar2: ["bintang tashih", "reading-check star"], day: ["hari", "days"], day1: ["hari", "day"], doneToday: ["Selesai hari ini ✓", "Done today ✓"],
     books: ["Jilid Belajar", "Books"], footDua: ["Ya Rabbku, tambahkanlah ilmu kepadaku", "My Lord, increase me in knowledge"],
     gMorning: ["Selamat pagi! Yuk mulai ngaji, Bismillah.", "Good morning! Let's start, Bismillah."],
     gDay: ["Siang ini kita belajar huruf baru, yuk!", "Let's learn a new letter this afternoon!"],

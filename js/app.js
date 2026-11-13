@@ -9,7 +9,7 @@
   // what Mo says at the start of each kind of step (spoken, so a child who can't read yet knows what to do)
   var INSTR = { pick: "whichOne", yesno: "isRight", pop: "popIt", train: "listenFirst", bridge: "bridge", match: "match", build: "build",
     sort: "sortIt", trace: "traceStart", learn: "listenFirst", ayah: "ayahListen", ayahbuild: "ayahBuild", ayahfill: "ayahFill" };
-  var HAND = { pick: ".speaker", yesno: ".btn.big", pop: ".sky", train: ".row .btn.gold", bridge: ".speaker", match: ".mcard", build: ".speaker",
+  var HAND = { pick: ".speaker", yesno: ".bigcard", pop: ".speaker", train: ".row .btn.gold", bridge: ".speaker", match: ".mcard", build: ".speaker",
     sort: ".bucket", learn: ".bigcard", trace: ".trace-wrap", ayahbuild: ".tile.qw", ayahfill: ".tile.qw" };
   function firstTimeHand(type) {
     var st = S.get(); st.seen = st.seen || {};
@@ -387,7 +387,16 @@
       if (missed.length && !replayed && !opts.noReplay) {
         replayed = true; finalStars = boss ? hearts : (mistakes <= 1 ? 3 : mistakes <= 4 ? 2 : 1);
         steps.push({ type: "intro", mo: "pose-12", say: { id: "Yuk ulang yang tadi masih susah. Pasti bisa!", en: "Let's try the tricky ones again. You can do it!" }, short: 1 });
-        missed.forEach(function (m) { steps.push({ type: "pick", q: m.q, options: HJ.util.shuffle(m.options), again: 1 }); });
+        var seenItems = [];
+        steps.forEach(function (s) { [s.q, s.item, s.heard].concat(s.options || [], s.pool || [], (s.rounds || []).map(function (r) { return r.q; }))
+          .forEach(function (x) { if (x && x.ar && x.au && !x.parts && !seenItems.some(function (y) { return y.ar === x.ar; })) seenItems.push(x); }); });
+        missed.forEach(function (m) {
+          var opts = m.options.slice(), extra = HJ.util.shuffle(seenItems.filter(function (x) { return !opts.some(function (o) { return o.ar === x.ar; }); }));
+          while (opts.length < 3 && extra.length) opts.push(extra.pop());
+          if (opts.length < 3 && m.q.k) HJ.cousins(m.q.k).concat(["ba", "ta", "nun", "ya", "jim"]).forEach(function (k) {   // look-alike letters
+            var x = HJ.syl(k, m.q.v || "a"); if (opts.length < 3 && !opts.some(function (o) { return o.ar === x.ar; })) opts.push(x); });
+          steps.push({ type: "pick", q: m.q, options: HJ.util.shuffle(opts), again: 1 });
+        });
         show(); return;
       }
       runId++;
@@ -466,7 +475,7 @@
       if (mNow > (before.missions || 0)) p.appendChild(el("div", "res-mission", HJ.art("check", 22) + " " + esc(t("missionDone", { n: mNow }))));
       var r = el("div", "row"), again = el("button", "btn ghost", ic("replay") + " " + t("again")), go = el("button", "btn", t("next") + " " + ic("next"));
       again.onclick = function () { close(); runLevel(lv); };
-      go.onclick = function () { close(); if (nxt && S.unlocked(nxt)) { var my = ++navId; map(nxt.w); setTimeout(function () { if (my === navId && document.querySelector(".map-mo")) levelSheet(nxt); }, st.justUnlocked ? 2100 : 700); } else map(lv.w); };
+      go.onclick = function () { close(); if (nxt && S.unlocked(nxt)) { var my = ++navId, anim = !!st.justUnlocked; map(nxt.w); setTimeout(function () { if (my === navId && document.querySelector(".map-mo")) levelSheet(nxt); }, anim ? 2200 : 700); } else map(lv.w); };
       r.appendChild(again); r.appendChild(go); p.appendChild(r);
     }, { sticky: true });
     A.talk(t("great"), S.get().lang);
@@ -520,7 +529,19 @@
     runLevel({ id: "tashih", kind: "tashih", w: 1 }, { noReplay: true, onExit: home, steps: [
       { type: "intro", mo: "thank-you", say: { id: "Waktunya tashih! {k} membaca, Abi/Umi mendengarkan.", en: "Reading check! {k} reads, a parent listens." } },
       { type: "tashih", items: pool, say: { id: "Baca satu per satu tanpa bantuan.", en: "Read them one by one, without help." } }
-    ], onDone: function () { home(); } });
+    ], onDone: function () {
+      var d = today(), got = !!(missions().tashih) && st.tashihBonus !== d;
+      if (got) { st.bonus = (st.bonus || 0) + 1; st.tashihBonus = d; S.save(); }
+      A.fx.win(); confetti(50);
+      HJ.modal(function (p, close) {
+        p.appendChild(moImg("thank-you", "140px"));
+        p.appendChild(el("div", "kicker", esc(t("mTashih"))));
+        p.appendChild(el("h2", "", esc(t("great"))));
+        if (got) p.appendChild(el("div", "row res-chips", '<span class="chip glass">' + HJ.art("star", 22) + ' <b class="plus">+1</b> ' + esc(t("bonusStar2")) + "</span>"));
+        if (missions().tashih) p.appendChild(el("div", "res-mission", HJ.art("check", 22) + " " + esc(t("missionDone", { n: Object.keys(missions()).length }))));
+        var r = el("div", "row"), b = el("button", "btn", t("done") + " " + ic("check")); b.onclick = function () { close(); home(); }; r.appendChild(b); p.appendChild(r);
+      }, { sticky: true });
+    } });
   }
 
   /* ---------- sticker book ---------- */

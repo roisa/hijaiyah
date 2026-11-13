@@ -19,7 +19,7 @@ const STATE = (lang, dark) => `(function(){localStorage.clear();var s=HJ.store.g
 s.theme=${JSON.stringify(dark ? "dark" : "light")};s.settings.moVoice=false;s.settings.sfx=false;s.settings.cdn=false;
 var d=new Date(),t=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 ["1-1","1-2","1-3","1-4","1-5","1-6","1-7"].forEach(function(id,i){s.stars[id]=i%3===1?2:3;s.stickers.push(id);s.tashih[id]=i<4?1:0;});
-s.streak={last:t,n:4};s.plays=12;s.daily={date:t,done:{level:1}};HJ.store.save();})()`;
+s.streak={last:t,n:4};s.plays=12;s.seen={pick:1,yesno:1,pop:1,train:1,bridge:1,match:1,build:1,sort:1,learn:1,trace:1,ayahbuild:1,ayahfill:1};s.daily={date:t,done:{level:1}};HJ.store.save();})()`;
 
 async function scene(p, key) {
   const go = (js) => p.evaluate(js);
@@ -38,10 +38,19 @@ async function scene(p, key) {
       await p.waitForTimeout(3200); await go("document.querySelectorAll('.confetti,.toast').forEach(function(x){x.remove()})"); break;
     case "tajwid": await step("6-5", "sort", true); await p.waitForTimeout(900); break;
     case "ayah": await step("7-1", "ayah", true); await go("HJ._ctx.next()"); await p.waitForTimeout(900); break;
-    case "parents": await go("HJ.go.parents()"); await p.waitForTimeout(700); break;
+    case "trace": {
+      // a child half-way through ج: painted road, ink, moving arrows ahead
+      await go(`HJ.runLevel(HJ.level("1-1"),{steps:[{type:"trace",glyph:"ج"}],noReplay:true})`); await p.waitForTimeout(2600);
+      const box = await go(`(function(){var r=document.querySelector(".tr-ink").getBoundingClientRect();return {x:r.left,y:r.top,w:r.width}})()`);
+      const pts = await go(`(function(){var s=document.createElementNS("http://www.w3.org/2000/svg","svg");document.body.appendChild(s);var pe=document.createElementNS("http://www.w3.org/2000/svg","path");pe.setAttribute("d",HJ.strokes("jim")[0]);s.appendChild(pe);var L=pe.getTotalLength(),o=[];for(var i=0;i<=50;i++){var q=pe.getPointAtLength(L*i/50);o.push([q.x,q.y]);}s.remove();return o;})()`);
+      const X = (u) => box.x + u / 100 * box.w, Y = (v) => box.y + v / 100 * box.w;
+      await p.mouse.move(X(pts[0][0]), Y(pts[0][1])); await p.mouse.down();
+      for (const q of pts.slice(1, 31)) await p.mouse.move(X(q[0] + Math.sin(q[1]) * 1.2), Y(q[1] + Math.cos(q[0]) * 1.2));
+      await p.waitForTimeout(500); break;
+    }
     case "dark": await go("HJ.go.home()"); await p.waitForTimeout(1200); break;
   }
-  await go("document.querySelectorAll('.jp,.jfly,.jbanner').forEach(function(x){x.remove()})");
+  await go("document.querySelectorAll('.jp,.jfly,.jbanner,.toast,.tap-hand').forEach(function(x){x.remove()})");
 }
 
 (async () => {

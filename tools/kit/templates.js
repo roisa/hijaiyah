@@ -51,10 +51,10 @@ function icon(base) {
   return HEAD(base) + `<style>
 body{width:512px;height:512px;background:radial-gradient(90% 70% at 30% 10%,#5BE38A,transparent 70%),linear-gradient(160deg,#22C06E,#0A7A55);position:relative}
 .sheen{position:absolute;left:-20%;right:-20%;top:-38%;height:75%;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0))}
-.card{position:absolute;left:58px;top:70px;width:300px;height:230px;border-radius:52px;background:#fff;transform:rotate(-7deg);box-shadow:0 14px 0 rgba(0,60,30,.18);display:grid;place-items:center}
+.card{position:absolute;left:44px;top:58px;width:290px;height:220px;border-radius:52px;background:#fff;transform:rotate(-7deg);box-shadow:0 14px 0 rgba(0,60,30,.18);display:grid;place-items:center}
 .card .ar{font-size:150px;line-height:1;color:#0A7A55;margin-top:-14px}
 .star{position:absolute;left:300px;top:44px;width:96px}
-.mo{position:absolute;right:-34px;bottom:-70px;width:330px;filter:drop-shadow(0 12px 16px rgba(0,50,30,.35))}
+.mo{position:absolute;right:-70px;bottom:-110px;width:430px;filter:drop-shadow(0 12px 16px rgba(0,50,30,.35))}
 </style></head><body><div class="sheen"></div><div class="card"><span class="ar">أَ بَ</span></div>
 <svg class="star" viewBox="0 0 48 48"><path d="M24 4.5l5.6 11.6 12.7 1.7-9.3 8.8 2.3 12.6L24 33.2l-11.3 6 2.3-12.6-9.3-8.8 12.7-1.7z" fill="#FFC93D" stroke="#F08C00" stroke-width="3" stroke-linejoin="round"/></svg>
 <img class="mo" src="tools/kit/art/mo-pose-05.png"></body></html>`;
@@ -69,18 +69,18 @@ function wide({ w, h, lang, shots, base, scene }) {
   const tiles = ["أَ", "بَ", "تَ", "ثَ", "جَ", "مِ", "نُ", "قُرْآن"];
   return HEAD(base) + `<style>
 body{width:${w}px;height:${h}px;position:relative;background:#EAF6FF}
-.scene{position:absolute;inset:0}.scene svg{width:100%;height:100%}
-.txt{position:absolute;left:${120 * u}px;top:${h * 0.16}px;width:${860 * u}px}
+.scene.pd-scene{position:absolute;inset:0;top:0;height:100%;-webkit-mask-image:none;mask-image:none}.scene svg{width:100%;height:100%}
+.txt{position:absolute;left:${120 * u}px;top:${h * 0.13}px;width:${980 * u}px}
 .k{display:inline-block;padding:${10 * u}px ${24 * u}px;border-radius:99px;background:#fff;font-weight:900;letter-spacing:.14em;font-size:${22 * u}px;color:#3A4656;box-shadow:0 10px 24px -16px rgba(30,60,110,.6)}
 h1{margin-top:${26 * u}px;font-size:${108 * u}px;line-height:1.02;color:#152230}
 h1 em{font-style:normal;display:block;background:linear-gradient(95deg,#12A15A,#10B5A0 40%,#2F9BEA 75%,#8B6CF5);-webkit-background-clip:text;background-clip:text;color:transparent}
-p{margin-top:${24 * u}px;font-size:${34 * u}px;font-weight:800;color:#3A4656;background:rgba(255,255,255,.75);display:inline-block;padding:${10 * u}px ${20 * u}px;border-radius:${20 * u}px}
+p{margin-top:${24 * u}px;font-size:${30 * u}px;font-weight:800;color:#3A4656;background:rgba(255,255,255,.82);display:inline-block;padding:${10 * u}px ${22 * u}px;border-radius:${20 * u}px;white-space:nowrap}
 .ph{position:absolute;bottom:${-h * 0.18}px;width:${330 * u}px;border-radius:${46 * u}px;background:#141A26;padding:${11 * u}px;box-shadow:0 40px 70px -30px rgba(20,30,60,.6)}
 .ph img{width:100%;display:block;border-radius:${36 * u}px}
 .p1{right:${430 * u}px;transform:rotate(-6deg)}.p2{right:${90 * u}px;bottom:${-h * 0.10}px;transform:rotate(5deg)}
 .mo{position:absolute;right:${560 * u}px;bottom:${-30 * u}px;width:${470 * u}px;filter:drop-shadow(0 26px 30px rgba(30,50,90,.35));z-index:3}
 .tile{position:absolute;background:#fff;border-radius:${26 * u}px;padding:${6 * u}px ${20 * u}px;box-shadow:0 14px 26px -16px rgba(30,60,110,.55);font-size:${64 * u}px;color:#0A7A55;line-height:1.5}
-</style></head><body><div class="scene">${scene}</div>
+</style><link rel="stylesheet" href="css/scene.css"></head><body><div class="scene pd-scene">${scene}</div>
 ${tiles.map((x, i) => `<div class="tile ar" style="left:${(980 + (i % 4) * 150) * u}px;top:${(90 + Math.floor(i / 4) * 130 + (i % 2) * 40) * u}px;transform:rotate(${(i % 3 - 1) * 8}deg)">${x}</div>`).join("")}
 <div class="txt"><span class="k">${t.k}</span><h1 class="fun">${t.t1}<em>${t.t2}</em></h1><p>${t.sub}</p></div>
 <div class="ph p1"><img src="${shots[0]}"></div><div class="ph p2"><img src="${shots[1]}"></div>
