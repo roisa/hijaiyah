@@ -31,7 +31,22 @@
     var wrap = HJ.el("div", "trace-wrap glass"), road = HJ.el("canvas"), ink = HJ.el("canvas"), clean = HJ.el("canvas");
     road.className = "tr-road"; ink.className = "tr-ink"; clean.className = "tr-clean";
     wrap.appendChild(road); wrap.appendChild(ink); wrap.appendChild(clean);
-    var glyph = HJ.el("div", "tr-glyph ar", HJ.esc(letter ? letter.c : "ا")); wrap.appendChild(glyph);
+    var glyph = HJ.el("canvas"); glyph.className = "tr-glyph"; wrap.appendChild(glyph);
+    /* the real letter, centred by its INK (the font keeps lots of empty space above and below each letter,
+       so centring the text box would leave the letter low); every letter is scaled to fill the same area */
+    function drawGlyph() {
+      var c = letter ? letter.c : "ا", g = glyph.getContext("2d"); glyph.width = W; glyph.height = W;
+      var F = "'Scheherazade New', 'Amiri', serif"; g.font = "100px " + F;
+      var m = g.measureText(c), iw = (m.actualBoundingBoxLeft || 0) + (m.actualBoundingBoxRight || 50), ih = (m.actualBoundingBoxAscent || 70) + (m.actualBoundingBoxDescent || 10);
+      var size = 100 * Math.min(W * .62 / iw, W * .62 / ih); g.font = size + "px " + F; m = g.measureText(c);
+      var L = m.actualBoundingBoxLeft || 0, R = m.actualBoundingBoxRight || 0, Asc = m.actualBoundingBoxAscent || 0, Des = m.actualBoundingBoxDescent || 0;
+      var x = W / 2 - (R - L) / 2, y = W / 2 + (Asc - Des) / 2;          // ink centre → canvas centre
+      g.textAlign = "left"; g.textBaseline = "alphabetic"; g.direction = "ltr";
+      g.save(); g.shadowColor = "rgba(255,201,61,.9)"; g.shadowBlur = 22 * dpr;
+      var col = dark() ? "#6EE7B7" : "#12A15A";
+      g.fillStyle = col; g.fillText(c, x, y); g.restore();
+      g.fillStyle = col; g.fillText(c, x, y);                         // crisp letter on top of its glow
+    }
     st.appendChild(wrap);
     var row = HJ.el("div", "row tr-row"), watch = HJ.el("button", "btn small ghost", HJ.art("hand", 22) + " " + t("traceWatch")), skip = HJ.el("button", "btn small ghost", HJ.ic("skip") + " " + t("skip"));
     row.appendChild(watch); row.appendChild(skip); st.appendChild(row);
@@ -207,7 +222,7 @@
         HJ.juice.burst(r.left + r.width / 2, r.top + r.height / 2, 22, true); A.fx.win(); HJ.juice.buzz([20, 30, 40]);
         setTimeout(function () {
           if (!ctx.alive()) return;
-          clean.classList.add("tr-fade"); road.classList.add("tr-fade"); glyph.classList.add("on");
+          drawGlyph(); clean.classList.add("tr-fade"); road.classList.add("tr-fade"); glyph.classList.add("on");
           A.say(letter ? letter.n : "أَلِف");
           var msg = stars === 3 ? t("traceNeat") : t("traceGood");
           ctx.cheer(msg);
