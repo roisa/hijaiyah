@@ -234,7 +234,7 @@
   }
   function big(o, a) { var b = el("div", "big", (a ? art(a, 120) : "") + "<b>" + esc(tr(o)) + "</b>"); fxLayer.appendChild(b); setTimeout(function () { b.classList.add("out"); }, 1300); setTimeout(function () { b.remove(); }, 1800); log("combo"); }
   function showCta() {
-    cta.innerHTML = '<img class="logo" src="../../assets/brand/babymo-logo-512.png" alt=""><h2>Baby Mo <em>Hijaiyah</em></h2>' +
+    cta.innerHTML = '<img class="logo" src="../../assets/brand/icon-buddy-512.png" alt=""><h2>Baby Mo <em>Hijaiyah</em></h2>' +
       "<p>" + esc(R.lang === "en" ? "Learn to read the Qur'an through play" : "Belajar ngaji sambil bermain") + "</p>" +
       '<div class="pills"><span>' + esc(R.lang === "en" ? "No ads" : "Tanpa iklan") + "</span><span>" + esc(R.lang === "en" ? "Works offline" : "Bisa offline") + "</span><span>ID · EN</span></div>" +
       '<div class="go-btn">' + esc(R.lang === "en" ? "Try it now" : "Coba sekarang") + "</div>";

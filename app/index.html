@@ -9,8 +9,8 @@
 <meta property="og:description" content="Dari alif sampai Al-Qur'an lewat 77 level game seru bersama Baby Mo. Tanpa iklan, tanpa akun, bisa offline.">
 <meta property="og:image" content="../kit/creative/header-16x9-id.png">
 <meta name="theme-color" content="#F2F6FC">
-<link rel="icon" href="../assets/brand/app-icon-192.png">
-<link rel="apple-touch-icon" href="../assets/brand/app-icon-180.png">
+<link rel="icon" href="../assets/brand/icon-buddy-192.png">
+<link rel="apple-touch-icon" href="../assets/brand/icon-buddy-180.png">
 <link rel="stylesheet" href="../assets/fonts/fonts.css">
 <style>
 :root{--bg:#F4F7FC;--ink:#152230;--ink2:#4A5563;--ink3:#6B7787;--card:#fff;--line:rgba(21,34,48,.08);--green:#12A15A;--go:linear-gradient(120deg,#10A765,#0A9488 52%,#0A7FB0);
@@ -106,7 +106,7 @@ footer{padding:40px 0 60px;text-align:center;color:var(--ink3);font-weight:700;f
 </head>
 <body>
 <nav><div class="wrap">
-  <a class="brand" href="#top"><img src="../kit/creative/app-icon-1024.png" alt=""><span>Baby Mo Hijaiyah</span></a>
+  <a class="brand" href="#top"><img src="../assets/brand/icon-buddy-192.png" alt=""><span>Baby Mo Hijaiyah</span></a>
   <div class="lang" role="group" aria-label="Language"><button data-lang="id" aria-pressed="true">ID</button><button data-lang="en" aria-pressed="false">EN</button></div>
   <a class="btn small" href="../" data-t="navPlay">Main gratis</a>
 </div></nav>
@@ -253,10 +253,10 @@ footer{padding:40px 0 60px;text-align:center;color:var(--ink3);font-weight:700;f
     document.documentElement.lang = lang;
     document.querySelectorAll("[data-t]").forEach(function (e) { var v = T[e.getAttribute("data-t")]; if (v) e.innerHTML = v[I()]; });
     document.querySelectorAll("[data-lang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang)); });
-    document.querySelectorAll("video[data-src]").forEach(function (v) { var src = "../kit/reels/video/" + v.getAttribute("data-src") + "-" + lang + ".mp4"; if (v.getAttribute("src") !== src) { v.src = src; v.poster = src.replace(".mp4", ".jpg"); v.play().catch(function () {}); } });
+    document.querySelectorAll("video[data-src]").forEach(function (v) { var src = "../kit/reels/video/" + v.getAttribute("data-src") + "-" + lang + ".mp4?v=2"; if (v.getAttribute("src") !== src) { v.src = src; v.poster = src.replace(".mp4", ".jpg"); v.play().catch(function () {}); } });
     document.getElementById("journey").innerHTML = WORLDS.map(function (w, i) { return '<div class="isle" style="background:linear-gradient(160deg,' + w[0] + "," + w[1] + ')"><div class="n">' + (i < 6 ? (lang === "en" ? "BOOK " : "JILID ") + (i + 1) : "AL-QUR'AN") + "</div><b>" + esc(w[3 + I()]) + "</b><p>" + esc(w[5 + I()]) + '</p><div class="sig">' + w[2] + "</div></div>"; }).join("");
     document.getElementById("featWrap").innerHTML = FEATS.map(function (f) {
-      var media = f.v ? '<video data-src="' + f.v + '" autoplay muted loop playsinline preload="metadata" src="../kit/reels/video/' + f.v + "-" + lang + '.mp4" poster="../kit/reels/video/' + f.v + "-" + lang + '.jpg"></video>' : '<img src="img/' + f.img + "-" + lang + '.jpg" alt="" loading="lazy">';
+      var media = f.v ? '<video data-src="' + f.v + '" autoplay muted loop playsinline preload="metadata" src="../kit/reels/video/' + f.v + "-" + lang + '.mp4?v=2" poster="../kit/reels/video/' + f.v + "-" + lang + '.jpg?v=2"></video>' : '<img src="img/' + f.img + "-" + lang + '.jpg" alt="" loading="lazy">';
       return '<div class="feat rv"><div class="fv"><div class="blob" style="background:' + f.c + '"></div><div class="phone">' + media + '</div></div><div><span class="kick">' + esc(f.k[I()]) + "</span><h3>" + f.h[I()] + "</h3><p>" + esc(f.p[I()]) + "</p><ul>" + f.l.map(function (x) { return "<li>" + esc(x[I()]) + "</li>"; }).join("") + "</ul></div></div>";
     }).join("");
     document.getElementById("safe").innerHTML = SAFE.map(function (s) { return '<div class="card rv"><div class="ic">' + s[0] + "</div><b>" + esc(s[1 + I()]) + "</b><small>" + esc(s[3 + I()]) + "</small></div>"; }).join("");

@@ -4,21 +4,21 @@
   "t": "كَتَبَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-9"
+  "h": "2-5"
  },
  {
   "id": "hx-9f9143b7",
   "t": "ذَهَبَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-9"
+  "h": "2-5"
  },
  {
   "id": "hx-dad87428",
   "t": "جَلَسَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-9"
+  "h": "2-5"
  },
  {
   "id": "hx-d69aa59b",
@@ -53,49 +53,49 @@
   "t": "سَأَلَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-9"
+  "h": "2-5"
  },
  {
   "id": "hx-3ebe4666",
   "t": "رَجَعَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-9"
+  "h": "2-5"
  },
  {
   "id": "hx-a099bcda",
   "t": "صَدَقَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-3"
+  "h": "2-9"
  },
  {
   "id": "hx-dba32066",
   "t": "حَمَلَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-5"
+  "h": "2-3"
  },
  {
   "id": "hx-1f0cdf13",
   "t": "دَخَلَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-5"
+  "h": "2-9"
  },
  {
   "id": "hx-2f40b005",
   "t": "خَرَجَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-3"
+  "h": "2-9"
  },
  {
   "id": "hx-480c474e",
   "t": "شَكَرَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-4"
+  "h": "2-9"
  },
  {
   "id": "hx-76ddc09f",
@@ -109,7 +109,7 @@
   "t": "غَفَرَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-4"
+  "h": "2-9"
  },
  {
   "id": "hx-4ff71baf",
@@ -123,21 +123,21 @@
   "t": "كَسَبَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-9"
+  "h": "2-4"
  },
  {
   "id": "hx-8240248a",
   "t": "حَسَدَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-5"
+  "h": "2-9"
  },
  {
   "id": "hx-45e66a33",
   "t": "وَقَبَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-5"
+  "h": "2-9"
  },
  {
   "id": "hx-694cf7e8",
@@ -158,28 +158,28 @@
   "t": "كَانَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-9"
+  "h": "2-8"
  },
  {
   "id": "hx-501d2b09",
   "t": "سَارَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-8"
+  "h": "2-9"
  },
  {
   "id": "hx-8ea3d18f",
   "t": "زَارَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-9"
+  "h": "2-8"
  },
  {
   "id": "hx-55fdb532",
   "t": "صَامَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-9"
+  "h": "2-8"
  },
  {
   "id": "hx-0cb83c6d",
@@ -207,14 +207,14 @@
   "t": "سَالَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-8"
+  "h": "2-9"
  },
  {
   "id": "hx-b21ce2b1",
   "t": "كُتِبَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-7"
+  "h": "3-10"
  },
  {
   "id": "hx-d1285122",
@@ -228,7 +228,7 @@
   "t": "عَلِمَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-10"
+  "h": "3-7"
  },
  {
   "id": "hx-53a98e1a",
@@ -249,7 +249,7 @@
   "t": "رَكِبَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-7"
+  "h": "3-10"
  },
  {
   "id": "hx-8f3aaa05",
@@ -263,14 +263,14 @@
   "t": "فَرِحَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-10"
+  "h": "3-7"
  },
  {
   "id": "hx-9a1858ba",
   "t": "حَسُنَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-7"
+  "h": "3-10"
  },
  {
   "id": "hx-08b5eadd",
@@ -305,21 +305,21 @@
   "t": "يَقُولُ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-10"
+  "h": "3-9"
  },
  {
   "id": "hx-ef84967b",
   "t": "يَكُونُ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-10"
+  "h": "3-9"
  },
  {
   "id": "hx-333296b0",
   "t": "فِيهِ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-10"
+  "h": "3-9"
  },
  {
   "id": "hx-7e31f6d3",
@@ -333,7 +333,7 @@
   "t": "نُوحِي",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-9"
+  "h": "3-10"
  },
  {
   "id": "hx-35f85c04",
@@ -368,7 +368,7 @@
   "t": "بَيْتًا",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-7"
+  "h": "4-2"
  },
  {
   "id": "hx-96bd5a2a",
@@ -382,7 +382,7 @@
   "t": "قَلَمٍ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-2"
+  "h": "4-7"
  },
  {
   "id": "hx-4a228e70",
@@ -445,7 +445,7 @@
   "t": "مَنْ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-7"
+  "h": "4-4"
  },
  {
   "id": "hx-0f4077d3",
@@ -459,21 +459,21 @@
   "t": "أَمْسِ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-7"
+  "h": "4-4"
  },
  {
   "id": "hx-ac12ada9",
   "t": "اِجْلِسْ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-7"
+  "h": "4-4"
  },
  {
   "id": "hx-0f6848f1",
   "t": "يَسْمَعُ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-4"
+  "h": "4-7"
  },
  {
   "id": "hx-3fcc53fe",
@@ -571,7 +571,7 @@
   "t": "إِيَّاكَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "5-1"
+  "h": "5-8"
  },
  {
   "id": "hx-b8d30006",
@@ -585,14 +585,14 @@
   "t": "تَوَّابًا",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "5-8"
+  "h": "5-7"
  },
  {
   "id": "hx-a8a076ea",
   "t": "كَلَّا",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "5-1"
+  "h": "5-8"
  },
  {
   "id": "hx-2d5fe39b",
@@ -641,14 +641,14 @@
   "t": "ثُمَّ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "5-2"
+  "h": "5-8"
  },
  {
   "id": "hx-d05e3096",
   "t": "فَأَمَّا",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "5-2"
+  "h": "5-8"
  },
  {
   "id": "hx-5e4748f7",
@@ -676,21 +676,21 @@
   "t": "الْحَمْدُ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "5-5"
+  "h": "5-8"
  },
  {
   "id": "hx-f51d5577",
   "t": "الْعَالَمِينَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "5-5"
+  "h": "5-8"
  },
  {
   "id": "hx-4299edaf",
   "t": "الْعَصْرِ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "5-7"
+  "h": "5-8"
  },
  {
   "id": "hx-eebd1d8a",
@@ -753,21 +753,21 @@
   "t": "التَّكَاثُرُ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "5-8"
+  "h": "5-5"
  },
  {
   "id": "hx-ab13549a",
   "t": "الضَّالِّينَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "5-8"
+  "h": "5-5"
  },
  {
   "id": "hx-f69850bc",
   "t": "الشِّتَاءِ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-7"
+  "h": "6-8"
  },
  {
   "id": "hx-dfc70523",
@@ -963,21 +963,21 @@
   "t": "حَاسِدٍ إِذَا",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-5"
+  "h": "6-8"
  },
  {
   "id": "hx-c73bf8cc",
   "t": "كُفُوًا أَحَدٌ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-8"
+  "h": "6-5"
  },
  {
   "id": "hx-12210edd",
   "t": "نَارٌ حَامِيَةٌ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-5"
+  "h": "6-8"
  },
  {
   "id": "hx-eebf26af",
@@ -1012,21 +1012,21 @@
   "t": "وَيْلٌ لِكُلِّ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-8"
+  "h": "6-5"
  },
  {
   "id": "hx-1806c02c",
   "t": "عِيشَةٍ رَاضِيَةٍ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-8"
+  "h": "6-5"
  },
  {
   "id": "hx-94e231f3",
   "t": "يَكُنْ لَهُ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-5"
+  "h": "6-8"
  },
  {
   "id": "hx-2a7b5006",
@@ -1040,7 +1040,7 @@
   "t": "مِنْ شَرِّ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-8"
+  "h": "6-4"
  },
  {
   "id": "hx-c6642afb",
@@ -1054,21 +1054,21 @@
   "t": "مَنْ ثَقُلَتْ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-8"
+  "h": "6-4"
  },
  {
   "id": "hx-4de75073",
   "t": "عَنْ صَلَاتِهِمْ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-4"
+  "h": "6-5"
  },
  {
   "id": "hx-d64b2a0f",
   "t": "مِنْ جُوعٍ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-8"
+  "h": "6-4"
  },
  {
   "id": "hx-75df6d46",
@@ -1082,21 +1082,21 @@
   "t": "تَرْمِيهِمْ بِحِجَارَةٍ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-8"
+  "h": "6-6"
  },
  {
   "id": "hx-023df5f7",
   "t": "أَطْعَمَهُمْ مِنْ جُوعٍ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-6"
+  "h": "6-8"
  },
  {
   "id": "hx-1339e2a8",
   "t": "لَكُمْ دِينُكُمْ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-8"
+  "h": "6-6"
  },
  {
   "id": "hx-a8530060",
@@ -1117,7 +1117,7 @@
   "t": "هُمْ عَنْ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-6"
+  "h": "6-8"
  },
  {
   "id": "hx-b4f4fc39",
@@ -1138,7 +1138,7 @@
   "t": "إِنَّا أَعْطَيْنَاكَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "6-7"
+  "h": "6-8"
  },
  {
   "id": "hx-233bb874",
@@ -1162,15 +1162,22 @@
   "h": "2-1"
  },
  {
-  "id": "hx-7cfd05b2",
-  "t": "وَرَدَ",
+  "id": "hx-e2f9ed0d",
+  "t": "زَرَعَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
   "h": "2-6"
  },
  {
-  "id": "hx-09051e71",
-  "t": "وَعَدَ",
+  "id": "hx-8e6479cd",
+  "t": "رَزَقَ",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "2-6"
+ },
+ {
+  "id": "hx-7cfd05b2",
+  "t": "وَرَدَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
   "h": "2-6"
@@ -1190,15 +1197,8 @@
   "h": "2-6"
  },
  {
-  "id": "hx-e2f9ed0d",
-  "t": "زَرَعَ",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "2-6"
- },
- {
-  "id": "hx-8e6479cd",
-  "t": "رَزَقَ",
+  "id": "hx-09051e71",
+  "t": "وَعَدَ",
   "lang": "ar",
   "sec": "hijaiyah-game",
   "h": "2-6"
@@ -1211,32 +1211,11 @@
   "h": "2-7"
  },
  {
-  "id": "hx-90e245a5",
-  "t": "لَا",
+  "id": "hx-2a1a8227",
+  "t": "يَا",
   "lang": "ar",
   "sec": "hijaiyah-game",
   "h": "2-7"
- },
- {
-  "id": "hx-56f1db1c",
-  "t": "نَا",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "2-7"
- },
- {
-  "id": "hx-72b0e31c",
-  "t": "قَا",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "2-8"
- },
- {
-  "id": "hx-fddc134f",
-  "t": "سَا",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "2-8"
  },
  {
   "id": "hx-eb9cd431",
@@ -1246,39 +1225,53 @@
   "h": "2-7"
  },
  {
+  "id": "hx-fddc134f",
+  "t": "سَا",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "2-8"
+ },
+ {
+  "id": "hx-90e245a5",
+  "t": "لَا",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "2-7"
+ },
+ {
+  "id": "hx-32675bc6",
+  "t": "خَا",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "2-8"
+ },
+ {
   "id": "hx-bcd23cbc",
   "t": "طَا",
   "lang": "ar",
   "sec": "hijaiyah-game",
+  "h": "2-8"
+ },
+ {
+  "id": "hx-72b0e31c",
+  "t": "قَا",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
   "h": "2-9"
+ },
+ {
+  "id": "hx-dc206648",
+  "t": "زَا",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "2-8"
  },
  {
   "id": "hx-ca9db61c",
   "t": "أِ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-2"
- },
- {
-  "id": "hx-493139be",
-  "t": "نُو",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-9"
- },
- {
-  "id": "hx-b40650fe",
-  "t": "مُو",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-8"
- },
- {
-  "id": "hx-c2e3a161",
-  "t": "لُو",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-8"
+  "h": "3-6"
  },
  {
   "id": "hx-1f389ed9",
@@ -1288,57 +1281,15 @@
   "h": "3-8"
  },
  {
-  "id": "hx-7adaca0f",
-  "t": "تُو",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-8"
- },
- {
-  "id": "hx-3c5c0066",
-  "t": "قِي",
+  "id": "hx-439b9bd9",
+  "t": "سُو",
   "lang": "ar",
   "sec": "hijaiyah-game",
   "h": "3-9"
  },
  {
-  "id": "hx-1be3e93a",
-  "t": "تِي",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-8"
- },
- {
-  "id": "hx-02cedc00",
-  "t": "نِي",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-8"
- },
- {
-  "id": "hx-439b9bd9",
-  "t": "سُو",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-8"
- },
- {
-  "id": "hx-759f345b",
-  "t": "بِي",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-8"
- },
- {
-  "id": "hx-56159284",
-  "t": "رِي",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-8"
- },
- {
-  "id": "hx-eb57c82e",
-  "t": "سِي",
+  "id": "hx-7adaca0f",
+  "t": "تُو",
   "lang": "ar",
   "sec": "hijaiyah-game",
   "h": "3-8"
@@ -1351,11 +1302,60 @@
   "h": "3-9"
  },
  {
-  "id": "hx-291c32fa",
-  "t": "كُو",
+  "id": "hx-493139be",
+  "t": "نُو",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-9"
+  "h": "3-8"
+ },
+ {
+  "id": "hx-1be3e93a",
+  "t": "تِي",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "3-8"
+ },
+ {
+  "id": "hx-eb57c82e",
+  "t": "سِي",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "3-8"
+ },
+ {
+  "id": "hx-759f345b",
+  "t": "بِي",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "3-8"
+ },
+ {
+  "id": "hx-f1e23303",
+  "t": "رُو",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "3-8"
+ },
+ {
+  "id": "hx-1825874d",
+  "t": "لِي",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "3-8"
+ },
+ {
+  "id": "hx-c2e3a161",
+  "t": "لُو",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "3-8"
+ },
+ {
+  "id": "hx-02cedc00",
+  "t": "نِي",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "3-8"
  },
  {
   "id": "hx-7626b97c",
@@ -1372,43 +1372,22 @@
   "h": "3-9"
  },
  {
-  "id": "hx-0a3fba38",
-  "t": "بًا",
+  "id": "hx-c0120c3a",
+  "t": "دِي",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-1"
+  "h": "3-9"
  },
  {
-  "id": "hx-e7b01c60",
-  "t": "تٍ",
+  "id": "hx-41c84b98",
+  "t": "حِي",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-1"
+  "h": "3-9"
  },
  {
   "id": "hx-6e0f0c53",
   "t": "نٍ",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "4-1"
- },
- {
-  "id": "hx-ed1b1d90",
-  "t": "مٍ",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "4-1"
- },
- {
-  "id": "hx-f1ada30c",
-  "t": "مًا",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "4-1"
- },
- {
-  "id": "hx-2a113a14",
-  "t": "تًا",
   "lang": "ar",
   "sec": "hijaiyah-game",
   "h": "4-1"
@@ -1421,32 +1400,46 @@
   "h": "4-1"
  },
  {
-  "id": "hx-2c57b8c8",
-  "t": "أَرْ",
+  "id": "hx-e7b01c60",
+  "t": "تٍ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-3"
+  "h": "4-1"
  },
  {
-  "id": "hx-73bfda0f",
-  "t": "أَكْ",
+  "id": "hx-f1ada30c",
+  "t": "مًا",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-3"
+  "h": "4-1"
  },
  {
-  "id": "hx-6cbb98de",
-  "t": "أَسْ",
+  "id": "hx-ed1b1d90",
+  "t": "مٍ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-3"
+  "h": "4-1"
  },
  {
-  "id": "hx-4e7a90d1",
-  "t": "أَقْ",
+  "id": "hx-907205d0",
+  "t": "بٍ",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "4-5"
+  "h": "4-1"
+ },
+ {
+  "id": "hx-0a3fba38",
+  "t": "بًا",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "4-1"
+ },
+ {
+  "id": "hx-2a113a14",
+  "t": "تًا",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "4-1"
  },
  {
   "id": "hx-650b2789",
@@ -1456,15 +1449,8 @@
   "h": "4-3"
  },
  {
-  "id": "hx-36b04630",
-  "t": "أَمْ",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "4-3"
- },
- {
-  "id": "hx-47d26b07",
-  "t": "أَلْ",
+  "id": "hx-73bfda0f",
+  "t": "أَكْ",
   "lang": "ar",
   "sec": "hijaiyah-game",
   "h": "4-3"
@@ -1484,8 +1470,50 @@
   "h": "4-5"
  },
  {
-  "id": "hx-2a1a8227",
-  "t": "يَا",
+  "id": "hx-4d81a02a",
+  "t": "أَنْ",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "4-3"
+ },
+ {
+  "id": "hx-2c57b8c8",
+  "t": "أَرْ",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "4-3"
+ },
+ {
+  "id": "hx-47d26b07",
+  "t": "أَلْ",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "4-3"
+ },
+ {
+  "id": "hx-4e7a90d1",
+  "t": "أَقْ",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "4-5"
+ },
+ {
+  "id": "hx-6cbb98de",
+  "t": "أَسْ",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "4-3"
+ },
+ {
+  "id": "hx-36b04630",
+  "t": "أَمْ",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
+  "h": "4-3"
+ },
+ {
+  "id": "hx-56f1db1c",
+  "t": "نَا",
   "lang": "ar",
   "sec": "hijaiyah-game",
   "h": "2-7"
@@ -1498,32 +1526,18 @@
   "h": "2-7"
  },
  {
-  "id": "hx-32675bc6",
-  "t": "خَا",
+  "id": "hx-ff98d65d",
+  "t": "صَا",
   "lang": "ar",
   "sec": "hijaiyah-game",
   "h": "2-8"
  },
  {
-  "id": "hx-dc206648",
-  "t": "زَا",
+  "id": "hx-3c5c0066",
+  "t": "قِي",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "2-8"
- },
- {
-  "id": "hx-1825874d",
-  "t": "لِي",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-8"
- },
- {
-  "id": "hx-f1e23303",
-  "t": "رُو",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "3-8"
+  "h": "3-9"
  },
  {
   "id": "hx-f70d890a",
@@ -1533,45 +1547,31 @@
   "h": "3-8"
  },
  {
-  "id": "hx-c0120c3a",
-  "t": "دِي",
+  "id": "hx-b40650fe",
+  "t": "مُو",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-9"
+  "h": "3-8"
  },
  {
-  "id": "hx-41c84b98",
-  "t": "حِي",
+  "id": "hx-56159284",
+  "t": "رِي",
   "lang": "ar",
   "sec": "hijaiyah-game",
-  "h": "3-9"
+  "h": "3-8"
  },
  {
   "id": "hx-537b4442",
   "t": "ةُ",
   "lang": "ar",
   "sec": "hijaiyah-game",
+  "h": "3-9"
+ },
+ {
+  "id": "hx-291c32fa",
+  "t": "كُو",
+  "lang": "ar",
+  "sec": "hijaiyah-game",
   "h": "3-10"
- },
- {
-  "id": "hx-907205d0",
-  "t": "بٍ",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "4-1"
- },
- {
-  "id": "hx-4d81a02a",
-  "t": "أَنْ",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "4-3"
- },
- {
-  "id": "hx-ff98d65d",
-  "t": "صَا",
-  "lang": "ar",
-  "sec": "hijaiyah-game",
-  "h": "2-8"
  }
 ]

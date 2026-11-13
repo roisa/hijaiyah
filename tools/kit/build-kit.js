@@ -97,7 +97,8 @@ async function scene(p, key) {
   console.log(" banners");
   // app icon: the final design from tools/kit/icons/concepts.js (green = main; orange and purple = alternatives)
   const IC = require("./icons/concepts").C;
-  await render(IC.green(BASE), 512, 512, 2, path.join(KIT, "creative/app-icon-1024.png"), "png");
+  await render(IC.buddy3(BASE), 512, 512, 2, path.join(KIT, "creative/app-icon-1024.png"), "png");
+  await render(IC.green(BASE), 512, 512, 2, path.join(KIT, "creative/app-icon-1024-green.png"), "png");
   await render(IC.orange(BASE), 512, 512, 2, path.join(KIT, "creative/app-icon-1024-orange.png"), "png");
   await render(IC.purple(BASE), 512, 512, 2, path.join(KIT, "creative/app-icon-1024-purple.png"), "png");
   const sceneSvg = fs.readFileSync(path.join(ROOT, "js/scene.js"), "utf8").match(/HJ_SCENE='([\s\S]*)';/)[1];
