@@ -202,8 +202,8 @@
       var b = el("button", "ar-tile" + (open ? "" : " locked"));
       b.style.background = "linear-gradient(160deg," + g[3] + "," + g[4] + ")";
       b.innerHTML = '<span class="at-art">' + (g[2] ? HJ.art(g[2], 46) : HJ.engine()) + "</span><b>" + esc(t(g[1])) + "</b>" +
-        (open ? "" : "<small>" + HJ.ic("lock") + " " + esc(t("arcadeLock", { b: info.first.w < 7 ? t("book") + " " + info.first.w : "Al-Qur'an" })) + "</small>");
-      b.onclick = function () { A().unlock(); if (!open) { A().fx.bad(); HJ.toast(HJ.ic("lock") + " " + esc(t("arcadeAsk"))); return; } A().fx.tap(); play(g[0]); };
+        (open ? "" : "<small>" + HJ.ic("lock") + " " + esc(t("arcadeLock", { b: info.first.id })) + "</small>");
+      b.onclick = function () { A().unlock(); if (!open) { A().fx.bad(); HJ.toast(HJ.ic("lock") + " " + esc(t("arcadeAsk"))); A().talk(t("arcadeAsk"), S.get().lang); return; } A().fx.tap(); play(g[0]); };
       strip.appendChild(b);
     });
     sc.appendChild(strip);

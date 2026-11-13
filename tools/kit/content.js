@@ -142,7 +142,7 @@ const REVIEW_NOTES = `Baby Mo Hijaiyah is a free app that teaches children (abou
 • To see later levels quickly: Parents tab (answer the grown-up sum) → Settings → "Unlock all levels".
 • Microphone (optional): only for the "Record me" button, so the child can hear their own reading. The recording is kept in memory, never saved or uploaded. If permission is denied, everything else works.
 • Arabic audio plays recordings bundled with the app, with the device's speech voice as a fallback. The Qur'an recitation for the surah levels is bundled too.
-• No analytics or third-party SDKs; the app makes no network requests. The parent area is behind a parental gate (a maths question for grown-ups).
+• No analytics or third-party SDKs; the app makes no network requests. The parent area is behind a parental gate (a multiplication answered on a number keypad).
 • Works fully offline.
 
 Privacy policy: https://babymo.id/privacy/ · Support: https://babymo.id/support/`;

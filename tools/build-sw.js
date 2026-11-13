@@ -3,7 +3,7 @@
    Bump VERSION when shipping changed art or audio (CLAUDE.md rule from Baby Mo). */
 const fs = require("fs"), path = require("path");
 const root = path.join(__dirname, "..");
-const VERSION = "bmh-v13";
+const VERSION = "bmh-v14";
 const dirs = ["css", "js", "assets", "audio/huruf", "audio/extra", "audio/lines", "audio/quran"];
 // audio/extra (Arabic words) and audio/lines (Mo's lines): only their voice.js is precached; the mp3s (hundreds) are
 // cached the first time they play, under their full URL with ?v=, so a new take (?v=rec1) is fetched fresh.

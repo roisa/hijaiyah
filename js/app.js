@@ -12,7 +12,7 @@
     bubbles: "tdBubbles", paint: "tdPaint", feed: "feedAsk", shadow: "tdShadow" };
   var HAND = { pick: ".speaker", yesno: ".bigcard", pop: ".speaker", train: ".row .btn.gold", bridge: ".speaker", match: ".mcard", build: ".speaker",
     sort: ".bucket", learn: ".bigcard", trace: ".trace-wrap", ayahbuild: ".tile.qw", ayahfill: ".tile.qw",
-    bubbles: ".bub", paint: ".paint-wrap", feed: ".fruit", shadow: ".sh-piece" };
+    bubbles: ".bub", paint: ".paint-wrap", feed: ".fruit[data-ok]", shadow: ".sh-piece" };
   function firstTimeHand(type) {
     var st = S.get(); st.seen = st.seen || {};
     if (st.seen[type] || !HAND[type]) return;
@@ -84,20 +84,30 @@
     build(p, close);
     return close;
   };
+  /* parental gate (Kids Category): a multiplication answered on a keypad — a young child can't guess it (1 in 100) */
   HJ.gate = function (ok) {
-    var a = 3 + Math.floor(Math.random() * 6), b = 4 + Math.floor(Math.random() * 5), ans = a + b;
+    var a = 3 + Math.floor(Math.random() * 7), b = 4 + Math.floor(Math.random() * 6), ans = String(a * b), typed = "";
     HJ.modal(function (p, close) {
       p.appendChild(el("div", "kicker", ic("lock") + " " + esc(t("parents"))));
       p.appendChild(el("h2", "", esc(t("gateQ", { a: a, b: b }))));
-      var g = el("div", "gate-nums");
-      var opts = [ans]; while (opts.length < 5) { var x = ans + Math.floor(Math.random() * 9) - 4; if (x > 0 && opts.indexOf(x) < 0) opts.push(x); }
-      HJ.util.shuffle(opts).forEach(function (n) {
-        var bt = el("button", "", n); bt.onclick = function () { close(); if (n === ans) ok(); else A.fx.bad(); };
+      var out = el("div", "gate-out", "&nbsp;"); p.appendChild(out);
+      var g = el("div", "gate-keys");
+      ["1", "2", "3", "4", "5", "6", "7", "8", "9", "del", "0", "ok"].forEach(function (k) {
+        var bt = el("button", "gk" + (k === "ok" ? " ok" : k === "del" ? " del" : ""), k === "ok" ? ic("check") : k === "del" ? ic("back") : k);
+        bt.setAttribute("aria-label", k === "ok" ? "OK" : k === "del" ? "Delete" : k);
+        bt.onclick = function () {
+          A.fx.tap();
+          if (k === "del") typed = typed.slice(0, -1);
+          else if (k === "ok") { if (typed === ans) { close(); ok(); } else { A.fx.bad(); out.classList.remove("no"); void out.offsetWidth; out.classList.add("no"); typed = ""; } }
+          else if (typed.length < 3) typed += k;
+          out.innerHTML = typed ? esc(typed) : "&nbsp;";
+        };
         g.appendChild(bt);
       });
       p.appendChild(g);
     });
   };
+
 
   /* play-time limit: counts time spent inside levels (only while the page is visible); Mo suggests a break */
   setInterval(function () { if (document.visibilityState === "visible" && document.querySelector(".lv-top")) S.addPlay(15000); }, 15000);

@@ -906,3 +906,9 @@ html.big .tabbar { max-width: 600px; }
 .sh-piece.drag { animation: none; cursor: grabbing; z-index: 30; }
 .sh-piece .ar { font-size: 70px; color: #fff; line-height: 1.2; text-shadow: 0 2px 0 rgba(0,0,0,.2); pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .bub { animation-duration: 14s, 0s !important; } .sh-piece { animation: none; } }
+.gate-out { margin: 12px auto 0; min-width: 140px; width: fit-content; padding: 8px 22px; border-radius: 16px; font: 900 30px 'Nunito'; letter-spacing: .1em; text-align: center; background: var(--card2); box-shadow: inset 0 0 0 .5px var(--hair2); }
+.gate-out.no { animation: shakeX .4s; color: #FF3B30; }
+.gate-keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px auto 0; max-width: 300px; }
+.gate-keys button { height: 54px; border-radius: 16px; font-weight: 900; font-size: 22px; background: var(--card2); box-shadow: inset 0 0 0 .5px var(--hair2), 0 6px 12px -8px rgba(30,60,110,.4); display: grid; place-items: center; }
+.gate-keys button.ok { background: linear-gradient(135deg,#10A765,#0A9488); color: #fff; }
+.gate-keys button:active { transform: scale(.92); }

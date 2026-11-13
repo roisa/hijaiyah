@@ -134,7 +134,7 @@
       ask.textContent = t("feedAsk");
       U.shuffle(r.options.slice()).forEach(function (o, i) {
         var f = el("div", "fruit"); f.innerHTML = fruitSvg(FRUIT[(round * 2 + i) % FRUIT.length]); f.appendChild(el("span", "ar", HJ.esc(o.ar)));
-        f.setAttribute("role", "button");
+        f.setAttribute("role", "button"); if (o.ar === r.q.ar) f.setAttribute("data-ok", "1");
         function choose() {
           if (busy) return false;
           if (o.ar === r.q.ar) {
