@@ -330,9 +330,9 @@
     lvl(w1, { kind: "letters", letters: g, pool: lettersUpTo(gi), title: nm,
       say: T("Huruf baru: " + g.map(function (k) { return BY[k].id; }).join(" & ") + ". Dengar, lalu tirukan ya!",
         "New letters: " + g.map(function (k) { return BY[k].id; }).join(" & ") + ". Listen, then copy me!") });
-    if (gi === 3 || gi === 7 || gi === 10 || gi === 13) lvl(w1, { kind: "review", pool: lettersUpTo(gi), title: T("Ulangan", "Review"), icon: "🔁" });
+    if (gi === 3 || gi === 7 || gi === 10 || gi === 13) lvl(w1, { kind: "review", pool: lettersUpTo(gi), title: T("Ulangan", "Review") });
   });
-  lvl(w1, { kind: "boss", pool: lettersUpTo(13), title: T("Ujian Jilid 1", "Book 1 Test"), icon: "🏆" });
+  lvl(w1, { kind: "boss", pool: lettersUpTo(13), title: T("Ujian Jilid 1", "Book 1 Test") });
 
   /* Jilid 2 — Hutan Sambung */
   var w2 = world({ n: 2, key: "sambung", emoji: "🌳", color: "#3E9B3A", bg: "linear-gradient(180deg,#C8F0A8,#6CC24A)",
@@ -347,45 +347,45 @@
     };
   }
   var ALLK = HJ.L.map(function (l) { return l.k; });
-  lvl(w2, { kind: "words", title: "بَتَ", icon: "🔗", items: J2W.slice(0, 5), mo: "idea",
+  lvl(w2, { kind: "words", title: "بَتَ", items: J2W.slice(0, 5), mo: "idea",
     say: T("Huruf bisa bergandengan tangan! Bentuknya berubah sedikit, tapi bunyinya sama.", "Letters can hold hands! They change shape a little, but sound the same."),
     learnFirst: [J("بَتَ", "bata"), J("كَتَبَ", "kataba", "menulis", "wrote")] });
   lvl(w2, { kind: "words", title: "جَلَسَ", items: J2W.slice(3, 9), say: T("Baca kata bersambung ini ya.", "Read these joined words.") });
   lvl(w2, { kind: "words", title: "صَدَقَ", items: J2W.slice(8, 14), say: T("Huruf tebal: kho, sho, dho, tho, zho, gho, qo, ro.", "Heavy letters: kho, sho, dho, tho, zho, gho, qo, ro.") });
   lvl(w2, { kind: "words", title: "صَبَرَ", items: J2W.slice(13, 20), say: T("Kata-kata yang baik: sabar, syukur, jujur!", "Good words: patient, thankful, truthful!") });
-  lvl(w2, { kind: "review", title: T("Ulangan", "Review"), icon: "🔁", items: J2W, mkChain: joinedChain(ALLK),
+  lvl(w2, { kind: "review", title: T("Ulangan", "Review"), items: J2W, mkChain: joinedChain(ALLK),
     pairTwin: function (x) { return { ar: x.parts.join("  "), au: x.au, tr: x.tr, sep: 1 }; } });
-  lvl(w2, { kind: "words", title: "دَرَسَ", icon: "✋", items: [J("دَرَسَ", "darosa", "belajar", "studied"), J("وَرَدَ", "warada", "datang", "arrived"),
+  lvl(w2, { kind: "words", title: "دَرَسَ", items: [J("دَرَسَ", "darosa", "belajar", "studied"), J("وَرَدَ", "warada", "datang", "arrived"),
       J("زَرَعَ", "zaro'a", "menanam", "planted"), J("ذَكَرَ", "dzakaro", "mengingat", "remembered"), J("رَزَقَ", "rozaqo", "memberi rezeki", "provided"), J("وَعَدَ", "wa'ada", "berjanji", "promised")],
     say: T("Huruf ا د ذ ر ز و tidak mau digandeng dari kiri. Lihat jaraknya!", "ا د ذ ر ز و never join to the next letter. Look at the gap!") });
   var MADS = ["ba","ta","sin","nun","mim","lam","kaf","qof","ro","ya"].map(function (k) { return syl(k, "aa"); });
-  lvl(w2, { kind: "mad", title: "بَا", icon: "〰️", items: MADS.concat(fat(["ba","ta","sin","nun","mim","lam","kaf","qof","ro","ya"])),
+  lvl(w2, { kind: "mad", title: "بَا", items: MADS.concat(fat(["ba","ta","sin","nun","mim","lam","kaf","qof","ro","ya"])),
     say: T("Ada alif setelah fathah? Bacanya panjang 2 ketukan: baa!", "An alif after fathah? Read it long, 2 beats: baa!") });
   lvl(w2, { kind: "words", title: "قَالَ", items: J2MAD, say: T("Kata dengan bacaan panjang (mad).", "Words with a long vowel (mad).") });
-  lvl(w2, { kind: "boss", title: T("Ujian Jilid 2", "Book 2 Test"), icon: "🏆", items: J2W.concat(J2MAD), mkChain: joinedChain(ALLK) });
+  lvl(w2, { kind: "boss", title: T("Ujian Jilid 2", "Book 2 Test"), items: J2W.concat(J2MAD), mkChain: joinedChain(ALLK) });
 
   /* Jilid 3 — Gunung Kasrah & Dhammah */
   var w3 = world({ n: 3, key: "kasrah", emoji: "⛰️", color: "#3B7DD8", bg: "linear-gradient(180deg,#BFE0FF,#5A9BEA)",
     name: T("Gunung Kasrah-Dhammah", "Kasrah-Dhammah Mountain"), sub: T("Jilid 3 · bunyi i dan u", "Book 3 · i and u sounds"),
     goal: T("Membaca harakat kasrah (i) dan dhammah (u), lalu mad panjang بِي dan بُو.", "Read kasrah (i) and dhammah (u), then the long بِي and بُو.") });
   var KI = ["alif","ba","ta","tsa","jim","hha","kho","dal","dzal","ro","zai","sin","syin","shod"], KI2 = ["dhod","tho","zho","ain","ghin","fa","qof","kaf","lam","mim","nun","wau","ha","ya"];
-  lvl(w3, { kind: "letters", letters: ["ba", "ta"], pool: KI, v: "i", noTrace: 1, title: "بِ", icon: "⬇️",
+  lvl(w3, { kind: "letters", letters: ["ba", "ta"], pool: KI, v: "i", noTrace: 1, title: "بِ",
     say: T("Garis di BAWAH huruf namanya kasrah. Bunyinya i: bi, ti!", "A line UNDER the letter is kasrah. It sounds i: bi, ti!") });
   lvl(w3, { kind: "review", pool: KI, v: "i", title: "اِ - صِ" });
   lvl(w3, { kind: "review", pool: KI2, v: "i", title: "ضِ - يِ" });
-  lvl(w3, { kind: "letters", letters: ["ba", "ta"], pool: KI, v: "u", noTrace: 1, title: "بُ", icon: "🔄",
+  lvl(w3, { kind: "letters", letters: ["ba", "ta"], pool: KI, v: "u", noTrace: 1, title: "بُ",
     say: T("Tanda seperti koma kecil di ATAS huruf namanya dhammah. Bunyinya u: bu, tu!", "A little curl ON TOP is dhammah. It sounds u: bu, tu!") });
   lvl(w3, { kind: "review", pool: KI.concat(KI2), v: "u", title: "اُ - يُ" });
   var MIX3 = []; ALLK.forEach(function (k) { ["a","i","u"].forEach(function (v) { MIX3.push(syl(k, v)); }); });
-  lvl(w3, { kind: "words", title: "بَ بِ بُ", icon: "🎯", items: shuffle(MIX3).slice(0, 18), nLearn: 0,
+  lvl(w3, { kind: "words", title: "بَ بِ بُ", items: shuffle(MIX3).slice(0, 18), nLearn: 0,
     learnFirst: [syl("ba","a"), syl("ba","i"), syl("ba","u")].map(function (x) { x.note = {}; return x; }),
     say: T("A, i, u! Dengarkan baik-baik, harakat mana yang dibaca?", "A, i, u! Listen carefully — which mark is it?") });
   lvl(w3, { kind: "words", title: "كُتِبَ", items: J3W, say: T("Kata dengan fathah, kasrah dan dhammah.", "Words with fathah, kasrah and dhammah.") });
-  lvl(w3, { kind: "mad", title: "بِي بُو", icon: "〰️",
+  lvl(w3, { kind: "mad", title: "بِي بُو",
     items: ["ba","ta","nun","mim","lam","sin","qof","ro"].map(function (k) { return syl(k, "ii"); }).concat(["ba","ta","nun","mim","lam","sin","qof","ro"].map(function (k) { return syl(k, "uu"); })),
     say: T("Kasrah lalu ya → panjang: bii. Dhammah lalu wau → panjang: buu.", "Kasrah then ya → long: bii. Dhammah then waw → long: buu.") });
   lvl(w3, { kind: "words", title: "يَقُولُ", items: J3MAD, say: T("Kata dengan bacaan panjang.", "Words with long vowels.") });
-  lvl(w3, { kind: "boss", title: T("Ujian Jilid 3", "Book 3 Test"), icon: "🏆", items: J3W.concat(J3MAD).concat(shuffle(MIX3).slice(0, 10)) });
+  lvl(w3, { kind: "boss", title: T("Ujian Jilid 3", "Book 3 Test"), items: J3W.concat(J3MAD).concat(shuffle(MIX3).slice(0, 10)) });
 
   /* Jilid 4 — Lautan Tanwin & Sukun */
   var w4 = world({ n: 4, key: "tanwin", emoji: "🌊", color: "#0EA5B7", bg: "linear-gradient(180deg,#B5F1F7,#2BB8C9)",
@@ -393,38 +393,38 @@
     goal: T("Membaca tanwin (an, in, un), huruf mati (sukun), qalqalah yang memantul, dan bacaan lin (ai, au).",
       "Read tanwin (an, in, un), letters with sukun, bouncing qalqalah and the soft ai / au.") });
   var TANS = ["dal","kaf","ro","mim","lam","ba","ta","sin"].map(function (k) { return syl(k, "un"); });
-  lvl(w4, { kind: "mad", title: "بٌ بٍ بًا", icon: "✌️",
+  lvl(w4, { kind: "mad", title: "بٌ بٍ بًا",
     items: TANS.concat(["ba","ta","nun","mim"].map(function (k) { return syl(k, "an"); })).concat(["ba","ta","nun","mim"].map(function (k) { return syl(k, "in"); })),
     say: T("Harakat dobel namanya tanwin. Bunyinya an, in, un — ada n kecil di akhir!", "Double marks are tanwin: an, in, un — a little n at the end!") });
   lvl(w4, { kind: "words", title: "كِتَابٌ", items: J4TAN, say: T("Benda-benda dengan tanwin!", "Things with tanwin!") });
   var SUKS = ["ba","ta","dal","ro","sin","mim","nun","lam","kaf","qof"].map(function (k) {
     var s = syl("alif", "a"), b = BY[k]; return { ar: s.ar + b.c + M.SUKUN, tr: "a" + b.cons, k: k, au: s.ar + b.c + M.SUKUN };
   });
-  lvl(w4, { kind: "mad", title: "أَبْ", icon: "⭕", items: SUKS,
+  lvl(w4, { kind: "mad", title: "أَبْ", items: SUKS,
     say: T("Bulatan kecil di atas huruf namanya sukun. Hurufnya mati: dibaca menempel ke huruf sebelumnya — ab!", "The little circle is sukun: the letter has no vowel and joins the one before — ab!") });
   lvl(w4, { kind: "words", title: "مِنْ قُلْ", items: J4SUK, say: T("Kata pendek dengan huruf mati.", "Short words with sukun.") });
-  lvl(w4, { kind: "words", title: "قُطْبُ جَدْ", icon: "🏀", items: J4QAL,
+  lvl(w4, { kind: "words", title: "قُطْبُ جَدْ", items: J4QAL,
     say: T("Huruf ق ط ب ج د kalau mati dibaca memantul: qalqalah! Seperti bola memantul.", "ق ط ب ج د bounce when they have sukun: qalqalah! Like a ball."),
     learnFirst: [W("أَقْ", "aq"), W("أَبْ", "ab"), W("أَدْ", "ad")] });
-  lvl(w4, { kind: "words", title: "بَيْ بَوْ", icon: "🌀", items: J4LIN, say: T("Fathah lalu wau atau ya mati: dibaca lembut, ai / au.", "Fathah then a still waw or ya: read softly, ai / au.") });
-  lvl(w4, { kind: "boss", title: T("Ujian Jilid 4", "Book 4 Test"), icon: "🏆", items: J4TAN.concat(J4SUK).concat(J4LIN) });
+  lvl(w4, { kind: "words", title: "بَيْ بَوْ", items: J4LIN, say: T("Fathah lalu wau atau ya mati: dibaca lembut, ai / au.", "Fathah then a still waw or ya: read softly, ai / au.") });
+  lvl(w4, { kind: "boss", title: T("Ujian Jilid 4", "Book 4 Test"), items: J4TAN.concat(J4SUK).concat(J4LIN) });
 
   /* Jilid 5 — Kota Tasydid */
   var w5 = world({ n: 5, key: "tasydid", emoji: "🏙️", color: "#8B5CF6", bg: "linear-gradient(180deg,#DCCBFF,#9A7AF0)",
     name: T("Kota Tasydid", "Tasydid Town"), sub: T("Jilid 5 · tasydid, ghunnah, alif lam, waqaf", "Book 5 · shaddah, ghunnah, al-, stopping"),
     goal: T("Membaca tasydid, dengung (ghunnah), alif lam qamariyah & syamsiyah, lafaz Allah, dan cara berhenti (waqaf).",
       "Read shaddah, the nasal ghunnah, the two kinds of al-, the word Allah, and how to stop (waqaf).") });
-  lvl(w5, { kind: "words", title: "رَبِّ", icon: "〽️", items: J5TAS, say: T("Tanda seperti huruf w kecil namanya tasydid: hurufnya dibaca dua kali, ditekan!", "The little w is shaddah: the letter is doubled, pressed!") });
-  lvl(w5, { kind: "words", title: "إِنَّ", icon: "🔔", items: J5GHU, say: T("نّ dan مّ yang bertasydid dibaca berdengung (ghunnah) 2 ketukan. Nnnn!", "Doubled نّ and مّ hum for 2 beats (ghunnah). Nnnn!") });
-  lvl(w5, { kind: "words", title: "الْقَمَرُ", icon: "🌙", items: J5AL.filter(function (x) { return x.b === QAM; }), say: T("Alif lam qamariyah: lam-nya dibaca jelas. Al-qomar!", "Moon letters: the lam is clear. Al-qamar!") });
-  lvl(w5, { kind: "words", title: "الشَّمْسُ", icon: "☀️", items: J5AL.filter(function (x) { return x.b === SYM; }), say: T("Alif lam syamsiyah: lam-nya hilang, huruf berikutnya ditasydid. Asy-syams!", "Sun letters: the lam disappears, the next letter doubles. Ash-shams!") });
-  var BQS = [{ k: QAM, label: T("🌙 Qamariyah (lam jelas)", "🌙 Moon (clear lam)") }, { k: SYM, label: T("☀️ Syamsiyah (lam hilang)", "☀️ Sun (silent lam)") }];
-  lvl(w5, { kind: "sort", title: "🌙 ☀️", icon: "🗂️", items: J5AL, buckets: BQS, say: T("Bulan atau matahari? Kelompokkan!", "Moon or sun? Sort them!") });
-  lvl(w5, { kind: "sort", title: "اللَّهُ", icon: "✨", items: J5JAL,
+  lvl(w5, { kind: "words", title: "رَبِّ", items: J5TAS, say: T("Tanda seperti huruf w kecil namanya tasydid: hurufnya dibaca dua kali, ditekan!", "The little w is shaddah: the letter is doubled, pressed!") });
+  lvl(w5, { kind: "words", title: "إِنَّ", items: J5GHU, say: T("نّ dan مّ yang bertasydid dibaca berdengung (ghunnah) 2 ketukan. Nnnn!", "Doubled نّ and مّ hum for 2 beats (ghunnah). Nnnn!") });
+  lvl(w5, { kind: "words", title: "الْقَمَرُ", items: J5AL.filter(function (x) { return x.b === QAM; }), say: T("Alif lam qamariyah: lam-nya dibaca jelas. Al-qomar!", "Moon letters: the lam is clear. Al-qamar!") });
+  lvl(w5, { kind: "words", title: "الشَّمْسُ", items: J5AL.filter(function (x) { return x.b === SYM; }), say: T("Alif lam syamsiyah: lam-nya hilang, huruf berikutnya ditasydid. Asy-syams!", "Sun letters: the lam disappears, the next letter doubles. Ash-shams!") });
+  var BQS = [{ k: QAM, art: "moon", label: T("Qamariyah (lam jelas)", "Moon letters (clear lam)") }, { k: SYM, art: "sun", label: T("Syamsiyah (lam hilang)", "Sun letters (silent lam)") }];
+  lvl(w5, { kind: "sort", title: "الْ", items: J5AL, buckets: BQS, say: T("Bulan atau matahari? Kelompokkan!", "Moon or sun? Sort them!") });
+  lvl(w5, { kind: "sort", title: "اللَّهُ", items: J5JAL,
     buckets: [{ k: TAF, label: T("Tebal (tafkhim)", "Full (tafkhim)") }, { k: TAR, label: T("Tipis (tarqiq)", "Light (tarqiq)") }],
     say: T("Lafaz Allah dibaca tebal setelah a / u, dan tipis setelah i.", "Allah is read full after a / u, and light after i.") });
-  lvl(w5, { kind: "waqaf", title: "أَحَدْ", icon: "✋", say: T("Waqaf = berhenti. Di akhir ayat, harakat terakhir dimatikan.", "Waqaf = stopping. At the end of a verse, the last vowel goes still.") });
-  lvl(w5, { kind: "boss", title: T("Ujian Jilid 5", "Book 5 Test"), icon: "🏆", items: J5TAS.concat(J5GHU).concat(J5AL) });
+  lvl(w5, { kind: "waqaf", title: "أَحَدْ", say: T("Waqaf = berhenti. Di akhir ayat, harakat terakhir dimatikan.", "Waqaf = stopping. At the end of a verse, the last vowel goes still.") });
+  lvl(w5, { kind: "boss", title: T("Ujian Jilid 5", "Book 5 Test"), items: J5TAS.concat(J5GHU).concat(J5AL) });
 
   /* Jilid 6 — Istana Tajwid */
   var w6 = world({ n: 6, key: "tajwid", emoji: "🏰", color: "#E0892B", bg: "linear-gradient(180deg,#FFE0B5,#F2A54A)",
@@ -434,18 +434,18 @@
   var BNUN = [{ k: IZ, label: T("Izhar (jelas)", "Izhar (clear)") }, { k: IDG, label: T("Idgham (masuk)", "Idgham (merge)") },
     { k: IQL, label: T("Iqlab (jadi m)", "Iqlab (to m)") }, { k: IKH, label: T("Ikhfa (samar)", "Ikhfa (hidden)") }];
   var by = function (list, b) { return list.filter(function (x) { return x.b === b; }); };
-  lvl(w6, { kind: "words", title: "مِنْ خَوْفٍ", icon: "💡", items: by(J6NUN, IZ), say: T("Izhar: nun mati/tanwin bertemu ء ه ع ح غ خ → dibaca JELAS.", "Izhar: before ء ه ع ح غ خ the n is CLEAR.") });
-  lvl(w6, { kind: "words", title: "مِنْ مَسَدٍ", icon: "🤝", items: by(J6NUN, IDG), say: T("Idgham: bertemu ي ن م و (berdengung) atau ل ر (tanpa dengung) → nun masuk ke huruf berikutnya.", "Idgham: before ي ن م و (with hum) or ل ر (no hum) the n merges in.") });
-  lvl(w6, { kind: "words", title: "لَيُنْبَذَنَّ", icon: "🔀", items: by(J6NUN, IQL).concat(by(J6MIM, IKS)), say: T("Iqlab: nun mati bertemu ب → berubah jadi bunyi m.", "Iqlab: before ب the n turns into m.") });
-  lvl(w6, { kind: "words", title: "مِنْ شَرِّ", icon: "🌫️", items: by(J6NUN, IKH), say: T("Ikhfa: bertemu 15 huruf lainnya → dibaca samar sambil berdengung.", "Ikhfa: before the other 15 letters the n is hidden, with a hum.") });
-  lvl(w6, { kind: "sort", title: "نْ ـًـٍـٌ", icon: "🗂️", items: J6NUN, buckets: BNUN, say: T("Hukum apa ini? Masukkan ke kotak yang benar!", "Which rule? Put it in the right box!") });
-  lvl(w6, { kind: "sort", title: "مْ", icon: "🫧", items: J6MIM,
+  lvl(w6, { kind: "words", title: "مِنْ خَوْفٍ", items: by(J6NUN, IZ), say: T("Izhar: nun mati/tanwin bertemu ء ه ع ح غ خ → dibaca JELAS.", "Izhar: before ء ه ع ح غ خ the n is CLEAR.") });
+  lvl(w6, { kind: "words", title: "مِنْ مَسَدٍ", items: by(J6NUN, IDG), say: T("Idgham: bertemu ي ن م و (berdengung) atau ل ر (tanpa dengung) → nun masuk ke huruf berikutnya.", "Idgham: before ي ن م و (with hum) or ل ر (no hum) the n merges in.") });
+  lvl(w6, { kind: "words", title: "لَيُنْبَذَنَّ", items: by(J6NUN, IQL).concat(by(J6MIM, IKS)), say: T("Iqlab: nun mati bertemu ب → berubah jadi bunyi m.", "Iqlab: before ب the n turns into m.") });
+  lvl(w6, { kind: "words", title: "مِنْ شَرِّ", items: by(J6NUN, IKH), say: T("Ikhfa: bertemu 15 huruf lainnya → dibaca samar sambil berdengung.", "Ikhfa: before the other 15 letters the n is hidden, with a hum.") });
+  lvl(w6, { kind: "sort", title: "نْ ـًـٍـٌ", items: J6NUN, buckets: BNUN, say: T("Hukum apa ini? Masukkan ke kotak yang benar!", "Which rule? Put it in the right box!") });
+  lvl(w6, { kind: "sort", title: "مْ", items: J6MIM,
     buckets: [{ k: IKS, label: T("Ikhfa syafawi (مْ ب)", "Ikhfa syafawi (مْ ب)") }, { k: IDM, label: T("Idgham mimi (مْ م)", "Idgham mimi (مْ م)") }, { k: IZS, label: T("Izhar syafawi (lainnya)", "Izhar syafawi (others)") }],
     say: T("Mim mati: bertemu ب samar, bertemu م masuk, selain itu jelas.", "Mim sakinah: hidden before ب, merged into م, clear before the rest.") });
-  lvl(w6, { kind: "sort", title: "جَاءَ", icon: "📏", items: J6MAD,
+  lvl(w6, { kind: "sort", title: "جَاءَ", items: J6MAD,
     buckets: [{ k: MW, label: T("Mad wajib (satu kata)", "Mad wajib (same word)") }, { k: MJ, label: T("Mad jaiz (beda kata)", "Mad jaiz (next word)") }],
     say: T("Mad bertemu hamzah: di kata yang sama = wajib (5 ketukan), di kata berikutnya = jaiz.", "A long vowel before hamzah: same word = wajib (5 beats), next word = jaiz.") });
-  lvl(w6, { kind: "boss", title: T("Ujian Jilid 6", "Book 6 Test"), icon: "🏆", items: J6NUN.concat(J6MIM).concat(J6MAD),
+  lvl(w6, { kind: "boss", title: T("Ujian Jilid 6", "Book 6 Test"), items: J6NUN.concat(J6MIM).concat(J6MAD),
     extra: function () { return [S.sort(BNUN, shuffle(J6NUN).slice(0, 6))]; } });
 
   /* Jilid 7 — Gerbang Al-Qur'an */
@@ -455,7 +455,7 @@
       "Read short surahs straight from the mushaf: hear the recitation, build the verses, read alone, then a check by Abi/Umi.") });
   ["al-fatihah","al-ikhlas","an-nas","al-falaq","al-kautsar","al-asr","an-nasr","quraisy","al-lahab","al-fil","al-kafirun","al-maun","al-humazah","at-takatsur","al-qariah"]
     .forEach(function (slug) { lvl(w7, { kind: "surah", surah: slug, title: null }); });
-  lvl(w7, { kind: "khatam", title: T("Wisuda!", "Graduation!"), icon: "🎓" });
+  lvl(w7, { kind: "khatam", title: T("Wisuda!", "Graduation!") });
 
   // the level kinds that need a pool of items from letters
   HJ.surah = function (slug) { return (window.HJ_QURAN || []).filter(function (s) { return s.slug === slug; })[0]; };

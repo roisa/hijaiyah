@@ -44,7 +44,7 @@
     var it = s.item, st = ctx.stage, heard = 0, said = 0;
     if (s.note && s.note.from) {
       var from = el("div", "row"); from.appendChild(el("div", "bigcard qq")).appendChild(arEl(s.note.from));
-      from.appendChild(el("div", "count", "→ ✋"));
+      from.appendChild(el("div", "count", HJ.ic("next") + " " + HJ.art("hand", 30)));
       st.appendChild(from);
     }
     add(st, el("div", "ask", t("tapHear")));
@@ -56,7 +56,7 @@
     var nextB = el("button", "btn", t("next") + " " + HJ.ic("next")); nextB.style.visibility = "hidden";
     function play() { A.say(it.au).then(function () { heard++; if (heard >= 1) nextB.style.visibility = "visible"; }); card.classList.add("shake"); setTimeout(function () { card.classList.remove("shake"); }, 400); }
     card.onclick = play;
-    var said3 = el("button", "btn gold small", HJ.ic("mouth") + " " + (HJ.store.get().lang === "en" ? "I said it!" : "Aku sudah baca!"));
+    var said3 = el("button", "btn gold small", HJ.ic("bubble") + " " + (HJ.store.get().lang === "en" ? "I said it!" : "Aku sudah baca!"));
     said3.onclick = function () {
       if (said >= 3) return; said++; A.fx.coin();
       dots.children[said - 1].classList.add("on");
@@ -65,7 +65,7 @@
     add(st, dots, el("div", "row"));
     var r = st.lastChild; r.appendChild(said3); r.appendChild(recorder());
     if (s.note && s.note.name) {
-      var nm = el("button", "chip", HJ.ic("ear") + " " + t("letterName") + ": <span class='ar' style='font-size:22px'>" + esc(s.note.name) + "</span> " + esc(s.note.nameTr || ""));
+      var nm = el("button", "chip", HJ.ic("tag") + " " + t("letterName") + ": <span class='ar' style='font-size:22px'>" + esc(s.note.name) + "</span> " + esc(s.note.nameTr || ""));
       nm.onclick = function () { A.say(s.note.name); };
       st.appendChild(nm);
     }
@@ -193,7 +193,7 @@
   /* Balloon pop */
   G.pop = function (s, ctx) {
     var st = ctx.stage, need = 4, got = 0, timer = null;
-    var head = el("div", "row"), cnt = el("div", "count glass", "🎈 0 / " + need);
+    var head = el("div", "row"), cnt = el("div", "count glass", HJ.art("balloon", 24) + " 0 / " + need);
     head.appendChild(speakerBtn(function () { A.say(s.q.au); }));
     var tg = el("div", "tile " + sizeCls(s.q)); tg.style.minHeight = "70px"; tg.appendChild(arEl(s.q)); tg.style.pointerEvents = "none";
     head.appendChild(tg); head.appendChild(cnt);
@@ -215,7 +215,7 @@
       b.onpointerdown = function (e) {
         e.preventDefault(); if (b.classList.contains("burst")) return;
         if (it.ar === s.q.ar) {
-          b.classList.add("burst"); A.fx.pop(); got++; cnt.textContent = "🎈 " + got + " / " + need; A.say(it.au);
+          b.classList.add("burst"); A.fx.pop(); got++; cnt.innerHTML = HJ.art("balloon", 24) + " " + got + " / " + need; A.say(it.au);
           if (got >= need) { clearInterval(timer); ctx.cheer(t("great")); A.fx.win(); after(ctx, 1200, ctx.next); }
         } else { b.classList.add("shake"); ctx.bad(true); A.say(it.au); }
       };
@@ -232,7 +232,7 @@
     var phase = 0, idx = 0;
     var ask = el("div", "ask", t("listenFirst"));
     var track = el("div", "track"), train = el("div", "train");
-    train.appendChild(el("div", "engine", "🚂"));
+    train.appendChild(el("div", "engine-wrap", HJ.engine()));
     var cars = parts.map(function (p, i) {
       var c = el("button", "car " + (isWordy(p) || p.quran ? "w" : "")); c.appendChild(arEl(p));
       c.onclick = function () {
@@ -251,7 +251,7 @@
     var tl = latinEl(s.item);
     add(st, ask, track, tl, row);
     row.appendChild(lb); row.appendChild(recorder());
-    var go = el("button", "btn", HJ.ic("mouth") + " " + (HJ.store.get().lang === "en" ? "My turn" : "Giliranku")); go.style.display = "none"; row.appendChild(go);
+    var go = el("button", "btn", HJ.ic("bubble") + " " + (HJ.store.get().lang === "en" ? "My turn" : "Giliranku")); go.style.display = "none"; row.appendChild(go);
     function listen() {
       phase = 0; var my = {};
       var i = 0;
@@ -279,7 +279,7 @@
     var planks = el("div", "planks"); for (var i = 0; i < n; i++) planks.appendChild(el("div", "plank"));
     river.appendChild(planks);
     var mo = el("img", "bridge-mo"); mo.src = "assets/mo/mo-run.webp"; mo.style.right = "1%"; mo.style.transform = "scaleX(-1)"; river.appendChild(mo);
-    var chest = el("div", "", "🎁"); chest.style.cssText = "position:absolute;left:3%;bottom:52%;font-size:40px"; river.appendChild(chest);
+    var chest = el("div", "chest", HJ.art("gift", 46)); river.appendChild(chest);
     var spk = speakerBtn(function () { A.say(s.rounds[r].q.au); });
     var opts = el("div", "opts");
     add(st, river, spk, opts);
@@ -295,7 +295,7 @@
             planks.children[r].classList.add("set");
             r++;
             mo.style.right = (15 + (70 * r / n) - 6) + "%";
-            if (r >= n) { after(ctx, 800, function () { mo.style.right = "84%"; chest.textContent = "✨"; ctx.cheer(t("great")); A.fx.win(); }); after(ctx, 2100, ctx.next); }
+            if (r >= n) { after(ctx, 800, function () { mo.style.right = "84%"; chest.innerHTML = HJ.art("sparkle", 46) + HJ.art("gift", 46); ctx.cheer(t("great")); A.fx.win(); }); after(ctx, 2100, ctx.next); }
             else after(ctx, 900, round);
           } else { b.classList.add("no"); setTimeout(function () { b.classList.remove("no"); }, 450); ctx.bad(); after(ctx, 450, function () { A.say(R.q.au); }); }
         };
@@ -315,7 +315,7 @@
     var grid = el("div", "grid" + (cards.length <= 6 ? " c3" : ""));
     cards.forEach(function (c) {
       var m = el("button", "mcard " + (isWordy(c.it) || c.it.quran ? "w" : "")), inn = el("div", "in");
-      inn.appendChild(el("div", "f", "⭐")); var b = el("div", "b"); b.appendChild(arEl(c.it)); inn.appendChild(b); m.appendChild(inn);
+      inn.appendChild(el("div", "f", HJ.art("star", 40))); var b = el("div", "b"); b.appendChild(arEl(c.it)); inn.appendChild(b); m.appendChild(inn);
       m.onclick = function () {
         if (busy || m.classList.contains("flip")) return;
         m.classList.add("flip"); A.fx.tap(); A.say(c.it.au); open.push({ m: m, c: c });
@@ -367,7 +367,7 @@
     var counts = {};
     var btns = s.buckets.map(function (b) {
       counts[b.k] = 0;
-      var x = el("button", "bucket glass", esc(tr(b.label)) + '<span class="n">0</span>'); x.dataset.k = b.k; bk.appendChild(x); return x;
+      var x = el("button", "bucket glass", (b.art ? HJ.art(b.art, 30) + "<br>" : "") + esc(tr(b.label)) + '<span class="n">0</span>'); x.dataset.k = b.k; bk.appendChild(x); return x;
     });
     add(st, holder, bk);
     ctx.mo("pose-36", null);
@@ -495,7 +495,7 @@
         HJ.modal(function (p, close) {
           p.appendChild(el("div", "kicker", t("parents"))); p.appendChild(el("h2", "", t("tashih")));
           p.appendChild(el("p", "", esc(t("tashihHint"))));
-          var r = el("div", "row"), f = el("button", "btn gold", t("fluent")), pr = el("button", "btn ghost", t("practice"));
+          var r = el("div", "row"), f = el("button", "btn gold", HJ.art("star", 24) + " " + t("fluent")), pr = el("button", "btn ghost", t("practice"));
           f.onclick = function () { HJ.store.get().tashih[ctx.lv.id] = 1; HJ.store.save(); HJ.mission && HJ.mission("tashih"); close(); ctx.next(); };
           pr.onclick = function () { close(); ctx.bad(true); ctx.next(); };
           r.appendChild(f); r.appendChild(pr); p.appendChild(r);
@@ -520,7 +520,7 @@
       grid.appendChild(c);
     });
     st.appendChild(grid);
-    var row = el("div", "row"), all = el("button", "btn gold", "⭐ " + t("allGood")), sk = el("button", "btn ghost small", HJ.ic("skip") + " " + t("skip"));
+    var row = el("div", "row"), all = el("button", "btn gold", HJ.art("star", 24) + " " + t("allGood")), sk = el("button", "btn ghost small", HJ.ic("skip") + " " + t("skip"));
     var hint = el("button", "btn ghost small", HJ.ic("bulb") + " " + t("hint"));
     hint.onclick = function () { A.say(s.items.map(function (x) { return x.au; })); };
     all.onclick = function () { HJ.store.get().tashih[ctx.lv.id] = 1; HJ.store.save(); HJ.mission && HJ.mission("tashih"); ctx.cheer(t("great")); A.fx.win(); after(ctx, 900, ctx.next); };

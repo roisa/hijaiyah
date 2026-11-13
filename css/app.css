@@ -503,3 +503,33 @@ svg.ic { width: 1.15em; height: 1.15em; display: inline-block; vertical-align: -
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
 .bigcard.wordy .ar { line-height: 1.65; }
 .bigcard .lat { margin-top: -4px; padding-bottom: 2px; }
+
+/* ===== illustrated icons (HJ.art) — replace emoji ===== */
+svg.art { display: inline-block; vertical-align: middle; flex: 0 0 auto; overflow: visible; }
+.star-jar { padding-left: 6px; }
+.star-jar svg.art { filter: drop-shadow(0 2px 2px rgba(200,120,0,.35)); }
+.mo-hello svg.waving { vertical-align: -4px; transform-origin: 60% 90%; animation: wave 2.4s ease-in-out infinite; }
+@keyframes wave { 0%,60%,100% { transform: rotate(0); } 10%,30% { transform: rotate(14deg); } 20%,40% { transform: rotate(-8deg); } }
+.dm-fire svg.art { display: block; }
+.dm-streak.lit .dm-fire svg, .dm-streak:not(.off) .dm-fire svg { animation: flicker 1.6s ease-in-out infinite; transform-origin: 50% 90%; }
+@keyframes flicker { 50% { transform: scale(1.08) rotate(-3deg); } }
+.sec-h small svg.art { vertical-align: -3px; }
+.node .st { display: flex; align-items: center; gap: 0; padding: 2px 6px; }
+.node > svg.art { filter: drop-shadow(0 3px 3px rgba(0,0,0,.18)); }
+.bigstars { font-size: 0; }
+.bigstars span { display: inline-block; }
+.hearts { align-items: center; gap: 3px; }
+.hearts svg.art { filter: drop-shadow(0 2px 2px rgba(224,25,63,.3)); }
+.sticker .sf { position: relative; z-index: 1; font-family: var(--ar); font-size: 28px; line-height: 1; text-shadow: 0 2px 2px rgba(0,0,0,.18); direction: rtl; white-space: nowrap; }
+.sticker.long .sf { font-size: 16px; }
+.sticker.big .sf { font-size: 42px; } .sticker.big.long .sf { font-size: 24px; }
+.sticker svg.art { position: relative; z-index: 1; filter: drop-shadow(0 3px 3px rgba(0,0,0,.2)); }
+.engine-wrap { flex: 0 0 auto; }
+.engine-wrap svg.engine { width: 92px; height: 73px; display: block; margin-bottom: -6px; filter: drop-shadow(0 6px 6px rgba(30,60,110,.25)); }
+.chest { position: absolute; left: 2%; bottom: 50%; display: flex; }
+.chest svg { filter: drop-shadow(0 4px 4px rgba(0,0,0,.2)); animation: moBreath 2s ease-in-out infinite; }
+.count { display: inline-flex; align-items: center; gap: 6px; }
+.bucket svg.art { margin-bottom: 4px; }
+.mcard .f svg.art { position: relative; z-index: 1; filter: drop-shadow(0 3px 3px rgba(0,0,0,.2)); }
+.panel h2 svg.art, .panel p svg.art { vertical-align: -5px; }
+.btn svg.art { margin: -4px 0; }

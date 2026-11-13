@@ -10,15 +10,15 @@
 
   /* per-book icon: gradient squircle + the book's sign on a white card (App Library style) */
   var WI = {
-    1: { g: ["#34D399", "#065F46"], s: "أَ بَ", e: "🏝️" }, 2: { g: ["#A3E635", "#3F8F1F"], s: "بَتَ", e: "🌳" },
-    3: { g: ["#7DD3FC", "#2563EB"], s: "بِ بُ", e: "⛰️" }, 4: { g: ["#5EEAD4", "#0E7490"], s: "بٌ بْ", e: "🌊" },
-    5: { g: ["#C4B5FD", "#7C3AED"], s: "بَّ", e: "🏙️" }, 6: { g: ["#FDBA74", "#C2410C"], s: "نْ", e: "🏰" },
-    7: { g: ["#FDE68A", "#B7791F"], s: "قُرْآن", e: "🕌" }
+    1: { g: ["#34D399", "#065F46"], s: "أَ بَ" }, 2: { g: ["#A3E635", "#3F8F1F"], s: "بَتَ" },
+    3: { g: ["#7DD3FC", "#2563EB"], s: "بِ بُ" }, 4: { g: ["#5EEAD4", "#0E7490"], s: "بٌ بْ" },
+    5: { g: ["#C4B5FD", "#7C3AED"], s: "بَّ" }, 6: { g: ["#FDBA74", "#C2410C"], s: "نْ" },
+    7: { g: ["#FDE68A", "#B7791F"], s: "قُرْآن" }
   };
   function wi(n, noEm) {
     var d = WI[n], e = el("span", "wi");
     e.style.background = "linear-gradient(160deg," + d.g[0] + "," + d.g[1] + ")";
-    e.innerHTML = '<span class="card"><span style="color:' + d.g[1] + '">' + esc(d.s) + "</span></span>" + (noEm ? "" : '<span class="em">' + d.e + "</span>");
+    e.innerHTML = '<span class="card"><span style="color:' + d.g[1] + '">' + esc(d.s) + "</span></span>";
     return e;
   }
   HJ.wi = wi;
@@ -93,7 +93,7 @@
   function shell(tab, title) {
     var s = bare();
     var nb = el("header", "navbar");
-    var jar = el("button", "star-jar", '<span class="ring">⭐</span><span>' + S.totalStars() + "</span>");
+    var jar = el("button", "star-jar", HJ.art("star", 30) + '<span>' + S.totalStars() + "</span>");
     jar.setAttribute("aria-label", t("stars")); jar.onclick = function () { A.fx.coin(); stickers(); };
     nb.appendChild(jar);
     nb.appendChild(el("div", "nav-title", esc(title || "")));
@@ -113,6 +113,7 @@
     return sc;
   }
 
+  function kindArt(lv) { return { review: "repeat", boss: "trophy", khatam: "cap", surah: "book" }[lv.kind] || "sparkle"; }
   function levelName(lv) {
     if (lv.kind === "surah") { var su = HJ.surah(lv.surah); return (EN() ? "Surah " : "Surat ") + tr(su.name); }
     return typeof lv.title === "string" ? lv.title : tr(lv.title);
@@ -132,7 +133,7 @@
     pic.appendChild(moImg(pose));
     pic.onclick = function () { A.unlock(); A.fx.pop(); var im = pic.querySelector("img"); im.src = MO(HJ.util.pick(CHEER)); A.talk(t("hello", { n: st.name }), st.lang); };
     var bub = el("div", "mo-bub glass");
-    bub.appendChild(el("div", "mo-hello", "Assalamu'alaikum,<br><em>" + esc(st.name) + "</em>! 👋"));
+    bub.appendChild(el("div", "mo-hello", "Assalamu'alaikum,<br><em>" + esc(st.name) + "</em>! " + HJ.art("hand", 26, "waving")));
     bub.appendChild(el("div", "mo-sub", esc(greetLine(hr))));
     g.appendChild(pic); g.appendChild(bub); pane.appendChild(g);
 
@@ -161,7 +162,7 @@
     var lit = st.streak.last === today();
     dm.innerHTML = '<div class="dm-head"><img class="dm-cal" src="assets/icons/mission.svg" alt=""><div class="dm-titles"><div class="dm-kicker">' + esc(dateStr) +
       '</div><div class="dm-title">' + esc(t("mission")) + '</div><div class="dm-sub">' + esc(nDone === 3 ? t("missionAll") : t("missionSub", { n: 3 - nDone })) +
-      '</div></div><div class="dm-streak' + (lit ? "" : " off") + '"><span class="dm-fire">🔥</span><span class="dm-sn">' + (st.streak.n || 0) + '</span><span class="dm-sl">' + esc(t("day")) + "</span></div></div>" +
+      '</div></div><div class="dm-streak' + (lit ? "" : " off") + '"><span class="dm-fire">' + HJ.art("flame", 26) + '</span><span class="dm-sn">' + (st.streak.n || 0) + '</span><span class="dm-sl">' + esc(t("day")) + "</span></div></div>" +
       '<div class="dm-prog">' + list.map(function (m) { return "<i" + (md[m.k] ? ' class="on"' : "") + "></i>"; }).join("") + "</div>";
     var dl = el("div", "dm-list");
     list.forEach(function (m) {
@@ -176,7 +177,7 @@
     dm.appendChild(dl); pane.appendChild(dm);
 
     // the 7 books as app icons
-    sc.appendChild(el("div", "sec-h", "<h3>" + esc(t("books")) + "</h3><small>" + S.totalStars() + " ⭐</small>"));
+    sc.appendChild(el("div", "sec-h", "<h3>" + esc(t("books")) + "</h3><small>" + S.totalStars() + " " + HJ.art("star", 16) + "</small>"));
     var grid = el("div", "icon-grid");
     HJ.worlds.forEach(function (w) {
       var locked = !S.unlocked(w.levels[0]), dn = w.levels.filter(function (l) { return st.stars[l.id]; }).length;
@@ -231,9 +232,9 @@
         n.style.left = x + "%";
         var label = lv.kind === "surah" ? HJ.surah(lv.surah).arabicName : (typeof lv.title === "string" ? lv.title : null);
         if (!unl) n.innerHTML = ic("lock");
-        else if (isBoss || (lv.icon && !label)) n.innerHTML = '<span class="ic2">' + (lv.icon || "⭐") + "</span>";
+        else if (isBoss || !label) n.innerHTML = HJ.art(kindArt(lv), isBoss ? 50 : 40);
         else n.innerHTML = '<span class="t ar">' + esc(label) + "</span>";
-        if (stars) n.appendChild(el("span", "st", "★★★".slice(0, stars) + "<span style='opacity:.25'>" + "★★★".slice(stars) + "</span>" + (st.tashih[lv.id] ? " ✓" : "")));
+        if (stars) n.appendChild(el("span", "st", [0, 1, 2].map(function (i) { return HJ.art(i < stars ? "star" : "starOff", 13); }).join("") + (st.tashih[lv.id] ? HJ.art("check", 13) : "")));
         n.onclick = function () {
           A.unlock();
           if (!unl) { A.fx.bad(); n.classList.add("shake"); setTimeout(function () { n.classList.remove("shake"); }, 450); A.talk(t("locked"), st.lang); return; }
@@ -259,9 +260,9 @@
       var h = el("h2", isAr ? "ar" : "", esc(levelName(lv))); if (isAr) h.style.fontSize = "44px"; p.appendChild(h);
       if (lv.kind === "surah") { var su = HJ.surah(lv.surah); var q = el("div", "qr", esc(su.arabicName)); q.style.fontSize = "34px"; p.appendChild(q); p.appendChild(el("p", "", esc(tr(su.meaning)) + " · " + su.ayahs.length + " " + (EN() ? "verses" : "ayat"))); }
       if (lv.say) p.appendChild(el("p", "", esc(tr(lv.say))));
-      if (lv.kind === "boss") p.appendChild(el("p", "", '<span style="color:#FF3B30">' + ic("heart") + ic("heart") + ic("heart") + "</span> " + esc(t("hearts"))));
+      if (lv.kind === "boss") p.appendChild(el("p", "", HJ.art("heart", 22) + HJ.art("heart", 22) + HJ.art("heart", 22) + " " + esc(t("hearts"))));
       var stars = S.get().stars[lv.id] || 0;
-      var bs = el("div", "bigstars"); for (var i = 0; i < 3; i++) bs.appendChild(el("span", i < stars ? "on" : "", "⭐")); p.appendChild(bs);
+      var bs = el("div", "bigstars"); for (var i = 0; i < 3; i++) bs.appendChild(el("span", i < stars ? "on" : "", HJ.art("star", 50))); p.appendChild(bs);
       var r = el("div", "row"), b = el("button", "btn big", ic("play") + " " + t("start")); b.onclick = function () { close(); runLevel(lv); };
       r.appendChild(b); p.appendChild(r);
     });
@@ -280,7 +281,7 @@
     var stage = el("div", "stage"); s.appendChild(stage);
     var bw = el("div", "bubble-wrap"), moI = el("img"), bub = el("div", "bubble glass"); moI.alt = "Baby Mo"; bw.appendChild(moI); bw.appendChild(bub);
     s.appendChild(bw);
-    function drawHearts() { hz.innerHTML = [0, 1, 2].map(function (i) { return '<span class="' + (i < hearts ? "" : "off") + '">' + ic("heart") + "</span>"; }).join(""); }
+    function drawHearts() { hz.innerHTML = [0, 1, 2].map(function (i) { return HJ.art(i < hearts ? "heart" : "heartOff", 24); }).join(""); }
     drawHearts();
     x.onclick = function () {
       HJ.modal(function (p, close) {
@@ -348,10 +349,15 @@
   }
 
   function stickerEl(lv, got, big) {
-    var w = WI[lv.w], face = lv.kind === "letters" ? HJ.syl(lv.letters[0], lv.v || "a").ar : lv.kind === "surah" ? "📖" : lv.icon || w.e;
-    var e = el("div", "sticker" + (got ? "" : " no") + (big ? " big" : ""), esc(face));
+    var w = WI[lv.w], art = null, face;
+    if (lv.kind === "letters") face = HJ.syl(lv.letters[0], lv.v || "a").ar;
+    else if (lv.kind === "surah") face = HJ.surah(lv.surah).arabicName;
+    else if (typeof lv.title === "string") face = lv.title;
+    else art = kindArt(lv);
+    var e = el("div", "sticker" + (got ? "" : " no") + (big ? " big" : ""));
+    if (got || big) e.innerHTML = art ? HJ.art(art, big ? 64 : 42) : '<span class="sf">' + esc(face) + "</span>";
+    if (face && face.replace(/[\u064B-\u0652\s]/g, "").length > 3) e.classList.add("long");
     e.style.background = "linear-gradient(160deg," + w.g[0] + "," + w.g[1] + ")";
-    if (lv.kind !== "letters") e.style.fontFamily = "var(--font)";
     return e;
   }
 
@@ -362,10 +368,10 @@
       var m = moImg(HJ.util.pick(["yeyy", "pose-02", "wow", "pose-37"]), "150px"); m.classList.add("result-mo"); p.appendChild(m);
       p.appendChild(el("div", "kicker", esc(tr(w.name)) + " · Level " + lv.id));
       p.appendChild(el("h2", "", esc(t("levelDone"))));
-      var bs = el("div", "bigstars"); for (var i = 0; i < 3; i++) bs.appendChild(el("span", "", "⭐")); p.appendChild(bs);
+      var bs = el("div", "bigstars"); for (var i = 0; i < 3; i++) bs.appendChild(el("span", "", HJ.art("star", 54))); p.appendChild(bs);
       for (var j = 0; j < stars; j++) (function (j) { setTimeout(function () { bs.children[j].classList.add("on"); A.fx.star(j); }, 400 + j * 350); })(j);
       if (first) { p.appendChild(el("p", "", "<b>" + esc(t("newSticker")) + "</b>")); p.appendChild(stickerEl(lv, true, true)); }
-      if (lv.kind === "boss") p.appendChild(el("p", "", "🏆 <b>" + esc(tr(w.name)) + "</b> ✓"));
+      if (lv.kind === "boss") p.appendChild(el("p", "", HJ.art("trophy", 28) + " <b>" + esc(tr(w.name)) + "</b> " + HJ.art("check", 20)));
       var r = el("div", "row"), again = el("button", "btn ghost", ic("replay") + " " + t("again")), go = el("button", "btn", t("next") + " " + ic("next"));
       again.onclick = function () { close(); runLevel(lv); };
       go.onclick = function () { close(); if (nxt && S.unlocked(nxt)) { map(nxt.w); setTimeout(function () { levelSheet(nxt); }, 150); } else map(lv.w); };
@@ -401,7 +407,7 @@
       HJ.modal(function (p, close) {
         p.appendChild(moImg("yeyy", "150px"));
         p.appendChild(el("div", "kicker", esc(t("daily"))));
-        p.appendChild(el("h2", "", "🔥 " + (st.streak.n || 1) + " " + esc(t("streak"))));
+        p.appendChild(el("h2", "", HJ.art("flame", 30) + " " + (st.streak.n || 1) + " " + esc(t("streak"))));
         var r = el("div", "row"), b = el("button", "btn", t("done") + " " + ic("check")); b.onclick = function () { close(); home(); }; r.appendChild(b); p.appendChild(r);
       }, { sticky: true });
     } });
@@ -431,7 +437,7 @@
     var sc = shell("parents", t("tabParents")), st = S.get();
     var pr = el("div", "profile");
     pr.innerHTML = '<div class="fam"><img src="assets/family/abi-wave.webp" alt="Abi"><img class="mo" src="assets/mo/mo-yes.webp" alt="Baby Mo"><img src="assets/family/umi-welcome.webp" alt="Umi"></div>' +
-      "<h2>" + esc(st.name) + "</h2><p>⭐ " + S.totalStars() + " " + esc(t("stars")) + " · 🔥 " + (st.streak.n || 0) + " " + esc(t("streak")) + "</p>";
+      "<h2>" + esc(st.name) + "</h2><p>" + HJ.art("star", 18) + " " + S.totalStars() + " " + esc(t("stars")) + " · " + HJ.art("flame", 18) + " " + (st.streak.n || 0) + " " + esc(t("streak")) + "</p>";
     sc.appendChild(pr);
 
     function row(iconHtml, cls, body, right, onclick) {
@@ -466,7 +472,7 @@
       opts.forEach(function (o) { var b = el("button", st[key] === o[0] ? "on" : "", esc(o[1])); b.onclick = function () { S.set(key, o[0]); applyTheme(); parents(); }; sg.appendChild(b); });
       g2.appendChild(row(icon, cls, esc(label), sg));
     }
-    seg("🌐", "teal", t("language"), "lang", [["id", "ID"], ["en", "EN"]]);
+    seg(ic("globe"), "teal", t("language"), "lang", [["id", "ID"], ["en", "EN"]]);
     seg('<img src="assets/icons/theme.svg" alt="">', "", t("theme"), "theme", [["auto", t("themeAuto")], ["light", t("themeLight")], ["dark", t("themeDark")]]);
     function tog(icon, cls, label, key, sub) {
       var sw = el("button", "switch" + (st.settings[key] ? " on" : "")); sw.setAttribute("role", "switch");
@@ -475,7 +481,7 @@
     }
     tog(ic("speaker"), "gold", t("moVoice"), "moVoice");
     tog('<img src="assets/icons/sound.svg" alt="">', "", t("sfx"), "sfx");
-    tog("Aa", "purple", t("latin"), "latin", t("latinSub"));
+    tog(ic("textA"), "purple", t("latin"), "latin", t("latinSub"));
     if (!window.HJ_APP_BUILD) tog(ic("book"), "teal", t("cdn"), "cdn", t("cdnSub"));
     tog(ic("lock"), "gray", t("unlockAll"), "unlockAll", t("unlockSub"));
     sc.appendChild(g2);
@@ -512,12 +518,12 @@
       var c = el("div", "cert");
       c.appendChild(moImg("mo2:hug-quran", "150px"));
       c.appendChild(el("div", "kicker", "Baby Mo Hijaiyah"));
-      c.appendChild(el("h2", "", "🎓 " + esc(t("certTitle"))));
+      c.appendChild(el("div", "", HJ.art("cap", 54))); c.appendChild(el("h2", "", esc(t("certTitle"))));
       c.appendChild(el("div", "nm", esc(S.get().name)));
       c.appendChild(el("p", "", esc(t("certBody"))));
       c.appendChild(el("p", "", new Date().toLocaleDateString(EN() ? "en-GB" : "id-ID", { day: "numeric", month: "long", year: "numeric" })));
       p.appendChild(c);
-      var r = el("div", "row"), b = el("button", "btn big", "🏆 " + t("done")); b.onclick = function () { close(); done && done(); }; r.appendChild(b); p.appendChild(r);
+      var r = el("div", "row"), b = el("button", "btn big", HJ.art("trophy", 30) + " " + t("done")); b.onclick = function () { close(); done && done(); }; r.appendChild(b); p.appendChild(r);
     }, { sticky: true });
   };
 
