@@ -107,6 +107,17 @@
     var w = size || 24;
     return '<svg class="art ' + (cls || "") + '" viewBox="0 0 48 48" width="' + w + '" height="' + w + '" aria-hidden="true">' + f(u) + "</svg>";
   };
+  // round flags for the language choice (drawn, not emoji, so they look the same on every phone)
+  HJ.flag = function (code, size) {
+    var w = size || 44, u = "f" + (++uid), body;
+    if (code === "id") body = '<rect width="60" height="30" fill="#E5262D"/><rect y="30" width="60" height="30" fill="#fff"/>';
+    else body = '<rect width="60" height="60" fill="#012169"/><path d="M0 0l60 60M60 0L0 60" stroke="#fff" stroke-width="12"/>' +
+      '<path d="M0 0l60 60M60 0L0 60" stroke="#C8102E" stroke-width="5"/><path d="M30 0v60M0 30h60" stroke="#fff" stroke-width="18"/>' +
+      '<path d="M30 0v60M0 30h60" stroke="#C8102E" stroke-width="10"/>';
+    return '<svg class="flag" viewBox="0 0 60 60" width="' + w + '" height="' + w + '" aria-hidden="true"><defs><clipPath id="' + u + '"><circle cx="30" cy="30" r="30"/></clipPath>' +
+      '<radialGradient id="' + u + 'g" cx=".35" cy=".25" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>' +
+      '<g clip-path="url(#' + u + ')">' + body + '<circle cx="30" cy="30" r="30" fill="url(#' + u + 'g)"/></g><circle cx="30" cy="30" r="29" fill="none" stroke="rgba(0,0,0,.12)" stroke-width="2"/></svg>';
+  };
   // the cute engine for the reading train (faces left, the way we read)
   HJ.engine = function () {
     var u = "e" + (++uid);

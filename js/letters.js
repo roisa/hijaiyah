@@ -37,8 +37,12 @@
     { k: "ha",   c: "ه", n: "هَاء",  cons: "h",  id: "Ha" },
     { k: "ya",   c: "ي", n: "يَاء",  cons: "y",  id: "Ya" }
   ];
+  // English names (international spelling) next to the Indonesian ones
+  var EN = { alif: "Alif", ba: "Ba", ta: "Ta", tsa: "Tha", jim: "Jim", hha: "Ḥa", kho: "Kha", dal: "Dal", dzal: "Dhal", ro: "Ra",
+    zai: "Zay", sin: "Sin", syin: "Shin", shod: "Ṣad", dhod: "Ḍad", tho: "Ṭa", zho: "Ẓa", ain: "'Ayn", ghin: "Ghayn", fa: "Fa",
+    qof: "Qaf", kaf: "Kaf", lam: "Lam", mim: "Mim", nun: "Nun", wau: "Waw", ha: "Ha", ya: "Ya" };
   var BY = {};
-  L.forEach(function (l, i) { l.i = i; BY[l.k] = l; BY[l.c] = l; });
+  L.forEach(function (l, i) { l.i = i; l.en = EN[l.k]; BY[l.k] = l; BY[l.c] = l; });
 
   // Letters that look alike (dots) or sound alike — used to pick fair "tricky" distractors
   var LOOK = [["ba","ta","tsa","nun","ya"],["jim","hha","kho"],["dal","dzal"],["ro","zai"],["sin","syin"],
@@ -78,7 +82,17 @@
       au: list.map(function (s) { return s.au; }), parts: list };
   }
 
+  /* Latin hints are written the Indonesian way (ts, dz, sy, sh, kho…). For English we convert them to the
+     usual international spelling: ث th, ذ dh, ش sh, ص ṣ, ض ḍ, ط ṭ, ظ ẓ, and the "o" of heavy letters back to "a". */
+  var ID2EN = { ts: "th", dz: "dh", sy: "sh", sh: "ṣ", dh: "ḍ", th: "ṭ", zh: "ẓ", kh: "kh", gh: "gh", oo: "aa", o: "a" };
+  function latinFor(tr, lang) {
+    if (!tr || lang !== "en") return tr;
+    return String(tr).replace(/ts|dz|sy|sh|dh|th|zh|kh|gh|oo|o/g, function (m) { return ID2EN[m]; });
+  }
+  function letterName(k, lang) { var l = BY[k]; return l ? (lang === "en" ? l.en : l.id) : ""; }
+
   window.HJ = window.HJ || {};
+  HJ.latinFor = latinFor; HJ.letterName = letterName;
   HJ.L = L; HJ.BY = BY; HJ.syl = syl; HJ.chain = chain; HJ.cousins = cousins; HJ.latin = latin;
   HJ.M = { FATHAH: FATHAH, KASRAH: KASRAH, DHAMMAH: DHAMMAH, SUKUN: SUKUN, SHADDA: SHADDA,
     FATHATAIN: FATHATAIN, KASRATAIN: KASRATAIN, DHAMMATAIN: DHAMMATAIN };

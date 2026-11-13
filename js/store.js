@@ -1,7 +1,9 @@
 /* Baby Mo Hijaiyah — progress (on this device only) and the interface words in Indonesian and English. */
 (function () {
   var KEY = "bmh_v1";
-  var DEF = { name: "Ibra", lang: "id", theme: "auto", stars: {}, tashih: {}, stickers: [], streak: { last: "", n: 0 }, plays: 0,
+  // first language guess: the phone's language (Indonesian → id, anything else → en); the picker confirms it
+  var navLang = ((navigator.languages && navigator.languages[0]) || navigator.language || "en").toLowerCase();
+  var DEF = { name: "", lang: /^(id|ms)/.test(navLang) ? "id" : "en", langChosen: false, theme: "auto", stars: {}, tashih: {}, stickers: [], streak: { last: "", n: 0 }, plays: 0,
     settings: { moVoice: true, sfx: true, latin: true, cdn: true, unlockAll: false } };
   var st;
   function load() {
@@ -9,6 +11,8 @@
     if (!st) st = JSON.parse(JSON.stringify(DEF));
     for (var k in DEF) if (st[k] === undefined) st[k] = JSON.parse(JSON.stringify(DEF[k]));
     for (var s in DEF.settings) if (st.settings[s] === undefined) st.settings[s] = DEF.settings[s];
+    // same site as the Baby Mo app? reuse the language already chosen there
+    if (!st.langChosen) { try { var bm = localStorage.getItem("bm_lang"); if (bm === "id" || bm === "en") { st.lang = bm; st.langChosen = true; } } catch (e) {} }
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
   load();
@@ -19,7 +23,7 @@
     save: save,
     set: function (k, v) { st[k] = v; save(); },
     setting: function (k, v) { st.settings[k] = v; save(); },
-    reset: function () { var keep = { name: st.name, lang: st.lang, settings: st.settings }; st = JSON.parse(JSON.stringify(DEF)); Object.assign(st, keep); save(); },
+    reset: function () { var keep = { name: st.name, lang: st.lang, langChosen: st.langChosen, settings: st.settings }; st = JSON.parse(JSON.stringify(DEF)); Object.assign(st, keep); save(); },
     finish: function (id, stars) {
       var first = !st.stars[id];
       st.stars[id] = Math.max(st.stars[id] || 0, stars);
@@ -48,6 +52,13 @@
 
   /* interface words */
   var W = {
+    chooseLang: ["Pilih Bahasa / Choose Language", "Pilih Bahasa / Choose Language"],
+    langIdSub: ["Belajar membaca Al-Qur'an sambil bermain", "Belajar membaca Al-Qur'an sambil bermain"],
+    langEnSub: ["Learn to read the Qur'an through play", "Learn to read the Qur'an through play"],
+    nameQ: ["Siapa nama si kecil?", "What's your little one's name?"], nameSub: ["Mo mau kenalan!", "Mo wants to say hi!"],
+    namePh: ["Nama si kecil", "Child's name"], save: ["Simpan", "Save"], later: ["Nanti saja", "Maybe later"],
+    kid: ["Si kecil", "Your child"], langToast: ["Bahasa Indonesia", "English"], langNote: ["Semua game, suara Mo dan terjemahan ikut berubah", "Games, Mo's voice and translations all switch"],
+    book: ["Jilid", "Book"],
     tabHome: ["Main", "Play"], tabParents: ["Orang Tua", "Parents"], continue: ["Lanjut belajar", "Keep learning"],
     mLevel: ["Main 1 level", "Play 1 level"], mTashih: ["Tashih bersama Abi/Umi", "Reading check with a parent"],
     mTashihSub: ["Baca sendiri, Abi/Umi mencentang", "Read alone, a parent ticks"],
@@ -68,7 +79,7 @@
     play: ["Ayo Main!", "Let's Play!"], hello: ["Assalamu'alaikum, {n}!", "Assalamu'alaikum, {n}!"],
     hello2: ["Ayo belajar membaca Al-Qur'an bersama Baby Mo!", "Let's learn to read the Qur'an with Baby Mo!"],
     daily: ["Murajaah Harian", "Daily Review"], dailySub: ["5 menit mengulang, biar makin lancar", "5 minutes of review, every day"],
-    stickers: ["Stiker", "Stickers"], map: ["Peta", "Map"], parents: ["Abi & Umi", "Parents"],
+    stickers: ["Stiker", "Stickers"], map: ["Peta", "Map"], parents: ["Abi & Umi", "Parents"], nameSaved: ["Nama tersimpan", "Name saved"],
     start: ["Mulai!", "Start!"], next: ["Lanjut", "Next"], again: ["Ulangi", "Again"], listen: ["Dengar", "Listen"],
     yourTurn: ["Giliranmu! Ketuk tiap gerbong sambil membaca →", "Your turn! Tap each carriage as you read →"],
     listenFirst: ["Dengarkan dulu, lalu tirukan", "Listen first, then copy"],
@@ -81,7 +92,7 @@
     sortIt: ["Masukkan ke kotak yang benar", "Put it in the right box"], ayahListen: ["Dengar murottal, lalu baca", "Hear the recitation, then read"],
     ayahBuild: ["Susun ayatnya (mulai dari kanan)", "Build the verse (start from the right)"], ayahFill: ["Kata mana yang hilang?", "Which word is missing?"],
     record: ["Rekam suaraku", "Record me"], stopRec: ["Selesai", "Stop"], myVoice: ["Suaraku", "My voice"],
-    tashih: ["Tashih bersama Abi/Umi", "Check with Abi/Umi"], tashihHint: ["Ibra membaca tanpa suara bantuan. Ketuk ✓ kalau sudah lancar.", "Ibra reads without help. Tap ✓ when it's fluent."],
+    tashih: ["Tashih bersama Abi/Umi", "Reading check with a parent"], tashihHint: ["Tanpa suara bantuan. Ketuk tiap bacaan yang sudah lancar.", "No help sounds. Tap each one read fluently."],
     allGood: ["Lancar semua!", "All fluent!"], skip: ["Lewati", "Skip"], done: ["Selesai", "Done"],
     great: ["Masya Allah, hebat!", "Masha Allah, great!"], good: ["Bagus!", "Good!"], tryAgain: ["Coba lagi ya!", "Try again!"],
     oops: ["Hampir! Dengarkan lagi", "Almost! Listen again"], levelDone: ["Level selesai!", "Level complete!"],
@@ -100,7 +111,7 @@
     certTitle: ["Sertifikat Khatam Jilid", "Graduation Certificate"],
     certBody: ["telah menyelesaikan perjalanan Baby Mo Hijaiyah, dari huruf alif sampai membaca Al-Qur'an. Barakallahu fiik!",
       "has finished the Baby Mo Hijaiyah journey, from alif to reading the Qur'an. Barakallahu fiik!"],
-    noAudio: ["Murottal belum diunduh — Abi/Umi bacakan ya, Ibra menirukan (talaqqi).", "Recitation not downloaded — a parent reads, the child copies (talaqqi)."],
+    noAudio: ["Murottal belum diunduh — Abi/Umi bacakan ya, {k} menirukan (talaqqi).", "Recitation not downloaded — a parent reads, the child copies (talaqqi)."],
     goal: ["Target", "Goal"], hearts: ["hati", "hearts"], tapSlow: ["Baca pelan-pelan, jangan dieja", "Read slowly, don't spell it out"],
     worldLocked: ["Selesaikan Ujian jilid sebelumnya dulu", "Pass the previous book's test first"],
     hint: ["Bantuan", "Hint"], back: ["Kembali", "Back"], quit: ["Keluar dari level?", "Leave this level?"],
@@ -110,9 +121,11 @@
     var e = W[k]; if (!e) return k;
     var s = e[st.lang === "en" ? 1 : 0];
     if (vars) for (var v in vars) s = s.replace("{" + v + "}", vars[v]);
-    return s;
+    return kid(s);
   }
-  function tr(o) { if (!o) return ""; if (typeof o === "string") return o; return o[st.lang] || o.id || ""; }
+  // {k} = the child's name, or "Si kecil" / "Your child" when no name was given
+  function kid(s) { return s.indexOf("{k}") < 0 ? s : s.split("{k}").join(st.name || W.kid[st.lang === "en" ? 1 : 0]); }
+  function tr(o) { if (!o) return ""; if (typeof o === "string") return kid(o); return kid(o[st.lang] || o.id || ""); }
 
   window.HJ = window.HJ || {}; HJ.store = store; HJ.t = t; HJ.tr = tr;
 })();

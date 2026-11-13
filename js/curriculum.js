@@ -77,7 +77,7 @@
     var newK = lv.letters, poolK = lv.pool, vow = lv.v || "a";
     var nw = fat(newK, vow), pool = fat(poolK.length > 1 ? poolK : newK.concat(["ba", "ta"]), vow);
     var st = [S.intro("pose-41", lv.say || T("Ayo kenalan dengan huruf baru!", "Let's meet new letters!"), nw)];
-    nw.forEach(function (it) { st.push(S.learn(it, { name: BY[it.k].n, nameTr: BY[it.k].id })); });
+    nw.forEach(function (it) { st.push(S.learn(it, { name: BY[it.k].n, nameK: it.k })); });
     if (!lv.noTrace) st.push(S.trace(BY[newK[0]].seat ? "ا" : BY[newK[0]].c));
     st.push(S.pick(pick(nw), pool));
     st.push(S.pop(pick(nw), pool));
@@ -102,7 +102,7 @@
     st.push(S.pick(pick(pool), pool, 4));
     st.push(S.match(shuffle(pool).slice(0, 4).map(function (x) { return [x, lv.pairTwin ? lv.pairTwin(x) : x]; })));
     st.push(S.train(lv.mkChain ? lv.mkChain() : randChain(pool, 5)));
-    st.push(S.tashih(shuffle(pool).slice(0, 6), T("Ibra baca, Abi/Umi dengarkan.", "Ibra reads, Abi/Umi listen.")));
+    st.push(S.tashih(shuffle(pool).slice(0, 6), T("{k} membaca, Abi/Umi mendengarkan.", "{k} reads, a parent listens.")));
     return st;
   }
 
@@ -116,7 +116,7 @@
     if (lv.extra) st = st.concat(lv.extra());
     st.push(S.yesno(pick(pool), pool));
     st.push(S.train(lv.mkChain ? lv.mkChain() : randChain(pool, pool[0].ar.length > 3 ? 3 : 6)));
-    st.push(S.tashih(shuffle(pool).slice(0, 8), T("Tashih: Ibra membaca, Abi/Umi menilai.", "Check: Ibra reads, Abi/Umi listen.")));
+    st.push(S.tashih(shuffle(pool).slice(0, 8), T("Tashih: {k} membaca, Abi/Umi menilai.", "Reading check: {k} reads, a parent listens.")));
     return st;
   }
 
@@ -280,7 +280,7 @@
     if (items[0].parts) st.push(S.build(pick(items.filter(function (x) { return x.parts && x.parts.length >= 2 && x.parts.length <= 5; }))));
     st.push(S.train(chain(shuffle(items).slice(0, 3))));
     if (lv.sortBy) st.push(S.sort(lv.sortBy, shuffle(items).slice(0, 6), lv.sortSay));
-    st.push(S.tashih(shuffle(items).slice(0, 5), T("Ibra baca sendiri, Abi/Umi dengarkan.", "Ibra reads alone, Abi/Umi listen.")));
+    st.push(S.tashih(shuffle(items).slice(0, 5), T("{k} membaca sendiri, Abi/Umi mendengarkan.", "{k} reads alone, a parent listens.")));
     return st;
   }
   function sortSteps(lv) {
@@ -291,7 +291,7 @@
     st.push(S.train(chain(shuffle(items).slice(0, 2))));
     st.push(S.sort(lv.buckets, shuffle(items).slice(0, Math.min(6, items.length)), lv.sortSay));
     st.push(S.bridge(items, null, 4));
-    st.push(S.tashih(shuffle(items).slice(0, 5), T("Ibra baca, Abi/Umi dengarkan.", "Ibra reads, Abi/Umi listen.")));
+    st.push(S.tashih(shuffle(items).slice(0, 5), T("{k} membaca, Abi/Umi mendengarkan.", "{k} reads, a parent listens.")));
     return st;
   }
   function waqafSteps(lv) {
@@ -329,7 +329,7 @@
     var nm = g.map(function (k) { return syl(k, "a").ar; }).join("  ");
     lvl(w1, { kind: "letters", letters: g, pool: lettersUpTo(gi), title: nm,
       say: T("Huruf baru: " + g.map(function (k) { return BY[k].id; }).join(" & ") + ". Dengar, lalu tirukan ya!",
-        "New letters: " + g.map(function (k) { return BY[k].id; }).join(" & ") + ". Listen, then copy me!") });
+        "New letters: " + g.map(function (k) { return BY[k].en; }).join(" & ") + ". Listen, then copy me!") });
     if (gi === 3 || gi === 7 || gi === 10 || gi === 13) lvl(w1, { kind: "review", pool: lettersUpTo(gi), title: T("Ulangan", "Review") });
   });
   lvl(w1, { kind: "boss", pool: lettersUpTo(13), title: T("Ujian Jilid 1", "Book 1 Test") });

@@ -28,6 +28,7 @@
     var m = S.get().theme, dark = m === "dark" || (m === "auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
     document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
     document.documentElement.lang = S.get().lang;
+    document.title = S.get().lang === "en" ? "Baby Mo Hijaiyah — learn to read the Qur'an" : "Baby Mo Hijaiyah — belajar membaca Al-Qur'an";
     var meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.content = dark ? "#0B1020" : "#F2F6FC";
   }
   applyTheme();
@@ -90,13 +91,18 @@
 
   /* ---------- shell ---------- */
   function bare() { A.stop(); app.innerHTML = ""; var s = el("div", "screen"); app.appendChild(s); return s; }
+  var curScreen = null;
   function shell(tab, title) {
+    curScreen = { home: home, map: map, stickers: stickers, parents: parents }[tab];
     var s = bare();
     var nb = el("header", "navbar");
     var jar = el("button", "star-jar", HJ.art("star", 30) + '<span>' + S.totalStars() + "</span>");
     jar.setAttribute("aria-label", t("stars")); jar.onclick = function () { A.fx.coin(); stickers(); };
     nb.appendChild(jar);
     nb.appendChild(el("div", "nav-title", esc(title || "")));
+    var lp = el("button", "nav-btn lang-pill", HJ.flag(S.get().lang, 22) + "<b>" + S.get().lang.toUpperCase() + "</b>");
+    lp.setAttribute("aria-label", t("language")); lp.onclick = function () { A.fx.tap(); setLang(S.get().lang === "en" ? "id" : "en", true); };
+    nb.appendChild(lp);
     var gear = el("button", "nav-btn", ic("gear")); gear.setAttribute("aria-label", t("settings"));
     gear.onclick = function () { HJ.gate(parents); };
     nb.appendChild(gear);
@@ -131,10 +137,12 @@
     var hr = new Date().getHours();
     var pose = hr < 11 ? "pose-05" : hr < 15 ? "pose-41" : hr < 18 ? "yes" : "pose-12";
     pic.appendChild(moImg(pose));
-    pic.onclick = function () { A.unlock(); A.fx.pop(); var im = pic.querySelector("img"); im.src = MO(HJ.util.pick(CHEER)); A.talk(t("hello", { n: st.name }), st.lang); };
+    pic.onclick = function () { A.unlock(); A.fx.pop(); var im = pic.querySelector("img"); im.src = MO(HJ.util.pick(CHEER)); A.talk(st.name ? t("hello", { n: st.name }) : "Assalamu'alaikum!", st.lang); };
     var bub = el("div", "mo-bub glass");
-    bub.appendChild(el("div", "mo-hello", "Assalamu'alaikum,<br><em>" + esc(st.name) + "</em>! " + HJ.art("hand", 26, "waving")));
+    bub.appendChild(el("div", "mo-hello", st.name ? "Assalamu'alaikum,<br><em>" + esc(st.name) + "</em>! " + HJ.art("hand", 26, "waving")
+      : "Assalamu'alaikum! " + HJ.art("hand", 26, "waving")));
     bub.appendChild(el("div", "mo-sub", esc(greetLine(hr))));
+    if (!st.name) { var chip = el("button", "chip", ic("user") + " " + esc(t("nameQ"))); chip.onclick = function () { nameSheet(home); }; bub.appendChild(chip); }
     g.appendChild(pic); g.appendChild(bub); pane.appendChild(g);
 
     // "now" card: continue where Ibra stopped
@@ -142,7 +150,7 @@
     var done = w.levels.filter(function (l) { return st.stars[l.id]; }).length;
     var now = el("button", "hm-now glass");
     var tx = el("span", "hm-tx");
-    tx.innerHTML = '<span class="hm-k">' + esc(t("continue")) + " · Jilid " + w.n + "</span><b>" + esc(tr(w.name)) + "</b>" +
+    tx.innerHTML = '<span class="hm-k">' + esc(t("continue")) + " · " + t("book") + " " + w.n + "</span><b>" + esc(tr(w.name)) + "</b>" +
       '<small><span class="ar" style="font-size:20px">' + esc(cur.kind === "surah" ? HJ.surah(cur.surah).arabicName : levelName(cur)) + "</span> · Level " + cur.id + "</small>" +
       '<span class="hm-bar"><i style="width:' + Math.round(done / w.levels.length * 100) + '%"></i></span>';
     now.appendChild(tx);
@@ -183,7 +191,7 @@
       var locked = !S.unlocked(w.levels[0]), dn = w.levels.filter(function (l) { return st.stars[l.id]; }).length;
       var a = el("button", "app-icon" + (locked ? " locked" : ""));
       a.appendChild(wi(w.n));
-      a.appendChild(el("div", "ai-label", esc(w.n < 7 ? "Jilid " + w.n : "Al-Qur'an")));
+      a.appendChild(el("div", "ai-label", esc(w.n < 7 ? t("book") + " " + w.n : "Al-Qur'an")));
       a.appendChild(el("div", "ai-sub", esc(tr(w.name))));
       if (locked) a.appendChild(el("span", "ai-badge", ic("lock")));
       else if (dn === w.levels.length) a.appendChild(el("span", "ai-badge ok", ic("check")));
@@ -393,7 +401,7 @@
     var U = HJ.util, lv = { id: "daily", kind: "daily", w: 1 };
     function chainOf(n) { return HJ.chain(U.shuffle(pool).slice(0, n)); }
     var steps = [
-      { type: "intro", mo: "pose-12", say: { id: "Murajaah! Kita ulang yang sudah " + st.name + " pelajari.", en: "Review! Let's repeat what " + st.name + " has learned." } },
+      { type: "intro", mo: "pose-12", say: { id: "Murajaah! Kita ulang yang sudah {k} pelajari.", en: "Review! Let's repeat what {k} has learned." } },
       { type: "train", item: chainOf(4) },
       { type: "bridge", rounds: [0, 1, 2, 3].map(function () { var q = U.pick(pool); return { q: q, options: U.shuffle([q].concat(U.shuffle(pool.filter(function (x) { return x.ar !== q.ar; })).slice(0, 2))) }; }) },
       { type: "match", pairs: U.shuffle(pool).slice(0, 4).map(function (x) { return [x, x]; }) },
@@ -437,7 +445,7 @@
     var sc = shell("parents", t("tabParents")), st = S.get();
     var pr = el("div", "profile");
     pr.innerHTML = '<div class="fam"><img src="assets/family/abi-wave.webp" alt="Abi"><img class="mo" src="assets/mo/mo-yes.webp" alt="Baby Mo"><img src="assets/family/umi-welcome.webp" alt="Umi"></div>' +
-      "<h2>" + esc(st.name) + "</h2><p>" + HJ.art("star", 18) + " " + S.totalStars() + " " + esc(t("stars")) + " · " + HJ.art("flame", 18) + " " + (st.streak.n || 0) + " " + esc(t("streak")) + "</p>";
+      "<h2>" + esc(st.name || t("kid")) + "</h2><p>" + HJ.art("star", 18) + " " + S.totalStars() + " " + esc(t("stars")) + " · " + HJ.art("flame", 18) + " " + (st.streak.n || 0) + " " + esc(t("streak")) + "</p>";
     sc.appendChild(pr);
 
     function row(iconHtml, cls, body, right, onclick) {
@@ -464,15 +472,17 @@
     // settings
     sc.appendChild(el("div", "group-t", esc(t("settings"))));
     var g2 = el("div", "list-group");
-    var inp = el("input"); inp.type = "text"; inp.value = st.name; inp.maxLength = 20;
-    inp.onchange = function () { S.set("name", inp.value.trim() || "Ibra"); };
+    var inp = el("input"); inp.type = "text"; inp.value = st.name; inp.maxLength = 20; inp.placeholder = t("namePh");
+    inp.onchange = function () { S.set("name", inp.value.trim()); };
     g2.appendChild(row(ic("user"), "blue", esc(t("childName")), inp));
     function seg(icon, cls, label, key, opts) {
       var sg = el("div", "seg");
       opts.forEach(function (o) { var b = el("button", st[key] === o[0] ? "on" : "", esc(o[1])); b.onclick = function () { S.set(key, o[0]); applyTheme(); parents(); }; sg.appendChild(b); });
       g2.appendChild(row(icon, cls, esc(label), sg));
     }
-    seg(ic("globe"), "teal", t("language"), "lang", [["id", "ID"], ["en", "EN"]]);
+    var lsg = el("div", "seg");
+    [["id", "Indonesia"], ["en", "English"]].forEach(function (o) { var b = el("button", st.lang === o[0] ? "on" : "", HJ.flag(o[0], 16) + " " + o[1]); b.onclick = function () { setLang(o[0], true); }; lsg.appendChild(b); });
+    g2.appendChild(row(ic("globe"), "teal", esc(t("language")) + "<small>" + esc(t("langNote")) + "</small>", lsg));
     seg('<img src="assets/icons/theme.svg" alt="">', "", t("theme"), "theme", [["auto", t("themeAuto")], ["light", t("themeLight")], ["dark", t("themeDark")]]);
     function tog(icon, cls, label, key, sub) {
       var sw = el("button", "switch" + (st.settings[key] ? " on" : "")); sw.setAttribute("role", "switch");
@@ -528,10 +538,56 @@
   };
 
   if (document.fonts && document.fonts.load) { document.fonts.load("40px 'Scheherazade New'", "بت"); document.fonts.load("40px 'Amiri Quran'", "بِسْمِ"); }
+  /* ---------- language (Indonesian / English), like the Baby Mo app ---------- */
+  function setLang(l, toastIt) {
+    S.set("lang", l); S.set("langChosen", true);
+    try { localStorage.setItem("bm_lang", l); } catch (e) {}
+    applyTheme();
+    if (toastIt) toast(HJ.flag(l, 22) + " " + esc(t("langToast")) + "<small>" + esc(t("langNote")) + "</small>");
+    (curScreen || home)();
+  }
+  HJ.setLang = setLang;
+  function toast(html) {
+    var o = document.querySelector(".toast"); if (o) o.remove();
+    var x = el("div", "toast glass", html); document.body.appendChild(x);
+    setTimeout(function () { x.classList.add("out"); }, 2200); setTimeout(function () { x.remove(); }, 2700);
+  }
+  HJ.toast = toast;
+  // first launch: choose the language (same screen as the Baby Mo app), then the child's name
+  function langPicker(done) {
+    var v = el("div", "lang-pick");
+    v.innerHTML = '<img class="lp-logo" src="assets/brand/babymo-logo-512.png" alt="Baby Mo"><h1>Baby Mo <em>Hijaiyah</em></h1><p>Pilih Bahasa / Choose Language</p>';
+    [["id", "Bahasa Indonesia", "Belajar membaca Al-Qur'an sambil bermain"], ["en", "English", "Learn to read the Qur'an through play"]].forEach(function (o) {
+      var b = el("button", "lang-btn glass", HJ.flag(o[0], 44) + '<span class="lt"><b>' + o[1] + "</b><small>" + o[2] + "</small></span>" + ic("chevR"));
+      if (S.get().lang === o[0]) b.classList.add("guess");
+      b.onclick = function () { A.unlock(); A.fx.tap(); S.set("lang", o[0]); S.set("langChosen", true); try { localStorage.setItem("bm_lang", o[0]); } catch (e) {} applyTheme(); v.remove(); done(); };
+      v.appendChild(b);
+    });
+    v.appendChild(el("div", "lp-ar ar", "ا ب ت ث ج ح خ"));
+    document.body.appendChild(v);
+  }
+  function nameSheet(after) {
+    HJ.modal(function (p, close) {
+      p.appendChild(moImg("yes", "120px"));
+      p.appendChild(el("h2", "", esc(t("nameQ"))));
+      p.appendChild(el("p", "", esc(t("nameSub"))));
+      var inp = el("input", "name-input"); inp.type = "text"; inp.maxLength = 20; inp.placeholder = t("namePh"); inp.value = S.get().name || "";
+      p.appendChild(inp);
+      var r = el("div", "row"), later = el("button", "btn ghost", t("later")), ok = el("button", "btn", ic("check") + " " + t("save"));
+      later.onclick = function () { close(); after && after(); };
+      ok.onclick = function () { S.set("name", inp.value.trim()); close(); A.fx.coin(); after && after(); };
+      inp.onkeydown = function (e) { if (e.key === "Enter") ok.click(); };
+      r.appendChild(later); r.appendChild(ok); p.appendChild(r);
+      setTimeout(function () { try { inp.focus(); } catch (e) {} }, 350);
+    });
+  }
+  HJ.nameSheet = nameSheet;
+
   HJ.go = { home: home, map: map, stickers: stickers, parents: parents };
   var q = location.hash.replace("#", "");
   if (q === "map") map(); else if (q === "stickers") stickers(); else if (q === "parents") parents();
   else if (q.indexOf("level=") === 0 && HJ.level(q.slice(6))) runLevel(HJ.level(q.slice(6))); else home();
+  if (!S.get().langChosen) langPicker(function () { home(); if (!S.get().name) setTimeout(function () { nameSheet(home); }, 250); });
 
   if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(function () {});
 })();

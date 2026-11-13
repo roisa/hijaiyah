@@ -13,7 +13,7 @@
   }
   function arEl(it, cls) { var e = el("div", "ar " + (cls || ""), arHtml(it)); return e; }
   function isWordy(it) { return (it.ar || "").replace(/[ً-ْ\s]/g, "").length > 2; }
-  function latinEl(it) { return HJ.store.get().settings.latin && it.tr ? el("div", "lat", esc(it.tr)) : el("div"); }
+  function latinEl(it) { return HJ.store.get().settings.latin && it.tr ? el("div", "lat", esc(HJ.latinFor(it.tr, HJ.store.get().lang))) : el("div"); }
   function sizeCls(it) { return it.quran ? "q" : isWordy(it) ? "w" : ""; }
   function speakerBtn(fn) { var b = el("button", "speaker", HJ.ic("speaker")); b.setAttribute("aria-label", t("listen")); b.onclick = function () { A.fx.tap(); fn(); }; return b; }
   function add(p) { for (var i = 1; i < arguments.length; i++) if (arguments[i]) p.appendChild(arguments[i]); return p; }
@@ -65,7 +65,7 @@
     add(st, dots, el("div", "row"));
     var r = st.lastChild; r.appendChild(said3); r.appendChild(recorder());
     if (s.note && s.note.name) {
-      var nm = el("button", "chip", HJ.ic("tag") + " " + t("letterName") + ": <span class='ar' style='font-size:22px'>" + esc(s.note.name) + "</span> " + esc(s.note.nameTr || ""));
+      var nm = el("button", "chip", HJ.ic("tag") + " " + t("letterName") + ": <span class='ar' style='font-size:22px'>" + esc(s.note.name) + "</span> " + esc(s.note.nameK ? HJ.letterName(s.note.nameK, HJ.store.get().lang) : ""));
       nm.onclick = function () { A.say(s.note.name); };
       st.appendChild(nm);
     }
