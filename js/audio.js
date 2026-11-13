@@ -2,7 +2,8 @@
    Arabic: recorded clip (audio/huruf, the same Google voice as the Baby Mo app) → phone's Arabic voice.
    Qur'an verses: murottal file audio/quran/SSSAAA.mp3 (tools/fetch-murottal.sh) → on the web only, the
    everyayah.com stream → phone voice as the very last resort.
-   Mo's lines: the phone's Indonesian / English voice (can be switched off by the parent).
+   Mo's lines: a recorded clip (audio/lines, window.HJ_LINES, made by tools/voice/gen.py or a real-voice
+   recording) → the phone's Indonesian / English voice (can be switched off by the parent).
    Effects are synthesised with WebAudio, so there are no extra files. */
 (function () {
   var A = {}, cur = null, seqToken = 0;
@@ -60,16 +61,20 @@
   }
   A.stop = function () {
     talkP = null;
+    if (lineEnd) { var le = lineEnd; lineEnd = null; le(); }
     seqToken++;
     if (cur) { try { cur.pause(); } catch (e) {} cur = null; }
     try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) {}
   };
 
   // say one Arabic text
+  function noQ() { if (A.onNoAyah) A.onNoAyah(); return Promise.resolve(); }
   function sayOne(t) {
     var c = clipFor(t);
-    if (c) return playUrl(c).catch(function () { return tts(t, "ar"); });
-    return tts(t, "ar");
+    // Qur'an words are never read by the phone's computer voice: no recorded clip → silence (and the one-time "no audio" note)
+    var isQ = HJ.QTEXT && HJ.QTEXT[norm(t)];
+    if (c) return playUrl(c).catch(function () { return isQ ? noQ() : tts(t, "ar"); });
+    return isQ ? noQ() : tts(t, "ar");
   }
 
   // au: "text" | ["text", …] (read one by one, onEach(i) for highlighting)
@@ -109,13 +114,38 @@
     });
   };
 
-  // Mo talks (Indonesian / English)
+  // Mo talks (Indonesian / English): the recorded line when there is one, else the phone's voice.
+  // Key = lang + "|" + normalised spoken text (same rules as tools/voice/voicekey.js; tools/voice/test-keys.js checks).
+  var EMO = /\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDEFF]|\uDB40[\uDC20-\uDC7F]|[\u2190-\u21FF\u2300-\u23FF\u25A0-\u25FF\u2600-\u27BF\u2B00-\u2BFF\uFE00-\uFE0F\u200D\u20E3\u00A9\u00AE\u2122\u2139\u3030\u303D\u3297\u3299]/g;
+  var EDGE = "\\s.,!?;:\u2026\u060C\u061B\u061F\u06D4\u3002'\"()\\[\\]\\-\u2014\u2022\u00B7*~_";
+  var LEAD = new RegExp("^[" + EDGE + "]+"), TRAIL = new RegExp("[" + EDGE + "]+$");
+  function spoken(text) { return String(text).replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, "").replace(/[ء-يً-ْ]+/g, "").trim(); }
+  function lnorm(t) {
+    var s = String(t == null ? "" : t);
+    try { s = s.normalize("NFC"); } catch (e) {}
+    return s.replace(EMO, "").replace(/[\u2018\u2019\u02BC`\u00B4]/g, "'").replace(/[\u201C\u201D\u201E\u00AB\u00BB]/g, '"').replace(/[\u2012\u2013\u2015]/g, "\u2014")
+      .replace(/\s+/g, " ").replace(/ ([,.!?;:\u2026])/g, "$1").replace(/\s*\u2014\s*/g, " \u2014 ")
+      .replace(/([.!?\u2026\u061F])[.!?\u2026\u061F]+/g, "$1").trim().replace(/\u0640/g, "").replace(LEAD, "").replace(TRAIL, "").toLowerCase();
+  }
+  A.lineText = spoken;
+  A.lineKey = function (text, lang) { return (lang || "id") + "|" + lnorm(spoken(text)); };
+  function lineFor(text, lang) { var m = window.HJ_LINES, f = m && m[A.lineKey(text, lang)]; return f ? "audio/lines/" + f : null; }
+  var lineEnd = null;
+  function playLine(url, t) {          // resolves when the clip ends or A.stop() cuts it (like a cancelled TTS)
+    return new Promise(function (res, rej) {
+      var done = false, end = function (e) { if (done) return; done = true; if (lineEnd === fin) lineEnd = null; e ? rej(e) : res(); }, fin = function () { end(); };
+      lineEnd = fin; setTimeout(fin, 4000 + t.length * 220);
+      playUrl(url).then(fin, function (e) { end(e || new Error("audio")); });
+    });
+  }
   A.talk = function (text, lang) {
     if (HJ.store && HJ.store.get().settings.moVoice === false) return Promise.resolve();
     if (!text) return Promise.resolve();
     A.stop();
-    var t = String(text).replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, "").replace(/[ء-يً-ْ]+/g, "").trim();
-    var p = tts(t, lang || "id", 1.02); talkP = p; p.then(function () { if (talkP === p) talkP = null; });
+    lang = lang || "id";
+    var t = spoken(text), c = lineFor(text, lang), my = seqToken;
+    var p = c ? playLine(c, t).catch(function () { if (my === seqToken) return tts(t, lang, 1.02); }) : tts(t, lang, 1.02);
+    talkP = p; p.then(function () { if (talkP === p) talkP = null; });
     return p;
   };
 

@@ -13,7 +13,7 @@
   function uniqBy(a, f) { var s = {}, o = []; a.forEach(function (x) { var k = f(x); if (!s[k]) { s[k] = 1; o.push(x); } }); return o; }
   function W(ar, tr, id, en, extra) { var o = { ar: ar, tr: tr, au: ar, id: id, en: en || id }; for (var k in extra || {}) o[k] = extra[k]; return o; }
   // A Qur'an fragment: must be an exact substring of ayah (s, a) in js/quran.js (tools/check-curriculum.js checks it)
-  function Q(ar, s, a, tr, hl, extra) { var o = { ar: ar, tr: tr, au: ar, ref: [s, a], hl: hl, quran: 1 }; for (var k in extra || {}) o[k] = extra[k]; return o; }
+  function Q(ar, s, a, tr, hl, extra) { var o = { ar: ar, tr: tr, au: ar, ref: [s, a], hl: hl, quran: 1 }; for (var k in extra || {}) o[k] = extra[k]; (HJ.QTEXT = HJ.QTEXT || {})[String(ar).normalize("NFC").replace(/\u0640/g, "").replace(/\s+/g, " ").trim()] = 1; return o; }
   function T(id, en) { return { id: id, en: en || id }; }
 
   // options for a "listen and choose" round: the answer plus fair distractors (look-alikes first)
