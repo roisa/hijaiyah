@@ -144,21 +144,23 @@
 
   /* Listen and choose */
   G.pick = function (s, ctx) {
-    var st = ctx.stage, locked = false;
-    add(st, el("div", "ask", esc(s.ask ? tr(s.ask) : t("whichOne"))));
+    var st = ctx.stage, locked = false, wrong = 0, right = null;
+    add(st, el("div", "ask", esc(s.again ? t("again2") : s.ask ? tr(s.ask) : t("whichOne"))));
     if (s.show) { var sc = el("div", "bigcard glass qq"); sc.appendChild(arEl(s.show)); st.appendChild(sc); }
     else st.appendChild(speakerBtn(function () { A.say(s.q.au); }));
     var opts = el("div", "opts");
     s.options.forEach(function (o) {
       var b = el("button", "tile " + sizeCls(o)); b.appendChild(arEl(o));
+      if (o.ar === s.q.ar) right = b;
       b.onclick = function () {
         if (locked) return;
         if (o.ar === s.q.ar) {
-          locked = true; b.classList.add("ok"); ctx.good();
+          locked = true; b.classList.remove("hint"); b.classList.add("ok"); ctx.good();
           A.say(o.au); after(ctx, 1200, ctx.next);
         } else {
           b.classList.add("no"); setTimeout(function () { b.classList.remove("no"); }, 450);
-          ctx.bad(); after(ctx, 500, function () { A.say(s.q.au); });
+          ctx.bad(!!s.again, s.q, s.options); after(ctx, 500, function () { A.say(s.q.au); });
+          if (++wrong >= 2 && right) right.classList.add("hint");   // gentle help, never stuck
         }
       };
       opts.appendChild(b);
@@ -247,6 +249,9 @@
     });
     cars.forEach(function (c) { train.appendChild(c); });
     track.appendChild(train);
+    // long chains: shrink the whole train so every carriage stays on screen
+    function fitTrain() { train.style.scale = ""; var w = 28; [].forEach.call(train.children, function (c) { w += c.offsetWidth + 8; }); var k = (track.clientWidth - 12) / w; if (k < 1) { train.style.scale = Math.max(0.55, k).toFixed(3); train.style.transformOrigin = "50% 100%"; } }
+    setTimeout(fitTrain, 0); (document.fonts && document.fonts.ready || Promise.resolve()).then(function () { if (ctx.alive()) fitTrain(); });
     var row = el("div", "row"), lb = el("button", "btn gold", HJ.ic("speaker") + " " + t("listen"));
     var tl = latinEl(s.item);
     add(st, ask, track, tl, row);
@@ -285,19 +290,21 @@
     add(st, river, spk, opts);
     ctx.mo(null);
     function round() {
-      var R = s.rounds[r], locked = false; opts.innerHTML = "";
+      var R = s.rounds[r], locked = false, wrong = 0, right = null; opts.innerHTML = "";
       R.options.forEach(function (o) {
         var b = el("button", "tile " + sizeCls(o)); b.appendChild(arEl(o));
+        if (o.ar === R.q.ar) right = b;
         b.onclick = function () {
           if (locked) return;
           if (o.ar === R.q.ar) {
-            locked = true; b.classList.add("ok"); A.fx.good(); A.say(o.au);
-            planks.children[r].classList.add("set");
+            locked = true; b.classList.remove("hint"); b.classList.add("ok"); ctx.good(true); A.say(o.au);
+            planks.children[r].classList.add("set"); HJ.juice.bump(mo);
             r++;
             mo.style.right = (15 + (70 * r / n) - 6) + "%";
             if (r >= n) { after(ctx, 800, function () { mo.style.right = "84%"; chest.innerHTML = HJ.art("sparkle", 46) + HJ.art("gift", 46); ctx.cheer(t("great")); A.fx.win(); }); after(ctx, 2100, ctx.next); }
             else after(ctx, 900, round);
-          } else { b.classList.add("no"); setTimeout(function () { b.classList.remove("no"); }, 450); ctx.bad(); after(ctx, 450, function () { A.say(R.q.au); }); }
+          } else { b.classList.add("no"); setTimeout(function () { b.classList.remove("no"); }, 450); ctx.bad(false, R.q, R.options); after(ctx, 450, function () { A.say(R.q.au); });
+            if (++wrong >= 2 && right) right.classList.add("hint"); }
         };
         opts.appendChild(b);
       });

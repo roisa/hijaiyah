@@ -12,21 +12,25 @@
 <link rel="icon" href="assets/brand/babymo-logo.png">
 <link rel="apple-touch-icon" href="assets/brand/babymo-logo-512.png">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="css/scene.css?v=4">
-<link rel="stylesheet" href="css/app.css?v=4">
+<link rel="stylesheet" href="css/scene.css?v=5">
+<link rel="stylesheet" href="css/app.css?v=5">
 <script>/* theme before first paint (no flash) */try{var m=(JSON.parse(localStorage.getItem("bmh_v1")||"{}").theme)||"auto";document.documentElement.setAttribute("data-theme",m==="dark"||(m==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light")}catch(e){}</script>
+<script>/* big screens (iPad, desktop): scale the whole phone layout up, like the Baby Mo app does on iPad */
+(function(){function fit(){var w=innerWidth,h=innerHeight,z=1;if(Math.min(w,h)>=700)z=Math.max(1,Math.min(w/430,h/900));
+document.documentElement.style.zoom=z>1.02?z.toFixed(3):"";document.documentElement.classList.toggle("big",z>1.02);document.documentElement.style.setProperty("--vz",z>1.02?z:1);}fit();addEventListener("resize",fit);})();</script>
 </head>
 <body>
 <div id="app"></div>
 <script src="audio/huruf/voice.js"></script>
 <script src="js/letters.js?v=1"></script>
 <script src="js/quran.js?v=1"></script>
-<script src="js/store.js?v=4"></script>
-<script src="js/icons.js?v=4"></script>
-<script src="js/scene.js?v=4"></script>
-<script src="js/curriculum.js?v=4"></script>
-<script src="js/audio.js?v=4"></script>
-<script src="js/games.js?v=4"></script>
-<script src="js/app.js?v=4"></script>
+<script src="js/store.js?v=5"></script>
+<script src="js/icons.js?v=5"></script>
+<script src="js/scene.js?v=5"></script>
+<script src="js/curriculum.js?v=5"></script>
+<script src="js/audio.js?v=5"></script>
+<script src="js/juice.js?v=5"></script>
+<script src="js/games.js?v=5"></script>
+<script src="js/app.js?v=5"></script>
 </body>
 </html>

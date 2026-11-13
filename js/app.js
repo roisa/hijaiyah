@@ -1,7 +1,7 @@
 /* Baby Mo Hijaiyah — screens. Same iOS layout as the Baby Mo app home:
    nav bar (star jar · title · settings) → scroll content → floating glass tab bar (Main · Peta · Stiker · Abi & Umi). */
 (function () {
-  var A = HJ.audio, S = HJ.store, t = HJ.t, tr = HJ.tr, el = HJ.el, esc = HJ.esc, ic = HJ.ic;
+  var A = HJ.audio, S = HJ.store, t = HJ.t, tr = HJ.tr, el = HJ.el, esc = HJ.esc, ic = HJ.ic, J = HJ.juice;
   var app = document.getElementById("app");
   var MO = function (p) { return p.indexOf("mo2:") === 0 ? "assets/mo2/mo2-" + p.slice(4) + ".webp" : "assets/mo/mo-" + p + ".webp"; };
   var CHEER = ["yeyy", "pose-02", "wow", "ok", "pose-37", "alright", "pose-26"];
@@ -249,6 +249,14 @@
           A.fx.tap(); levelSheet(lv);
         };
         row.appendChild(n);
+        if (st.justUnlocked === lv.id && unl) {
+          n.classList.add("unlocking"); var keep = n.innerHTML; n.innerHTML = ic("lock");
+          setTimeout(function () {
+            n.innerHTML = keep; n.classList.add("opened"); A.fx.unlock();
+            var r = n.getBoundingClientRect(); J.burst(r.left + r.width / 2, r.top + r.height / 2, 16, true); J.buzz(30);
+          }, 900);
+          delete st.justUnlocked; S.save();
+        }
         if (lv === cur) { var mo = el("img", "map-mo"); mo.src = MO("pose-20"); mo.alt = ""; mo.style.left = "calc(" + x + "% + 36px)"; row.appendChild(mo); curNode = row; }
         path.appendChild(row);
       });
@@ -283,8 +291,10 @@
     var steps = opts.steps || HJ.buildSteps(lv), idx = 0, mistakes = 0, hearts = 3, boss = lv.kind === "boss", my = ++runId;
     var s = bare();
     var top = el("div", "lv-top"), x = el("button", "nav-btn", ic("close")), bar = el("div", "bar", "<i></i>"), hz = el("div", "hearts glass");
+    var goal = el("div", "bar-goal", HJ.art(boss ? "trophy" : "star", 30)), combo = 0, missed = [], replayed = false, collected = 0;
     x.setAttribute("aria-label", t("close"));
-    top.appendChild(x); top.appendChild(bar); if (boss) top.appendChild(hz);
+    var barWrap = el("div", "bar-wrap"); barWrap.appendChild(bar); barWrap.appendChild(goal);
+    top.appendChild(x); top.appendChild(barWrap); if (boss) top.appendChild(hz);
     s.appendChild(top);
     var stage = el("div", "stage"); s.appendChild(stage);
     var bw = el("div", "bubble-wrap"), moI = el("img"), bub = el("div", "bubble glass"); moI.alt = "Baby Mo"; bw.appendChild(moI); bw.appendChild(bub);
@@ -319,10 +329,19 @@
         stage: stage, lv: lv, step: step,
         alive: function () { return my === runId && tok === stepToken; },
         next: function () { if (nexted || !ctx.alive()) return; nexted = true; A.stop(); idx++; show(); },
-        good: function () { A.fx.good(); mo(HJ.util.pick(CHEER), HJ.util.pick([t("great"), t("good"), "Yeay!", "Masya Allah!"])); },
-        cheer: function (txt) { mo(HJ.util.pick(CHEER), txt || t("great")); },
-        bad: function (soft) {
-          A.fx.bad(); mo(HJ.util.pick(OOPS), t("oops"));
+        good: function (quiet) {
+          A.fx.good(); combo++; collected++;
+          if (!quiet) mo(HJ.util.pick(CHEER), HJ.util.pick([t("great"), t("good"), "Yeay!", "Masya Allah!"]));
+          var p = J.at(); J.burst(p.x, p.y, 10); J.buzz(15);
+          J.fly(p, bar.firstChild.getBoundingClientRect().width > 4 ? bar.firstChild : bar, HJ.art("sparkle", 24));
+          if ([3, 5, 8, 12, 16].indexOf(combo) >= 0) {
+            setTimeout(function () { if (!ctx.alive()) return; A.fx.combo(combo); J.banner(HJ.art("flame", 44) + "<b>" + esc(t("combo", { n: combo })) + "</b><small>" + esc(HJ.util.pick([t("great"), "Masya Allah!", t("good")])) + "</small>", "combo"); }, 350);
+          }
+        },
+        cheer: function (txt, quiet) { if (!quiet) mo(HJ.util.pick(CHEER), txt || t("great")); J.burst(null, null, 16, true); },
+        bad: function (soft, item, options) {
+          A.fx.bad(); mo(HJ.util.pick(OOPS), t("oops")); combo = 0; J.buzz([20, 40, 20]);
+          if (item && options && !replayed && missed.length < 3 && !missed.some(function (m) { return m.q.ar === item.ar; })) missed.push({ q: item, options: options });
           if (soft) return;
           mistakes++;
           if (boss) { hearts--; drawHearts(); hz.classList.add("shake"); setTimeout(function () { hz.classList.remove("shake"); }, 450); if (hearts <= 0) { runId++; A.fx.lose(); failed(lv); } }
@@ -333,13 +352,25 @@
       if (!g) { ctx.next(); return; }
       g(step, ctx);
     }
+    var finalStars = null;
     function finish() {
+      // learning loop: what was missed comes back once, gently, before the level ends (no stars lost here)
+      if (missed.length && !replayed && !opts.noReplay) {
+        replayed = true; finalStars = boss ? hearts : (mistakes <= 1 ? 3 : mistakes <= 4 ? 2 : 1);
+        steps.push({ type: "intro", mo: "pose-12", say: { id: "Yuk ulang yang tadi masih susah. Pasti bisa!", en: "Let's try the tricky ones again. You can do it!" }, short: 1 });
+        missed.forEach(function (m) { steps.push({ type: "pick", q: m.q, options: HJ.util.shuffle(m.options), again: 1 }); });
+        show(); return;
+      }
       runId++;
-      var stars = boss ? hearts : (mistakes <= 1 ? 3 : mistakes <= 4 ? 2 : 1);
+      var stars = finalStars != null ? finalStars : boss ? hearts : (mistakes <= 1 ? 3 : mistakes <= 4 ? 2 : 1);
       if (opts.onDone) return opts.onDone(stars);
+      var before = { total: S.totalStars(), streak: S.get().streak.n, streakDay: S.get().streak.last, worldDone: HJ.worlds[lv.w - 1].levels.filter(function (l) { return S.get().stars[l.id]; }).length,
+        missions: Object.keys((S.get().daily || {}).done || {}).length };
       var first = S.finish(lv.id, stars);
       HJ.mission("level");
-      results(lv, stars, first);
+      var all = HJ.allLevels(), nxt = all[all.indexOf(lv) + 1];
+      if (first && nxt) { S.get().justUnlocked = nxt.id; S.save(); }
+      results(lv, stars, first, before);
     }
     show();
   }
@@ -369,17 +400,40 @@
     return e;
   }
 
-  function results(lv, stars, first) {
+  function results(lv, stars, first, before) {
     A.fx.win(); confetti(70);
-    var all = HJ.allLevels(), nxt = all[all.indexOf(lv) + 1], w = HJ.worlds[lv.w - 1];
+    before = before || { total: S.totalStars(), streak: S.get().streak.n, worldDone: 0, missions: 0 };
+    var all = HJ.allLevels(), nxt = all[all.indexOf(lv) + 1], w = HJ.worlds[lv.w - 1], st = S.get();
+    var worldDone = w.levels.filter(function (l) { return st.stars[l.id]; }).length, worldComplete = worldDone === w.levels.length && before.worldDone < w.levels.length;
     HJ.modal(function (p, close) {
       var m = moImg(HJ.util.pick(["yeyy", "pose-02", "wow", "pose-37"]), "150px"); m.classList.add("result-mo"); p.appendChild(m);
       p.appendChild(el("div", "kicker", esc(tr(w.name)) + " · Level " + lv.id));
-      p.appendChild(el("h2", "", esc(t("levelDone"))));
+      p.appendChild(el("h2", "", esc(t(stars === 3 ? "perfect" : "levelDone"))));
       var bs = el("div", "bigstars"); for (var i = 0; i < 3; i++) bs.appendChild(el("span", "", HJ.art("star", 54))); p.appendChild(bs);
-      for (var j = 0; j < stars; j++) (function (j) { setTimeout(function () { bs.children[j].classList.add("on"); A.fx.star(j); }, 400 + j * 350); })(j);
-      if (first) { p.appendChild(el("p", "", "<b>" + esc(t("newSticker")) + "</b>")); p.appendChild(stickerEl(lv, true, true)); }
-      if (lv.kind === "boss") p.appendChild(el("p", "", HJ.art("trophy", 28) + " <b>" + esc(tr(w.name)) + "</b> " + HJ.art("check", 20)));
+      for (var j = 0; j < stars; j++) (function (j) { setTimeout(function () {
+        bs.children[j].classList.add("on"); A.fx.star(j); J.buzz(20);
+        var r = bs.children[j].getBoundingClientRect(); J.burst(r.left + r.width / 2, r.top + r.height / 2, 12, true);
+      }, 450 + j * 420); })(j);
+      // the totals move: stars, this book's progress, the streak
+      var gained = S.totalStars() - before.total, chips = el("div", "row res-chips");
+      var cs = el("span", "chip glass", HJ.art("star", 22) + ' <b class="n">' + before.total + "</b>" + (gained > 0 ? ' <span class="plus">+' + gained + "</span>" : ""));
+      chips.appendChild(cs);
+      var streakUp = st.streak.n > (before.streak || 0) || before.streakDay !== st.streak.last;
+      var cf = el("span", "chip glass" + (streakUp ? " lit" : ""), HJ.art("flame", 22) + " <b>" + st.streak.n + "</b> " + esc(st.streak.n === 1 ? t("day1") : t("day")));
+      chips.appendChild(cf); p.appendChild(chips);
+      setTimeout(function () { J.countUp(cs.querySelector(".n"), before.total, S.totalStars(), 900); if (gained > 0) A.fx.coin(); if (streakUp) { J.bump(cf); A.fx.combo(3); } }, 450 + stars * 420);
+      var wb = el("div", "res-world", '<div class="rw-h">' + wi(w.n, true).outerHTML + "<span><b>" + esc(tr(w.name)) + '</b><small><span class="wn">' + before.worldDone + "</span> / " + w.levels.length + "</small></span></div>" +
+        '<div class="hm-bar"><i style="width:' + (before.worldDone / w.levels.length * 100) + '%"></i></div>');
+      p.appendChild(wb);
+      setTimeout(function () { wb.querySelector(".hm-bar i").style.width = (worldDone / w.levels.length * 100) + "%"; J.countUp(wb.querySelector(".wn"), before.worldDone, worldDone, 700); }, 700 + stars * 420);
+      if (first) { var sh = el("p", "", "<b>" + esc(t("newSticker")) + "</b>"); p.appendChild(sh); var sk = stickerEl(lv, true, true); sk.classList.add("shine"); p.appendChild(sk); }
+      if (worldComplete) {
+        p.appendChild(el("div", "world-done", HJ.art("trophy", 46) + "<span><b>" + esc(t("bookDone", { b: tr(w.name) })) + "</b>" +
+          (nxt ? "<small>" + esc(t("bookOpen", { b: tr(HJ.worlds[nxt.w - 1].name) })) + "</small>" : "") + "</span>"));
+        setTimeout(function () { A.fx.unlock(); J.banner(HJ.art("trophy", 60) + "<b>" + esc(t("bookDone", { b: tr(w.name) })) + "</b>", "big"); confetti(120); }, 1600 + stars * 420);
+      }
+      var mNow = Object.keys((st.daily || {}).done || {}).length;
+      if (mNow > (before.missions || 0)) setTimeout(function () { HJ.toast(HJ.art("check", 22) + " " + esc(t("missionDone", { n: mNow }))); }, 2400);
       var r = el("div", "row"), again = el("button", "btn ghost", ic("replay") + " " + t("again")), go = el("button", "btn", t("next") + " " + ic("next"));
       again.onclick = function () { close(); runLevel(lv); };
       go.onclick = function () { close(); if (nxt && S.unlocked(nxt)) { map(nxt.w); setTimeout(function () { levelSheet(nxt); }, 150); } else map(lv.w); };

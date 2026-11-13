@@ -132,6 +132,9 @@
     whoosh: function () { tone(300, 0.25, "sine", 0.08, 0, 900); },
     win: function () { [523, 659, 784, 1047].forEach(function (f, i) { tone(f, 0.22, "triangle", 0.18, i * 0.12); }); tone(1319, 0.5, "triangle", 0.16, 0.5); },
     star: function (i) { tone(880 + i * 220, 0.2, "triangle", 0.18); },
+    combo: function (n) { var b = 523 + Math.min(n, 12) * 30; [0, 4, 7, 12].forEach(function (s, i) { tone(b * Math.pow(2, s / 12), 0.16, "triangle", 0.15, i * 0.07); }); },
+    unlock: function () { tone(392, 0.12, "square", 0.07); tone(784, 0.1, "triangle", 0.16, 0.1); [1047, 1319, 1568].forEach(function (f, i) { tone(f, 0.25, "triangle", 0.14, 0.22 + i * 0.09); }); },
+    sparkle: function () { tone(1568, 0.08, "sine", 0.08); tone(2093, 0.1, "sine", 0.06, 0.05); },
     lose: function () { [440, 392, 330].forEach(function (f, i) { tone(f, 0.25, "triangle", 0.14, i * 0.18); }); }
   };
 

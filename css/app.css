@@ -571,3 +571,53 @@ svg.flag { display: inline-block; vertical-align: middle; flex: 0 0 auto; filter
 .name-input { width: 100%; height: 54px; margin-top: 12px; border-radius: 16px; border: none; text-align: center; font: 800 19px var(--font); color: var(--ink);
   background: var(--card2); box-shadow: inset 0 0 0 1.5px var(--hair2); outline: none; }
 .name-input:focus { box-shadow: inset 0 0 0 2px #0A9488, 0 0 0 4px rgba(10,148,136,.15); }
+
+/* ===== juice: bursts, flying sparkles, banners, bumps (js/juice.js) ===== */
+.jp { position: fixed; z-index: 90; width: 9px; height: 9px; margin: -4px 0 0 -4px; border-radius: 50%; pointer-events: none; animation: jp 700ms cubic-bezier(.2,.7,.3,1) forwards; }
+.jp.s { width: auto; height: auto; background: none; margin: -10px 0 0 -10px; }
+@keyframes jp { 0% { transform: translate(0,0) scale(.4) rotate(0); opacity: 1; } 70% { opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(1) rotate(var(--r)); opacity: 0; } }
+.jfly { position: fixed; z-index: 91; margin: -13px 0 0 -13px; pointer-events: none; filter: drop-shadow(0 4px 6px rgba(120,80,0,.35)); }
+.jbump { animation: jbump .5s cubic-bezier(.3,1.8,.5,1); }
+@keyframes jbump { 30% { transform: scale(1.25); } 60% { transform: scale(.94); } }
+.jbanner { position: fixed; z-index: 95; left: 50%; top: 30%; min-width: 230px; max-width: calc(100vw - 40px); transform: translate(-50%,-50%); display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 16px 30px 14px; border-radius: 28px; text-align: center; pointer-events: none; color: #fff;
+  background: linear-gradient(135deg,#FF9F45,#FF5E7E); box-shadow: inset 0 2px 0 rgba(255,255,255,.45), 0 22px 40px -16px rgba(255,94,126,.8);
+  animation: bannerIn .5s cubic-bezier(.3,1.7,.5,1); }
+.jbanner b { font-family: var(--fun); font-weight: 700; font-size: 30px; line-height: 1.1; white-space: nowrap; text-shadow: 0 2px 0 rgba(0,0,0,.15); }
+.jbanner small { font-weight: 800; font-size: 14px; opacity: .95; }
+.jbanner.big { background: linear-gradient(135deg,#FFC93D,#FF9500); padding: 22px 34px; }
+.jbanner.big b { font-size: 26px; max-width: 280px; white-space: normal; }
+.jbanner.out { opacity: 0; transform: translate(-50%,-62%) scale(.9); transition: .4s ease-in; }
+@keyframes bannerIn { from { transform: translate(-50%,-50%) scale(.3) rotate(-8deg); opacity: 0; } }
+.bar-wrap { flex: 1; display: flex; align-items: center; gap: 6px; }
+.bar-goal { flex: 0 0 auto; display: grid; place-items: center; filter: drop-shadow(0 3px 4px rgba(200,120,0,.35)); }
+.bar i { position: relative; }
+.bar i::after { content: ""; position: absolute; right: 2px; top: 2px; width: 5px; height: 5px; border-radius: 50%; background: #fff; opacity: .9; box-shadow: 0 0 8px 3px rgba(255,255,255,.8); }
+.tile.hint { animation: hintGlow 1.2s ease-in-out infinite; }
+@keyframes hintGlow { 0%,100% { box-shadow: inset 0 0 0 2.5px rgba(255,201,61,.9), 0 0 0 0 rgba(255,201,61,.55), 0 12px 22px -14px rgba(30,60,110,.55); transform: scale(1); }
+  50% { box-shadow: inset 0 0 0 3px #FFB800, 0 0 0 12px rgba(255,201,61,0), 0 12px 22px -14px rgba(30,60,110,.55); transform: scale(1.05); } }
+.res-chips { margin-top: 4px !important; gap: 8px; }
+.res-chips .chip { min-height: 40px; font-size: 16px; }
+.res-chips .plus { color: #12A15A; font-weight: 900; animation: plusIn .6s .9s both cubic-bezier(.3,1.7,.5,1); }
+@keyframes plusIn { from { opacity: 0; transform: translateY(8px) scale(.6); } }
+.res-chips .chip.lit svg { animation: flicker 1.2s ease-in-out infinite; transform-origin: 50% 90%; }
+.res-world { margin: 12px auto 0; max-width: 320px; text-align: left; padding: 10px 12px; border-radius: 18px; background: var(--card2); box-shadow: inset 0 0 0 .5px var(--hair2); }
+.rw-h { display: flex; align-items: center; gap: 10px; }
+.rw-h .wi { width: 38px; height: 38px; border-radius: 12px; margin: 0; box-shadow: none; }
+.rw-h .wi .card span { font-size: 10px; }
+.rw-h b { display: block; font-size: 15px; font-weight: 900; } .rw-h small { font-weight: 800; color: var(--ink3); }
+.res-world .hm-bar i { transition: width 1s cubic-bezier(.2,.7,.2,1); }
+.world-done { display: flex; align-items: center; gap: 12px; margin: 14px auto 0; max-width: 340px; text-align: left; padding: 12px 14px; border-radius: 20px;
+  background: linear-gradient(135deg,#FFF3C4,#FFE08A); color: #6A4300; animation: bannerIn2 .6s 1.4s both cubic-bezier(.3,1.6,.5,1); }
+.world-done b { display: block; font-size: 16px; font-weight: 900; } .world-done small { display: block; font-weight: 800; opacity: .85; }
+@keyframes bannerIn2 { from { opacity: 0; transform: scale(.6); } }
+.sticker.shine::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.75) 46%, transparent 62%); background-size: 260% 100%; animation: shine 1.6s .9s ease-in-out 2; }
+@keyframes shine { from { background-position: 130% 0; } to { background-position: -130% 0; } }
+.node.unlocking { animation: wiggle .3s ease-in-out 3 .2s; }
+@keyframes wiggle { 25% { transform: translateX(-50%) rotate(-8deg); } 75% { transform: translateX(-50%) rotate(8deg); } }
+.node.opened { animation: openPop .6s cubic-bezier(.3,1.8,.5,1); }
+@keyframes openPop { 0% { transform: translateX(-50%) scale(.6); } 60% { transform: translateX(-50%) scale(1.2); } 100% { transform: translateX(-50%) scale(1); } }
+/* iPad: the scaled phone layout uses the whole width */
+html.big #app { max-width: none; }
+html.big .tabbar { max-width: 600px; }

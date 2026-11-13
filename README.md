@@ -11,6 +11,7 @@ EN/ID pill in the top bar switches everything at once — menus, instructions, M
   a parent check before moving on), then a Qur'an book with Al-Fatihah and 14 Juz 'Amma surahs.
 - All levels: [docs/LEVELS.en.md](docs/LEVELS.en.md) · method and game design: [docs/CURRICULUM.md](docs/CURRICULUM.md)
 - **Play online:** https://roisa.github.io/hijaiyah/ (published automatically from this repo)
+- **App Store kit:** https://roisa.github.io/hijaiyah/kit/ — screenshots, banners, artwork and listing text (`node tools/kit/build-kit.js` remakes it)
 - Run locally: `npm start`, open http://localhost:8811 · checks: `npm run check`
 - Kids Category ready: no ads, no tracking, progress stays on the device, parent area behind a parental gate.
 
