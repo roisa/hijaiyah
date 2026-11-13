@@ -186,6 +186,11 @@
     var pose = hr < 11 ? "pose-05" : hr < 15 ? "pose-41" : hr < 18 ? "yes" : "pose-12";
     pic.appendChild(moImg(pose));
     pic.onclick = function () { A.unlock(); A.fx.pop(); var im = pic.querySelector("img"); im.src = MO(HJ.util.pick(CHEER)); A.talk(st.name ? t("hello", { n: st.name }) : "Assalamu'alaikum!", st.lang); };
+    // Mo greets once a day, on the first touch of the home screen (phones only allow sound after a tap)
+    if (st.greeted !== today()) sc.addEventListener("pointerdown", function once(e) {
+      sc.removeEventListener("pointerdown", once, true); if (S.get().greeted === today() || pic.contains(e.target)) return;
+      S.set("greeted", today()); setTimeout(function () { A.talk((st.name ? t("hello", { n: st.name }) : "Assalamu'alaikum!") + " " + greetLine(new Date().getHours()), st.lang); }, 250);
+    }, true);
     var bub = el("div", "mo-bub glass");
     bub.appendChild(el("div", "mo-hello", st.name ? "Assalamu'alaikum,<br><em>" + esc(st.name) + "</em>! " + HJ.art("hand", 26, "waving")
       : "Assalamu'alaikum! " + HJ.art("hand", 26, "waving")));
@@ -367,6 +372,20 @@
       });
     };
     var stepToken = 0, bubT = null;
+    function react(k) { bw.classList.remove("yay", "oh"); void bw.offsetWidth; bw.classList.add(k); }
+    // idle nudge: nothing touched for 12 s → Mo hops and says the step's instruction again (pre-readers can't re-read it)
+    var lastTouch = Date.now(), nudges = 0, nudgeStep = -1;
+    s.addEventListener("pointerdown", function () { lastTouch = Date.now(); }, true);
+    var idleT = setInterval(function () {
+      if (my !== runId || !document.body.contains(s)) { clearInterval(idleT); return; }
+      if (document.querySelector(".veil") || document.visibilityState !== "visible") { lastTouch = Date.now(); return; }
+      if (nudgeStep !== idx) { nudgeStep = idx; nudges = 0; }
+      if (Date.now() - lastTouch < 12000 || nudges >= 2 || bw.style.display === "none") return;
+      var step = steps[idx]; if (!step || !INSTR[step.type]) return;
+      nudges++; lastTouch = Date.now();
+      mo(HJ.util.pick(["pose-37", "pose-02", "yes"]), t("nudge")); react("yay");
+      A.talk(t(INSTR[step.type]), S.get().lang);
+    }, 1500);
     function mo(pose, text) {
       if (pose === null) { bw.style.display = "none"; return; }
       bw.style.display = "";
@@ -386,7 +405,7 @@
         alive: function () { return my === runId && tok === stepToken; },
         next: function () { if (nexted || !ctx.alive()) return; nexted = true; A.stop(); idx++; show(); },
         good: function (quiet) {
-          A.fx.good(); combo++; collected++;
+          A.fx.good(); combo++; collected++; react("yay");
           if (!quiet) mo(HJ.util.pick(CHEER), HJ.util.pick([t("great"), t("good"), "Yeay!", "Masya Allah!"])); else if (bw.style.display !== "none") mo(HJ.util.pick(CHEER));
           var p = J.at(); J.burst(p.x, p.y, 10); J.buzz(15);
           J.fly(p, bar.firstChild.getBoundingClientRect().width > 4 ? bar.firstChild : bar, HJ.art("sparkle", 24));
@@ -396,11 +415,12 @@
         },
         cheer: function (txt, quiet) { if (!quiet) mo(HJ.util.pick(CHEER), txt || t("great")); J.burst(null, null, 16, true); },
         bad: function (soft, item, options) {
-          A.fx.bad(); mo(HJ.util.pick(OOPS), t("oops")); combo = 0; J.buzz([20, 40, 20]);
+          A.fx.bad(); mo(HJ.util.pick(OOPS), t("oops")); react("oh"); combo = 0; J.buzz([20, 40, 20]);
+          if (item) S.addMiss(item);
           if (item && options && !replayed && missed.length < 3 && !missed.some(function (m) { return m.q.ar === item.ar; })) missed.push({ q: item, options: options });
           if (soft) return;
           mistakes++;
-          var qKey = idx + "|" + (item ? item.ar : "");
+          var qKey = String(idx);                            // a step (with all its rounds) costs at most one heart
           if (boss && lostFor[qKey]) return;                // at most one heart per question
           if (boss) { lostFor[qKey] = 1; hearts--; drawHearts(); hz.classList.add("shake"); setTimeout(function () { hz.classList.remove("shake"); }, 450); if (hearts <= 0) { runId++; A.fx.lose(); failed(lv); } }
         },
@@ -435,7 +455,7 @@
       runId++;
       var stars = finalStars != null ? finalStars : boss ? hearts : (mistakes <= 1 ? 3 : mistakes <= 4 ? 2 : 1);
       if (opts.onDone) return opts.onDone(stars);
-      var before = { total: S.totalStars(), streak: S.get().streak.n, streakDay: S.get().streak.last, worldDone: HJ.worlds[lv.w - 1].levels.filter(function (l) { return S.get().stars[l.id]; }).length,
+      var before = { mistakes: mistakes, total: S.totalStars(), streak: S.get().streak.n, streakDay: S.get().streak.last, worldDone: HJ.worlds[lv.w - 1].levels.filter(function (l) { return S.get().stars[l.id]; }).length,
         missions: Object.keys((S.get().daily || {}).done || {}).length };
       var first = S.finish(lv.id, stars);
       HJ.mission("level");
@@ -481,7 +501,7 @@
     HJ.modal(function (p, close) {
       var m = moImg(HJ.util.pick(["yeyy", "pose-02", "wow", "pose-37"]), "150px"); m.classList.add("result-mo"); p.appendChild(m);
       p.appendChild(el("div", "kicker", esc(tr(w.name)) + " · Level " + lv.id));
-      p.appendChild(el("h2", "", esc(t(stars === 3 ? "perfect" : "levelDone"))));
+      p.appendChild(el("h2", "", esc(t(stars === 3 && !before.mistakes ? "perfect" : stars === 3 ? "great" : "levelDone"))));
       var bs = el("div", "bigstars"); for (var i = 0; i < 3; i++) bs.appendChild(el("span", "", HJ.art("star", 54))); p.appendChild(bs);
       for (var j = 0; j < stars; j++) (function (j) { setTimeout(function () {
         bs.children[j].classList.add("on"); A.fx.star(j); J.buzz(20);

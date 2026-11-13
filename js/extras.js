@@ -90,6 +90,7 @@
       p.classList.add("chest-open");
       var mo = APP().moImg("wow", "96px"); mo.classList.add("co-mo"); p.appendChild(mo);
       var h = el("h2", "", esc(t("chestTap"))); p.appendChild(h);
+      A().talk(t("chestTap"), S.get().lang);
       var box = el("button", "co-chest", chestSvg(190)); box.setAttribute("aria-label", t("chestOpen")); p.appendChild(box);
       var dots = el("div", "co-dots", "<i></i><i></i><i></i>"); p.appendChild(dots);
       box.onclick = function () {
@@ -113,6 +114,7 @@
         setTimeout(function () {
           dots.remove(); h.textContent = pr ? t("chestGot") : t("chestAll");
           var card = el("div", "co-prize");
+          A().talk(pr ? t("chestGot") + " " + t(SETS[kind].label) + " " + t(SETS[kind].items[key].n) + "!" : t("chestStars"), S.get().lang);
           if (pr) {
             card.innerHTML = '<span class="cp-art">' + prizeArt(kind, key, 92) + '</span><b>' + esc(t(SETS[kind].label)) + " · " + esc(t(SETS[kind].items[key].n)) + "</b>";
           } else card.innerHTML = '<span class="cp-art">' + HJ.art("star", 72) + '</span><b>' + esc(t("chestStars")) + "</b>";
@@ -222,7 +224,18 @@
         p.appendChild(APP().moImg(HJ.util.pick(["yeyy", "pose-02", "pose-37"]), "140px"));
         p.appendChild(el("div", "kicker", esc(t("arcade"))));
         p.appendChild(el("h2", "", esc(t("arcadeDone"))));
-        p.appendChild(el("p", "ar-note", esc(t("arcadeNoStars"))));
+        A().talk(t("arcadeDone"), S.get().lang);
+        // the fun jar: every 3 Free Play rounds → +1 star (at most 3 a day), so little ones also reach treasure chests
+        var s0 = S.get(), d0 = S.dayKey(new Date()); if (!s0.fun || s0.fun.d !== d0) s0.fun = { d: d0, n: 0, st: 0 };
+        s0.fun.n++; var fill = s0.fun.n % 3 || 3, gotStar = fill === 3 && s0.fun.st < 3;
+        if (gotStar) { s0.fun.st++; s0.bonus = (s0.bonus || 0) + 1; }
+        S.save();
+        var jar = el("div", "fun-jar" + (gotStar ? " full" : ""));
+        jar.innerHTML = '<span class="fj-k">' + esc(t("funJar")) + "</span>" + [0, 1, 2].map(function (i) { return '<i class="' + (i < fill ? "on" : "") + (i === fill - 1 ? " new" : "") + '">' + HJ.art("star", 22) + "</i>"; }).join("") +
+          (gotStar ? '<b class="fj-plus">+1 ' + HJ.art("star", 22) + "</b>" : "");
+        p.appendChild(jar);
+        p.appendChild(el("p", "ar-note", esc(gotStar ? t("funJarFull") : s0.fun.st >= 3 && fill === 3 ? t("funJarMax") : t("funJarSub", { n: 3 - fill }))));
+        if (gotStar) setTimeout(function () { A().fx.star(2); }, 500);
         var r = el("div", "row"), home = el("button", "btn ghost", esc(t("done"))), again = el("button", "btn", HJ.ic("replay") + " " + esc(t("arcadeAgain")));
         home.onclick = function () { close(); APP().home(); }; again.onclick = function () { close(); play(type); };
         r.appendChild(home); r.appendChild(again); p.appendChild(r);
@@ -250,6 +263,22 @@
     box.appendChild(el("div", "wk-stats", [[mins, "wkMin", "flame"], [sum.lv, "wkLv", "trophy"], [sum.nw, "wkNew", "medal"], [sum.ts, "wkTs", "check"]].map(function (x) {
       return '<span class="wk-s">' + HJ.art(x[2], 26) + "<b>" + x[0] + "</b><small>" + esc(t(x[1])) + "</small></span>";
     }).join("")));
+    // letters to practise
+    var weak = S.weak(14).slice(0, 6);
+    var wb = el("div", "wk-weak");
+    wb.appendChild(el("div", "wk-wt", "<b>" + esc(t("weakT")) + "</b><small>" + esc(weak.length ? t("weakSub") : t("weakNone")) + "</small>"));
+    if (weak.length) {
+      var chips = el("div", "wk-chips");
+      weak.forEach(function (x) {
+        var c = el("button", "wk-chip", '<span class="ar">' + esc(x.ar) + "</span><small>" + esc(t("weakTimes", { n: x.n })) + "</small>");
+        c.onclick = function () { A().unlock(); A().say(x.au || x.ar); };
+        chips.appendChild(c);
+      });
+      wb.appendChild(chips);
+      var go = el("button", "btn small", HJ.ic("play") + " " + esc(t("weakGo"))); go.onclick = function () { practice(weak); };
+      var gr = el("div", "wk-btns"); gr.appendChild(go); wb.appendChild(gr);
+    }
+    box.appendChild(wb);
     var cur = S.current(), w = HJ.worlds[cur.w - 1];
     var text = t("wkText", { k: s.name || t("kid"), d: played, m: mins, l: sum.lv, s: sum.nw, t: sum.ts, now: tr(w.name) + " · Level " + cur.id });
     var row = el("div", "wk-btns"), sh = el("button", "btn small", HJ.ic("next") + " " + esc(t("wkShare"))), wa = el("button", "btn small ghost", HJ.ic("bubble") + " " + esc(t("wkWa")));
@@ -262,11 +291,32 @@
     box.appendChild(row);
     sc.appendChild(box);
   }
+  // a short practice of the mixed-up letters: hear it → pick it among its look-alikes, then a yes/no round
+  function practice(weak) {
+    var U = HJ.util, items = weak.map(function (x) { return { ar: x.ar, au: x.au || x.ar, k: x.k, v: x.v, tr: x.tr }; });
+    function opts(q) {
+      var o = [q];
+      if (q.k) HJ.cousins(q.k).concat(HJ.L.map(function (l) { return l.k; })).forEach(function (k) { var y = HJ.syl(k, q.v || "a"); if (o.length < 3 && !o.some(function (z) { return z.ar === y.ar; })) o.push(y); });
+      items.forEach(function (y) { if (o.length < 3 && !o.some(function (z) { return z.ar === y.ar; })) o.push(y); });
+      return U.shuffle(o);
+    }
+    var steps = [{ type: "intro", mo: "pose-12", say: { id: t("practiceSay"), en: t("practiceSay") } }];
+    items.forEach(function (q) { steps.push({ type: "pick", q: q, options: opts(q) }); });
+    U.shuffle(items.slice()).slice(0, 3).forEach(function (q) { var o = opts(q); steps.push({ type: "pick", q: q, options: o }); });
+    HJ.runLevel({ id: "_practice", kind: "practice", w: 1 }, { steps: steps, noReplay: true, onExit: APP().home, onDone: function () {
+      var s = S.get(); s.practiced = s.practiced || {}; items.forEach(function (x) { s.practiced[x.ar] = Date.now(); }); S.save();
+      A().fx.win(); APP().confetti(50); A().talk(t("practiceDone"), s.lang);
+      HJ.modal(function (p, close) {
+        p.appendChild(APP().moImg("yeyy", "140px")); p.appendChild(el("div", "kicker", esc(t("practiceT")))); p.appendChild(el("h2", "", esc(t("practiceDone"))));
+        var r = el("div", "row"), ok = el("button", "btn", HJ.ic("check") + " " + esc(t("done"))); ok.onclick = function () { close(); APP().home(); }; r.appendChild(ok); p.appendChild(r);
+      });
+    } });
+  }
   function copy(text) {
     var done = function () { HJ.toast(HJ.art("check", 22) + " " + esc(t("wkCopied"))); };
     if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {});
     else { var ta = el("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); done(); } catch (e) {} ta.remove(); }
   }
 
-  HJ.extras = { chestCard: chestCard, openChest: openChest, treasures: treasures, arcadeRow: arcadeRow, weekly: weekly, chestReady: ready, playArcade: play };
+  HJ.extras = { practice: practice, chestCard: chestCard, openChest: openChest, treasures: treasures, arcadeRow: arcadeRow, weekly: weekly, chestReady: ready, playArcade: play };
 })();

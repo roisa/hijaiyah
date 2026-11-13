@@ -55,7 +55,7 @@
     var dots = el("div", "dots", "<i></i><i></i><i></i>");
     var lbl = el("div", "sub", t("copy3"));
     var nextB = el("button", "btn", t("next") + " " + HJ.ic("next")); nextB.style.visibility = "hidden";
-    var said3 = el("button", "btn gold small", HJ.ic("bubble") + " " + (HJ.store.get().lang === "en" ? "I said it!" : "Aku sudah baca!"));
+    var said3 = el("button", "btn gold small", HJ.ic("bubble") + " " + t("iSaid"));
     // talaqqi rhythm: Mo says it → the child says it → taps → Mo says it again … three times
     function ready(on) { said3.disabled = !on; said3.classList.toggle("wait", !on); if (on) HJ.juice.bump(said3); }
     function play() {
@@ -71,7 +71,13 @@
     };
     ready(false);
     add(st, dots, el("div", "row"));
-    var r = st.lastChild; r.appendChild(said3); st.appendChild(recorder(it.au, { onDone: function () { if (said < 3) { said3.disabled = false; said3.onclick(); } } }));
+    var r = st.lastChild; r.appendChild(said3);
+    var rec = recorder(it.au, { onDone: function () { if (said < 3) { said3.disabled = false; said3.onclick(); } } }); st.appendChild(rec);
+    // one clear action: with a microphone the child just taps the mic and reads; "I said it!" only shows without one
+    if (HJ.voice && HJ.voice.ok && !rec.classList.contains("nomic")) {
+      said3.style.display = "none";
+      try { new MutationObserver(function () { if (rec.classList.contains("nomic")) said3.style.display = ""; }).observe(rec, { attributes: true, subtree: true, attributeFilter: ["class"] }); } catch (e) { said3.style.display = ""; }
+    }
     if (s.note && s.note.name) {
       var nm = el("button", "chip", HJ.ic("tag") + " " + t("letterName") + ": <span class='ar' style='font-size:22px'>" + esc(s.note.name) + "</span> " + esc(s.note.nameK ? HJ.letterName(s.note.nameK, HJ.store.get().lang) : ""));
       nm.onclick = function () { A.say(s.note.name); };

@@ -26,8 +26,9 @@
       others = shuffle(tricky).concat(shuffle(others.filter(function (x) { return tricky.indexOf(x) < 0; })));
     } else others = shuffle(others);
     others = uniqBy(others, function (x) { return x.ar; });
-    // never fewer than 3 choices (a 2-way choice can be won by guessing): borrow look-alike letters if needed
-    if (ans.k && ans.v && others.length < n - 1) {
+    // only letters the child has already met: borrow other letters only when the pool has a single one
+    // (the very first level, alif & ba, is a 2-way choice on purpose — it's for meeting the letters, not testing them)
+    if (ans.k && ans.v && others.length < 1) {
       var extra = HJ.cousins(ans.k).concat(HJ.L.map(function (l) { return l.k; })).map(function (k) { return syl(k, ans.v); })
         .filter(function (x) { return x.ar !== ans.ar && !others.some(function (o) { return o.ar === x.ar; }); });
       others = others.concat(extra.slice(0, n - 1 - others.length));
@@ -84,18 +85,18 @@
     var nw = fat(newK, vow), pool = fat(poolK.length > 1 ? poolK : newK.concat(["ba", "ta"]), vow);
     var st = [S.intro("pose-41", lv.say || T("Ayo kenalan dengan huruf baru!", "Let's meet new letters!"), nw)];
     nw.forEach(function (it) { st.push(S.learn(it, { name: BY[it.k].n, nameK: it.k })); });
+    // 10 steps at most (was 12): short enough for a 4–5 year old's attention, every game type still visits often
     if (!lv.noTrace) st.push(S.trace(BY[newK[0]].seat ? "ا" : BY[newK[0]].c));
     st.push(S.pick(pick(nw), pool));
     st.push(S.pop(pick(nw), pool));
     st.push(S.train(randChain(pool, Math.min(4, 3 + pool.length / 8 | 0), nw)));
-    st.push(S.yesno(pick(nw), pool));
     if (!lv.noTrace && newK[1]) st.push(S.trace(BY[newK[1]].c));
-    st.push(S.bridge(pool, nw, 4));
+    else st.push(S.yesno(pick(nw), pool));
+    st.push(S.bridge(pool, nw, 3));
     if (pool.length >= 4) {
       var ps = shuffle(uniqBy(nw.concat(shuffle(pool)), function (x) { return x.ar; })).slice(0, 4);
       st.push(S.match(ps.map(function (x) { return [x, { ar: x.ar, au: x.au, soundOnly: 1 }]; })));   // hear the sound, find the letter
-    }
-    st.push(S.train(randChain(pool, Math.min(5, 3 + pool.length / 8 | 0), nw)));
+    } else st.push(S.train(randChain(pool, Math.min(5, 3 + pool.length / 8 | 0), nw)));
     return st;
   }
 

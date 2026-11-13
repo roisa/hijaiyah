@@ -40,6 +40,21 @@
     },
     playMs: function () { var t = today(); if (st.playDay.d !== t) st.playDay = { d: t, ms: 0 }; return st.playDay.ms; },
     addPlay: function (ms) { this.playMs(); st.playDay.ms += ms; this.logDay().ms += ms; save(); },
+    // letters/words the child got wrong (for "letters to practise"): per day counts + what to replay, kept 30 days
+    addMiss: function (it) {
+      if (!it || !it.ar || it.quran) return;
+      var d = today(); st.miss = st.miss || {}; st.missMeta = st.missMeta || {};
+      var m = st.miss[d] = st.miss[d] || {}; m[it.ar] = (m[it.ar] || 0) + 1;
+      st.missMeta[it.ar] = { au: it.au, k: it.k, v: it.v, tr: it.tr, t: Date.now() };
+      var ks = Object.keys(st.miss); if (ks.length > 30) { var f = function (k) { var x = k.split("-"); return +x[0] * 10000 + +x[1] * 100 + +x[2]; }; ks.sort(function (a, b) { return f(a) - f(b); }).slice(0, ks.length - 30).forEach(function (k) { delete st.miss[k]; }); }
+      save();
+    },
+    weak: function (days) {
+      var tot = {}, now = new Date(), pr = st.practiced || {};
+      for (var i = 0; i < (days || 14); i++) { var d = new Date(now); d.setDate(now.getDate() - i); var m = (st.miss || {})[this.dayKey(d)]; if (m) for (var a in m) tot[a] = (tot[a] || 0) + m[a]; }
+      return Object.keys(tot).filter(function (a) { var mm = (st.missMeta || {})[a]; return mm && !(pr[a] && pr[a] >= mm.t); })
+        .sort(function (a, b) { return tot[b] - tot[a]; }).map(function (a) { var mm = st.missMeta[a]; return { ar: a, au: mm.au, k: mm.k, v: mm.v, tr: mm.tr, n: tot[a] }; });
+    },
     // a small per-day log for the parents' weekly report (kept 60 days)
     dayKey: function (d) { return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); },
     logDay: function (d) {
@@ -88,6 +103,14 @@
     prClassic: ["Klasik", "Classic"], prOcean: ["Samudra", "Ocean"], prGold: ["Emas", "Gold"], prGalaxy: ["Galaksi", "Galaxy"], prPastel: ["Pastel", "Pastel"], prCandy: ["Permen", "Candy"], prSilver: ["Emas & perak", "Gold & silver"], prRainbow: ["Pelangi", "Rainbow"],
     arcade: ["Main Bebas", "Free Play"], arcadeSub: ["Main game favorit dengan huruf yang sudah kamu pelajari", "Play your favourite games with letters you've learned"],
     arcadeLock: ["Terbuka setelah level {b}", "Opens after level {b}"], arcadeDone: ["Seru sekali!", "That was fun!"], arcadeAgain: ["Main lagi!", "Play again!"], arcadeNoStars: ["Main Bebas untuk latihan, bintang didapat di peta", "Free Play is practice; stars are earned on the map"],
+    funJar: ["Toples seru", "Fun jar"], funJarSub: ["{n} permainan lagi untuk 1 bintang", "{n} more games for a star"], funJarFull: ["Toplesnya penuh! 1 bintang untukmu", "The jar is full! A star for you"],
+    funJarMax: ["Hari ini 3 bintang sudah didapat. Lanjut besok ya!", "You got 3 jar stars today. More tomorrow!"],
+    weakT: ["Perlu dilatih", "Letters to practise"], weakSub: ["Yang paling sering tertukar 2 minggu terakhir. Ketuk untuk mendengar.", "Mixed up most in the last 2 weeks. Tap one to hear it."],
+    weakNone: ["Belum ada yang perlu dilatih. Masya Allah!", "Nothing to practise yet. Masha Allah!"], weakGo: ["Latih sekarang", "Practise now"], weakTimes: ["{n}× salah", "missed {n}×"],
+    practiceT: ["Latihan huruf tricky", "Tricky letters practice"], practiceSay: ["Ayo latihan huruf yang tadi tertukar. Pelan-pelan ya!", "Let's practise the letters that got mixed up. Nice and slow!"],
+    practiceDone: ["Latihan selesai! Makin lancar!", "Practice done! Getting better!"],
+    iSaid: ["Aku sudah baca!", "I said it!"],
+    nudge: ["Ayo, kamu pasti bisa!", "Come on, you can do it!"],
     gBubbles: ["Gelembung", "Bubbles"], gPaint: ["Warnai huruf", "Paint a letter"], gFeed: ["Suapi Mo", "Feed Mo"], gShadow: ["Cari bayangan", "Find the shadow"],
     arcadeAsk: ["Minta Abi/Umi membuka semua game di menu Orang Tua", "Ask a grown-up to open all games in Parents"],
     arcadeAll: ["Buka semua game Main Bebas", "Open all Free Play games"], arcadeAllSub: ["Untuk anak prasekolah yang ingin langsung bermain", "For preschoolers who just want to play"],
