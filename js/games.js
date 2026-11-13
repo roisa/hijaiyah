@@ -71,7 +71,7 @@
     };
     ready(false);
     add(st, dots, el("div", "row"));
-    var r = st.lastChild; r.appendChild(said3); r.appendChild(recorder());
+    var r = st.lastChild; r.appendChild(said3); st.appendChild(recorder(it.au, { onDone: function () { if (said < 3) { said3.disabled = false; said3.onclick(); } } }));
     if (s.note && s.note.name) {
       var nm = el("button", "chip", HJ.ic("tag") + " " + t("letterName") + ": <span class='ar' style='font-size:22px'>" + esc(s.note.name) + "</span> " + esc(s.note.nameK ? HJ.letterName(s.note.nameK, HJ.store.get().lang) : ""));
       nm.onclick = function () { A.say(s.note.name); };
@@ -84,24 +84,8 @@
   };
 
   // record + play back my own voice (local only)
-  function recorder() {
-    var wrap = el("span", "row");
-    if (!A.canRecord()) return wrap;
-    var url = null, recB = el("button", "btn small ghost", HJ.ic("mic") + " " + t("record")), playB = el("button", "btn small ghost", HJ.ic("play") + " " + t("myVoice"));
-    playB.style.display = "none";
-    var on = false;
-    recB.onclick = function () {
-      if (!on) {
-        A.recStart().then(function () { on = true; recB.innerHTML = HJ.ic("stop") + " " + t("stopRec"); recB.classList.remove("ghost"); recB.classList.add("rec"); })
-          .catch(function () { recB.style.display = "none"; });
-      } else {
-        A.recStop().then(function (u) { on = false; url = u; recB.innerHTML = HJ.ic("mic") + " " + t("record"); recB.classList.add("ghost"); recB.classList.remove("rec"); playB.style.display = ""; });
-      }
-    };
-    playB.onclick = function () { if (url) A.playUrl(url); };
-    wrap.appendChild(recB); wrap.appendChild(playB);
-    return wrap;
-  }
+  // record + play back my own voice (local only): the "Mo is listening" widget from js/voice.js
+  function recorder(au, opts) { return HJ.voice ? HJ.voice.widget(Object.assign({ au: au, compact: true }, opts || {})) : el("span"); }
   G.recorder = recorder;
 
   /* Trace the letter */
@@ -272,7 +256,8 @@
     var row = el("div", "row"), lb = el("button", "btn gold", HJ.ic("speaker") + " " + t("listen"));
     var tl = latinEl(s.item);
     add(st, ask, track, tl, row);
-    row.appendChild(lb); row.appendChild(recorder());
+    row.appendChild(lb);
+    st.appendChild(recorder(typeof s.item.au === "string" ? s.item.au : null));
     var go = el("button", "btn", HJ.ic("bubble") + " " + (HJ.store.get().lang === "en" ? "My turn" : "Giliranku")); go.style.display = "none"; row.appendChild(go);
     function listen() {
       phase = 0; var my = {};
@@ -442,7 +427,7 @@
     var row = el("div", "row"), lb = el("button", "btn gold", HJ.ic("speaker") + " " + t("listen"));
     lb.onclick = function () { playAyah(s.s, s.a, box); };
     var nx = el("button", "btn", t("next") + " " + HJ.ic("next")); nx.onclick = function () { ctx.next(); };
-    row.appendChild(lb); row.appendChild(recorder()); row.appendChild(nx);
+    row.appendChild(lb); row.appendChild(nx); st.appendChild(recorder(null));
     st.appendChild(row);
     ctx.mo("mo2:read-book", t("ayahListen"));
     after(ctx, 400, function () { playAyah(s.s, s.a, box); });
@@ -529,7 +514,7 @@
         });
       });
     };
-    row.appendChild(all); row.appendChild(recorder()); row.appendChild(ts);
+    row.appendChild(all); row.appendChild(ts); st.appendChild(recorder(null));
     st.appendChild(row);
     ctx.mo("mo2:hug-quran", null);
   };

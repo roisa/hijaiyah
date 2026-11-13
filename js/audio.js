@@ -23,6 +23,7 @@
     return null;
   }
   A.hasClip = function (t) { return !!clipFor(t); };
+  A.clipUrl = function (t) { return clipFor(t); };
 
   var voices = [];
   function loadVoices() { try { voices = speechSynthesis.getVoices() || []; } catch (e) {} }
