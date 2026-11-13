@@ -3,8 +3,8 @@
   var KEY = "bmh_v1";
   // first language guess: the phone's language (Indonesian → id, anything else → en); the picker confirms it
   var navLang = ((navigator.languages && navigator.languages[0]) || navigator.language || "en").toLowerCase();
-  var DEF = { name: "", lang: /^(id|ms)/.test(navLang) ? "id" : "en", langChosen: false, theme: "auto", stars: {}, tashih: {}, stickers: [], streak: { last: "", n: 0 }, plays: 0, limit: "0", playDay: { d: "", ms: 0 },
-    settings: { moVoice: true, sfx: true, latin: true, cdn: true, unlockAll: false } };
+  var DEF = { name: "", lang: /^(id|ms)/.test(navLang) ? "id" : "en", langChosen: false, theme: "auto", stars: {}, tashih: {}, stickers: [], streak: { last: "", n: 0 }, plays: 0, limit: "0", playDay: { d: "", ms: 0 }, log: {}, chest: 0, owned: [], equip: { train: "classic", balloons: "classic", ink: "classic" },
+    settings: { moVoice: true, sfx: true, latin: true, cdn: true, unlockAll: false, nature: false } };
   var st;
   function load() {
     try { st = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { st = null; }
@@ -29,6 +29,7 @@
       st.stars[id] = Math.max(st.stars[id] || 0, stars);
       if (first && st.stickers.indexOf(id) < 0) st.stickers.push(id);
       st.plays++;
+      if (id.charAt(0) !== "_") { var lg = this.logDay(); lg.lv++; if (first) lg.nw++; }
       var t = today();
       if (st.streak.last !== t) {
         var y = new Date(); y.setDate(y.getDate() - 1);
@@ -38,7 +39,14 @@
       save(); return first;
     },
     playMs: function () { var t = today(); if (st.playDay.d !== t) st.playDay = { d: t, ms: 0 }; return st.playDay.ms; },
-    addPlay: function (ms) { this.playMs(); st.playDay.ms += ms; save(); },
+    addPlay: function (ms) { this.playMs(); st.playDay.ms += ms; this.logDay().ms += ms; save(); },
+    // a small per-day log for the parents' weekly report (kept 60 days)
+    dayKey: function (d) { return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); },
+    logDay: function (d) {
+      d = d || today(); st.log = st.log || {};
+      if (!st.log[d]) { st.log[d] = { ms: 0, lv: 0, nw: 0, ts: 0 }; var ks = Object.keys(st.log); if (ks.length > 60) ks.sort(function (a, b) { var f = function (k) { var x = k.split("-"); return +x[0] * 10000 + +x[1] * 100 + +x[2]; }; return f(a) - f(b); }).slice(0, ks.length - 60).forEach(function (k) { delete st.log[k]; }); }
+      return st.log[d];
+    },
     overLimit: function () { var m = +st.limit || 0; return m > 0 && this.playMs() >= m * 60000; },
     totalStars: function () { var n = st.bonus || 0; for (var k in st.stars) if (k.charAt(0) !== "_") n += st.stars[k]; return n; },
     unlocked: function (lv) {
@@ -70,6 +78,21 @@
     restH: ["Waktunya istirahat, {k}!", "Time for a break, {k}!"], restH0: ["Waktunya istirahat!", "Time for a break!"], restP: ["Matanya istirahat dulu ya. Hari ini sudah belajar {m} menit. Mo bangga! Sampai nanti, insya Allah.", "Let's rest our eyes. You learned for {m} minutes today. Mo is so proud! See you later, insya Allah."],
     restOk: ["Oke, sampai nanti!", "Okay, see you later!"], restMore: ["Orang tua: tambah 10 menit", "Grown-up: 10 more minutes"],
     nextSticker: ["Stiker berikutnya!", "Next sticker!"],
+    chestT: ["Peti Harta", "Treasure Chest"], chestSub: ["{n} bintang lagi untuk peti berikutnya", "{n} more stars to the next chest"], chestSub1: ["1 bintang lagi untuk peti berikutnya", "1 more star to the next chest"],
+    chestReady: ["Petinya siap dibuka!", "Your chest is ready!"], chestOpen: ["Buka!", "Open!"], chestTap: ["Ketuk petinya 3 kali!", "Tap the chest 3 times!"],
+    chestGot: ["Kamu dapat:", "You found:"], chestUse: ["Pakai sekarang!", "Use it now!"], chestLater: ["Nanti saja", "Later"],
+    chestStars: ["2 bintang bonus!", "2 bonus stars!"], chestAll: ["Semua harta sudah terkumpul. Masya Allah!", "You've collected every treasure. Masha Allah!"],
+    treasures: ["Harta Karunku", "My Treasures"], treasuresSub: ["Ketuk untuk memakai. Buka peti untuk mendapat yang baru.", "Tap one to use it. Open chests to find new ones."],
+    tLocked: ["Buka peti untuk mendapatkannya", "Open a chest to find this one"], tOn: ["Dipakai!", "Now using it!"],
+    pTrain: ["Kereta", "Train"], pBalloons: ["Balon", "Balloons"], pInk: ["Tinta menulis", "Writing ink"],
+    prClassic: ["Klasik", "Classic"], prOcean: ["Samudra", "Ocean"], prGold: ["Emas", "Gold"], prGalaxy: ["Galaksi", "Galaxy"], prPastel: ["Pastel", "Pastel"], prCandy: ["Permen", "Candy"], prSilver: ["Emas & perak", "Gold & silver"], prRainbow: ["Pelangi", "Rainbow"],
+    arcade: ["Main Bebas", "Free Play"], arcadeSub: ["Main game favorit dengan huruf yang sudah kamu pelajari", "Play your favourite games with letters you've learned"],
+    arcadeLock: ["Terbuka di {b}", "Opens in {b}"], arcadeDone: ["Seru sekali!", "That was fun!"], arcadeAgain: ["Main lagi!", "Play again!"], arcadeNoStars: ["Main Bebas untuk latihan, bintang didapat di peta", "Free Play is practice; stars are earned on the map"],
+    gPop: ["Balon", "Balloons"], gTrain: ["Kereta", "Train"], gBridge: ["Jembatan", "Bridge"], gMatch: ["Kartu kembar", "Memory"], gTrace: ["Menulis", "Tracing"], gPick: ["Tebak bunyi", "Sound quiz"], gBuild: ["Susun kata", "Word builder"], gSort: ["Monster tajwid", "Tajwid monsters"], gYesno: ["Benar atau salah", "Right or wrong"],
+    week: ["Minggu ini", "This week"], wkMin: ["menit belajar", "minutes learning"], wkLv: ["level selesai", "levels done"], wkNew: ["stiker baru", "new stickers"], wkTs: ["tashih", "reading checks"],
+    wkDays: ["{n} dari 7 hari", "{n} of 7 days"], wkShare: ["Bagikan laporan", "Share report"], wkWa: ["WhatsApp", "WhatsApp"], wkCopied: ["Laporan disalin", "Report copied"],
+    wkText: ["Laporan Baby Mo Hijaiyah minggu ini untuk {k}: {d} hari belajar, {m} menit, {l} level selesai, {s} stiker baru, {t} tashih. Sekarang di {now}.", "Baby Mo Hijaiyah weekly report for {k}: {d} days of learning, {m} minutes, {l} levels done, {s} new stickers, {t} reading checks. Now at {now}."],
+    nature: ["Suara alam", "Nature sounds"], natureSub: ["Angin, burung dan jangkrik yang lembut. Tanpa musik.", "Soft breeze, birds and crickets. No music."],
     yourTurnSay: ["Giliranmu! Ucapkan, lalu ketuk", "Your turn! Say it, then tap"],
     micTap: ["Ketuk mic, lalu baca", "Tap the mic, then read"], micListen: ["Mo mendengarkan… ayo baca!", "Mo is listening… read now!"],
     micNone: ["Mo belum dengar. Coba lebih keras ya!", "Mo didn't hear you. A bit louder!"], micThinking: ["Mo sedang mendengar…", "Mo is listening back…"],

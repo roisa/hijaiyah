@@ -128,7 +128,7 @@
       return { i: best, d: bd };
     }
     var lastP = null, inkCol = 0;
-    var COLS = ["#3B82F6", "#8B5CF6", "#EC4899", "#F59E0B", "#10B981"];
+    var COLS = (HJ.prize && HJ.prize.ink()) || ["#3B82F6", "#8B5CF6", "#EC4899", "#F59E0B", "#10B981"];
     function inkLine(a, b, good) {
       gI.strokeStyle = good ? COLS[(inkCol / 30 | 0) % COLS.length] : "rgba(255,90,90,.55)";
       gI.lineWidth = (good ? 5.2 : 4) * sc; gI.beginPath(); gI.moveTo(a.x * sc, a.y * sc);

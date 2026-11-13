@@ -777,3 +777,86 @@ html.big .tabbar { max-width: 600px; }
 .surah-page.end { -webkit-mask-image: none; mask-image: none; }
 @media (prefers-reduced-motion: reduce) { .sticker.no.next { animation: none; } }
 :root[data-theme="dark"] .sticker.no.next { color: rgba(138,82,0,.55); }
+
+/* ---------- treasure chest ---------- */
+.chest-card { display: flex; align-items: center; gap: 12px; width: 100%; margin: 14px 0 0; padding: 12px 14px; border-radius: 26px; text-align: left; border: 0; cursor: pointer; color: inherit; font: inherit;
+  background: linear-gradient(135deg, rgba(255,243,196,.92), rgba(255,226,170,.85)); box-shadow: inset 0 0 0 1.5px rgba(255,200,80,.55), 0 14px 30px -20px rgba(160,100,0,.6); }
+:root[data-theme="dark"] .chest-card { background: linear-gradient(135deg, rgba(70,52,20,.92), rgba(58,38,24,.9)); box-shadow: inset 0 0 0 1.5px rgba(255,200,80,.3), 0 14px 30px -20px rgba(0,0,0,.8); }
+.chest-card .cc-art { flex: none; width: 64px; height: 64px; display: grid; place-items: center; }
+.chest-card .cc-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.chest-card .cc-tx b { font: 700 19px/1.15 var(--fun, 'Fredoka'), sans-serif; color: #7A4300; }
+:root[data-theme="dark"] .chest-card .cc-tx b { color: #FFD66B; }
+.chest-card .cc-tx small { font-weight: 700; font-size: 13px; color: #8A6A2A; }
+:root[data-theme="dark"] .chest-card .cc-tx small { color: #E8D3A0; }
+.chest-card .hm-bar { margin-top: 6px; }
+.chest-card .hm-bar i { background: linear-gradient(90deg,#FFC21A,#FF9500); }
+.chest-card .cc-n { display: inline-block; font: 900 12px 'Nunito'; background: #FF7A1A; color: #fff; border-radius: 99px; padding: 1px 7px; vertical-align: 3px; }
+.chest-card .cc-go { flex: none; font: 900 16px 'Nunito'; color: #fff; padding: 10px 18px; border-radius: 99px; background: linear-gradient(135deg,#FFB800,#FF7A1A); box-shadow: inset 0 10px 10px -8px rgba(255,255,255,.6), 0 10px 18px -10px rgba(255,120,0,.9); }
+.chest-card .cc-star { flex: none; opacity: .9; }
+.chest-card.ready .cc-art { animation: chestWig 1.4s ease-in-out infinite; transform-origin: 50% 90%; }
+.chest-card.ready .cc-go { animation: stkNext 1.4s ease-in-out infinite; }
+@keyframes chestWig { 0%, 60%, 100% { transform: rotate(0); } 70% { transform: rotate(-8deg) scale(1.06); } 80% { transform: rotate(7deg) scale(1.06); } 90% { transform: rotate(-4deg); } }
+.chest-open { text-align: center; position: relative; }
+.chest-open .co-mo { position: absolute; left: 10px; top: 6px; }
+.chest-open h2 { margin: 6px 0 4px; }
+.co-chest { background: none; border: 0; cursor: pointer; display: block; margin: 6px auto 0; transform-origin: 50% 85%; }
+.co-chest.wob { animation: coWob .45s cubic-bezier(.3,1.6,.5,1); }
+.co-chest.opened { animation: coPop .6s cubic-bezier(.3,1.6,.5,1); }
+@keyframes coWob { 25% { transform: rotate(-10deg) scale(1.06); } 55% { transform: rotate(9deg) scale(1.08); } 80% { transform: rotate(-4deg); } }
+@keyframes coPop { 0% { transform: scale(.9); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.co-dots { display: flex; justify-content: center; gap: 10px; margin: 6px 0 4px; }
+.co-dots i { width: 14px; height: 14px; border-radius: 50%; background: rgba(120,120,128,.22); transition: transform .25s, background .25s; }
+.co-dots i.on { background: #FFB800; transform: scale(1.25); box-shadow: 0 0 10px rgba(255,184,0,.8); }
+.co-prize { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 10px auto 16px; padding: 18px 26px; border-radius: 28px; width: fit-content;
+  background: radial-gradient(circle at 50% 40%, #FFF7C2, #FFE08A 60%, #FFC94D); color: #6A4300; box-shadow: 0 0 0 4px #fff, 0 0 40px rgba(255,200,60,.8); animation: coPop .6s cubic-bezier(.3,1.6,.5,1); }
+.co-prize b { font: 700 20px var(--fun, 'Fredoka'), sans-serif; }
+.co-prize .cp-art { animation: float 3s ease-in-out infinite; }
+.tr-box { padding: 12px 14px 6px; }
+.tr-box .chest-card { margin: 4px 0 10px; }
+.tr-sub { font-size: 13px; font-weight: 700; color: var(--ink2, #6B7787); margin: 0 2px 4px; }
+.tr-row { padding: 8px 0; border-top: 1px solid rgba(120,120,128,.14); }
+.tr-k { font: 800 13px 'Nunito'; letter-spacing: .06em; text-transform: uppercase; color: var(--ink3, #8794A6); margin: 0 2px 6px; }
+.tr-items { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.tr-item { border: 0; cursor: pointer; font: inherit; color: inherit; border-radius: 18px; padding: 8px 2px 6px; background: rgba(120,120,128,.08); display: flex; flex-direction: column; align-items: center; gap: 2px; transition: transform .2s cubic-bezier(.34,1.56,.64,1); }
+.tr-item:active { transform: scale(.92); }
+.tr-item small { font-weight: 800; font-size: 11.5px; }
+.tr-item.on { background: linear-gradient(160deg, rgba(52,211,153,.25), rgba(16,185,129,.18)); box-shadow: inset 0 0 0 2.5px #12A15A; }
+.tr-item.no .ti-art { filter: grayscale(1) brightness(1.6) opacity(.35); }
+:root[data-theme="dark"] .tr-item.no .ti-art { filter: grayscale(1) brightness(.6) opacity(.5); }
+.tr-item.no small { color: var(--ink3, #8794A6); font-size: 15px; }
+
+/* ---------- free play ---------- */
+.arcade { display: flex; gap: 12px; overflow-x: auto; padding: 4px 16px 14px; margin: 0 -16px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.arcade::-webkit-scrollbar { display: none; }
+.ar-tile { flex: 0 0 116px; height: 132px; scroll-snap-align: start; border: 0; cursor: pointer; border-radius: 28px; color: #fff; font: inherit; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 8px; box-shadow: inset 0 16px 18px -14px rgba(255,255,255,.55), 0 14px 22px -14px rgba(30,60,110,.6);
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1); }
+.ar-tile:active { transform: scale(.93); }
+.ar-tile::before { content: ""; position: absolute; left: -20%; right: -20%; top: -45%; height: 70%; border-radius: 50%; background: rgba(255,255,255,.22); }
+.ar-tile .at-art { position: relative; width: 64px; height: 56px; display: grid; place-items: center; filter: drop-shadow(0 4px 4px rgba(0,0,0,.18)); }
+.ar-tile .at-art .engine { width: 64px; height: auto; }
+.ar-tile b { position: relative; font: 700 15px/1.1 var(--fun, 'Fredoka'), sans-serif; text-align: center; text-shadow: 0 1px 2px rgba(0,0,0,.2); }
+.ar-tile small { position: relative; font-size: 10.5px; font-weight: 800; opacity: .95; display: flex; align-items: center; gap: 3px; }
+.ar-tile small .ic { width: 12px; height: 12px; }
+.ar-tile.locked { filter: grayscale(.85); opacity: .6; }
+.ar-note { color: var(--ink3, #8794A6); font-weight: 700; font-size: 13px; margin-top: 4px; }
+
+/* ---------- weekly report ---------- */
+.wk { padding: 14px; }
+.wk-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.wk-d i { display: grid; place-items: center; width: 34px; height: 34px; margin: 0 auto 3px; border-radius: 50%; font: 800 13px 'Nunito'; font-style: normal; background: rgba(120,120,128,.12); color: var(--ink3, #8794A6); }
+.wk-d i .ic { width: 18px; height: 18px; }
+.wk-d.on i { background: linear-gradient(160deg,#34D399,#0E9F57); color: #fff; box-shadow: 0 6px 12px -6px rgba(14,159,87,.8); }
+.wk-d.today i { box-shadow: 0 0 0 2.5px #FFB800; }
+.wk-d.fut i { opacity: .45; }
+.wk-d small { font-size: 11px; font-weight: 800; color: var(--ink3, #8794A6); }
+.wk-sum { text-align: center; font: 700 15px var(--fun, 'Fredoka'), sans-serif; margin: 10px 0 8px; }
+.wk-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.wk-s { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 8px 2px; border-radius: 16px; background: rgba(120,120,128,.08); }
+.wk-s b { font: 700 22px var(--fun, 'Fredoka'), sans-serif; line-height: 1.1; }
+.wk-s small { font-size: 10.5px; font-weight: 800; color: var(--ink3, #8794A6); line-height: 1.2; }
+.wk-btns { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+@media (prefers-reduced-motion: reduce) { .chest-card.ready .cc-art, .chest-card.ready .cc-go, .co-prize .cp-art { animation: none; } }
+.has-scene > .chest-card { width: calc(100% - 32px); margin: 12px 16px 2px; position: relative; z-index: 3; }
+.sec-h.arc { flex-direction: column; align-items: flex-start; gap: 2px; }
+.arcade { padding-left: 16px; padding-right: 16px; margin: 0; scroll-padding-left: 16px; }

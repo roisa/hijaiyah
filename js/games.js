@@ -209,7 +209,7 @@
       var it = isT ? s.q : U.pick(s.pool.filter(function (x) { return x.ar !== s.q.ar; }).concat([s.q]));
       if (it.ar === s.q.ar) lastTarget = n;
       var b = el("button", "balloon " + (isWordy(it) ? "w" : ""));
-      b.style.background = COLORS[n % COLORS.length];
+      var BC = (HJ.prize && HJ.prize.balloons()) || COLORS; b.style.background = BC[n % BC.length];
       b.style.left = (5 + Math.random() * 70) + "%";
       b.style.animationDuration = (6.5 + Math.random() * 2.5) + "s";
       b.appendChild(arEl(it));

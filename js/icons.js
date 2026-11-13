@@ -121,7 +121,8 @@
   // the cute engine for the reading train (faces left, the way we read)
   HJ.engine = function () {
     var u = "e" + (++uid);
-    return '<svg class="art engine" viewBox="0 0 96 76" aria-hidden="true"><defs>' + lg(u, "#FF8A80", "#E5394B") + lg(u + "b", "#7CC8FF", "#2B7BE4") + "</defs>" +
+    var P = (HJ.prize && HJ.prize.train()) || { body: ["#FF8A80", "#E5394B"], cab: ["#7CC8FF", "#2B7BE4"] };
+    return '<svg class="art engine" viewBox="0 0 96 76" aria-hidden="true"><defs>' + lg(u, P.body[0], P.body[1]) + lg(u + "b", P.cab[0], P.cab[1]) + "</defs>" +
       '<circle cx="74" cy="10" r="6" fill="#fff" opacity=".85"/><circle cx="84" cy="5" r="4" fill="#fff" opacity=".6"/>' +
       '<rect x="66" y="16" width="12" height="16" rx="3" fill="#3A4256"/><rect x="63" y="13" width="18" height="6" rx="3" fill="#4A5470"/>' +
       '<rect x="8" y="30" width="72" height="30" rx="10" fill="url(#' + u + ')"/><rect x="8" y="12" width="32" height="30" rx="8" fill="url(#' + u + 'b)"/>' +

@@ -72,7 +72,7 @@
     if (!st.daily || st.daily.date !== today()) { st.daily = { date: today(), done: {} }; S.save(); }
     return st.daily.done;
   }
-  HJ.mission = function (k) { missions()[k] = 1; S.save(); };
+  HJ.mission = function (k) { if (k === "tashih") S.logDay().ts++; missions()[k] = 1; S.save(); };
 
   /* ---------- sheets + parental gate ---------- */
   HJ.modal = function (build, opts) {
@@ -219,6 +219,7 @@
       dl.appendChild(r);
     });
     dm.appendChild(dl); pane.appendChild(dm);
+    if (HJ.extras) { pane.appendChild(HJ.extras.chestCard()); HJ.extras.arcadeRow(sc); }
 
     // the 7 books as app icons
     sc.appendChild(el("div", "sec-h", "<h3>" + esc(t("books")) + "</h3><small>" + S.totalStars() + " " + HJ.art("star", 16) + "</small>"));
@@ -329,7 +330,7 @@
   var runId = 0;
   function runLevel(lv, opts) {
     opts = opts || {};
-    if (S.overLimit() && !opts.onDone) return restScreen(function () { runLevel(lv, opts); });
+    if (S.overLimit() && !opts.noLimit) return restScreen(function () { runLevel(lv, opts); });
     var steps = opts.steps || HJ.buildSteps(lv), idx = 0, mistakes = 0, hearts = 3, boss = lv.kind === "boss", my = ++runId;
     var s = bare();
     var top = el("div", "lv-top"), x = el("button", "nav-btn", ic("close")), bar = el("div", "bar", "<i></i>"), hz = el("div", "hearts glass");
@@ -570,6 +571,7 @@
     var got = st.stickers.filter(function (id) { return HJ.level(id); }).length, nextMarked = false;
     sc.appendChild(el("div", "large-title", esc(t("stickerTitle1")) + " <em>" + esc(t("stickerTitle2")) + "</em>"));
     sc.appendChild(el("div", "large-sub", got + " / " + HJ.allLevels().length + " " + esc(t("stickers").toLowerCase())));
+    if (HJ.extras) HJ.extras.treasures(sc);
     HJ.worlds.forEach(function (w) {
       var have = w.levels.filter(function (l) { return st.stickers.indexOf(l.id) >= 0; }).length;
       sc.appendChild(el("div", "group-t", esc(tr(w.name)) + " · " + have + "/" + w.levels.length));
@@ -614,6 +616,7 @@
     sc.appendChild(el("div", "cur-text", (EN() ? "Now: " : "Sekarang: ") + "<b>" + esc(tr(HJ.worlds[cur.w - 1].name)) + " · " + esc(levelName(cur)) + "</b>"));
 
     // settings
+    if (HJ.extras) HJ.extras.weekly(sc);
     sc.appendChild(el("div", "group-t", esc(t("settings"))));
     var g2 = el("div", "list-group");
     var inp = el("input"); inp.type = "text"; inp.value = st.name; inp.maxLength = 20; inp.placeholder = t("namePh");
@@ -630,7 +633,7 @@
     seg('<img src="assets/icons/theme.svg" alt="">', "", t("theme"), "theme", [["auto", t("themeAuto")], ["light", t("themeLight")], ["dark", t("themeDark")]]);
     function tog(icon, cls, label, key, sub) {
       var sw = el("button", "switch" + (st.settings[key] ? " on" : "")); sw.setAttribute("role", "switch");
-      sw.onclick = function () { S.setting(key, !st.settings[key]); sw.classList.toggle("on", st.settings[key]); A.fx.tap(); };
+      sw.onclick = function () { S.setting(key, !st.settings[key]); sw.classList.toggle("on", st.settings[key]); A.fx.tap(); if (HJ.ambience) HJ.ambience.sync(); };
       g2.appendChild(row(icon, cls, esc(label) + (sub ? "<small>" + esc(sub) + "</small>" : ""), sw));
     }
     var lim = el("div", "seg");
@@ -638,6 +641,7 @@
     g2.appendChild(row(HJ.art("moon", 22), "purple", esc(t("limit")) + "<small>" + esc(t("limitSub")) + "</small>", lim));
     tog(ic("speaker"), "gold", t("moVoice"), "moVoice");
     tog('<img src="assets/icons/sound.svg" alt="">', "", t("sfx"), "sfx");
+    tog(HJ.art("sun", 22), "green", t("nature"), "nature", t("natureSub"));
     tog(ic("textA"), "purple", t("latin"), "latin", t("latinSub"));
     if (!window.HJ_APP_BUILD) tog(ic("book"), "teal", t("cdn"), "cdn", t("cdnSub"));
     tog(ic("lock"), "gray", t("unlockAll"), "unlockAll", t("unlockSub"));
@@ -731,6 +735,7 @@
   HJ.nameSheet = nameSheet;
 
   HJ.go = { home: home, map: map, stickers: stickers, parents: parents };
+  HJ._app = { home: home, stickers: stickers, parents: parents, moImg: moImg, confetti: confetti, levelSheet: levelSheet };
   var q = location.hash.replace("#", "");
   if (q === "map") map(); else if (q === "stickers") stickers(); else if (q === "parents") parents();
   else if (q.indexOf("level=") === 0 && HJ.level(q.slice(6))) runLevel(HJ.level(q.slice(6))); else home();
