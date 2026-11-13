@@ -181,3 +181,55 @@ Object.assign(C, {
   purple: finalIcon("radial-gradient(95% 85% at 30% 18%,#A897FF,#6243E0 50%,#2B1478)", ["#FFFFFF", "#F3EEFF"], "#C9BDF0", { face: ["#FFE680", "#FF9F00"], side: "#B86200" }, "pose-41", "rgba(255,210,110,.45)")
 });
 module.exports = { C, candy, star, twinkle, moon, head, MO, block, tile, bigMo, rim };
+
+/* ---------- v2 (drawn letters): three new directions — Blast off, Letter buddy, Game badge ---------- */
+// ب drawn as a thick vector stroke (same shape as the tracing game), with a 3D extrusion, a white rim and a shine
+function drawBa({ x, y, s, face = ["#FFE680", "#FF9F00"], side = "#B86200", rim = "#fff", rot = 0, eyes = false, id = "b" }) {
+  const P = "M80 40 C83 60 75 68 50 68 C27 68 19 61 20 44", F = "M50 46 L52 46";
+  let ext = ""; for (let i = 7; i >= 1; i--) ext += `<path d="${P}" stroke="${side}" stroke-width="15" transform="translate(0 ${i * .7})"/>`;
+  let dext = ""; for (let i = 7; i >= 1; i--) dext += `<circle cx="50" cy="${84 + i * .7}" r="7.5" fill="${side}"/>`;
+  let fext = ""; for (let i = 5; i >= 1; i--) fext += `<path d="M42 27 L58 21" stroke="${side}" stroke-width="7" transform="translate(0 ${i * .7})"/>`;
+  const face_ = eyes ? `<g><ellipse cx="38" cy="52" rx="6.4" ry="7.4" fill="#fff"/><ellipse cx="60" cy="52" rx="6.4" ry="7.4" fill="#fff"/>
+    <circle cx="39.5" cy="53.5" r="3.6" fill="#1D2433"/><circle cx="61.5" cy="53.5" r="3.6" fill="#1D2433"/><circle cx="40.6" cy="52" r="1.2" fill="#fff"/><circle cx="62.6" cy="52" r="1.2" fill="#fff"/>
+    <path d="M44 61 Q49.5 66 55 61" stroke="#7A2E00" stroke-width="2.2" fill="none" stroke-linecap="round"/><ellipse cx="31" cy="60" rx="3.4" ry="2.2" fill="#FF7A9A" opacity=".55"/><ellipse cx="68" cy="60" rx="3.4" ry="2.2" fill="#FF7A9A" opacity=".55"/></g>` : "";
+  return `<svg style="position:absolute;left:${x}px;top:${y}px;width:${s}px;height:${s}px;transform:rotate(${rot}deg);overflow:visible;filter:drop-shadow(0 12px 14px rgba(0,0,0,.3))" viewBox="0 0 100 100">
+<defs><linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${face[0]}"/><stop offset="1" stop-color="${face[1]}"/></linearGradient></defs>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">${ext}${fext}<path d="${P}" stroke="${rim}" stroke-width="18"/><path d="${P}" stroke="url(#${id}f)" stroke-width="13"/>
+<path d="M42 27 L58 21" stroke="${rim}" stroke-width="10"/><path d="M42 27 L58 21" stroke="url(#${id}f)" stroke-width="6"/>
+<path d="M77 43 C78 52 74 58 62 60" stroke="#fff" stroke-width="3.5" opacity=".75"/></g>
+${dext}<circle cx="50" cy="84" r="9" fill="${rim}"/><circle cx="50" cy="84" r="7" fill="url(#${id}f)"/><circle cx="48" cy="82" r="2" fill="#fff" opacity=".8"/>${face_}</svg>`;
+}
+Object.assign(C, {
+  // A — Blast off: Mo bursting out of a golden portal with a glowing بَ, comic speed lines
+  blast: (b) => head(b, `body{background:radial-gradient(90% 90% at 70% 30%,#FFD36B,#FF7A45 45%,#D9366E 80%,#8E1F5E)}`) +
+    `<div class="rays" style="opacity:.6;background:repeating-conic-gradient(from 10deg at 50% 50%,rgba(255,255,255,.22) 0 5deg,rgba(255,255,255,0) 5deg 15deg)"></div>
+<div style="position:absolute;left:120px;top:-6px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,#FFF7C2 0,#FFD84D 35%,#FFAA00 58%,rgba(255,170,0,0) 72%)"></div>
+<div style="position:absolute;left:152px;top:26px;width:336px;height:336px;border-radius:50%;border:18px solid #FFE680;box-shadow:0 0 0 9px #E08A00,inset 0 0 50px rgba(255,140,0,.8),0 0 60px rgba(255,220,120,.9)"></div>
+${drawBa({ x: 176, y: 16, s: 300, face: ["#7CF0B0", "#0E9F57"], side: "#0A6E3D", id: "bl" })}
+${[0, 1, 2, 3, 4].map((i) => `<div style="position:absolute;left:${20 + i * 18}px;top:${300 + i * 26}px;width:${120 - i * 12}px;height:10px;border-radius:5px;background:rgba(255,255,255,.75);transform:rotate(-32deg)"></div>`).join("")}
+${star(36, 40, 70, undefined, undefined, -14)}${twinkle(110, 150, 30)}
+<img src="${MO("pose-02")}" style="position:absolute;left:-14px;top:172px;width:390px;filter:drop-shadow(0 18px 20px rgba(80,0,40,.45));transform:rotate(-8deg)"></body></html>`,
+  // B — Letter buddy: a cute 3D ب with a face high-fiving Mo
+  buddy: (b) => head(b, `body{background:radial-gradient(90% 85% at 30% 20%,#9CF7D9,#2DD4BF 45%,#0F8F8A 80%,#0B5E66)}`) +
+    `<div class="rays" style="opacity:.5"></div><div class="glow" style="left:10px;top:40px;width:330px;height:300px;background:rgba(255,255,230,.6)"></div>
+${drawBa({ x: -6, y: 46, s: 330, eyes: true, id: "bd" })}
+${star(250, 26, 74, undefined, undefined, 12)}${twinkle(40, 40, 30)}${twinkle(206, 136, 22)}
+<img src="${MO("yes")}" style="position:absolute;left:168px;top:138px;width:430px;transform:scaleX(-1);filter:drop-shadow(0 18px 20px rgba(0,60,60,.4))">
+<svg style="position:absolute;left:236px;top:150px;width:70px" viewBox="0 0 40 40"><path d="M20 0l3 13 13-6-9 11 13 4-14 2 6 13-11-9-5 14-2-14-13 6 9-11L0 18l14-2-6-13 11 9z" fill="#FFE680" stroke="#FFAA00" stroke-width="1.5"/></svg></body></html>`,
+  // C — Game badge: a gold shield with Mo's face and a أ ب ت ribbon on a starry night
+  badge: (b) => head(b, `body{background:radial-gradient(90% 85% at 50% 20%,#4B3BB8,#24186E 55%,#120B3D)}
+.shield{position:absolute;left:66px;top:30px;width:380px;height:420px}`) +
+    `${[...Array(18)].map((_, i) => `<div style="position:absolute;left:${(i * 97) % 500}px;top:${(i * 61) % 470}px;width:${i % 3 ? 3 : 5}px;height:${i % 3 ? 3 : 5}px;border-radius:50%;background:#FFE9A8;opacity:.8"></div>`).join("")}
+<svg class="shield" viewBox="0 0 380 420"><defs><linearGradient id="gd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF3A6"/><stop offset=".5" stop-color="#FFC21A"/><stop offset="1" stop-color="#C77700"/></linearGradient>
+<radialGradient id="in" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#7CF0B0"/><stop offset="1" stop-color="#0E9F57"/></radialGradient><clipPath id="cl"><path d="M190 34 L330 84 C330 220 290 320 190 380 C90 320 50 220 50 84 Z"/></clipPath></defs>
+<path d="M190 8 L356 66 C356 236 306 354 190 412 C74 354 24 236 24 66 Z" fill="url(#gd)" stroke="#8A5200" stroke-width="5"/>
+<path d="M190 34 L330 84 C330 220 290 320 190 380 C90 320 50 220 50 84 Z" fill="url(#in)"/>
+<g clip-path="url(#cl)"><path d="M190 34 L330 84 L330 200 L50 200 L50 84 Z" fill="rgba(255,255,255,.12)"/><image href="${MO("pose-41")}" x="-10" y="80" width="400" height="400"/></g>
+<path d="M60 70 Q190 20 320 70" stroke="#fff" stroke-width="6" fill="none" opacity=".5" stroke-linecap="round"/></svg>
+${moon(214, 0, 82)}
+<svg style="position:absolute;left:14px;top:330px;width:484px;height:130px" viewBox="0 0 484 130"><path d="M10 40 L60 30 L60 110 L10 120 L34 76 Z" fill="#B91C4B"/><path d="M474 40 L424 30 L424 110 L474 120 L450 76 Z" fill="#B91C4B"/>
+<path d="M50 24 Q242 -6 434 24 L434 100 Q242 70 50 100 Z" fill="#E11D48" stroke="#8A0E30" stroke-width="4"/><path d="M60 34 Q242 6 424 34" stroke="#fff" stroke-width="4" opacity=".4" fill="none"/></svg>
+<div class="ar" style="position:absolute;left:0;right:0;top:312px;text-align:center;font-size:92px;color:#FFE680;text-shadow:0 4px 0 #8A0E30,0 0 12px rgba(255,220,120,.6)">أ ب ت</div>
+${twinkle(40, 70, 40, "#FFE9A8")}${twinkle(430, 120, 30, "#FFE9A8")}</body></html>`
+});
+module.exports = Object.assign(module.exports, { drawBa });

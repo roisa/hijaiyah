@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baby Mo Hijaiyah — Belajar ngaji sambil bermain</title>
+<meta name="description" content="Baby Mo Hijaiyah: dari huruf alif sampai membaca Al-Qur'an, lewat 77 level game seru bersama Baby Mo. Urutan Iqra + kebiasaan Ummi. Tanpa iklan, tanpa akun, bisa offline. Bahasa Indonesia & English.">
+<meta property="og:title" content="Baby Mo Hijaiyah — Belajar ngaji sambil bermain">
+<meta property="og:description" content="Dari alif sampai Al-Qur'an lewat 77 level game seru bersama Baby Mo. Tanpa iklan, tanpa akun, bisa offline.">
+<meta property="og:image" content="../kit/creative/header-16x9-id.png">
+<meta name="theme-color" content="#F2F6FC">
+<link rel="icon" href="../assets/brand/app-icon-192.png">
+<link rel="apple-touch-icon" href="../assets/brand/app-icon-180.png">
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+:root{--bg:#F4F7FC;--ink:#152230;--ink2:#4A5563;--ink3:#6B7787;--card:#fff;--line:rgba(21,34,48,.08);--green:#12A15A;--go:linear-gradient(120deg,#10A765,#0A9488 52%,#0A7FB0);
+  --shadow:0 1px 0 rgba(255,255,255,.9) inset,0 22px 44px -26px rgba(30,60,110,.45);--fun:'Fredoka','Nunito',sans-serif;--ar:'Scheherazade New',serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0B1020;--ink:#F2F5FA;--ink2:#C3CCE0;--ink3:#8794A6;--card:#161C2F;--line:rgba(255,255,255,.08);--shadow:0 22px 44px -26px rgba(0,0,0,.9);color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0B1020;--ink:#F2F5FA;--ink2:#C3CCE0;--ink3:#8794A6;--card:#161C2F;--line:rgba(255,255,255,.08);--shadow:0 22px 44px -26px rgba(0,0,0,.9);color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse 70% 45% at 0% 0%,rgba(120,200,255,.35),transparent 70%),radial-gradient(ellipse 60% 40% at 100% 8%,rgba(255,180,210,.32),transparent 70%),radial-gradient(ellipse 70% 45% at 100% 85%,rgba(190,170,255,.30),transparent 70%),radial-gradient(ellipse 70% 45% at 0% 100%,rgba(130,230,180,.30),transparent 70%)}
+a{color:inherit}
+.ar{font-family:var(--ar);direction:rtl;unicode-bidi:isolate;font-weight:700}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--fun);font-weight:700;letter-spacing:-.01em;line-height:1.08}
+h2{font-size:clamp(30px,5vw,46px)}h2 em,h1 em{font-style:normal;background:linear-gradient(95deg,#12A15A,#10B5A0 35%,#2F9BEA 68%,#8B6CF5);-webkit-background-clip:text;background-clip:text;color:transparent}
+.kick{display:inline-block;font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#E8590C;margin-bottom:10px}
+.lead{font-size:clamp(16px,2vw,19px);color:var(--ink2);font-weight:600;max-width:58ch}
+section{padding:72px 0}
+/* nav */
+nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);background:color-mix(in srgb,var(--bg) 75%,transparent);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:12px;height:64px}
+nav .brand{display:flex;align-items:center;gap:10px;font-family:var(--fun);font-weight:700;font-size:19px;text-decoration:none;flex:1;min-width:0}
+nav .brand img{width:38px;height:38px;border-radius:10px;box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
+.lang{display:flex;background:rgba(120,120,128,.14);border-radius:99px;padding:3px}.lang button{border:0;background:none;font:800 13px 'Nunito';padding:6px 11px;border-radius:99px;color:var(--ink);cursor:pointer}
+.lang button[aria-pressed=true]{background:var(--card);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 26px;border-radius:99px;font:900 17px 'Nunito';color:#fff;text-decoration:none;background:var(--go);border:0;cursor:pointer;
+  box-shadow:inset 0 16px 14px -12px rgba(255,255,255,.45),0 14px 26px -14px rgba(10,143,160,.75);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.btn:hover{transform:translateY(-2px) scale(1.02)}.btn.small{min-height:40px;padding:0 16px;font-size:14px}
+.btn.ghost{background:var(--card);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line),0 10px 20px -14px rgba(30,60,110,.5)}
+.store{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 18px;border-radius:14px;background:#111;color:#fff;text-decoration:none;font-weight:800;opacity:.9;position:relative}
+.store small{display:block;font-size:10.5px;font-weight:700;opacity:.8;line-height:1}.store b{display:block;font-size:16px;line-height:1.1}
+.store .soon{position:absolute;top:-9px;right:-8px;background:#FFB800;color:#3B2A00;font-size:10.5px;font-weight:900;padding:2px 8px;border-radius:99px}
+/* hero */
+.hero{padding:42px 0 30px;position:relative}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr;text-align:center}.hero .lead{margin:0 auto}.hero .ctas,.pills{justify-content:center}}
+.hero h1{font-size:clamp(40px,6.4vw,70px);margin:6px 0 16px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0 18px;align-items:center}
+.pills{display:flex;gap:8px;flex-wrap:wrap}.pills span{padding:7px 14px;border-radius:99px;background:var(--card);font-weight:800;font-size:14px;box-shadow:0 8px 18px -14px rgba(30,60,110,.5)}
+.pills span::before{content:"✓ ";color:#22C06E}
+.stage{position:relative;height:620px;max-width:520px;margin:0 auto;width:100%}
+.phone{position:absolute;border-radius:46px;background:#141A26;padding:10px;box-shadow:0 0 0 2px #2A3242 inset,0 50px 80px -40px rgba(20,30,60,.6)}
+.phone video,.phone img{display:block;width:100%;border-radius:37px;background:#F2F6FC}
+.stage .phone{left:50%;top:0;width:290px;transform:translateX(-30%) rotate(3deg)}
+.stage .mo{position:absolute;left:-20px;bottom:-10px;width:300px;filter:drop-shadow(0 26px 30px rgba(30,50,90,.35));animation:bob 3.2s ease-in-out infinite;z-index:2}
+@media(max-width:860px){.stage{height:560px}.stage .phone{width:260px}.stage .mo{width:190px;left:-6px}}
+@keyframes bob{50%{transform:translateY(-12px) rotate(-2deg)}}
+.float{position:absolute;font-family:var(--ar);font-size:44px;padding:0 14px;border-radius:20px;background:var(--card);box-shadow:var(--shadow);animation:float 5s ease-in-out infinite;z-index:3}
+@keyframes float{50%{transform:translateY(-16px) rotate(6deg)}}
+.badge-star{position:absolute;right:2%;bottom:16%;font-weight:900;padding:10px 14px;border-radius:18px;background:linear-gradient(135deg,#FFF3C4,#FFD66B);color:#6A4300;box-shadow:var(--shadow);z-index:3;animation:float 4s ease-in-out infinite reverse}
+/* cards */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}@media(max-width:860px){.grid3{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:28px;padding:24px;box-shadow:var(--shadow)}
+.card h3{font-size:22px;margin:10px 0 6px}.card p{color:var(--ink2);font-weight:600}
+.step-n{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;font:700 26px var(--fun);color:#fff}
+.problem{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;background:linear-gradient(135deg,#FFF1C2,#FFD9E6 50%,#DCD6FF);border-radius:36px;padding:34px;color:#152230}
+.problem img{width:180px}.problem p{color:#4A5563;font-weight:700;font-size:17px}
+:root[data-theme=dark] .problem{background:linear-gradient(135deg,#3A2E1C,#3A1E31 50%,#2A2440);color:#fff}:root[data-theme=dark] .problem p{color:#C3CCE0}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .problem{background:linear-gradient(135deg,#3A2E1C,#3A1E31 50%,#2A2440);color:#fff}:root:not([data-theme=light]) .problem p{color:#C3CCE0}}
+@media(max-width:700px){.problem{grid-template-columns:1fr;text-align:center}.problem img{margin:0 auto;width:140px}}
+/* journey */
+.journey{display:flex;gap:14px;overflow-x:auto;padding:14px 4px 22px;scroll-snap-type:x mandatory}
+.isle{flex:0 0 210px;scroll-snap-align:start;border-radius:28px;padding:18px;color:#152230;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.isle .n{font:700 13px var(--fun);letter-spacing:.08em;opacity:.7}.isle b{display:block;font:700 21px var(--fun);margin:4px 0}.isle p{font-size:14px;font-weight:700;opacity:.8}
+.isle .sig{font-family:var(--ar);font-size:44px;line-height:1.3;position:absolute;right:14px;bottom:4px;opacity:.85}
+/* features */
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:34px 0}
+.feat:nth-child(even) .fv{order:2}@media(max-width:860px){.feat{grid-template-columns:1fr;text-align:center}.feat:nth-child(even) .fv{order:0}.feat ul{display:inline-block;text-align:left}}
+.fv{position:relative;display:flex;justify-content:center}
+.fv .phone{position:relative;width:min(300px,72vw)}
+.fv .blob{position:absolute;inset:8% 10%;border-radius:50%;filter:blur(40px);opacity:.55;z-index:-1}
+.feat h3{font-size:clamp(28px,4vw,38px);margin:6px 0 12px}.feat p{color:var(--ink2);font-weight:600;font-size:17px}
+.feat ul{list-style:none;margin-top:14px;display:grid;gap:8px}.feat li{font-weight:800;display:flex;gap:10px;align-items:flex-start}.feat li::before{content:"";flex:0 0 22px;height:22px;border-radius:50%;background:#22C06E url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/14px no-repeat;margin-top:2px}
+/* parents */
+.safe{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}@media(max-width:860px){.safe{grid-template-columns:repeat(2,1fr)}}
+.safe .card{padding:18px;text-align:center}.safe .ic{width:56px;height:56px;margin:0 auto;border-radius:18px;display:grid;place-items:center;background:rgba(120,140,170,.12)}.safe b{display:block;font-size:16px;margin-top:6px}.safe small{color:var(--ink3);font-weight:700}
+.story{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center}@media(max-width:760px){.story{grid-template-columns:1fr;text-align:center}}
+.story .fam{display:flex;align-items:flex-end;justify-content:center}.story .fam img{height:220px;filter:drop-shadow(0 16px 20px rgba(30,60,110,.25))}.story .fam img.mo{height:170px;margin:0 -16px}
+.story blockquote{font:600 clamp(18px,2.4vw,22px)/1.5 'Nunito';color:var(--ink2)}.story blockquote b{color:var(--ink)}
+/* faq */
+details{background:var(--card);border-radius:20px;padding:16px 20px;box-shadow:var(--shadow);margin-top:10px}
+summary{font-weight:900;font-size:17px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px}summary::after{content:"+";font-size:22px;color:var(--green)}details[open] summary::after{content:"–"}
+details p{color:var(--ink2);font-weight:600;margin-top:8px}
+.final{text-align:center;border-radius:40px;padding:48px 24px;background:var(--go);color:#fff;position:relative;overflow:hidden}
+.final h2{color:#fff}.final p{opacity:.92;font-weight:700;font-size:18px;margin:10px auto 22px;max-width:50ch}
+.final .btn{background:#fff;color:#0B7A4B;box-shadow:0 14px 26px -14px rgba(0,0,0,.5)}
+.final img{position:absolute;width:200px;bottom:-20px}
+footer{padding:40px 0 60px;text-align:center;color:var(--ink3);font-weight:700;font-size:14px}footer a{color:var(--green);text-decoration:none;margin:0 8px}
+/* reveal on scroll */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}.rv.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="#top"><img src="../kit/creative/app-icon-1024.png" alt=""><span>Baby Mo Hijaiyah</span></a>
+  <div class="lang" role="group" aria-label="Language"><button data-lang="id" aria-pressed="true">ID</button><button data-lang="en" aria-pressed="false">EN</button></div>
+  <a class="btn small" href="../" data-t="navPlay">Main gratis</a>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <div>
+    <span class="kick" data-t="heroKick">Untuk anak 4–8 tahun</span>
+    <h1 data-t="heroH">Belajar ngaji jadi <em>waktu main favorit</em> si kecil</h1>
+    <p class="lead" data-t="heroP">Dari huruf alif sampai membaca Al-Qur'an — lewat 77 level game seru bersama Baby Mo. Menulis huruf, memecahkan balon, naik kereta baca, memberi makan monster tajwid… dan tanpa terasa, si kecil sudah bisa membaca.</p>
+    <div class="ctas">
+      <a class="btn" href="../" data-t="heroCta">Coba gratis sekarang</a>
+      <span class="store" title=""><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.9-.9-3.1-.8a4.6 4.6 0 00-3.9 2.4c-1.7 2.9-.4 7.2 1.2 9.5.8 1.1 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.8.8 3.1.8 2.1-1.2 2.9-2.3a10 10 0 001.3-2.7 4.2 4.2 0 01-2.7-4.1zM14.1 5.8A4.2 4.2 0 0015.1 2.7a4.3 4.3 0 00-2.8 1.4 4 4 0 00-1 3c1.1.1 2.1-.5 2.8-1.3z"/></svg><span><small data-t="storeA1">Segera di</small><b>App Store</b></span><span class="soon" data-t="soon">Segera</span></span>
+      <span class="store"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M4 3l11 9-11 9z" fill="#34D399"/><path d="M4 3l14 8-3 1z" fill="#60A5FA"/><path d="M4 21l14-8-3-1z" fill="#F87171"/><path d="M18 11l3 1-3 1-3-1z" fill="#FBBF24"/></svg><span><small data-t="storeG1">Segera di</small><b>Google Play</b></span><span class="soon" data-t="soon">Segera</span></span>
+    </div>
+    <div class="pills"><span data-t="p1">Tanpa iklan</span><span data-t="p2">Tanpa akun</span><span data-t="p3">Bisa offline</span><span>Bahasa Indonesia · English</span></div>
+  </div>
+  <div class="stage">
+    <div class="phone"><video data-src="hello" autoplay muted loop playsinline poster="../kit/reels/video/hello-id.jpg"></video></div>
+    <img class="mo" src="../kit/reels/art/mo-pose-41.png" alt="Baby Mo">
+    <div class="float ar" style="left:4%;top:4%">أَ</div><div class="float ar" style="left:20%;top:30%;animation-delay:-1.5s">بَ</div><div class="float ar" style="right:-2%;top:46%;animation-delay:-3s">تَ</div>
+    <div class="badge-star"><svg width="18" height="18" viewBox="0 0 24 24" fill="#FFB800" stroke="#B87A00" stroke-width="1.4" stroke-linejoin="round" style="vertical-align:-3px"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg> 3 · <svg width="16" height="18" viewBox="0 0 24 24" fill="#FF7A1A" style="vertical-align:-3px"><path d="M12 2c1 4 6 6 6 12a6 6 0 01-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-3-1-6 1-9z"/></svg> 4 <span data-t="days">hari</span></div>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="problem rv">
+    <img src="../kit/reels/art/mo-pose-36.png" alt="">
+    <div><span class="kick" data-t="probKick">Kenal masalah ini?</span><h2 data-t="probH">“Bosan, Bi… nanti saja ngajinya.”</h2>
+      <p data-t="probP">Belajar Iqra sering terasa seperti PR: membosankan, diulang-ulang, dan cepat ditinggal. Baby Mo Hijaiyah mengubahnya jadi petualangan — setiap huruf adalah level, setiap jawaban benar ada bintang, dan si kecil yang minta “satu level lagi!”.</p></div>
+  </div>
+</div></section>
+
+<section style="padding-top:20px"><div class="wrap">
+  <div class="rv" style="text-align:center;margin-bottom:30px"><span class="kick" data-t="howKick">Cara kerjanya</span><h2 data-t="howH">Dengar, main, lalu <em>baca sendiri</em></h2></div>
+  <div class="grid3">
+    <div class="card rv"><div class="step-n" style="background:linear-gradient(160deg,#7CC8FF,#2563EB)">1</div><h3 data-t="s1H">Dengar & tirukan</h3><p data-t="s1P">Mo membaca dulu, si kecil menirukan — talaqqi ala metode Ummi. Mic “Mo mendengarkan” memutar suaranya sendiri dan memberi bintang.</p></div>
+    <div class="card rv"><div class="step-n" style="background:linear-gradient(160deg,#FFC94D,#FF9500)">2</div><h3 data-t="s2H">Main & ulangi</h3><p data-t="s2P">Setiap langkah adalah game: balon, kereta, jembatan, kartu memori, monster tajwid. Yang tadi salah diulang lagi dengan lembut.</p></div>
+    <div class="card rv"><div class="step-n" style="background:linear-gradient(160deg,#5BE38A,#12A15A)">3</div><h3 data-t="s3H">Baca sendiri & tashih</h3><p data-t="s3P">Si kecil membaca tanpa bantuan suara, lalu Abi/Umi mencentang di Panggung Baca. Lancar? Naik level!</p></div>
+  </div>
+</div></section>
+
+<section style="padding-top:20px"><div class="wrap">
+  <div class="rv"><span class="kick" data-t="jKick">Perjalanan lengkap</span><h2 data-t="jH">7 pulau, <em>77 level</em> — dari alif sampai Al-Qur'an</h2><p class="lead" style="margin-top:10px" data-t="jP">Mengikuti urutan Iqra jilid 1–6 yang sudah dikenal guru ngaji di Indonesia, lalu dunia ke-7: membaca surat-surat pendek langsung dari mushaf.</p></div>
+  <div class="journey rv" id="journey"></div>
+</div></section>
+
+<section id="features" style="padding-top:20px"><div class="wrap" id="featWrap"></div></section>
+
+<section style="padding-top:20px"><div class="wrap">
+  <div class="rv" style="text-align:center;margin-bottom:26px"><span class="kick" data-t="safeKick">Untuk Abi & Umi</span><h2 data-t="safeH">Aman, tenang, <em>tanpa drama</em></h2></div>
+  <div class="safe" id="safe"></div>
+</div></section>
+
+<section style="padding-top:20px"><div class="wrap">
+  <div class="card story rv">
+    <div><span class="kick" data-t="storyKick">Cerita di baliknya</span><h2 data-t="storyH">Dibuat seorang Abi <em>untuk anaknya</em></h2>
+      <blockquote style="margin-top:14px" data-t="storyQ">Baby Mo Hijaiyah awalnya dibuat untuk satu anak: <b>Ibra</b>. Abinya ingin Ibra belajar membaca Al-Qur'an dengan cara yang membuatnya tersenyum — bukan dipaksa. Setiap game diuji dengan satu pertanyaan: <b>apakah Ibra mau main lagi besok?</b></blockquote>
+    </div>
+    <div class="fam"><img src="../assets/family/abi-wave.webp" alt="Abi"><img class="mo" src="../kit/reels/art/mo-yes.png" alt="Baby Mo"><img src="../assets/family/umi-welcome.webp" alt="Umi"></div>
+  </div>
+</div></section>
+
+<section style="padding-top:20px"><div class="wrap" style="max-width:820px">
+  <div class="rv" style="text-align:center;margin-bottom:14px"><span class="kick">FAQ</span><h2 data-t="faqH">Pertanyaan Abi & Umi</h2></div>
+  <div id="faq"></div>
+</div></section>
+
+<section style="padding-top:20px"><div class="wrap">
+  <div class="final rv"><h2 data-t="finalH">Siap memulai dari <span class="ar">أَ</span>?</h2><p data-t="finalP">Coba sekarang di browser — gratis, tanpa daftar. Aplikasi iPhone, iPad dan Android segera hadir.</p>
+    <a class="btn" href="../" data-t="heroCta">Coba gratis sekarang</a>
+    <img src="../kit/reels/art/mo-yeyy.png" alt="" style="left:-30px"><img src="../kit/reels/art/mo-pose-02.png" alt="" style="right:-30px;transform:scaleX(-1)">
+  </div>
+</div></section>
+
+<footer><div class="wrap"><div>Baby Mo Hijaiyah · <a href="https://babymo.id">babymo.id</a><a href="https://babymo.id/privacy/" data-t="privacy">Privasi</a><a href="../kit/">App Store kit</a></div>
+  <div style="margin-top:8px" data-t="foot">Tanpa iklan · tanpa akun · progres hanya tersimpan di perangkat</div></div></footer>
+
+<script>
+(function () {
+  var T = {
+    navPlay: ["Main gratis", "Play free"], heroKick: ["Untuk anak 4–8 tahun", "For children aged 4–8"],
+    heroH: ["Belajar ngaji jadi <em>waktu main favorit</em> si kecil", "Learning to read the Qur'an becomes <em>their favourite playtime</em>"],
+    heroP: ["Dari huruf alif sampai membaca Al-Qur'an — lewat 77 level game seru bersama Baby Mo. Menulis huruf, memecahkan balon, naik kereta baca, memberi makan monster tajwid… dan tanpa terasa, si kecil sudah bisa membaca.",
+      "From the letter alif to reading the Qur'an — through 77 playful levels with Baby Mo. Tracing letters, popping balloons, riding the reading train, feeding the tajwid monsters… and before they know it, they can read."],
+    heroCta: ["Coba gratis sekarang", "Try it free now"], storeA1: ["Segera di", "Coming to the"], storeG1: ["Segera di", "Coming to"], soon: ["Segera", "Soon"],
+    p1: ["Tanpa iklan", "No ads"], p2: ["Tanpa akun", "No account"], p3: ["Bisa offline", "Works offline"], days: ["hari", "days"],
+    probKick: ["Kenal masalah ini?", "Sound familiar?"], probH: ["“Bosan, Bi… nanti saja ngajinya.”", "“I'm bored… can we read later?”"],
+    probP: ["Belajar Iqra sering terasa seperti PR: membosankan, diulang-ulang, dan cepat ditinggal. Baby Mo Hijaiyah mengubahnya jadi petualangan — setiap huruf adalah level, setiap jawaban benar ada bintang, dan si kecil yang minta “satu level lagi!”.",
+      "Learning to read Arabic often feels like homework: repetitive, boring and quickly abandoned. Baby Mo Hijaiyah turns it into an adventure — every letter is a level, every right answer earns a star, and it's your child asking for “one more level!”."],
+    howKick: ["Cara kerjanya", "How it works"], howH: ["Dengar, main, lalu <em>baca sendiri</em>", "Listen, play, then <em>read alone</em>"],
+    s1H: ["Dengar & tirukan", "Listen & copy"], s1P: ["Mo membaca dulu, si kecil menirukan — talaqqi ala metode Ummi. Mic “Mo mendengarkan” memutar suaranya sendiri dan memberi bintang.", "Mo reads first, your child copies — talaqqi, the Ummi way. The “Mo is listening” mic plays their own voice back and gives stars."],
+    s2H: ["Main & ulangi", "Play & repeat"], s2P: ["Setiap langkah adalah game: balon, kereta, jembatan, kartu memori, monster tajwid. Yang tadi salah diulang lagi dengan lembut.", "Every step is a game: balloons, trains, bridges, memory cards, tajwid monsters. Anything missed comes back gently."],
+    s3H: ["Baca sendiri & tashih", "Read alone & check"], s3P: ["Si kecil membaca tanpa bantuan suara, lalu Abi/Umi mencentang di Panggung Baca. Lancar? Naik level!", "Your child reads without help, then a parent ticks it on the Reading Stage. Fluent? Next level!"],
+    jKick: ["Perjalanan lengkap", "The whole journey"], jH: ["7 pulau, <em>77 level</em> — dari alif sampai Al-Qur'an", "7 islands, <em>77 levels</em> — from alif to the Qur'an"],
+    jP: ["Mengikuti urutan Iqra jilid 1–6 yang sudah dikenal guru ngaji di Indonesia, lalu dunia ke-7: membaca surat-surat pendek langsung dari mushaf.", "Following the Iqra order (books 1–6) that Qur'an teachers know well, then a 7th world: reading short surahs straight from the mushaf."],
+    safeKick: ["Untuk Abi & Umi", "For parents"], safeH: ["Aman, tenang, <em>tanpa drama</em>", "Safe, calm, <em>no surprises</em>"],
+    storyKick: ["Cerita di baliknya", "The story behind it"], storyH: ["Dibuat seorang Abi <em>untuk anaknya</em>", "Made by a father <em>for his son</em>"],
+    storyQ: ["Baby Mo Hijaiyah awalnya dibuat untuk satu anak: <b>Ibra</b>. Abinya ingin Ibra belajar membaca Al-Qur'an dengan cara yang membuatnya tersenyum — bukan dipaksa. Setiap game diuji dengan satu pertanyaan: <b>apakah Ibra mau main lagi besok?</b>",
+      "Baby Mo Hijaiyah was first made for one child: <b>Ibra</b>. His father wanted him to learn to read the Qur'an in a way that makes him smile — not forced. Every game was tested with one question: <b>will Ibra want to play again tomorrow?</b>"],
+    faqH: ["Pertanyaan Abi & Umi", "Questions from parents"], finalH: ["Siap memulai dari <span class='ar'>أَ</span>?", "Ready to start with <span class='ar'>أَ</span>?"],
+    finalP: ["Coba sekarang di browser — gratis, tanpa daftar. Aplikasi iPhone, iPad dan Android segera hadir.", "Try it now in your browser — free, no sign-up. The iPhone, iPad and Android apps are coming soon."],
+    privacy: ["Privasi", "Privacy"], foot: ["Tanpa iklan · tanpa akun · progres hanya tersimpan di perangkat", "No ads · no account · progress stays on the device"]
+  };
+  var WORLDS = [
+    ["#9BE7C4", "#3FBF86", "أَ بَ", "Pulau Fathah", "Fathah Island", "28 huruf berharakat fathah", "28 letters with fathah"],
+    ["#C8F0A8", "#6CC24A", "بَتَ", "Hutan Sambung", "Joining Forest", "Huruf bersambung & mad", "Joined letters & long vowels"],
+    ["#BFE0FF", "#5A9BEA", "بِ بُ", "Gunung Kasrah-Dhammah", "Kasrah-Dhammah Mountain", "Bunyi i dan u", "The i and u sounds"],
+    ["#B5F1F7", "#2BB8C9", "بٌ بْ", "Lautan Tanwin & Sukun", "Tanwin & Sukun Sea", "an in un, sukun, qalqalah", "an in un, sukun, qalqalah"],
+    ["#DCCBFF", "#9A7AF0", "بَّ", "Kota Tasydid", "Tasydid Town", "Tasydid, ghunnah, alif lam", "Shaddah, ghunnah, al-"],
+    ["#FFE0B5", "#F2A54A", "نْ", "Istana Tajwid", "Tajwid Palace", "Hukum nun & mim mati, mad", "Nun & mim rules, mad"],
+    ["#FFF3C4", "#E9C25A", "قُرْآن", "Gerbang Al-Qur'an", "Qur'an Gate", "Al-Fatihah & 14 surat Juz 'Amma", "Al-Fatihah & 14 surahs of Juz 'Amma"]];
+  var FEATS = [
+    { v: "trace", c: "#7CC8FF", k: ["Menulis", "Writing"], h: ["Tulis hurufnya — jadi <em>emas!</em>", "Trace it — it turns <em>gold!</em>"],
+      p: ["Titik hijau, panah yang bergerak, dan jari Mo yang mencontohkan. Game ini benar-benar mengecek arah dan urutan goresan — coretan asal tidak lolos.", "A green start dot, moving arrows and Mo's finger showing the way. The game really checks the stroke order and direction — scribbles don't pass."],
+      l: [["Arah & urutan goresan yang benar", "The right stroke order and direction"], ["Tulisan goyang berubah jadi huruf emas", "Wobbly writing turns into a golden letter"], ["28 huruf, bisa ditulis berulang", "All 28 letters, write them again and again"]] },
+    { img: "monsters", c: "#C9A7FF", k: ["Tajwid", "Tajwid"], h: ["Kasih makan <em>monster tajwid!</em>", "Feed the <em>tajwid monsters!</em>"],
+      p: ["Izhar, idgham, iqlab, ikhfa jadi monster lucu. Potongan ayat datang seperti kue — beri ke monster yang benar, dia mengunyah dan tersenyum. Salah? Monsternya menjelaskan aturannya sendiri.", "Izhar, idgham, iqlab and ikhfa become funny monsters. A verse piece floats in like a cookie — feed it to the right monster and it chomps and smiles. Wrong one? That monster explains its own rule."],
+      l: [["Contoh langsung dari ayat Al-Qur'an", "Examples straight from real verses"], ["Huruf penentu hukum menyala", "The letters that decide the rule glow"], ["Belajar dari kesalahan, tanpa dimarahi", "Learn from mistakes, never scolded"]] },
+    { img: "listen", c: "#FF8FB1", k: ["Mo mendengarkan", "Mo is listening"], h: ["Rekam, dengar, <em>bandingkan</em>", "Record, listen, <em>compare</em>"],
+      p: ["Ketuk mic dan baca — Mo mendengarkan sendiri kapan mulai dan selesai, lalu memutar suara si kecil di samping suara Mo. Ada tombol “suara lucu” yang selalu bikin tertawa.", "Tap the mic and read — Mo notices when your child starts and stops, then plays their voice next to Mo's. There's a “funny voice” button that always gets a laugh."],
+      l: [["Ramah untuk suara anak & logat Indonesia", "Friendly to young voices and accents"], ["Suara tidak disimpan & tidak dikirim", "Nothing is saved or sent anywhere"], ["Abi/Umi tetap yang menilai (tashih)", "A parent still does the real check"]] },
+    { v: "rewards", c: "#FFD66B", k: ["Hadiah", "Rewards"], h: ["Bintang, stiker & <em>“satu lagi!”</em>", "Stars, stickers & <em>“one more!”</em>"],
+      p: ["Kombo, ledakan bintang, buku stiker, peta pulau yang terbuka satu per satu, misi harian dan hari beruntun — dirancang supaya si kecil ingin kembali besok.", "Combos, star bursts, a sticker book, an island map that opens step by step, daily missions and streaks — designed to bring them back tomorrow."],
+      l: [["Buku stiker yang ikut mengulang bacaan", "A sticker book that doubles as review"], ["Misi harian & murajaah 5 menit", "Daily missions and a 5-minute review"], ["Sertifikat wisuda dengan nama si kecil", "A graduation certificate with your child's name"]] },
+    { v: "quran", c: "#9BE7C4", k: ["Al-Qur'an", "Al-Qur'an"], h: ["Sampai benar-benar <em>membaca mushaf</em>", "All the way to <em>reading the mushaf</em>"],
+      p: ["Dunia terakhir: Al-Fatihah dan 14 surat pendek. Dengar murottal ayat demi ayat, susun ayatnya, isi kata yang hilang, lalu baca satu surat utuh.", "The final world: Al-Fatihah and 14 short surahs. Hear the recitation verse by verse, build the verses, fill in missing words, then read a whole surah."],
+      l: [["Teks Al-Qur'an persis, diperiksa huruf demi huruf terhadap sumbernya", "Exact Qur'an text, checked letter by letter against its source"], ["Tanpa suara komputer untuk ayat", "Never a computer voice for verses"], ["Terjemahan Indonesia & English", "Indonesian & English translations"]] }];
+  var SAFE = [["<svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"#F0506E\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M5.6 5.6l12.8 12.8\"/></svg>", "Tanpa iklan", "No ads", "Tidak ada iklan sama sekali", "None, ever"], ["<svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"#F2A54A\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"5\" y=\"11\" width=\"14\" height=\"10\" rx=\"3\"/><path d=\"M8 11V8a4 4 0 018 0v3\"/></svg>", "Tanpa akun", "No account", "Tidak perlu daftar atau login", "No sign-up or login"],
+    ["<svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"#5A9BEA\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 8.5a15 15 0 0120 0M5.5 12a10 10 0 0113 0M9 15.5a5 5 0 016 0\"/><path d=\"M3 3l18 18\"/></svg>", "Bisa offline", "Works offline", "Main di mobil atau pesawat", "In the car or on a plane"], ["<svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"#12A15A\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z\"/><path d=\"M8.5 12l2.5 2.5 4.5-5\"/></svg>", "Data aman", "No tracking", "Progres hanya di perangkat", "Progress stays on the device"],
+    ["<svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"#9A7AF0\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"9\" cy=\"8\" r=\"3\"/><circle cx=\"17\" cy=\"9\" r=\"2.4\"/><path d=\"M3.5 20a5.5 5.5 0 0111 0M14 20a4 4 0 017 0\"/></svg>", "Gerbang orang tua", "Parental gate", "Area Abi/Umi dikunci soal hitung", "A grown-up maths question"], ["<svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"#0A9488\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/></svg>", "Laporan belajar", "Progress report", "Lihat jilid & tashih anak", "See every book and check"],
+    ["<svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"#2F9BEA\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18\"/></svg>", "ID & EN", "ID & EN", "Bahasa Indonesia & English", "English & Bahasa Indonesia"], ["<svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"#E9A52A\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z\"/></svg>", "Mode gelap", "Dark mode", "Nyaman untuk malam hari", "Easy on the eyes at night"]];
+  var FAQ = [
+    ["Untuk umur berapa?", "What age is it for?", "Sekitar 4–8 tahun. Anak yang belum bisa membaca tetap bisa main karena Mo mengucapkan setiap instruksi.", "Roughly 4–8. Children who can't read yet can still play, because Mo says every instruction out loud."],
+    ["Metodenya Iqra atau Ummi?", "Is it Iqra or Ummi?", "Urutan materinya mengikuti Iqra jilid 1–6, dengan kebiasaan baik Ummi: talaqqi (dengar lalu tirukan), murajaah harian, dan tashih oleh orang tua sebelum naik level.", "The lessons follow the Iqra order (books 1–6), with the good habits of the Ummi method: talaqqi (listen, then copy), a daily review, and a parent check before moving on."],
+    ["Apakah bisa tanpa internet?", "Does it work offline?", "Bisa. Setelah dibuka sekali, game tetap jalan tanpa internet.", "Yes. After the first visit, the game works without internet."],
+    ["Apakah suara anak direkam dan dikirim?", "Is my child's voice recorded and sent?", "Tidak. Rekaman hanya ada di memori selama layar terbuka untuk diputar ulang, lalu hilang. Tidak ada yang disimpan atau dikirim.", "No. The recording lives in memory only while the screen is open, so your child can hear it back, then it's gone. Nothing is saved or sent."],
+    ["Berapa harganya?", "How much does it cost?", "Versi web bisa dicoba gratis sekarang. Info harga aplikasi akan diumumkan saat rilis di App Store dan Google Play.", "The web version is free to try now. App pricing will be announced at launch on the App Store and Google Play."],
+    ["Apakah teks Al-Qur'an-nya benar?", "Is the Qur'an text accurate?", "Teks diambil dari Mushaf Madinah dan setiap potongan ayat di game dicek otomatis huruf demi huruf terhadap sumbernya. Ayat tidak pernah dibacakan suara komputer.", "The text follows the Madinah Mushaf and every verse piece in the game is checked automatically, letter by letter, against its source. Verses are never read by a computer voice."]];
+  var lang = (navigator.language || "en").toLowerCase().indexOf("id") === 0 || (navigator.language || "").toLowerCase().indexOf("ms") === 0 ? "id" : "en";
+  try { var bm = localStorage.getItem("bm_lang"); if (bm === "id" || bm === "en") lang = bm; } catch (e) {}
+  var I = function () { return lang === "en" ? 1 : 0; };
+  function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+  function render() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-t]").forEach(function (e) { var v = T[e.getAttribute("data-t")]; if (v) e.innerHTML = v[I()]; });
+    document.querySelectorAll("[data-lang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang)); });
+    document.querySelectorAll("video[data-src]").forEach(function (v) { var src = "../kit/reels/video/" + v.getAttribute("data-src") + "-" + lang + ".mp4"; if (v.getAttribute("src") !== src) { v.src = src; v.poster = src.replace(".mp4", ".jpg"); v.play().catch(function () {}); } });
+    document.getElementById("journey").innerHTML = WORLDS.map(function (w, i) { return '<div class="isle" style="background:linear-gradient(160deg,' + w[0] + "," + w[1] + ')"><div class="n">' + (i < 6 ? (lang === "en" ? "BOOK " : "JILID ") + (i + 1) : "AL-QUR'AN") + "</div><b>" + esc(w[3 + I()]) + "</b><p>" + esc(w[5 + I()]) + '</p><div class="sig">' + w[2] + "</div></div>"; }).join("");
+    document.getElementById("featWrap").innerHTML = FEATS.map(function (f) {
+      var media = f.v ? '<video data-src="' + f.v + '" autoplay muted loop playsinline preload="metadata" src="../kit/reels/video/' + f.v + "-" + lang + '.mp4" poster="../kit/reels/video/' + f.v + "-" + lang + '.jpg"></video>' : '<img src="img/' + f.img + "-" + lang + '.jpg" alt="" loading="lazy">';
+      return '<div class="feat rv"><div class="fv"><div class="blob" style="background:' + f.c + '"></div><div class="phone">' + media + '</div></div><div><span class="kick">' + esc(f.k[I()]) + "</span><h3>" + f.h[I()] + "</h3><p>" + esc(f.p[I()]) + "</p><ul>" + f.l.map(function (x) { return "<li>" + esc(x[I()]) + "</li>"; }).join("") + "</ul></div></div>";
+    }).join("");
+    document.getElementById("safe").innerHTML = SAFE.map(function (s) { return '<div class="card rv"><div class="ic">' + s[0] + "</div><b>" + esc(s[1 + I()]) + "</b><small>" + esc(s[3 + I()]) + "</small></div>"; }).join("");
+    document.getElementById("faq").innerHTML = FAQ.map(function (q) { return '<details class="rv"><summary>' + esc(q[I()]) + "</summary><p>" + esc(q[2 + I()]) + "</p></details>"; }).join("");
+    reveal();
+  }
+  var io = "IntersectionObserver" in window ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); } }); }, { threshold: .12 }) : null;
+  function reveal() { document.querySelectorAll(".rv:not(.on)").forEach(function (e) { io ? io.observe(e) : e.classList.add("on"); }); }
+  document.querySelectorAll("[data-lang]").forEach(function (b) { b.onclick = function () { lang = b.getAttribute("data-lang"); try { localStorage.setItem("bm_lang", lang); } catch (e) {} render(); }; });
+  render();
+})();
+</script>
+</body>
+</html>
