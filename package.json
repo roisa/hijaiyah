@@ -1,0 +1,12 @@
+{
+  "name": "babymo-hijaiyah",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Baby Mo Hijaiyah — learn to read hijaiyah up to Al-Qur'an, as a game (web first, then iOS/Android with Capacitor)",
+  "scripts": {
+    "start": "python3 -m http.server 8811",
+    "check": "node tools/check-curriculum.js",
+    "sw": "node tools/build-sw.js",
+    "build:app": "node tools/build-app.js"
+  }
+}

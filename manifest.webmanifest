@@ -1,0 +1,14 @@
+{
+  "name": "Baby Mo Hijaiyah",
+  "short_name": "Mo Hijaiyah",
+  "description": "Belajar membaca hijaiyah sampai Al-Qur'an bersama Baby Mo",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F2F6FC",
+  "theme_color": "#1FA971",
+  "icons": [
+    { "src": "assets/brand/babymo-logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/brand/babymo-logo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
