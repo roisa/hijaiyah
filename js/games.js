@@ -15,7 +15,7 @@
   function isWordy(it) { return (it.ar || "").replace(/[ً-ْ\s]/g, "").length > 2; }
   function latinEl(it) { return HJ.store.get().settings.latin && it.tr ? el("div", "lat", esc(it.tr)) : el("div"); }
   function sizeCls(it) { return it.quran ? "q" : isWordy(it) ? "w" : ""; }
-  function speakerBtn(fn) { var b = el("button", "speaker", "🔊"); b.setAttribute("aria-label", t("listen")); b.onclick = function () { A.fx.tap(); fn(); }; return b; }
+  function speakerBtn(fn) { var b = el("button", "speaker", HJ.ic("speaker")); b.setAttribute("aria-label", t("listen")); b.onclick = function () { A.fx.tap(); fn(); }; return b; }
   function add(p) { for (var i = 1; i < arguments.length; i++) if (arguments[i]) p.appendChild(arguments[i]); return p; }
   function after(ctx, ms, fn) { setTimeout(function () { if (ctx.alive()) fn(); }, ms); }
 
@@ -33,7 +33,7 @@
       });
       st.appendChild(row);
     }
-    var b = el("button", "btn big", t("start") + " ▶"); b.onclick = function () { A.fx.tap(); ctx.next(); };
+    var b = el("button", "btn big", HJ.ic("play") + " " + t("start")); b.onclick = function () { A.fx.tap(); ctx.next(); };
     st.appendChild(b);
     ctx.mo(s.mo, null, true);
     A.talk(tr(s.say), HJ.store.get().lang);
@@ -48,15 +48,15 @@
       st.appendChild(from);
     }
     add(st, el("div", "ask", t("tapHear")));
-    var card = el("button", "bigcard " + (it.quran ? "qq" : isWordy(it) ? "wordy" : ""));
-    card.appendChild(arEl(it)); card.appendChild(latinEl(it));
+    var card = el("button", "bigcard glass " + (it.quran ? "qq" : isWordy(it) ? "wordy" : ""));
+    card.appendChild(arEl(it)); card.appendChild(latinEl(it)); card.appendChild(el("span", "tap", HJ.ic("speaker")));
     st.appendChild(card);
     var dots = el("div", "dots", "<i></i><i></i><i></i>");
     var lbl = el("div", "sub", t("copy3"));
-    var nextB = el("button", "btn", t("next") + " ▶"); nextB.style.visibility = "hidden";
+    var nextB = el("button", "btn", t("next") + " " + HJ.ic("next")); nextB.style.visibility = "hidden";
     function play() { A.say(it.au).then(function () { heard++; if (heard >= 1) nextB.style.visibility = "visible"; }); card.classList.add("shake"); setTimeout(function () { card.classList.remove("shake"); }, 400); }
     card.onclick = play;
-    var said3 = el("button", "btn gold small", "🗣️ " + (HJ.store.get().lang === "en" ? "I said it!" : "Aku sudah baca!"));
+    var said3 = el("button", "btn gold small", HJ.ic("mouth") + " " + (HJ.store.get().lang === "en" ? "I said it!" : "Aku sudah baca!"));
     said3.onclick = function () {
       if (said >= 3) return; said++; A.fx.coin();
       dots.children[said - 1].classList.add("on");
@@ -65,7 +65,7 @@
     add(st, dots, el("div", "row"));
     var r = st.lastChild; r.appendChild(said3); r.appendChild(recorder());
     if (s.note && s.note.name) {
-      var nm = el("button", "chip", "🔤 " + t("letterName") + ": <span class='ar' style='font-size:22px'>" + esc(s.note.name) + "</span> " + esc(s.note.nameTr || ""));
+      var nm = el("button", "chip", HJ.ic("ear") + " " + t("letterName") + ": <span class='ar' style='font-size:22px'>" + esc(s.note.name) + "</span> " + esc(s.note.nameTr || ""));
       nm.onclick = function () { A.say(s.note.name); };
       st.appendChild(nm);
     }
@@ -79,15 +79,15 @@
   function recorder() {
     var wrap = el("span", "row");
     if (!A.canRecord()) return wrap;
-    var url = null, recB = el("button", "btn small ghost", "🎤 " + t("record")), playB = el("button", "btn small ghost", "▶ " + t("myVoice"));
+    var url = null, recB = el("button", "btn small ghost", HJ.ic("mic") + " " + t("record")), playB = el("button", "btn small ghost", HJ.ic("play") + " " + t("myVoice"));
     playB.style.display = "none";
     var on = false;
     recB.onclick = function () {
       if (!on) {
-        A.recStart().then(function () { on = true; recB.innerHTML = "⏹ " + t("stopRec"); recB.classList.remove("ghost"); recB.classList.add("red"); })
+        A.recStart().then(function () { on = true; recB.innerHTML = HJ.ic("stop") + " " + t("stopRec"); recB.classList.remove("ghost"); recB.classList.add("rec"); })
           .catch(function () { recB.style.display = "none"; });
       } else {
-        A.recStop().then(function (u) { on = false; url = u; recB.innerHTML = "🎤 " + t("record"); recB.classList.add("ghost"); recB.classList.remove("red"); playB.style.display = ""; });
+        A.recStop().then(function (u) { on = false; url = u; recB.innerHTML = HJ.ic("mic") + " " + t("record"); recB.classList.add("ghost"); recB.classList.remove("rec"); playB.style.display = ""; });
       }
     };
     playB.onclick = function () { if (url) A.playUrl(url); };
@@ -100,9 +100,9 @@
   G.trace = function (s, ctx) {
     var st = ctx.stage;
     add(st, el("div", "ask", t("trace")));
-    var wrap = el("div", "trace-wrap"), cv = el("canvas"), meter = el("div", "meter", "<i></i>");
+    var wrap = el("div", "trace-wrap glass"), cv = el("canvas"), meter = el("div", "meter", "<i></i>");
     wrap.appendChild(cv); st.appendChild(wrap); st.appendChild(meter);
-    var skip = el("button", "btn small ghost", t("skip") + " ⏭"); skip.onclick = function () { ctx.next(); }; st.appendChild(skip);
+    var skip = el("button", "btn small ghost", HJ.ic("skip") + " " + t("skip")); skip.onclick = function () { ctx.next(); }; st.appendChild(skip);
     ctx.mo("pose-08", t("trace"));
     var dpr = Math.min(2, window.devicePixelRatio || 1), W, H, g, mask, total = 0, hit = {}, nhit = 0, done = false;
     function setup() {
@@ -146,7 +146,7 @@
   G.pick = function (s, ctx) {
     var st = ctx.stage, locked = false;
     add(st, el("div", "ask", esc(s.ask ? tr(s.ask) : t("whichOne"))));
-    if (s.show) { var sc = el("div", "bigcard qq"); sc.appendChild(arEl(s.show)); st.appendChild(sc); }
+    if (s.show) { var sc = el("div", "bigcard glass qq"); sc.appendChild(arEl(s.show)); st.appendChild(sc); }
     else st.appendChild(speakerBtn(function () { A.say(s.q.au); }));
     var opts = el("div", "opts");
     s.options.forEach(function (o) {
@@ -172,10 +172,10 @@
   G.yesno = function (s, ctx) {
     var st = ctx.stage, locked = false, same = s.item.ar === s.heard.ar;
     add(st, el("div", "ask", t("isRight")));
-    var card = el("button", "bigcard " + (s.item.quran ? "qq" : isWordy(s.item) ? "wordy" : "")); card.appendChild(arEl(s.item));
+    var card = el("button", "bigcard glass " + (s.item.quran ? "qq" : isWordy(s.item) ? "wordy" : "")); card.appendChild(arEl(s.item));
     card.onclick = function () { A.say(s.heard.au); };
     st.appendChild(card);
-    var row = el("div", "row"), y = el("button", "btn big", "✅ " + t("yes")), n = el("button", "btn big red", "❌ " + t("no"));
+    var row = el("div", "row"), y = el("button", "btn big", HJ.ic("check") + " " + t("yes")), n = el("button", "btn big red", HJ.ic("close") + " " + t("no"));
     function ans(v, b) {
       if (locked) return;
       if (v === same) {
@@ -193,7 +193,7 @@
   /* Balloon pop */
   G.pop = function (s, ctx) {
     var st = ctx.stage, need = 4, got = 0, timer = null;
-    var head = el("div", "row"), cnt = el("div", "count", "🎈 0 / " + need);
+    var head = el("div", "row"), cnt = el("div", "count glass", "🎈 0 / " + need);
     head.appendChild(speakerBtn(function () { A.say(s.q.au); }));
     var tg = el("div", "tile " + sizeCls(s.q)); tg.style.minHeight = "70px"; tg.appendChild(arEl(s.q)); tg.style.pointerEvents = "none";
     head.appendChild(tg); head.appendChild(cnt);
@@ -247,11 +247,11 @@
     });
     cars.forEach(function (c) { train.appendChild(c); });
     track.appendChild(train);
-    var row = el("div", "row"), lb = el("button", "btn gold", "🔊 " + t("listen"));
+    var row = el("div", "row"), lb = el("button", "btn gold", HJ.ic("speaker") + " " + t("listen"));
     var tl = latinEl(s.item);
     add(st, ask, track, tl, row);
     row.appendChild(lb); row.appendChild(recorder());
-    var go = el("button", "btn", "🗣️ " + (HJ.store.get().lang === "en" ? "My turn" : "Giliranku")); go.style.display = "none"; row.appendChild(go);
+    var go = el("button", "btn", HJ.ic("mouth") + " " + (HJ.store.get().lang === "en" ? "My turn" : "Giliranku")); go.style.display = "none"; row.appendChild(go);
     function listen() {
       phase = 0; var my = {};
       var i = 0;
@@ -367,13 +367,13 @@
     var counts = {};
     var btns = s.buckets.map(function (b) {
       counts[b.k] = 0;
-      var x = el("button", "bucket", esc(tr(b.label)) + '<span class="n">0</span>'); x.dataset.k = b.k; bk.appendChild(x); return x;
+      var x = el("button", "bucket glass", esc(tr(b.label)) + '<span class="n">0</span>'); x.dataset.k = b.k; bk.appendChild(x); return x;
     });
     add(st, holder, bk);
     ctx.mo("pose-36", null);
     function show() {
       holder.innerHTML = "";
-      var it = s.items[i], c = el("button", "bigcard " + (it.quran ? "qq" : "wordy")); c.appendChild(arEl(it)); c.appendChild(latinEl(it));
+      var it = s.items[i], c = el("button", "bigcard glass " + (it.quran ? "qq" : "wordy")); c.appendChild(arEl(it)); c.appendChild(latinEl(it));
       c.onclick = function () { A.say(it.au); };
       holder.appendChild(c);
       A.say(it.au);
@@ -412,9 +412,9 @@
       (HJ.store.get().settings.latin ? '<div class="tl">' + esc(a.tr) + "</div>" : "") + '<div class="tr">' + esc(a[lang] || a.id) + "</div>";
     box.onclick = function () { playAyah(s.s, s.a, box); };
     st.appendChild(box);
-    var row = el("div", "row"), lb = el("button", "btn gold", "🔊 " + t("listen"));
+    var row = el("div", "row"), lb = el("button", "btn gold", HJ.ic("speaker") + " " + t("listen"));
     lb.onclick = function () { playAyah(s.s, s.a, box); };
-    var nx = el("button", "btn", t("next") + " ▶"); nx.onclick = function () { ctx.next(); };
+    var nx = el("button", "btn", t("next") + " " + HJ.ic("next")); nx.onclick = function () { ctx.next(); };
     row.appendChild(lb); row.appendChild(recorder()); row.appendChild(nx);
     st.appendChild(row);
     ctx.mo("mo2:read-book", t("ayahListen"));
@@ -434,7 +434,7 @@
         if (o.w === words[idx]) {
           var sl = slots.children[idx]; sl.classList.add("fill"); sl.appendChild(el("div", "ar", esc(o.w))); b.classList.add("used"); A.fx.good(); idx++;
           if (idx === words.length) { ctx.cheer(t("great")); A.fx.win(); after(ctx, 600, function () { playAyah(s.s, s.a); }); after(ctx, 1800, function () {
-            var nx = el("button", "btn", t("next") + " ▶"); nx.onclick = function () { ctx.next(); }; st.appendChild(nx); }); }
+            var nx = el("button", "btn", t("next") + " " + HJ.ic("next")); nx.onclick = function () { ctx.next(); }; st.appendChild(nx); }); }
         } else { b.classList.add("no"); setTimeout(function () { b.classList.remove("no"); }, 450); ctx.bad(); }
       };
       tiles.appendChild(b);
@@ -477,7 +477,7 @@
     var spans = su.ayahs.map(function (a) { var sp = el("span", "", esc(a.ar) + ' <span class="ayno">﴿' + arabicNum(a.n) + "﴾</span> "); page.appendChild(sp); return sp; });
     if (su.slug !== "al-fatihah") box.appendChild(el("div", "qr", "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")).style.cssText = "font-size:26px;opacity:.8";
     box.appendChild(page); st.appendChild(box);
-    var row = el("div", "row"), all = el("button", "btn gold", "🔊 " + t("listenAll")), playing = false;
+    var row = el("div", "row"), all = el("button", "btn gold", HJ.ic("speaker") + " " + t("listenAll")), playing = false;
     all.onclick = function () {
       if (playing) { A.stop(); playing = false; spans.forEach(function (x) { x.classList.remove("on"); }); return; }
       playing = true; var i = 0;
@@ -488,15 +488,15 @@
         playAyah(su.slug, su.ayahs[i].n).then(function () { i++; setTimeout(nx, 300); });
       })();
     };
-    var ts = el("button", "btn", "✅ " + t("tashih"));
+    var ts = el("button", "btn", HJ.ic("check") + " " + t("tashih"));
     ts.onclick = function () {
       A.stop(); playing = false;
       HJ.gate(function () {
         HJ.modal(function (p, close) {
-          p.appendChild(el("h2", "", t("tashih")));
+          p.appendChild(el("div", "kicker", t("parents"))); p.appendChild(el("h2", "", t("tashih")));
           p.appendChild(el("p", "", esc(t("tashihHint"))));
           var r = el("div", "row"), f = el("button", "btn gold", t("fluent")), pr = el("button", "btn ghost", t("practice"));
-          f.onclick = function () { HJ.store.get().tashih[ctx.lv.id] = 1; HJ.store.save(); close(); ctx.next(); };
+          f.onclick = function () { HJ.store.get().tashih[ctx.lv.id] = 1; HJ.store.save(); HJ.mission && HJ.mission("tashih"); close(); ctx.next(); };
           pr.onclick = function () { close(); ctx.bad(true); ctx.next(); };
           r.appendChild(f); r.appendChild(pr); p.appendChild(r);
         });
@@ -510,7 +510,7 @@
   /* Ummi-style tashih for a set of items: the child reads them alone, a parent ticks */
   G.tashih = function (s, ctx) {
     var st = ctx.stage, okN = 0;
-    add(st, el("div", "ask", "✅ " + t("tashih")), el("div", "sub", esc(tr(s.say)) + " " + esc(t("tashihHint"))));
+    add(st, el("div", "ask", t("tashih")), el("div", "sub", esc(tr(s.say)) + " " + esc(t("tashihHint"))));
     var grid = el("div", "tgrid");
     s.items.forEach(function (it) {
       var c = el("button", "titem " + (it.quran ? "q" : "")); c.appendChild(arEl(it));
@@ -520,10 +520,10 @@
       grid.appendChild(c);
     });
     st.appendChild(grid);
-    var row = el("div", "row"), all = el("button", "btn gold", "⭐ " + t("allGood")), sk = el("button", "btn ghost small", t("skip") + " ⏭");
-    var hint = el("button", "btn ghost small", "🔊 " + t("hint"));
+    var row = el("div", "row"), all = el("button", "btn gold", "⭐ " + t("allGood")), sk = el("button", "btn ghost small", HJ.ic("skip") + " " + t("skip"));
+    var hint = el("button", "btn ghost small", HJ.ic("bulb") + " " + t("hint"));
     hint.onclick = function () { A.say(s.items.map(function (x) { return x.au; })); };
-    all.onclick = function () { HJ.store.get().tashih[ctx.lv.id] = 1; HJ.store.save(); ctx.cheer(t("great")); A.fx.win(); after(ctx, 900, ctx.next); };
+    all.onclick = function () { HJ.store.get().tashih[ctx.lv.id] = 1; HJ.store.save(); HJ.mission && HJ.mission("tashih"); ctx.cheer(t("great")); A.fx.win(); after(ctx, 900, ctx.next); };
     sk.onclick = function () { ctx.next(); };
     row.appendChild(all); row.appendChild(hint); row.appendChild(sk);
     st.appendChild(row);

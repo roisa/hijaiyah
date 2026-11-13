@@ -3,7 +3,7 @@
    Bump VERSION when shipping changed art or audio (CLAUDE.md rule from Baby Mo). */
 const fs = require("fs"), path = require("path");
 const root = path.join(__dirname, "..");
-const VERSION = "bmh-v1";
+const VERSION = "bmh-v2";
 const dirs = ["css", "js", "assets", "audio/huruf", "audio/extra", "audio/quran"];
 let files = ["./", "index.html", "manifest.webmanifest"];
 function walk(d) { if (!fs.existsSync(path.join(root, d))) return; for (const f of fs.readdirSync(path.join(root, d))) {

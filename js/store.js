@@ -48,6 +48,23 @@
 
   /* interface words */
   var W = {
+    tabHome: ["Main", "Play"], tabParents: ["Orang Tua", "Parents"], continue: ["Lanjut belajar", "Keep learning"],
+    mLevel: ["Main 1 level", "Play 1 level"], mTashih: ["Tashih bersama Abi/Umi", "Reading check with a parent"],
+    mTashihSub: ["Baca sendiri, Abi/Umi mencentang", "Read alone, a parent ticks"],
+    mission: ["Misi Hari Ini", "Today's Missions"], missionAll: ["Semua misi selesai! Masya Allah 🏆", "All missions done! Masha Allah 🏆"],
+    missionSub: ["Selesaikan {n} misi lagi", "{n} missions to go"], day: ["hari", "days"], doneToday: ["Selesai hari ini ✓", "Done today ✓"],
+    books: ["Jilid Belajar", "Books"], footDua: ["Ya Rabbku, tambahkanlah ilmu kepadaku", "My Lord, increase me in knowledge"],
+    gMorning: ["Selamat pagi! Yuk mulai ngaji, Bismillah.", "Good morning! Let's start, Bismillah."],
+    gDay: ["Siang ini kita belajar huruf baru, yuk!", "Let's learn a new letter this afternoon!"],
+    gAfternoon: ["Sore yang seru untuk membaca, ayo!", "A lovely afternoon to read, come on!"],
+    gNight: ["Sebelum tidur, murajaah sebentar yuk.", "A little review before bed?"],
+    mapTitle1: ["Peta", "Learning"], mapTitle2: ["Belajar", "Map"], mapSub: ["7 jilid · dari alif sampai Al-Qur'an", "7 books · from alif to the Qur'an"],
+    stickerTitle1: ["Buku", "Sticker"], stickerTitle2: ["Stiker", "Book"],
+    latinSub: ["Tampilkan bacaan latin kecil", "Show small Latin spelling"], cdnSub: ["Putar murottal dari internet bila belum diunduh", "Stream recitation when not downloaded"],
+    unlockSub: ["Untuk mencoba semua jilid", "To try every book"],
+    method: ["Urutan Iqra (langsung bunyi, langkah kecil) dengan kebiasaan Ummi: talaqqi (dengar → tirukan), murajaah harian, dan tashih oleh Abi/Umi sebelum naik level. Jilid 7 membaca surat-surat pendek.",
+      "Iqra order (sounds first, small steps) with Ummi habits: talaqqi (listen → copy), daily review, and a parent check before moving on. Book 7 is reading short surahs."],
+    privacy: ["Tanpa iklan · progres hanya di perangkat ini", "No ads · progress stays on this device"],
     play: ["Ayo Main!", "Let's Play!"], hello: ["Assalamu'alaikum, {n}!", "Assalamu'alaikum, {n}!"],
     hello2: ["Ayo belajar membaca Al-Qur'an bersama Baby Mo!", "Let's learn to read the Qur'an with Baby Mo!"],
     daily: ["Murajaah Harian", "Daily Review"], dailySub: ["5 menit mengulang, biar makin lancar", "5 minutes of review, every day"],

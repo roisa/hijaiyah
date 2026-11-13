@@ -1,0 +1,43 @@
+/* Hills, mosque and sky behind the home screen — the same scene as the Baby Mo app (babymo-app/www/index.html) */
+.pd-scene{position:absolute;z-index:0;left:0;right:0;top:-96px;height:620px;pointer-events:none;overflow:hidden;
+  -webkit-mask-image:linear-gradient(180deg,#000 72%,transparent);mask-image:linear-gradient(180deg,#000 72%,transparent)}
+.pd-scene svg{width:100%;height:100%;display:block}
+.pd-scene svg *{transform-box:fill-box}
+.pd-scene .s1{stop-color:#5DB8FF}.pd-scene .s2{stop-color:#B4E1FF}.pd-scene .s3{stop-color:#EAF8FF}
+.pd-scene .g1{stop-color:#FFF3B8;stop-opacity:.9}.pd-scene .g2{stop-color:#FFF3B8;stop-opacity:0}
+.pd-scene .ha1{stop-color:#A9DCC4}.pd-scene .ha2{stop-color:#8CCBB0}
+.pd-scene .hb1{stop-color:#A5DE8C}.pd-scene .hb2{stop-color:#72C063}
+.pd-scene .hc1{stop-color:#8FD474}.pd-scene .hc2{stop-color:#4FA94C}
+.pd-scene .d1{stop-color:#FFF0A8}.pd-scene .d2{stop-color:#FFC93D}.pd-scene .d3{stop-color:#E39A16}
+.pd-scene .w1{stop-color:#FFFFFF}.pd-scene .w2{stop-color:#F2E9D8}
+.pd-scene .t1{stop-color:#FFE7A0}.pd-scene .t2{stop-color:#E9B850}
+.pd-scene .tr1{stop-color:#8FD87A}.pd-scene .tr2{stop-color:#3E9A48}
+.pd-scene .c1{stop-color:#FFFFFF}.pd-scene .c2{stop-color:#DCEBFA}
+.pd-scene .l1{stop-color:#7ACB63}.pd-scene .l2{stop-color:#3C9444}
+.pd-scene .far{fill:#7DBFA2}
+.pd-scene .win{fill:#BFE3F5}.pd-scene .door{opacity:.0}
+.pd-scene .birds{fill:none;stroke:#4A6A8A;stroke-width:1.8;stroke-linecap:round;opacity:.7}
+.pd-scene .stars-n,.pd-scene .moon{display:none}
+.pd-scene .cl{animation:pdDrift 26s ease-in-out infinite alternate}
+.pd-scene .c-b{animation-duration:34s;animation-delay:-8s}.pd-scene .c-c{animation-duration:30s;animation-delay:-15s}
+.pd-scene .birds{animation:pdBirds 9s ease-in-out infinite}
+.pd-scene .glow{animation:pdGlow 6s ease-in-out infinite;transform-origin:center}
+.pd-scene .stars-n circle{animation:pdTw 3s ease-in-out infinite}.pd-scene .stars-n circle:nth-child(odd){animation-delay:-1.5s}
+@media (prefers-reduced-motion:reduce){.pd-scene *{animation:none!important}}
+:root[data-theme="dark"] .pd-scene .s1{stop-color:#10173D}:root[data-theme="dark"] .pd-scene .s2{stop-color:#232D62}:root[data-theme="dark"] .pd-scene .s3{stop-color:#1A2042}
+:root[data-theme="dark"] .pd-scene .sun,:root[data-theme="dark"] .pd-scene .birds{display:none}
+:root[data-theme="dark"] .pd-scene .glow{display:block}
+:root[data-theme="dark"] .pd-scene .g1{stop-color:#8C90FF;stop-opacity:.28}:root[data-theme="dark"] .pd-scene .g2{stop-color:#8C90FF;stop-opacity:0}
+:root[data-theme="dark"] .pd-scene .stars-n{display:block;fill:#FFF3C4}:root[data-theme="dark"] .pd-scene .moon{display:block;fill:#FFE08A}
+:root[data-theme="dark"] .pd-scene .c1{stop-color:#4A5596}:root[data-theme="dark"] .pd-scene .c2{stop-color:#2E3870}
+:root[data-theme="dark"] .pd-scene .cl{opacity:.6}
+:root[data-theme="dark"] .pd-scene .ha1{stop-color:#2A3A68}:root[data-theme="dark"] .pd-scene .ha2{stop-color:#22305A}
+:root[data-theme="dark"] .pd-scene .hb1{stop-color:#21385A}:root[data-theme="dark"] .pd-scene .hb2{stop-color:#1A2C4A}
+:root[data-theme="dark"] .pd-scene .hc1{stop-color:#1C3150}:root[data-theme="dark"] .pd-scene .hc2{stop-color:#152440}
+:root[data-theme="dark"] .pd-scene .far{fill:#22345A}
+:root[data-theme="dark"] .pd-scene .tr1{stop-color:#2D5A50}:root[data-theme="dark"] .pd-scene .tr2{stop-color:#183A36}
+:root[data-theme="dark"] .pd-scene .l1{stop-color:#244A40}:root[data-theme="dark"] .pd-scene .l2{stop-color:#163029}
+:root[data-theme="dark"] .pd-scene .w1{stop-color:#D6DAF0}:root[data-theme="dark"] .pd-scene .w2{stop-color:#A9B0D6}
+:root[data-theme="dark"] .pd-scene .d1{stop-color:#FFE08A}:root[data-theme="dark"] .pd-scene .d2{stop-color:#E8B23A}:root[data-theme="dark"] .pd-scene .d3{stop-color:#B8801A}
+:root[data-theme="dark"] .pd-scene .win{fill:#FFD86B}:root[data-theme="dark"] .pd-scene .door{opacity:1}
+:root[data-theme="dark"] .pd-scene .flw{opacity:.4}
