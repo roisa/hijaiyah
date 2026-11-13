@@ -8,9 +8,11 @@
   var navId = 0;
   // what Mo says at the start of each kind of step (spoken, so a child who can't read yet knows what to do)
   var INSTR = { pick: "whichOne", yesno: "isRight", pop: "popIt", train: "listenFirst", bridge: "bridge", match: "match", build: "build",
-    sort: "sortIt", trace: "traceStart", learn: "listenFirst", ayah: "ayahListen", ayahbuild: "ayahBuild", ayahfill: "ayahFill" };
+    sort: "sortIt", trace: "traceStart", learn: "listenFirst", ayah: "ayahListen", ayahbuild: "ayahBuild", ayahfill: "ayahFill",
+    bubbles: "tdBubbles", paint: "tdPaint", feed: "feedAsk", shadow: "tdShadow" };
   var HAND = { pick: ".speaker", yesno: ".bigcard", pop: ".speaker", train: ".row .btn.gold", bridge: ".speaker", match: ".mcard", build: ".speaker",
-    sort: ".bucket", learn: ".bigcard", trace: ".trace-wrap", ayahbuild: ".tile.qw", ayahfill: ".tile.qw" };
+    sort: ".bucket", learn: ".bigcard", trace: ".trace-wrap", ayahbuild: ".tile.qw", ayahfill: ".tile.qw",
+    bubbles: ".bub", paint: ".paint-wrap", feed: ".fruit", shadow: ".sh-piece" };
   function firstTimeHand(type) {
     var st = S.get(); st.seen = st.seen || {};
     if (st.seen[type] || !HAND[type]) return;
@@ -645,6 +647,7 @@
     tog(ic("textA"), "purple", t("latin"), "latin", t("latinSub"));
     if (!window.HJ_APP_BUILD) tog(ic("book"), "teal", t("cdn"), "cdn", t("cdnSub"));
     tog(ic("lock"), "gray", t("unlockAll"), "unlockAll", t("unlockSub"));
+    tog(ic("gamepad"), "pink", t("arcadeAll"), "arcadeAll", t("arcadeAllSub"));
     sc.appendChild(g2);
 
     // curriculum

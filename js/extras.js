@@ -138,7 +138,7 @@
     box.appendChild(el("div", "tr-sub", esc(t("treasuresSub"))));
     box.appendChild(chestCard());
     Object.keys(SETS).forEach(function (kind) {
-      var row = el("div", "tr-row");
+      var row = el("div", "tz-row");
       row.appendChild(el("div", "tr-k", esc(t(SETS[kind].label))));
       var g = el("div", "tr-items");
       Object.keys(SETS[kind].items).forEach(function (key) {
@@ -159,6 +159,22 @@
   var GAMES = [["pop", "gPop", "balloon", "#FF8FB1", "#E5396B"], ["train", "gTrain", null, "#7CC8FF", "#2563EB"], ["bridge", "gBridge", "link", "#5EEAD4", "#0E7490"],
     ["match", "gMatch", "sparkle", "#C4B5FD", "#7C3AED"], ["trace", "gTrace", "hand", "#FDE68A", "#D97706"], ["pick", "gPick", "wave", "#86EFAC", "#15803D"],
     ["build", "gBuild", "book", "#FDBA74", "#C2410C"], ["sort", "gSort", "gift", "#F9A8D4", "#BE185D"], ["yesno", "gYesno", "check", "#93C5FD", "#1D4ED8"]];
+  // parents can open every Free Play game (Parents → "Open all games"; "Unlock all levels" does it too)
+  function allOpen() { var se = S.get().settings || {}; return !!(se.arcadeAll || se.unlockAll); }
+  // little ones' games (3–4): always open; letters = the ones learned so far, at least the first 8 (all 28 when opened)
+  var TODDLER = [["bubbles", "gBubbles", "#9BE7FF", "#3B82F6"], ["paint", "gPaint", "#FFB4C8", "#E5396B"], ["feed", "gFeed", "#FFD66B", "#F08C00"], ["shadow", "gShadow", "#B9A6FF", "#6D28D9"]];
+  function tArt(k) {
+    if (k === "bubbles") return '<svg width="54" height="54" viewBox="0 0 60 60"><circle cx="22" cy="36" r="16" fill="rgba(255,255,255,.35)" stroke="#fff" stroke-width="3"/><circle cx="42" cy="20" r="11" fill="rgba(255,255,255,.35)" stroke="#fff" stroke-width="3"/><circle cx="46" cy="44" r="6" fill="rgba(255,255,255,.35)" stroke="#fff" stroke-width="2.5"/><ellipse cx="16" cy="30" rx="4" ry="3" fill="#fff"/></svg>';
+    if (k === "paint") return '<svg width="54" height="54" viewBox="0 0 60 60"><path d="M10 46 L38 18 L46 26 L18 54 Z" fill="#FFD43B" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M38 18 L44 8 L54 16 L46 26 Z" fill="#fff"/><path d="M6 56 C10 48 16 48 18 54 Z" fill="#fff"/><circle cx="16" cy="18" r="6" fill="#34C759" stroke="#fff" stroke-width="2.5"/><circle cx="48" cy="44" r="5" fill="#3B82F6" stroke="#fff" stroke-width="2.5"/></svg>';
+    if (k === "feed") return '<svg width="54" height="54" viewBox="0 0 100 100"><path d="M52 20 C54 10 60 6 66 5" stroke="#6B4423" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M56 16 C66 6 80 8 84 14 C74 20 64 20 56 16 Z" fill="#3FBF5A"/><circle cx="50" cy="58" r="38" fill="#FF4D4D" stroke="#fff" stroke-width="5"/><ellipse cx="36" cy="40" rx="9" ry="6" fill="#fff" opacity=".6"/><text x="50" y="76" text-anchor="middle" font-size="44" font-family="Scheherazade New, serif" fill="#fff">بَ</text></svg>';
+    return '<svg width="54" height="54" viewBox="0 0 60 60"><rect x="4" y="22" width="26" height="30" rx="8" fill="rgba(30,20,80,.45)"/><rect x="30" y="8" width="26" height="30" rx="8" fill="#fff"/><text x="43" y="32" text-anchor="middle" font-size="24" font-family="Scheherazade New, serif" fill="#6D28D9">ب</text><text x="17" y="46" text-anchor="middle" font-size="24" font-family="Scheherazade New, serif" fill="rgba(255,255,255,.5)">ب</text></svg>';
+  }
+  function toddlerPool() {
+    var s = S.get(), ks = [];
+    HJ.allLevels().forEach(function (l) { if (l.kind === "letters" && (s.stars[l.id] || allOpen())) l.letters.forEach(function (k) { if (ks.indexOf(k) < 0) ks.push(k); }); });
+    HJ.L.forEach(function (l) { if (ks.length < 8 && ks.indexOf(l.k) < 0) ks.push(l.k); });
+    return ks.map(function (k) { return HJ.syl(k, "a"); });
+  }
   function stepsOf(type) {
     var s = S.get(), out = [], firstLv = null;
     HJ.allLevels().forEach(function (l) {
@@ -166,13 +182,20 @@
       var has = steps.filter(function (x) { return x.type === type && !x.again; });
       if (!has.length) return;
       if (!firstLv) firstLv = l;
-      if (s.stars[l.id]) out = out.concat(has);
+      if (s.stars[l.id] || allOpen()) out = out.concat(has);
     });
     return { steps: out, first: firstLv };
   }
   function arcadeRow(sc) {
     sc.appendChild(el("div", "sec-h arc", "<h3>" + esc(t("arcade")) + "</h3><small>" + esc(t("arcadeSub")) + "</small>"));
     var strip = el("div", "arcade");
+    TODDLER.forEach(function (g) {
+      var b = el("button", "ar-tile td");
+      b.style.background = "linear-gradient(160deg," + g[2] + "," + g[3] + ")";
+      b.innerHTML = '<span class="at-age">3+</span><span class="at-art">' + tArt(g[0]) + "</span><b>" + esc(t(g[1])) + "</b>";
+      b.onclick = function () { A().unlock(); A().fx.tap(); play(g[0]); };
+      strip.appendChild(b);
+    });
     GAMES.forEach(function (g) {
       var info = stepsOf(g[0]), open = info.steps.length > 0;
       if (!info.first) return;
@@ -180,14 +203,18 @@
       b.style.background = "linear-gradient(160deg," + g[3] + "," + g[4] + ")";
       b.innerHTML = '<span class="at-art">' + (g[2] ? HJ.art(g[2], 46) : HJ.engine()) + "</span><b>" + esc(t(g[1])) + "</b>" +
         (open ? "" : "<small>" + HJ.ic("lock") + " " + esc(t("arcadeLock", { b: info.first.w < 7 ? t("book") + " " + info.first.w : "Al-Qur'an" })) + "</small>");
-      b.onclick = function () { A().unlock(); if (!open) { A().fx.bad(); return; } A().fx.tap(); play(g[0]); };
+      b.onclick = function () { A().unlock(); if (!open) { A().fx.bad(); HJ.toast(HJ.ic("lock") + " " + esc(t("arcadeAsk"))); return; } A().fx.tap(); play(g[0]); };
       strip.appendChild(b);
     });
     sc.appendChild(strip);
   }
   function play(type) {
-    var pool = HJ.util.shuffle(stepsOf(type).steps.slice()), n = type === "match" || type === "trace" || type === "sort" ? 2 : 4;
-    var steps = pool.slice(0, n).map(function (x) { return JSON.parse(JSON.stringify(x)); });
+    var steps;
+    if (TODDLER.some(function (g) { return g[0] === type; })) steps = HJ.toddlerSteps(type, toddlerPool());
+    else {
+      var pool = HJ.util.shuffle(stepsOf(type).steps.slice()), n = type === "match" || type === "trace" || type === "sort" ? 2 : 4;
+      steps = pool.slice(0, n).map(function (x) { return JSON.parse(JSON.stringify(x)); });
+    }
     if (!steps.length) return;
     HJ.runLevel({ id: "_arcade", kind: "arcade", w: 1 }, { steps: steps, noReplay: true, onExit: APP().home, onDone: function () {
       A().fx.win(); APP().confetti(50);

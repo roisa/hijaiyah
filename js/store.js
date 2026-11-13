@@ -4,7 +4,7 @@
   // first language guess: the phone's language (Indonesian → id, anything else → en); the picker confirms it
   var navLang = ((navigator.languages && navigator.languages[0]) || navigator.language || "en").toLowerCase();
   var DEF = { name: "", lang: /^(id|ms)/.test(navLang) ? "id" : "en", langChosen: false, theme: "auto", stars: {}, tashih: {}, stickers: [], streak: { last: "", n: 0 }, plays: 0, limit: "0", playDay: { d: "", ms: 0 }, log: {}, chest: 0, owned: [], equip: { train: "classic", balloons: "classic", ink: "classic" },
-    settings: { moVoice: true, sfx: true, latin: true, cdn: true, unlockAll: false, nature: false } };
+    settings: { moVoice: true, sfx: true, latin: true, cdn: true, unlockAll: false, nature: false, arcadeAll: false } };
   var st;
   function load() {
     try { st = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { st = null; }
@@ -88,6 +88,11 @@
     prClassic: ["Klasik", "Classic"], prOcean: ["Samudra", "Ocean"], prGold: ["Emas", "Gold"], prGalaxy: ["Galaksi", "Galaxy"], prPastel: ["Pastel", "Pastel"], prCandy: ["Permen", "Candy"], prSilver: ["Emas & perak", "Gold & silver"], prRainbow: ["Pelangi", "Rainbow"],
     arcade: ["Main Bebas", "Free Play"], arcadeSub: ["Main game favorit dengan huruf yang sudah kamu pelajari", "Play your favourite games with letters you've learned"],
     arcadeLock: ["Terbuka di {b}", "Opens in {b}"], arcadeDone: ["Seru sekali!", "That was fun!"], arcadeAgain: ["Main lagi!", "Play again!"], arcadeNoStars: ["Main Bebas untuk latihan, bintang didapat di peta", "Free Play is practice; stars are earned on the map"],
+    gBubbles: ["Gelembung", "Bubbles"], gPaint: ["Warnai huruf", "Paint a letter"], gFeed: ["Suapi Mo", "Feed Mo"], gShadow: ["Cari bayangan", "Find the shadow"],
+    arcadeAsk: ["Minta Abi/Umi membuka semua game di menu Orang Tua", "Ask a grown-up to open all games in Parents"],
+    arcadeAll: ["Buka semua game Main Bebas", "Open all Free Play games"], arcadeAllSub: ["Untuk anak prasekolah yang ingin langsung bermain", "For preschoolers who just want to play"],
+    tdBubbles: ["Pecahkan gelembungnya!", "Pop the bubbles!"], tdPaint: ["Warnai hurufnya dengan jarimu!", "Colour the letter with your finger!"],
+    feedAsk: ["Mo lapar! Berikan buah yang ini ke Mo", "Mo is hungry! Give Mo this fruit"], tdShadow: ["Geser hurufnya ke bayangannya!", "Drag the letter to its shadow!"],
     gPop: ["Balon", "Balloons"], gTrain: ["Kereta", "Train"], gBridge: ["Jembatan", "Bridge"], gMatch: ["Kartu kembar", "Memory"], gTrace: ["Menulis", "Tracing"], gPick: ["Tebak bunyi", "Sound quiz"], gBuild: ["Susun kata", "Word builder"], gSort: ["Monster tajwid", "Tajwid monsters"], gYesno: ["Benar atau salah", "Right or wrong"],
     week: ["Minggu ini", "This week"], wkMin: ["menit belajar", "minutes learning"], wkLv: ["level selesai", "levels done"], wkNew: ["stiker baru", "new stickers"], wkTs: ["tashih", "reading checks"],
     wkDays: ["{n} dari 7 hari", "{n} of 7 days"], wkShare: ["Bagikan laporan", "Share report"], wkWa: ["WhatsApp", "WhatsApp"], wkCopied: ["Laporan disalin", "Report copied"],
