@@ -3,6 +3,23 @@ const fs = require("fs"), path = require("path");
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const len = (v, bytes) => bytes ? Buffer.byteLength(v, "utf8") : [...v].length;
 
+function reelsHtml(KIT) {
+  // reels: kit/reels/reels.js (the scripts) + kit/reels/video/ (made by tools/reels/render.js)
+  global.window = global; delete require.cache[require.resolve(path.join(KIT, "reels/reels.js"))]; require(path.join(KIT, "reels/reels.js"));
+  const R = window.REELS || [], has = (f) => fs.existsSync(path.join(KIT, "reels/video", f));
+  return `<h2 id="reels">Reels &amp; stories</h2>
+<p class="lead">${R.length} vertical videos (1080 × 1920, 9:16) for Instagram Reels and Stories, TikTok, YouTube Shorts and WhatsApp Status. Baby Mo (render 1) plays the real game: tracing, balloons, the reading train, the bridge, stars and stickers, the Qur'an. Each one has sound effects only (no music) — add a nasheed or voice-over in your editor if you like. Captions are ready to paste.</p>
+<div class="note"><b>Make more reels · </b>Open the <a href="reels/editor.html">reel editor</a>, pick a reel, change the words, poses (render-1 Baby Mo) or timing, press Play to preview, then Download it. Render the MP4 with <code>node tools/reels/render.js my-reel.json</code> (the game must be running with <code>npm start</code>). To keep a reel for good, paste it into <code>kit/reels/reels.js</code> and run <code>node tools/reels/render.js</code>.</div>
+<section class="group" id="reels-all"><div class="ghead"><div><h3>All reels · Bahasa Indonesia + English</h3><p>${R.length * 2} MP4 files · about 1.5 MB each · covers included</p></div><button class="btn" data-zip="reels-all" type="button">⬇ Download all reels (ZIP)</button></div>
+<div class="reels">${R.map((r, i) => `<div class="reel">
+  <video src="reels/video/${r.id}-id.mp4" poster="reels/video/${r.id}-id.jpg" controls muted playsinline preload="none" data-id="${r.id}"></video>
+  <div class="rmeta"><b>${String(i + 1).padStart(2, "0")} · ${esc(r.name)}</b><small>${r.dur}s · ${esc(r.theme)}</small>
+  <div class="rl">${["id", "en"].map((l) => has(`${r.id}-${l}.mp4`) ? `<a href="reels/video/${r.id}-${l}.mp4" download data-file="baby-mo-hijaiyah-reel-${r.id}-${l}.mp4">⬇ ${l.toUpperCase()} video</a><a href="reels/video/${r.id}-${l}.jpg" download data-file="baby-mo-hijaiyah-reel-${r.id}-${l}-cover.jpg">cover</a>` : "").join("")}</div>
+  <div class="rl"><button class="mini" data-swap="${r.id}">▶ ID / EN</button><a href="reels/reel.html?reel=${r.id}&amp;lang=id" target="_blank">live</a><a href="reels/editor.html?reel=${r.id}">✎ edit this reel</a></div>
+  ${["id", "en"].map((l) => `<div class="cap"><div class="fhead"><small>Caption · ${l === "id" ? "Bahasa Indonesia" : "English"}</small><button class="btn copy" data-copy="cap-${r.id}-${l}">Copy</button></div><div class="val" id="cap-${r.id}-${l}">${esc(r.caption ? r.caption[l] : "")}</div></div>`).join("")}
+  </div></div>`).join("")}</div></section>`;
+}
+
 function write(KIT, C, DEV) {
   // fail loudly if a listing field is over Apple's limit
   for (const [k, f] of Object.entries(C.LISTING)) for (const l of ["id", "en"]) {
@@ -62,12 +79,20 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}td{padding:8px 10px;b
 .check{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}.check li{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
 .check input{width:22px;height:22px;margin-top:2px;accent-color:var(--accent);flex:0 0 auto}.check b{display:block}.check span{color:var(--soft);font-size:14px}.check li.done b{text-decoration:line-through;color:var(--soft)}
 .note{background:var(--warn-bg);border-radius:14px;padding:12px 14px;margin-top:10px;font-size:14.5px}.note b{color:var(--warn)}
+.reels{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.reel{display:flex;flex-direction:column;gap:8px;background:var(--chip);border-radius:16px;padding:10px}
+.reel video{width:100%;aspect-ratio:9/16;border-radius:12px;background:#000;display:block}
+.rmeta b{display:block;font-size:15px}.rmeta small{color:var(--soft)}
+.rl{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;align-items:center}.rl a{font-size:13px;font-weight:800;color:var(--accent);text-decoration:none}
+.mini{font:inherit;font-size:13px;font-weight:800;padding:4px 10px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.cap{margin-top:8px}.cap .val{font-size:13px;max-height:140px}.cap .copy{min-height:30px;padding:3px 10px;font-size:13px}
+.note a{color:var(--accent);font-weight:800}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:800;opacity:0;transition:opacity .2s;pointer-events:none}.toast.on{opacity:1}
 </style></head><body><main class="w">
 <div class="top"><img src="creative/app-icon-1024.png" alt="Baby Mo Hijaiyah app icon"><div><h1>Baby Mo Hijaiyah · App Store Kit</h1>
 <p class="lead">Everything for the App Store Connect submission: real screenshots at Apple's sizes, caption banners in Bahasa Indonesia and English, header and search artwork, and every listing field ready to copy. Made from the game itself by <code>tools/kit/build-kit.js</code>.</p></div></div>
 <div class="bar"><button class="btn pri" data-zip="all" type="button">⬇ Download everything (ZIP)</button><a class="btn" href="creative/app-icon-1024.png" download="baby-mo-hijaiyah-icon-1024.png">App icon 1024 px</a><a class="btn" href="../">▶ Play the game</a></div>
-<nav class="toc"><a href="#screens">Screenshots</a><a href="#creative">Header &amp; search</a><a href="#listing">Listing text</a><a href="#info">App information</a><a href="#age">Age rating</a><a href="#privacy">App privacy</a><a href="#review">Review notes</a><a href="#checklist">Checklist</a></nav>
+<nav class="toc"><a href="#screens">Screenshots</a><a href="#creative">Header &amp; search</a><a href="#reels">Reels</a><a href="#listing">Listing text</a><a href="#info">App information</a><a href="#age">Age rating</a><a href="#privacy">App privacy</a><a href="#review">Review notes</a><a href="#checklist">Checklist</a></nav>
 
 <h2 id="screens">Screenshots &amp; banners</h2>
 <p class="lead">App Store Connect needs at least one image (up to 10) for <b>iPhone with Dynamic Island (medium display)</b> — 1206 × 2622 px — and for <b>iPad 13" display</b> — 2064 × 2752 px, because the app also runs on iPad. Use the banners (with captions) or the plain screenshots, per language.</p>
@@ -81,6 +106,8 @@ ${[["header-16x9", "Header · 16:9", "5244 × 2950 px · PNG"], ["search-3x2", "
     `<div style="margin-top:14px"><b>${t}</b> <small style="color:var(--soft)">· ${s}</small><div class="grid wide" style="margin-top:8px">${["id", "en"].map((l) => tile({ src: `creative/${b}-${l}.png`, th: `thumbs/creative-${b}-${l}.webp`, name: l === "id" ? "Bahasa Indonesia" : "English (U.S.)" })).join("")}</div></div>`).join("")}
 <div style="margin-top:14px"><b>App icon</b> <small style="color:var(--soft)">· 1024 × 1024 px · PNG, no transparency (Apple rounds the corners)</small><div class="grid" style="margin-top:8px">${tile({ src: "creative/app-icon-1024.png", th: "thumbs/creative-app-icon-1024.webp", name: "App icon 1024" })}</div></div>
 </section>
+
+${reelsHtml(KIT)}
 
 <h2 id="listing">Listing text</h2>
 <p class="lead">Paste each field into App Store Connect. The counter shows Apple's limit (keywords count in bytes).</p>
@@ -110,7 +137,9 @@ ${["id", "en"].map((l) => `<div data-pane="${l}"${l === "id" ? "" : " hidden"}>$
 document.addEventListener('click',function(e){
  var c=e.target.closest('[data-copy]');if(c){var el=document.getElementById(c.getAttribute('data-copy'));(navigator.clipboard?navigator.clipboard.writeText(el.textContent):Promise.reject()).then(function(){say('Copied')}).catch(function(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);say('Selected — press Copy')});}
  var l=e.target.closest('[data-lang]');if(l){var v=l.getAttribute('data-lang');document.querySelectorAll('[data-lang]').forEach(function(b){b.setAttribute('aria-pressed',String(b===l))});document.querySelectorAll('[data-pane]').forEach(function(p){p.hidden=p.getAttribute('data-pane')!==v});}
- var z=e.target.closest('[data-zip]');if(z)zip(z);});
+ var z=e.target.closest('[data-zip]');if(z)zip(z);
+ var sw=e.target.closest('[data-swap]');if(sw){var v=document.querySelector('video[data-id="'+sw.getAttribute('data-swap')+'"]'),en=/-id\.mp4$/.test(v.getAttribute('src'));
+   v.src=v.getAttribute('src').replace(en?'-id.mp4':'-en.mp4',en?'-en.mp4':'-id.mp4');v.poster=v.src.replace('.mp4','.jpg');v.play();}});
 function zip(btn){if(!window.JSZip){say('ZIP tool is still loading — try again');return;}
  var sel=btn.getAttribute('data-zip'),files=[].slice.call(document.querySelectorAll(sel==='all'?'[data-file]':'#'+sel+' [data-file]'));
  var z=new JSZip(),done=0,label=btn.textContent;btn.disabled=true;

@@ -12,6 +12,7 @@ EN/ID pill in the top bar switches everything at once — menus, instructions, M
 - All levels: [docs/LEVELS.en.md](docs/LEVELS.en.md) · method and game design: [docs/CURRICULUM.md](docs/CURRICULUM.md)
 - **Play online:** https://roisa.github.io/hijaiyah/ (published automatically from this repo)
 - **App Store kit:** https://roisa.github.io/hijaiyah/kit/ — screenshots, banners, artwork and listing text (`node tools/kit/build-kit.js` remakes it)
+- **Reels:** 10 promo reels (9:16, ID + EN) on the kit page; edit them in https://roisa.github.io/hijaiyah/kit/reels/editor.html or `kit/reels/reels.js`, render with `node tools/reels/render.js`
 - Run locally: `npm start`, open http://localhost:8811 · checks: `npm run check`
 - Kids Category ready: no ads, no tracking, progress stays on the device, parent area behind a parental gate.
 
