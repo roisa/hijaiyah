@@ -26,6 +26,12 @@
       others = shuffle(tricky).concat(shuffle(others.filter(function (x) { return tricky.indexOf(x) < 0; })));
     } else others = shuffle(others);
     others = uniqBy(others, function (x) { return x.ar; });
+    // never fewer than 3 choices (a 2-way choice can be won by guessing): borrow look-alike letters if needed
+    if (ans.k && ans.v && others.length < n - 1) {
+      var extra = HJ.cousins(ans.k).concat(HJ.L.map(function (l) { return l.k; })).map(function (k) { return syl(k, ans.v); })
+        .filter(function (x) { return x.ar !== ans.ar && !others.some(function (o) { return o.ar === x.ar; }); });
+      others = others.concat(extra.slice(0, n - 1 - others.length));
+    }
     return shuffle([ans].concat(others.slice(0, n - 1)));
   }
 
@@ -87,7 +93,7 @@
     st.push(S.bridge(pool, nw, 4));
     if (pool.length >= 4) {
       var ps = shuffle(uniqBy(nw.concat(shuffle(pool)), function (x) { return x.ar; })).slice(0, 4);
-      st.push(S.match(ps.map(function (x) { return [x, x]; })));
+      st.push(S.match(ps.map(function (x) { return [x, { ar: x.ar, au: x.au, soundOnly: 1 }]; })));   // hear the sound, find the letter
     }
     st.push(S.train(randChain(pool, Math.min(5, 3 + pool.length / 8 | 0), nw)));
     return st;
@@ -100,7 +106,7 @@
     st.push(S.bridge(pool, null, 5));
     st.push(S.pop(pick(pool), pool));
     st.push(S.pick(pick(pool), pool, 4));
-    st.push(S.match(shuffle(pool).slice(0, 4).map(function (x) { return [x, lv.pairTwin ? lv.pairTwin(x) : x]; })));
+    st.push(S.match(uniqBy(shuffle(pool), function (x) { return x.ar; }).slice(0, 4).map(function (x) { return [x, lv.pairTwin ? lv.pairTwin(x) : { ar: x.ar, au: x.au, soundOnly: 1 }]; })));
     st.push(S.train(lv.mkChain ? lv.mkChain() : randChain(pool, 5)));
     st.push(S.tashih(shuffle(pool).slice(0, 6), T("{k} membaca, Abi/Umi mendengarkan.", "{k} reads, a parent listens.")));
     return st;
@@ -305,12 +311,16 @@
   }
   function surahSteps(lv) {
     var s = HJ.surah(lv.surah), n = s.ayahs.length, st = [S.intro("mo2:hug-quran", lv.say || T("Ayo baca Surat " + s.name.id + "!", "Let's read Surah " + s.name.en + "!"))];
-    s.ayahs.forEach(function (a) { st.push(S.ayah(s.slug, a.n)); });
-    var many = shuffle(s.ayahs.filter(function (a) { return a.ar.split(" ").length >= 3; }));
-    if (many[0]) st.push(S.ayahbuild(s.slug, many[0].n));
-    if (many[1]) st.push(S.ayahfill(s.slug, many[1].n));
-    else if (s.ayahs[0].ar.split(" ").length >= 2) st.push(S.ayahfill(s.slug, s.ayahs[0].n));
-    if (many[2]) st.push(S.ayahbuild(s.slug, many[2].n));
+    // listen to two verses, then play with one of them — so he never gets more than two "listen" screens in a row
+    s.ayahs.forEach(function (a, i) {
+      st.push(S.ayah(s.slug, a.n));
+      if (i % 2 === 1) {
+        var prev = s.ayahs[i - 1], pickA = [prev, a].filter(function (x) { return x.ar.split(" ").length >= 3; });
+        var g = pickA.length ? pickA[rnd(pickA.length)] : a;
+        st.push(g.ar.split(" ").length >= 3 && i % 4 === 1 ? S.ayahbuild(s.slug, g.n) : S.ayahfill(s.slug, g.n));
+      }
+    });
+    if (s.ayahs.length % 2 === 1 && s.ayahs.length > 1) { var lastA = s.ayahs[s.ayahs.length - 1]; st.push(lastA.ar.split(" ").length >= 3 ? S.ayahbuild(s.slug, lastA.n) : S.ayahfill(s.slug, lastA.n)); }
     st.push({ type: "surahread", s: s.slug });
     return st;
   }

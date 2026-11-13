@@ -58,6 +58,7 @@
     });
   }
   A.stop = function () {
+    talkP = null;
     seqToken++;
     if (cur) { try { cur.pause(); } catch (e) {} cur = null; }
     try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) {}
@@ -71,7 +72,10 @@
   }
 
   // au: "text" | ["text", …] (read one by one, onEach(i) for highlighting)
+  // an instruction Mo is speaking finishes first, then the Arabic sound plays (so a pre-reader hears both)
+  var talkP = null;
   A.say = function (au, onEach, gap) {
+    if (talkP) { var tp = talkP, tok = seqToken; return tp.then(function () { if (tok !== seqToken) return false; if (talkP === tp) talkP = null; return A.say(au, onEach, gap); }); }
     A.stop();
     var my = ++seqToken;
     var list = Array.isArray(au) ? au : [au];
@@ -95,10 +99,12 @@
     var f = A.ayahFile(sNum, aNum), my = ++seqToken;
     var local = "audio/quran/" + f, cdn = "https://everyayah.com/data/" + A.reciter + "/" + f;
     var allowCdn = !window.HJ_APP_BUILD && (HJ.store ? HJ.store.get().settings.cdn !== false : true);
+    // never a computer voice for the Qur'an: with no recording, a parent reads it (talaqqi) — the caller shows a note
+    function none() { if (my === seqToken && A.onNoAyah) A.onNoAyah(); return false; }
     return playUrl(local).catch(function () {
       if (my !== seqToken) return;
-      if (allowCdn) return playUrl(cdn).catch(function () { return tts(text, "ar", 0.7); });
-      return tts(text, "ar", 0.7);
+      if (allowCdn) return playUrl(cdn).catch(none);
+      return none();
     });
   };
 
@@ -108,7 +114,8 @@
     if (!text) return Promise.resolve();
     A.stop();
     var t = String(text).replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, "").replace(/[ء-يً-ْ]+/g, "").trim();
-    return tts(t, lang || "id", 1.02);
+    var p = tts(t, lang || "id", 1.02); talkP = p; p.then(function () { if (talkP === p) talkP = null; });
+    return p;
   };
 
   /* ---------- effects ---------- */
@@ -134,6 +141,7 @@
     star: function (i) { tone(880 + i * 220, 0.2, "triangle", 0.18); },
     combo: function (n) { var b = 523 + Math.min(n, 12) * 30; [0, 4, 7, 12].forEach(function (s, i) { tone(b * Math.pow(2, s / 12), 0.16, "triangle", 0.15, i * 0.07); }); },
     unlock: function () { tone(392, 0.12, "square", 0.07); tone(784, 0.1, "triangle", 0.16, 0.1); [1047, 1319, 1568].forEach(function (f, i) { tone(f, 0.25, "triangle", 0.14, 0.22 + i * 0.09); }); },
+    note: function (i) { var sc = [523, 587, 659, 784, 880, 1047, 1175, 1319, 1568, 1760]; tone(sc[i % sc.length], 0.11, "sine", 0.1); },
     sparkle: function () { tone(1568, 0.08, "sine", 0.08); tone(2093, 0.1, "sine", 0.06, 0.05); },
     lose: function () { [440, 392, 330].forEach(function (f, i) { tone(f, 0.25, "triangle", 0.14, i * 0.18); }); }
   };

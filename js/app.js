@@ -4,6 +4,24 @@
   var A = HJ.audio, S = HJ.store, t = HJ.t, tr = HJ.tr, el = HJ.el, esc = HJ.esc, ic = HJ.ic, J = HJ.juice;
   var app = document.getElementById("app");
   var MO = function (p) { return p.indexOf("mo2:") === 0 ? "assets/mo2/mo2-" + p.slice(4) + ".webp" : "assets/mo/mo-" + p + ".webp"; };
+  var STK = [["#34D399", "#047857"], ["#7DD3FC", "#2563EB"], ["#FDA4AF", "#E11D48"], ["#FCD34D", "#D97706"], ["#C4B5FD", "#7C3AED"], ["#5EEAD4", "#0F766E"], ["#FDBA74", "#EA580C"], ["#F9A8D4", "#DB2777"]];
+  var navId = 0;
+  // what Mo says at the start of each kind of step (spoken, so a child who can't read yet knows what to do)
+  var INSTR = { pick: "whichOne", yesno: "isRight", pop: "popIt", train: "listenFirst", bridge: "bridge", match: "match", build: "build",
+    sort: "sortIt", trace: "traceStart", learn: "listenFirst", ayah: "ayahListen", ayahbuild: "ayahBuild", ayahfill: "ayahFill" };
+  var HAND = { pick: ".speaker", yesno: ".btn.big", pop: ".sky", train: ".row .btn.gold", bridge: ".speaker", match: ".mcard", build: ".speaker",
+    sort: ".bucket", learn: ".bigcard", trace: ".trace-wrap", ayahbuild: ".tile.qw", ayahfill: ".tile.qw" };
+  function firstTimeHand(type) {
+    var st = S.get(); st.seen = st.seen || {};
+    if (st.seen[type] || !HAND[type]) return;
+    st.seen[type] = 1; S.save();
+    setTimeout(function () {
+      var target = document.querySelector(".stage " + HAND[type]); if (!target) return;
+      var r = target.getBoundingClientRect(), h = el("img", "tap-hand"); h.src = "assets/icons/tap-hand.svg"; h.alt = "";
+      h.style.left = (r.left + r.width * .62) + "px"; h.style.top = (r.top + r.height * .55) + "px";
+      document.body.appendChild(h); setTimeout(function () { h.remove(); }, 3200);
+    }, 600);
+  }
   var CHEER = ["yeyy", "pose-02", "wow", "ok", "pose-37", "alright", "pose-26"];
   var OOPS = ["pose-28", "pose-33", "pose-23"];
   var EN = function () { return S.get().lang === "en"; };
@@ -162,14 +180,14 @@
     var md = missions(), list = [
       { k: "level", icon: wi(cur.w, true), b: t("mLevel"), s: levelName(cur), go: function () { levelSheet(cur); } },
       { k: "review", img: "assets/icons/calendar.svg", b: t("daily"), s: t("dailySub"), go: startDaily },
-      { k: "tashih", img: "assets/icons/child.svg", b: t("mTashih"), s: t("mTashihSub"), go: function () { levelSheet(cur); } }
+      { k: "tashih", img: "assets/icons/child.svg", b: t("mTashih"), s: t("mTashihSub"), go: startTashih }
     ];
     var nDone = list.filter(function (m) { return md[m.k]; }).length;
     var dm = el("section", "dm-card glass");
     var dateStr = new Date().toLocaleDateString(EN() ? "en-GB" : "id-ID", { weekday: "long", day: "numeric", month: "long" });
     var lit = st.streak.last === today();
     dm.innerHTML = '<div class="dm-head"><img class="dm-cal" src="assets/icons/mission.svg" alt=""><div class="dm-titles"><div class="dm-kicker">' + esc(dateStr) +
-      '</div><div class="dm-title">' + esc(t("mission")) + '</div><div class="dm-sub">' + esc(nDone === 3 ? t("missionAll") : t("missionSub", { n: 3 - nDone })) +
+      '</div><div class="dm-title">' + esc(t("mission")) + '</div><div class="dm-sub">' + esc(nDone === 3 ? t("missionAll") : t(3 - nDone === 1 ? "missionSub1" : "missionSub", { n: 3 - nDone })) +
       '</div></div><div class="dm-streak' + (lit ? "" : " off") + '"><span class="dm-fire">' + HJ.art("flame", 26) + '</span><span class="dm-sn">' + (st.streak.n || 0) + '</span><span class="dm-sl">' + esc(t("day")) + "</span></div></div>" +
       '<div class="dm-prog">' + list.map(function (m) { return "<i" + (md[m.k] ? ' class="on"' : "") + "></i>"; }).join("") + "</div>";
     var dl = el("div", "dm-list");
@@ -260,6 +278,11 @@
         if (lv === cur) { var mo = el("img", "map-mo"); mo.src = MO("pose-20"); mo.alt = ""; mo.style.left = "calc(" + x + "% + 36px)"; row.appendChild(mo); curNode = row; }
         path.appendChild(row);
       });
+      var H = w.levels.length * 96, pts = w.levels.map(function (l, i) { return [50 + Math.sin(i * 0.9) * 26, i * 96 + 46 + 8]; });
+      var lastDone = -1; w.levels.forEach(function (l, i) { if (st.stars[l.id]) lastDone = i; });
+      var line = function (a, b, cls) { return '<polyline class="' + cls + '" points="' + pts.slice(a, b + 1).map(function (q) { return q[0] + "," + q[1]; }).join(" ") + '" vector-effect="non-scaling-stroke"/>'; };
+      path.insertAdjacentHTML("afterbegin", '<svg class="map-path" viewBox="0 0 100 ' + (H + 16) + '" preserveAspectRatio="none" style="height:' + (H + 16) + 'px">' +
+        line(0, pts.length - 1, "todo") + (lastDone >= 0 ? line(0, Math.min(pts.length - 1, lastDone + 1), "done") : "") + "</svg>");
       box.appendChild(path);
       sc.appendChild(box);
       if (focusWorld === w.n) focusEl = box;
@@ -331,7 +354,7 @@
         next: function () { if (nexted || !ctx.alive()) return; nexted = true; A.stop(); idx++; show(); },
         good: function (quiet) {
           A.fx.good(); combo++; collected++;
-          if (!quiet) mo(HJ.util.pick(CHEER), HJ.util.pick([t("great"), t("good"), "Yeay!", "Masya Allah!"]));
+          if (!quiet) mo(HJ.util.pick(CHEER), HJ.util.pick([t("great"), t("good"), "Yeay!", "Masya Allah!"])); else if (bw.style.display !== "none") mo(HJ.util.pick(CHEER));
           var p = J.at(); J.burst(p.x, p.y, 10); J.buzz(15);
           J.fly(p, bar.firstChild.getBoundingClientRect().width > 4 ? bar.firstChild : bar, HJ.art("sparkle", 24));
           if ([3, 5, 8, 12, 16].indexOf(combo) >= 0) {
@@ -344,15 +367,21 @@
           if (item && options && !replayed && missed.length < 3 && !missed.some(function (m) { return m.q.ar === item.ar; })) missed.push({ q: item, options: options });
           if (soft) return;
           mistakes++;
-          if (boss) { hearts--; drawHearts(); hz.classList.add("shake"); setTimeout(function () { hz.classList.remove("shake"); }, 450); if (hearts <= 0) { runId++; A.fx.lose(); failed(lv); } }
+          var qKey = idx + "|" + (item ? item.ar : "");
+          if (boss && lostFor[qKey]) return;                // at most one heart per question
+          if (boss) { lostFor[qKey] = 1; hearts--; drawHearts(); hz.classList.add("shake"); setTimeout(function () { hz.classList.remove("shake"); }, 450); if (hearts <= 0) { runId++; A.fx.lose(); failed(lv); } }
         },
         mo: mo
       };
       bw.style.display = ""; HJ._ctx = ctx;
       if (!g) { ctx.next(); return; }
+      var say = INSTR[step.type] && (step.again ? t("again2") : step.type === "sort" && step.say ? tr(step.say) : t(INSTR[step.type]));
+      if (say && !spoken[step.type + (step.again ? "a" : "")]) { spoken[step.type + (step.again ? "a" : "")] = 1; A.talk(say, S.get().lang); }
       g(step, ctx);
+      firstTimeHand(step.type);
     }
-    var finalStars = null;
+    var finalStars = null, lostFor = {}, spoken = {}, noAyahShown = false;
+    A.onNoAyah = function () { if (noAyahShown || my !== runId) return; noAyahShown = true; HJ.toast(HJ.art("book", 22) + " " + esc(t("noAudio"))); };
     function finish() {
       // learning loop: what was missed comes back once, gently, before the level ends (no stars lost here)
       if (missed.length && !replayed && !opts.noReplay) {
@@ -393,7 +422,8 @@
     else if (lv.kind === "surah") face = HJ.surah(lv.surah).arabicName;
     else if (typeof lv.title === "string") face = lv.title;
     else art = kindArt(lv);
-    var e = el("div", "sticker" + (got ? "" : " no") + (big ? " big" : ""));
+    var e = el("div", "sticker" + (got ? "" : " no") + (big ? " big" : "")), li = HJ.allLevels().indexOf(lv);
+    if (lv.kind === "letters" || lv.kind === "words" || lv.kind === "mad") w = { g: STK[li % STK.length] };
     if (got || big) e.innerHTML = art ? HJ.art(art, big ? 64 : 42) : '<span class="sf">' + esc(face) + "</span>";
     if (face && face.replace(/[\u064B-\u0652\s]/g, "").length > 3) e.classList.add("long");
     e.style.background = "linear-gradient(160deg," + w.g[0] + "," + w.g[1] + ")";
@@ -433,10 +463,10 @@
         setTimeout(function () { A.fx.unlock(); J.banner(HJ.art("trophy", 60) + "<b>" + esc(t("bookDone", { b: tr(w.name) })) + "</b>", "big"); confetti(120); }, 1600 + stars * 420);
       }
       var mNow = Object.keys((st.daily || {}).done || {}).length;
-      if (mNow > (before.missions || 0)) setTimeout(function () { HJ.toast(HJ.art("check", 22) + " " + esc(t("missionDone", { n: mNow }))); }, 2400);
+      if (mNow > (before.missions || 0)) p.appendChild(el("div", "res-mission", HJ.art("check", 22) + " " + esc(t("missionDone", { n: mNow }))));
       var r = el("div", "row"), again = el("button", "btn ghost", ic("replay") + " " + t("again")), go = el("button", "btn", t("next") + " " + ic("next"));
       again.onclick = function () { close(); runLevel(lv); };
-      go.onclick = function () { close(); if (nxt && S.unlocked(nxt)) { map(nxt.w); setTimeout(function () { levelSheet(nxt); }, 150); } else map(lv.w); };
+      go.onclick = function () { close(); if (nxt && S.unlocked(nxt)) { var my = ++navId; map(nxt.w); setTimeout(function () { if (my === navId && document.querySelector(".map-mo")) levelSheet(nxt); }, st.justUnlocked ? 2100 : 700); } else map(lv.w); };
       r.appendChild(again); r.appendChild(go); p.appendChild(r);
     }, { sticky: true });
     A.talk(t("great"), S.get().lang);
@@ -458,21 +488,39 @@
       { type: "intro", mo: "pose-12", say: { id: "Murajaah! Kita ulang yang sudah {k} pelajari.", en: "Review! Let's repeat what {k} has learned." } },
       { type: "train", item: chainOf(4) },
       { type: "bridge", rounds: [0, 1, 2, 3].map(function () { var q = U.pick(pool); return { q: q, options: U.shuffle([q].concat(U.shuffle(pool.filter(function (x) { return x.ar !== q.ar; })).slice(0, 2))) }; }) },
-      { type: "match", pairs: U.shuffle(pool).slice(0, 4).map(function (x) { return [x, x]; }) },
+      { type: "match", pairs: U.shuffle(pool).slice(0, 4).map(function (x) { return [x, { ar: x.ar, au: x.au, soundOnly: 1 }]; }) },
       { type: "train", item: chainOf(4) }
     ];
     runLevel(lv, { steps: steps, onExit: home, onDone: function () {
       var t0 = today();
       if (st.streak.last !== t0) { S.finish("_daily", 0); delete st.stars._daily; var i = st.stickers.indexOf("_daily"); if (i >= 0) st.stickers.splice(i, 1); st.plays--; }
-      HJ.mission("review"); S.save();
+      HJ.mission("review");
+      var bonus = st.dailyBonus !== t0; if (bonus) { st.bonus = (st.bonus || 0) + 1; st.dailyBonus = t0; }
+      S.save();
       A.fx.win(); confetti(50);
       HJ.modal(function (p, close) {
         p.appendChild(moImg("yeyy", "150px"));
         p.appendChild(el("div", "kicker", esc(t("daily"))));
-        p.appendChild(el("h2", "", HJ.art("flame", 30) + " " + (st.streak.n || 1) + " " + esc(t("streak"))));
+        p.appendChild(el("h2", "", HJ.art("flame", 30) + " " + (st.streak.n || 1) + " " + esc(t((st.streak.n || 1) === 1 ? "streak1" : "streak"))));
+        if (bonus) p.appendChild(el("div", "row res-chips", '<span class="chip glass">' + HJ.art("star", 22) + ' <b class="plus">+1</b> ' + esc(t("bonusStar")) + "</span>"));
         var r = el("div", "row"), b = el("button", "btn", t("done") + " " + ic("check")); b.onclick = function () { close(); home(); }; r.appendChild(b); p.appendChild(r);
       }, { sticky: true });
     } });
+  }
+
+  /* ---------- reading check with a parent (mission): read what was learned, a grown-up ticks ---------- */
+  function startTashih() {
+    var st = S.get(), done = HJ.allLevels().filter(function (l) { return st.stars[l.id]; }), pool = [];
+    done.slice(-4).forEach(function (l) {
+      if (l.kind === "letters") l.letters.forEach(function (k) { pool.push(HJ.syl(k, l.v || "a")); });
+      else if (l.items) pool = pool.concat(l.items.slice(0, 4));
+    });
+    if (pool.length < 4) pool = pool.concat(["alif", "ba", "ta", "tsa"].map(function (k) { return HJ.syl(k, "a"); }));
+    var seen = {}; pool = pool.filter(function (x) { if (seen[x.ar]) return false; seen[x.ar] = 1; return true; }).slice(-8);
+    runLevel({ id: "tashih", kind: "tashih", w: 1 }, { noReplay: true, onExit: home, steps: [
+      { type: "intro", mo: "thank-you", say: { id: "Waktunya tashih! {k} membaca, Abi/Umi mendengarkan.", en: "Reading check! {k} reads, a parent listens." } },
+      { type: "tashih", items: pool, say: { id: "Baca satu per satu tanpa bantuan.", en: "Read them one by one, without help." } }
+    ], onDone: function () { home(); } });
   }
 
   /* ---------- sticker book ---------- */

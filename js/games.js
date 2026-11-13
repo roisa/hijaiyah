@@ -24,6 +24,7 @@
   /* Mo introduces the level */
   G.intro = function (s, ctx) {
     var st = ctx.stage;
+    var big = HJ.moImg(s.mo && s.mo.indexOf("mo2:") === 0 ? s.mo : (s.mo || "pose-41"), "150px"); big.classList.add("intro-mo"); st.appendChild(big);
     add(st, el("div", "ask", esc(tr(s.say))));
     if (s.show && s.show.length) {
       var row = el("div", "row");
@@ -35,7 +36,7 @@
     }
     var b = el("button", "btn big", HJ.ic("play") + " " + t("start")); b.onclick = function () { A.fx.tap(); ctx.next(); };
     st.appendChild(b);
-    ctx.mo(s.mo, null, true);
+    ctx.mo(null);
     A.talk(tr(s.say), HJ.store.get().lang);
   };
 
@@ -54,14 +55,21 @@
     var dots = el("div", "dots", "<i></i><i></i><i></i>");
     var lbl = el("div", "sub", t("copy3"));
     var nextB = el("button", "btn", t("next") + " " + HJ.ic("next")); nextB.style.visibility = "hidden";
-    function play() { A.say(it.au).then(function () { heard++; if (heard >= 1) nextB.style.visibility = "visible"; }); card.classList.add("shake"); setTimeout(function () { card.classList.remove("shake"); }, 400); }
-    card.onclick = play;
     var said3 = el("button", "btn gold small", HJ.ic("bubble") + " " + (HJ.store.get().lang === "en" ? "I said it!" : "Aku sudah baca!"));
+    // talaqqi rhythm: Mo says it → the child says it → taps → Mo says it again … three times
+    function ready(on) { said3.disabled = !on; said3.classList.toggle("wait", !on); if (on) HJ.juice.bump(said3); }
+    function play() {
+      ready(false); card.classList.add("speaking");
+      A.say(it.au).then(function () { card.classList.remove("speaking"); heard++; if (ctx.alive() && said < 3) { ready(true); ctx.mo("pose-12", t("yourTurnSay")); } });
+    }
+    card.onclick = function () { A.fx.tap(); play(); };
     said3.onclick = function () {
-      if (said >= 3) return; said++; A.fx.coin();
-      dots.children[said - 1].classList.add("on");
-      if (said === 3) { ctx.cheer(); nextB.style.visibility = "visible"; }
+      if (said >= 3 || said3.disabled) return; said++; A.fx.coin();
+      dots.children[said - 1].classList.add("on"); HJ.juice.burst(null, null, 8);
+      if (said === 3) { ready(false); ctx.cheer(); nextB.style.visibility = "visible"; HJ.juice.bump(nextB); }
+      else { ready(false); after(ctx, 700, play); }
     };
+    ready(false);
     add(st, dots, el("div", "row"));
     var r = st.lastChild; r.appendChild(said3); r.appendChild(recorder());
     if (s.note && s.note.name) {
@@ -184,7 +192,14 @@
         locked = true; ctx.good();
         after(ctx, 300, function () { if (!same) A.say(s.item.au); });
         after(ctx, same ? 1000 : 1700, ctx.next);
-      } else { b.classList.add("shake"); setTimeout(function () { b.classList.remove("shake"); }, 450); ctx.bad(); }
+      } else {
+        // no coin-flip second try: show the right answer, let him hear both, then go on (it comes back at the end)
+        locked = true; b.classList.add("shake"); setTimeout(function () { b.classList.remove("shake"); }, 450);
+        ctx.bad(false, s.item, [s.item, s.heard].filter(function (x, i, a) { return a.findIndex(function (y) { return y.ar === x.ar; }) === i; }));
+        (same ? y : n).classList.add("hintb");
+        after(ctx, 500, function () { A.say(same ? s.item.au : [s.heard.au, s.item.au]); });
+        after(ctx, 2600, ctx.next);
+      }
     }
     y.onclick = function () { ans(true, y); }; n.onclick = function () { ans(false, n); };
     row.appendChild(y); row.appendChild(n); st.appendChild(row);
@@ -197,12 +212,12 @@
     var st = ctx.stage, need = 4, got = 0, timer = null;
     var head = el("div", "row"), cnt = el("div", "count glass", HJ.art("balloon", 24) + " 0 / " + need);
     head.appendChild(speakerBtn(function () { A.say(s.q.au); }));
-    var tg = el("div", "tile " + sizeCls(s.q)); tg.style.minHeight = "70px"; tg.appendChild(arEl(s.q)); tg.style.pointerEvents = "none";
+    var tg = el("div", "tile mystery"); tg.style.minHeight = "70px"; tg.innerHTML = '<span class="qm">?</span>'; tg.style.pointerEvents = "none";
     head.appendChild(tg); head.appendChild(cnt);
     add(st, el("div", "ask", t("popIt")), head);
     var sky = el("div", "sky"); st.appendChild(sky);
     ctx.mo("yes", null);
-    var n = 0, lastTarget = 0;
+    var n = 0, lastTarget = 0, pause = 0, again = setInterval(function () { if (!ctx.alive()) { clearInterval(again); return; } A.say(s.q.au); }, 5200);
     function spawn() {
       if (!ctx.alive()) { clearInterval(timer); return; }
       n++;
@@ -215,11 +230,13 @@
       b.style.animationDuration = (6.5 + Math.random() * 2.5) + "s";
       b.appendChild(arEl(it));
       b.onpointerdown = function (e) {
-        e.preventDefault(); if (b.classList.contains("burst")) return;
+        e.preventDefault(); if (b.classList.contains("burst") || performance.now() < pause) return;
         if (it.ar === s.q.ar) {
+          if (got === 0) { tg.innerHTML = ""; tg.appendChild(arEl(s.q)); tg.classList.add("revealed"); }
           b.classList.add("burst"); A.fx.pop(); got++; cnt.innerHTML = HJ.art("balloon", 24) + " " + got + " / " + need; A.say(it.au);
-          if (got >= need) { clearInterval(timer); ctx.cheer(t("great")); A.fx.win(); after(ctx, 1200, ctx.next); }
-        } else { b.classList.add("shake"); ctx.bad(true); A.say(it.au); }
+          if (got >= need) { clearInterval(timer); clearInterval(again); ctx.cheer(t("great")); A.fx.win(); after(ctx, 1200, ctx.next); }
+        } else { b.classList.add("shake"); pause = performance.now() + 900; ctx.bad(true, s.q, s.pool.slice(0, 3).some(function (x) { return x.ar === s.q.ar; }) ? s.pool.slice(0, 3) : [s.q].concat(s.pool.filter(function (x) { return x.ar !== s.q.ar; }).slice(0, 2)));
+          A.say([it.au, s.q.au]); }
       };
       b.addEventListener("animationend", function (e) { if (e.animationName === "rise" || e.animationName === "burst") b.remove(); });
       sky.appendChild(b);
@@ -322,15 +339,18 @@
     var grid = el("div", "grid" + (cards.length <= 6 ? " c3" : ""));
     cards.forEach(function (c) {
       var m = el("button", "mcard " + (isWordy(c.it) || c.it.quran ? "w" : "")), inn = el("div", "in");
-      inn.appendChild(el("div", "f", HJ.art("star", 40))); var b = el("div", "b"); b.appendChild(arEl(c.it)); inn.appendChild(b); m.appendChild(inn);
+      inn.appendChild(el("div", "f", HJ.art("star", 40))); var b = el("div", "b");
+      if (c.it.soundOnly) { b.classList.add("snd"); b.innerHTML = HJ.ic("speaker"); } else b.appendChild(arEl(c.it));
+      inn.appendChild(b); m.appendChild(inn);
+      var listenGame = s.pairs.some(function (p) { return p[1].soundOnly; });
       m.onclick = function () {
         if (busy || m.classList.contains("flip")) return;
-        m.classList.add("flip"); A.fx.tap(); A.say(c.it.au); open.push({ m: m, c: c });
+        m.classList.add("flip"); A.fx.tap(); if (c.it.soundOnly || !listenGame) A.say(c.it.au); open.push({ m: m, c: c });
         if (open.length === 2) {
           busy = true;
           var a = open[0], z = open[1];
           if (a.c.k === z.c.k) {
-            setTimeout(function () { a.m.classList.add("got"); z.m.classList.add("got"); A.fx.good(); open = []; busy = false; got++;
+            setTimeout(function () { a.m.classList.add("got"); z.m.classList.add("got"); A.fx.good(); A.say(a.c.it.au); var r = z.m.getBoundingClientRect(); HJ.juice.burst(r.left + r.width / 2, r.top + r.height / 2, 10); open = []; busy = false; got++;
               if (got === s.pairs.length) { ctx.cheer(t("great")); A.fx.win(); after(ctx, 1200, ctx.next); } }, 500);
           } else setTimeout(function () { a.m.classList.remove("flip"); z.m.classList.remove("flip"); open = []; busy = false; }, 1100);
         }
@@ -466,7 +486,7 @@
       b.onclick = function () {
         if (locked) return;
         if (w === ans) { locked = true; b.classList.add("ok"); ctx.good(); q.querySelector(".blank").outerHTML = '<span class="hl">' + esc(ans) + "</span>";
-          playAyah(s.s, s.a, box).then(function () { if (ctx.alive()) ctx.next(); }); after(ctx, 15000, function () { ctx.next(); }); }
+          var t0 = Date.now(); playAyah(s.s, s.a, box).then(function () { after(ctx, Math.max(300, 1500 - (Date.now() - t0)), ctx.next); }); after(ctx, 15000, function () { ctx.next(); }); }
         else { b.classList.add("no"); setTimeout(function () { b.classList.remove("no"); }, 450); ctx.bad(); }
       };
       row.appendChild(b);
@@ -530,7 +550,7 @@
     var row = el("div", "row"), all = el("button", "btn gold", HJ.art("star", 24) + " " + t("allGood")), sk = el("button", "btn ghost small", HJ.ic("skip") + " " + t("skip"));
     var hint = el("button", "btn ghost small", HJ.ic("bulb") + " " + t("hint"));
     hint.onclick = function () { A.say(s.items.map(function (x) { return x.au; })); };
-    all.onclick = function () { HJ.store.get().tashih[ctx.lv.id] = 1; HJ.store.save(); HJ.mission && HJ.mission("tashih"); ctx.cheer(t("great")); A.fx.win(); after(ctx, 900, ctx.next); };
+    all.onclick = function () { HJ.gate(function () { HJ.store.get().tashih[ctx.lv.id] = 1; HJ.store.save(); HJ.mission && HJ.mission("tashih"); ctx.cheer(t("great")); A.fx.win(); after(ctx, 900, ctx.next); }); };
     sk.onclick = function () { ctx.next(); };
     row.appendChild(all); row.appendChild(hint); row.appendChild(sk);
     st.appendChild(row);

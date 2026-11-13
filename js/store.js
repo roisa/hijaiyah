@@ -37,7 +37,7 @@
       }
       save(); return first;
     },
-    totalStars: function () { var n = 0; for (var k in st.stars) n += st.stars[k]; return n; },
+    totalStars: function () { var n = st.bonus || 0; for (var k in st.stars) if (k.charAt(0) !== "_") n += st.stars[k]; return n; },
     unlocked: function (lv) {
       if (st.settings.unlockAll) return true;
       var all = HJ.allLevels(), i = all.indexOf(lv);
@@ -58,6 +58,12 @@
     nameQ: ["Siapa nama si kecil?", "What's your little one's name?"], nameSub: ["Mo mau kenalan!", "Mo wants to say hi!"],
     namePh: ["Nama si kecil", "Child's name"], save: ["Simpan", "Save"], later: ["Nanti saja", "Maybe later"],
     kid: ["Si kecil", "Your child"], langToast: ["Bahasa Indonesia", "English"], langNote: ["Semua game, suara Mo dan terjemahan ikut berubah", "Games, Mo's voice and translations all switch"],
+    traceStart: ["Mulai dari titik hijau, ikuti panahnya", "Start at the green dot and follow the arrows"],
+    traceFollow: ["Ikuti jalannya ya", "Stay on the road"], traceDot: ["Sekarang ketuk titiknya", "Now tap the dot"],
+    traceNext: ["Bagus! Garis berikutnya", "Great! Next line"], traceWatch: ["Lihat caranya", "Show me"],
+    traceNeat: ["Masya Allah, rapi sekali!", "Masha Allah, so neat!"], traceGood: ["Bagus! Ayo lebih rapi lagi", "Good! Try it even neater"],
+    writeAgain: ["Tulis lagi", "Write again"],
+    yourTurnSay: ["Giliranmu! Ucapkan, lalu ketuk", "Your turn! Say it, then tap"],
     book: ["Jilid", "Book"], combo: ["{n}x berturut-turut!", "{n} in a row!"], perfect: ["Sempurna!", "Perfect!"],
     bookDone: ["{b} selesai!", "{b} complete!"], bookOpen: ["{b} sekarang terbuka", "{b} is now open"],
     missionDone: ["Misi selesai · {n}/3", "Mission done · {n}/3"], again2: ["Coba sekali lagi", "One more try"],
@@ -65,7 +71,7 @@
     mLevel: ["Main 1 level", "Play 1 level"], mTashih: ["Tashih bersama Abi/Umi", "Reading check with a parent"],
     mTashihSub: ["Baca sendiri, Abi/Umi mencentang", "Read alone, a parent ticks"],
     mission: ["Misi Hari Ini", "Today's Missions"], missionAll: ["Semua misi selesai! Masya Allah", "All missions done! Masha Allah"],
-    missionSub: ["Selesaikan {n} misi lagi", "{n} missions to go"], day: ["hari", "days"], day1: ["hari", "day"], doneToday: ["Selesai hari ini ✓", "Done today ✓"],
+    missionSub: ["Selesaikan {n} misi lagi", "{n} missions to go"], missionSub1: ["Selesaikan 1 misi lagi", "1 mission to go"], streak1: ["hari berturut-turut", "day in a row"], bonusStar: ["bintang murajaah", "review star"], day: ["hari", "days"], day1: ["hari", "day"], doneToday: ["Selesai hari ini ✓", "Done today ✓"],
     books: ["Jilid Belajar", "Books"], footDua: ["Ya Rabbku, tambahkanlah ilmu kepadaku", "My Lord, increase me in knowledge"],
     gMorning: ["Selamat pagi! Yuk mulai ngaji, Bismillah.", "Good morning! Let's start, Bismillah."],
     gDay: ["Siang ini kita belajar huruf baru, yuk!", "Let's learn a new letter this afternoon!"],
