@@ -232,4 +232,42 @@ ${moon(214, 0, 82)}
 <div class="ar" style="position:absolute;left:0;right:0;top:312px;text-align:center;font-size:92px;color:#FFE680;text-shadow:0 4px 0 #8A0E30,0 0 12px rgba(255,220,120,.6)">أ ب ت</div>
 ${twinkle(40, 70, 40, "#FFE9A8")}${twinkle(430, 120, 30, "#FFE9A8")}</body></html>`
 });
+
+/* ---------- v3 (owner picks): Buddy with Mo's upper body only, Blast with Mo's head only ---------- */
+const spark = (x, y, w) => `<svg class="sp" style="left:${x}px;top:${y}px;width:${w}px" viewBox="0 0 40 40"><path d="M20 0l3 13 13-6-9 11 13 4-14 2 6 13-11-9-5 14-2-14-13 6 9-11L0 18l14-2-6-13 11 9z" fill="#FFF3A6" stroke="#FFAA00" stroke-width="1.5"/></svg>`;
+// upper body: the 800 px render placed so the waist (y≈540 of 800) sits on the icon's bottom edge
+const upper = (pose, w, cx, flip, extra = "") => { const k = w / 800, top = 512 - 540 * k, left = cx - (flip ? 800 - 395 : 395) * k;
+  return `<img src="${MO(pose)}" style="position:absolute;left:${left}px;top:${top}px;width:${w}px;${flip ? "transform:scaleX(-1);" : ""}filter:drop-shadow(0 16px 20px rgba(0,50,60,.45));${extra}">`; };
+const buddyBg = `body{background:radial-gradient(90% 85% at 30% 20%,#9CF7D9,#2DD4BF 45%,#0F8F8A 80%,#0B5E66)}`;
+function blastScene(headPose, opt = {}) {
+  const hx = opt.hx ?? 150, hy = opt.hy ?? 168, hw = opt.hw ?? 300, rot = opt.rot ?? -8;
+  return (b) => head(b, `body{background:radial-gradient(90% 90% at 70% 30%,#FFD36B,#FF7A45 45%,#D9366E 80%,#8E1F5E)}`) +
+`<div class="rays" style="opacity:.6;background:repeating-conic-gradient(from 10deg at 50% 50%,rgba(255,255,255,.22) 0 5deg,rgba(255,255,255,0) 5deg 15deg)"></div>
+<div style="position:absolute;left:96px;top:120px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,#FFF7C2 0,#FFD84D 35%,#FFAA00 58%,rgba(255,170,0,0) 72%)"></div>
+<div style="position:absolute;left:128px;top:152px;width:336px;height:336px;border-radius:50%;background:radial-gradient(circle,#5B2A86 0,#3A1560 60%,#24093F 100%);box-shadow:inset 0 0 40px rgba(255,160,40,.9)"></div>
+${[...Array(9)].map((_, i) => `<div style="position:absolute;left:${170 + (i * 73) % 250}px;top:${200 + (i * 47) % 230}px;width:${i % 3 ? 4 : 7}px;height:${i % 3 ? 4 : 7}px;border-radius:50%;background:#FFE9A8"></div>`).join("")}
+<img src="${MO("head-" + headPose)}" style="position:absolute;left:${hx}px;top:${hy}px;width:${hw}px;transform:rotate(${rot}deg);filter:drop-shadow(0 14px 16px rgba(60,0,40,.5))">
+<svg style="position:absolute;left:110px;top:134px;width:372px;height:372px;overflow:visible" viewBox="0 0 372 372">
+<path d="M18 186 A168 168 0 0 0 354 186" fill="none" stroke="#E08A00" stroke-width="44" stroke-linecap="round"/>
+<path d="M18 186 A168 168 0 0 0 354 186" fill="none" stroke="#FFE680" stroke-width="30" stroke-linecap="round"/>
+<path d="M40 230 A150 150 0 0 0 186 340" fill="none" stroke="#fff" stroke-width="7" opacity=".7" stroke-linecap="round"/></svg>
+${drawBa({ x: opt.bx ?? -8, y: opt.by ?? -18, s: opt.bs ?? 270, face: ["#7CF0B0", "#0E9F57"], side: "#0A6E3D", id: "bl3", rot: -14 })}
+${[0, 1, 2, 3].map((i) => `<div style="position:absolute;left:${210 + i * 26}px;top:${40 + i * 30}px;width:${90 - i * 14}px;height:9px;border-radius:5px;background:rgba(255,255,255,.75);transform:rotate(-40deg)"></div>`).join("")}
+${star(392, 26, 76, undefined, undefined, 14)}${twinkle(318, 108, 26)}${twinkle(40, 300, 30)}${twinkle(70, 410, 20)}</body></html>`;
+}
+Object.assign(C, {
+  // B · Buddy v3 — Mo from the waist up high-fives the ب buddy
+  buddy3: (b) => head(b, buddyBg) + `<div class="rays" style="opacity:.5"></div><div class="glow" style="left:0;top:20px;width:300px;height:280px;background:rgba(255,255,230,.6)"></div>
+${drawBa({ x: -34, y: 60, s: 290, eyes: true, id: "b3", rot: -4 })}
+${star(400, 22, 70, undefined, undefined, 12)}${twinkle(250, 40, 26)}${twinkle(30, 330, 22)}
+${upper("yes", 660, 330, true)}${spark(118, 268, 80)}</body></html>`,
+  // B2 · Buddy v3 variant — Mo waving both hands next to the ب buddy
+  buddy3b: (b) => head(b, buddyBg) + `<div class="rays" style="opacity:.5"></div><div class="glow" style="left:0;top:20px;width:300px;height:280px;background:rgba(255,255,230,.6)"></div>
+${drawBa({ x: -20, y: 10, s: 290, eyes: true, id: "b4", rot: -8 })}
+${star(410, 30, 66, undefined, undefined, 12)}${twinkle(240, 30, 26)}${twinkle(26, 330, 22)}
+${upper("pose-26", 640, 340, false)}${spark(196, 196, 56)}</body></html>`,
+  // A · Blast v3 — Mo's head pops through the portal as the ب blasts out
+  blast3: blastScene("41"),
+  blast3b: blastScene("yes", { rot: 6, hx: 146, hy: 160 })
+});
 module.exports = Object.assign(module.exports, { drawBa });
