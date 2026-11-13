@@ -3,7 +3,7 @@
   var KEY = "bmh_v1";
   // first language guess: the phone's language (Indonesian → id, anything else → en); the picker confirms it
   var navLang = ((navigator.languages && navigator.languages[0]) || navigator.language || "en").toLowerCase();
-  var DEF = { name: "", lang: /^(id|ms)/.test(navLang) ? "id" : "en", langChosen: false, theme: "auto", stars: {}, tashih: {}, stickers: [], streak: { last: "", n: 0 }, plays: 0,
+  var DEF = { name: "", lang: /^(id|ms)/.test(navLang) ? "id" : "en", langChosen: false, theme: "auto", stars: {}, tashih: {}, stickers: [], streak: { last: "", n: 0 }, plays: 0, limit: "0", playDay: { d: "", ms: 0 },
     settings: { moVoice: true, sfx: true, latin: true, cdn: true, unlockAll: false } };
   var st;
   function load() {
@@ -37,6 +37,9 @@
       }
       save(); return first;
     },
+    playMs: function () { var t = today(); if (st.playDay.d !== t) st.playDay = { d: t, ms: 0 }; return st.playDay.ms; },
+    addPlay: function (ms) { this.playMs(); st.playDay.ms += ms; save(); },
+    overLimit: function () { var m = +st.limit || 0; return m > 0 && this.playMs() >= m * 60000; },
     totalStars: function () { var n = st.bonus || 0; for (var k in st.stars) if (k.charAt(0) !== "_") n += st.stars[k]; return n; },
     unlocked: function (lv) {
       if (st.settings.unlockAll) return true;
@@ -63,6 +66,10 @@
     traceNext: ["Bagus! Garis berikutnya", "Great! Next line"], traceWatch: ["Lihat caranya", "Show me"],
     traceNeat: ["Masya Allah, rapi sekali!", "Masha Allah, so neat!"], traceGood: ["Bagus! Ayo lebih rapi lagi", "Good! Try it even neater"],
     writeAgain: ["Tulis lagi", "Write again"],
+    limit: ["Batas waktu main", "Play-time limit"], limitSub: ["Mo mengajak istirahat setelah waktunya habis", "Mo suggests a break when time is up"], limitOff: ["Mati", "Off"],
+    restH: ["Waktunya istirahat, {k}!", "Time for a break, {k}!"], restH0: ["Waktunya istirahat!", "Time for a break!"], restP: ["Matanya istirahat dulu ya. Hari ini sudah belajar {m} menit. Mo bangga! Sampai nanti, insya Allah.", "Let's rest our eyes. You learned for {m} minutes today. Mo is so proud! See you later, insya Allah."],
+    restOk: ["Oke, sampai nanti!", "Okay, see you later!"], restMore: ["Orang tua: tambah 10 menit", "Grown-up: 10 more minutes"],
+    nextSticker: ["Stiker berikutnya!", "Next sticker!"],
     yourTurnSay: ["Giliranmu! Ucapkan, lalu ketuk", "Your turn! Say it, then tap"],
     micTap: ["Ketuk mic, lalu baca", "Tap the mic, then read"], micListen: ["Mo mendengarkan… ayo baca!", "Mo is listening… read now!"],
     micNone: ["Mo belum dengar. Coba lebih keras ya!", "Mo didn't hear you. A bit louder!"], micThinking: ["Mo sedang mendengar…", "Mo is listening back…"],

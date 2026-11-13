@@ -489,6 +489,8 @@
     var spans = su.ayahs.map(function (a) { var sp = el("span", "", esc(a.ar) + ' <span class="ayno">﴿' + arabicNum(a.n) + "﴾</span> "); page.appendChild(sp); return sp; });
     if (su.slug !== "al-fatihah") box.appendChild(el("div", "qr", "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")).style.cssText = "font-size:26px;opacity:.8";
     box.appendChild(page); st.appendChild(box);
+    var endChk = function () { page.classList.toggle("end", page.scrollTop + page.clientHeight >= page.scrollHeight - 6); };
+    page.addEventListener("scroll", endChk); setTimeout(endChk, 60);
     var row = el("div", "row"), all = el("button", "btn gold", HJ.ic("speaker") + " " + t("listenAll")), playing = false;
     all.onclick = function () {
       if (playing) { A.stop(); playing = false; spans.forEach(function (x) { x.classList.remove("on"); }); return; }

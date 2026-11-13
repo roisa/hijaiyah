@@ -97,6 +97,24 @@
     });
   };
 
+  /* play-time limit: counts time spent inside levels (only while the page is visible); Mo suggests a break */
+  setInterval(function () { if (document.visibilityState === "visible" && document.querySelector(".lv-top")) S.addPlay(15000); }, 15000);
+  function restScreen(after) {
+    A.stop && A.stop(); A.fx.sparkle && A.fx.sparkle();
+    HJ.modal(function (p, close) {
+      p.classList.add("rest");
+      p.appendChild(moImg("thank-you", "140px"));
+      p.appendChild(el("div", "rest-moon", HJ.art("moon", 44)));
+      p.appendChild(el("h2", "", esc(S.get().name ? t("restH") : t("restH0"))));
+      p.appendChild(el("p", "", esc(t("restP", { m: Math.max(1, Math.round(S.playMs() / 60000)) }))));
+      var r = el("div", "row"), ok = el("button", "btn big", ic("check") + " " + esc(t("restOk"))), more = el("button", "btn ghost small", ic("lock") + " " + esc(t("restMore")));
+      ok.onclick = function () { close(); home(); };
+      more.onclick = function () { close(); HJ.gate(function () { S.get().playDay.ms = Math.max(0, S.get().playDay.ms - 600000); S.save(); after && after(); }); };
+      r.appendChild(ok); p.appendChild(r); p.appendChild(more);
+    });
+  }
+  HJ.restScreen = restScreen;
+
   function confetti(n) {
     var C = ["#FF6B6B", "#FFB800", "#3FBF86", "#3B7DD8", "#9A7AF0", "#FF8FB1"];
     for (var i = 0; i < (n || 60); i++) {
@@ -311,6 +329,7 @@
   var runId = 0;
   function runLevel(lv, opts) {
     opts = opts || {};
+    if (S.overLimit() && !opts.onDone) return restScreen(function () { runLevel(lv, opts); });
     var steps = opts.steps || HJ.buildSteps(lv), idx = 0, mistakes = 0, hearts = 3, boss = lv.kind === "boss", my = ++runId;
     var s = bare();
     var top = el("div", "lv-top"), x = el("button", "nav-btn", ic("close")), bar = el("div", "bar", "<i></i>"), hz = el("div", "hearts glass");
@@ -433,7 +452,7 @@
     else art = kindArt(lv);
     var e = el("div", "sticker" + (got ? "" : " no") + (big ? " big" : "")), li = HJ.allLevels().indexOf(lv);
     if (lv.kind === "letters" || lv.kind === "words" || lv.kind === "mad") w = { g: STK[li % STK.length] };
-    if (got || big) e.innerHTML = art ? HJ.art(art, big ? 64 : 42) : '<span class="sf">' + esc(face) + "</span>";
+    e.innerHTML = art ? HJ.art(art, big ? 64 : 42) : '<span class="sf">' + esc(face) + "</span>";
     if (face && face.replace(/[\u064B-\u0652\s]/g, "").length > 3) e.classList.add("long");
     e.style.background = "linear-gradient(160deg," + w.g[0] + "," + w.g[1] + ")";
     return e;
@@ -441,6 +460,7 @@
 
   function results(lv, stars, first, before) {
     A.fx.win(); confetti(70);
+    if (S.overLimit()) setTimeout(function () { if (document.querySelector(".result-mo")) restScreen(); }, 4200);
     before = before || { total: S.totalStars(), streak: S.get().streak.n, worldDone: 0, missions: 0 };
     var all = HJ.allLevels(), nxt = all[all.indexOf(lv) + 1], w = HJ.worlds[lv.w - 1], st = S.get();
     var worldDone = w.levels.filter(function (l) { return st.stars[l.id]; }).length, worldComplete = worldDone === w.levels.length && before.worldDone < w.levels.length;
@@ -547,7 +567,7 @@
   /* ---------- sticker book ---------- */
   function stickers() {
     var sc = shell("stickers", t("stickers")), st = S.get();
-    var got = st.stickers.filter(function (id) { return HJ.level(id); }).length;
+    var got = st.stickers.filter(function (id) { return HJ.level(id); }).length, nextMarked = false;
     sc.appendChild(el("div", "large-title", esc(t("stickerTitle1")) + " <em>" + esc(t("stickerTitle2")) + "</em>"));
     sc.appendChild(el("div", "large-sub", got + " / " + HJ.allLevels().length + " " + esc(t("stickers").toLowerCase())));
     HJ.worlds.forEach(function (w) {
@@ -556,6 +576,7 @@
       var box = el("div", "list-group"), g = el("div", "sgrid");
       w.levels.forEach(function (lv) {
         var has = st.stickers.indexOf(lv.id) >= 0, e = stickerEl(lv, has);
+        if (!has && !nextMarked) { nextMarked = true; e.classList.add("next"); e.title = t("nextSticker"); e.onclick = function () { A.fx.pop(); levelSheet(lv); }; }
         if (has) e.onclick = function () { A.fx.pop(); if (lv.kind === "letters") A.say(HJ.syl(lv.letters[0], lv.v || "a").au); };
         g.appendChild(e);
       });
@@ -612,6 +633,9 @@
       sw.onclick = function () { S.setting(key, !st.settings[key]); sw.classList.toggle("on", st.settings[key]); A.fx.tap(); };
       g2.appendChild(row(icon, cls, esc(label) + (sub ? "<small>" + esc(sub) + "</small>" : ""), sw));
     }
+    var lim = el("div", "seg");
+    [["0", t("limitOff")], ["15", "15'"], ["20", "20'"], ["30", "30'"]].forEach(function (o) { var b = el("button", String(st.limit) === o[0] ? "on" : "", esc(o[1])); b.onclick = function () { S.set("limit", o[0]); A.fx.tap(); parents(); }; lim.appendChild(b); });
+    g2.appendChild(row(HJ.art("moon", 22), "purple", esc(t("limit")) + "<small>" + esc(t("limitSub")) + "</small>", lim));
     tog(ic("speaker"), "gold", t("moVoice"), "moVoice");
     tog('<img src="assets/icons/sound.svg" alt="">', "", t("sfx"), "sfx");
     tog(ic("textA"), "purple", t("latin"), "latin", t("latinSub"));
