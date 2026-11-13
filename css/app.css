@@ -942,3 +942,49 @@ html.big .tabbar { max-width: 600px; }
 .wk-chip .ar { font-size: 30px; line-height: 1.4; }
 .wk-chip small { font-size: 10.5px; font-weight: 800; color: #E8590C; }
 :root[data-theme="dark"] .wk-chip small { color: #FFA36B; }
+
+/* ---------- illustrated backgrounds (js/bg.js) ---------- */
+#bgl { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.bg-scene { position: absolute; inset: 0; transition: opacity .6s ease; }
+.bg-scene.in, .bg-scene.out { opacity: 0; }
+.bg-svg { width: 100%; height: 100%; display: block; }
+.bg-svg .bgglow { transform-box: fill-box; transform-origin: center; animation: bgGlow 7s ease-in-out infinite; }
+.bg-svg .bgdrift { animation: bgDrift 46s ease-in-out infinite alternate; }
+.bg-svg .bgdrift.b { animation-duration: 62s; animation-delay: -20s; }
+.bg-svg .bgsway { animation: bgSway 7s ease-in-out infinite alternate; }
+.bg-svg .bgsway.b { animation-duration: 9s; animation-delay: -3s; }
+.bg-svg .bgsway.c { animation-duration: 8s; animation-delay: -5s; }
+.bg-svg .bgbob { animation: bgBob 6s ease-in-out infinite alternate; }
+.bg-svg .bgbob.b { animation-duration: 7.5s; animation-delay: -2.5s; }
+.bg-svg .bgwave { animation: bgWave 5s linear infinite; }
+.bg-svg .bgwave.b { animation: bgWave2 8s linear infinite; }
+.bg-svg .bgtw { animation: bgTw 3.6s ease-in-out infinite; }
+.bg-svg .bgtw.b { animation-delay: -1.8s; }
+.bg-svg .bgspin { animation: bgSpin 90s linear infinite; }
+.bg-svg .bgbirds { animation: bgBirds 30s ease-in-out infinite alternate; }
+.bg-svg .bgflut { animation: bgFlut 22s ease-in-out infinite; }
+.bg-svg .bgflut.b { animation-duration: 28s; animation-delay: -9s; }
+.bg-svg .bgfly { animation: bgFly 5s ease-in-out infinite; }
+.bg-svg .bgswim { animation: bgSwim 46s linear infinite; }
+.bg-svg .bgswim.b { animation-duration: 60s; animation-delay: -22s; }
+.bg-svg .bgswim.c { animation-duration: 72s; animation-delay: -48s; }
+.bg-svg .bgrise { animation: bgRise 11s linear infinite; }
+.bg-svg .bgwin { animation: bgTw 5s ease-in-out infinite; }
+.bg-svg .bgfount { transform-box: fill-box; transform-origin: 50% 100%; animation: bgFount 2.6s ease-in-out infinite; }
+@keyframes bgGlow { 50% { opacity: .75; transform: scale(1.06); } }
+@keyframes bgDrift { to { transform: translateX(46px); } }
+@keyframes bgSway { from { transform: rotate(-1.6deg); } to { transform: rotate(1.6deg); } }
+@keyframes bgBob { from { transform: translateY(-5px); } to { transform: translateY(6px); } }
+@keyframes bgWave { to { transform: translateX(-60px); } }
+@keyframes bgWave2 { to { transform: translateX(-80px); } }
+@keyframes bgTw { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+@keyframes bgSpin { to { transform: rotate(360deg); } }
+@keyframes bgBirds { from { transform: translate(0, 0); } to { transform: translate(90px, -30px); } }
+@keyframes bgFlut { 0% { transform: translate(0, 0); } 25% { transform: translate(-60px, -40px); } 50% { transform: translate(-20px, -90px); } 75% { transform: translate(40px, -40px); } 100% { transform: translate(0, 0); } }
+@keyframes bgFly { 0%, 100% { opacity: .2; transform: translate(0, 0); } 50% { opacity: 1; transform: translate(10px, -14px); } }
+@keyframes bgSwim { from { transform: translateX(0); } to { transform: translateX(560px); } }
+@keyframes bgRise { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: .9; } 100% { transform: translateY(-560px); opacity: 0; } }
+@keyframes bgFount { 50% { transform: scaleY(1.12); } }
+@media (prefers-reduced-motion: reduce) { .bg-svg * { animation: none !important; } }
+.bg-svg .bgray { animation: bgRay 9s ease-in-out infinite alternate; }
+@keyframes bgRay { from { opacity: .6; } to { opacity: 1; } }

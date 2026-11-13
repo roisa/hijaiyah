@@ -143,6 +143,7 @@
   function shell(tab, title) {
     curScreen = { home: home, map: map, stickers: stickers, parents: parents }[tab];
     var s = bare();
+    if (HJ.bg) HJ.bg({ map: "map", stickers: "stickers", parents: "parents" }[tab] || null);
     var nb = el("header", "navbar");
     var jar = el("button", "star-jar", HJ.art("star", 30) + '<span>' + S.totalStars() + "</span>");
     jar.setAttribute("aria-label", t("stars")); jar.onclick = function () { A.fx.coin(); stickers(); };
@@ -351,6 +352,7 @@
     if (S.overLimit() && !opts.noLimit) return restScreen(function () { runLevel(lv, opts); });
     var steps = opts.steps || HJ.buildSteps(lv), idx = 0, mistakes = 0, hearts = 3, boss = lv.kind === "boss", my = ++runId;
     var s = bare();
+    if (HJ.bg) HJ.bg(lv.kind === "arcade" ? "stickers" : "w" + Math.min(7, Math.max(1, lv.w || 1)));
     var top = el("div", "lv-top"), x = el("button", "nav-btn", ic("close")), bar = el("div", "bar", "<i></i>"), hz = el("div", "hearts glass");
     var goal = el("div", "bar-goal", HJ.art(boss ? "trophy" : "star", 30)), combo = 0, missed = [], replayed = false, collected = 0;
     x.setAttribute("aria-label", t("close"));
