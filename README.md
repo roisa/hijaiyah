@@ -10,7 +10,8 @@ EN/ID pill in the top bar switches everything at once — menus, instructions, M
 - 7 books, 77 levels: the Iqra order (sounds first, small steps) with Ummi habits (listen → copy, daily review,
   a parent check before moving on), then a Qur'an book with Al-Fatihah and 14 Juz 'Amma surahs.
 - All levels: [docs/LEVELS.en.md](docs/LEVELS.en.md) · method and game design: [docs/CURRICULUM.md](docs/CURRICULUM.md)
-- Run: `npm start`, open http://localhost:8811 · checks: `npm run check`
+- **Play online:** https://roisa.github.io/hijaiyah/ (published automatically from this repo)
+- Run locally: `npm start`, open http://localhost:8811 · checks: `npm run check`
 - Kids Category ready: no ads, no tracking, progress stays on the device, parent area behind a parental gate.
 
 ---
@@ -22,6 +23,10 @@ Game belajar membaca huruf hijaiyah sampai Al-Qur'an bersama Baby Mo — dibuat 
 Web dulu (mudah dicek di HP/laptop), lalu jadi aplikasi iOS & Android dengan Capacitor (sama seperti Baby Mo app).
 
 **Kurikulum lengkap & ide game:** [docs/CURRICULUM.md](docs/CURRICULUM.md) · semua level: [docs/LEVELS.id.md](docs/LEVELS.id.md) — 7 dunia, 77 level, dari أَ بَ sampai surat-surat Juz 'Amma.
+
+## Coba online
+
+https://roisa.github.io/hijaiyah/ — diperbarui otomatis setiap ada perubahan (GitHub Actions → `gh-pages`).
 
 ## Coba di komputer
 
