@@ -1090,7 +1090,7 @@ html.big .tabbar { max-width: 600px; }
 [data-theme="dark"] .hw-bub { background: #2B2560; color: #F1EEFF; box-shadow: 0 10px 22px -10px rgba(0,0,0,.6), 0 0 0 1.5px rgba(201,189,255,.18); }
 [data-theme="dark"] .hw-bub b { color: #C9BDFF; }
 @keyframes bubFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-.hw-bk { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 11px; display: grid; place-items: center; color: #fff; font-family: 'Fredoka One', var(--font); font-size: 19px;
+.hw-bk { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 11px; display: grid; place-items: center; color: #fff; font-family: 'Fredoka One', var(--font); font-size: 19px; line-height: 1; padding-top: 4px; box-sizing: border-box;
   text-shadow: 0 1.5px 0 rgba(0,0,0,.18); box-shadow: inset 0 -3px 0 rgba(0,0,0,.14), inset 0 2px 0 rgba(255,255,255,.35); }
 @keyframes bubIn { from { transform: scale(.6) translateY(10px); opacity: 0; } }
 .hw-name { position: absolute; left: 16px; top: 37%; }
@@ -1194,3 +1194,8 @@ img.mo-pad { background-image: radial-gradient(closest-side, rgba(40,30,90,.32),
 .gift-dance { position: relative; z-index: 1; filter: drop-shadow(0 1.5px 2px rgba(30,40,90,.16)); }
 .gift-stage:has(.gift-dance)::after { content: ""; position: absolute; left: 50%; bottom: 8px; width: 96px; height: 13px; margin-left: -48px; border-radius: 50%; z-index: 0;
   background: radial-gradient(closest-side, rgba(40,30,90,.3), rgba(40,30,90,0)); }
+
+/* Indonesian: the "Dunia" ribbon tucks behind "Hijaiyah" */
+.hw-rib.back { z-index: 0; margin-bottom: -14px; padding-bottom: 14px; transform: rotate(-3deg) translateY(2px); }
+.hw-rib.back::before, .hw-rib.back::after { top: 7px; height: calc(100% - 14px); }
+.hw-rib.back + .hw-word { z-index: 2; }

@@ -34,6 +34,7 @@
   // a real hot-air balloon: striped gores, shading, a band, a skirt, ropes and a woven basket.
   // It sways from the top (like it hangs in the wind) and drifts a little; far ones are smaller and hazier.
   function balloon(b, n, id) {
+    var by = b.c === "ب" ? 1 : 12;   // baseline: ba's dot hangs below, ta/tsa dots sit above — keep it all on the band
     var e = id + "b" + b.c.charCodeAt(0), C = b.col, rope = n ? "#9C8BB8" : "#8A6346";
     var env = "M0 -48 C29 -48 46 -28 45 -6 C44 14 28 30 14 44 L-14 44 C-28 30 -44 14 -45 -6 C-46 -28 -29 -48 0 -48Z";
     var out = '<g class="hw-drift3" style="animation-delay:-' + b.d * 3 + 's"><g class="hw-sway" style="animation-delay:-' + b.d + 's">' +
@@ -50,11 +51,16 @@
       // envelope with gores
       '<g clip-path="url(#' + e + 'c)"><rect x="-50" y="-50" width="100" height="100" fill="' + C[0] + '"/>' +
       '<ellipse cx="0" cy="-2" rx="32" ry="56" fill="' + C[1] + '"/><ellipse cx="0" cy="-2" rx="17" ry="58" fill="' + C[0] + '"/><ellipse cx="0" cy="-2" rx="5" ry="60" fill="' + C[1] + '"/>' +
-      // a band round the middle and a scalloped hem
-      '<path d="M-50 14 Q0 26 50 14 V22 Q0 34 -50 22Z" fill="' + C[2] + '"/>' +
-      '<path d="M-50 22 Q0 34 50 22 V26 Q0 38 -50 26Z" fill="#fff" opacity=".5"/>' +
-      // the letter is painted on the fabric: it follows the round shape a little and gets the same light and shade
-      '<g transform="translate(0 -8) scale(.86 1)"><text x="0" y="10" text-anchor="middle" style="font-family:var(--ar)" font-size="50" fill="#fff" stroke="' + C[3] + '" stroke-width="3" stroke-linejoin="round" paint-order="stroke" stroke-opacity=".85">' + b.c + "</text></g>" +
+      // a fabric band round the middle (like real balloons carry their lettering); it bows down with the round shape
+      '<path d="M-50 -24 Q0 -10 50 -24 V10 Q0 24 -50 10Z" fill="' + C[2] + '"/>' +
+      '<path d="M-50 -24 Q0 -10 50 -24 V-21 Q0 -7 -50 -21Z M-50 10 Q0 24 50 10 V7 Q0 21 -50 7Z" fill="#000" opacity=".12"/>' +
+      // the letter printed on the band; copies of it wrap round to the sides (squeezed, as on a ball)
+      '<g fill="' + C[3] + '" style="font-family:var(--ar)" text-anchor="middle">' +
+      '<text x="0" y="' + by + '" font-size="38" transform="scale(.94 1)">' + b.c + "</text>" +
+      '<text x="0" y="' + (by - 3) + '" font-size="32" transform="translate(-37 0) scale(.42 1)" opacity=".9">' + b.c + "</text>" +
+      '<text x="0" y="' + (by - 3) + '" font-size="32" transform="translate(37 0) scale(.42 1)" opacity=".9">' + b.c + "</text></g>" +
+      // fine seams over everything, so the band and letter sit in the fabric
+      '<path d="M0 -48 C10 -30 13 20 6 44 M0 -48 C-10 -30 -13 20 -6 44 M0 -48 C24 -36 32 10 14 44 M0 -48 C-24 -36 -32 10 -14 44" stroke="#000" stroke-opacity=".07" stroke-width=".8" fill="none"/>' +
       '<rect x="-50" y="-50" width="100" height="100" fill="url(#' + e + 'h)"/></g>' +
       '<path d="' + env + '" fill="none" stroke="#000" stroke-opacity=".12" stroke-width="1.2"/>' +
       // skirt
