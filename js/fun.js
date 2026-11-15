@@ -42,7 +42,7 @@
   function bonus(done) {
     var layer = el("div", "bonus"), got = 0, over = false, timers = [];
     var head = el("div", "bonus-h", '<b>' + esc(t("bonusT")) + '</b><span class="bonus-n">' + HJ.art("star", 26) + " <span>0</span></span>");
-    var mo = el("img", "bonus-mo"); mo.src = MO + "yeyy.webp"; mo.alt = "";
+    var mo = el("img", "bonus-mo mo-g"); mo.src = MO + "yeyy.webp"; mo.alt = "";
     layer.appendChild(head); layer.appendChild(mo);
     document.body.appendChild(layer);
     A.fx.whoosh(); A.talk(t("bonusT"), lang());

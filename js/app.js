@@ -57,6 +57,7 @@
   // Mo picture; render 2 is shown upper body only (owner's art rule)
   function moImg(p, w) {
     var img = el("img"); img.src = MO(p); img.alt = "Baby Mo"; img.draggable = false;
+    if (p.indexOf("mo2:") !== 0) img.className = "mo-g";      // a shadow on the ground under his feet (css)
     if (w) img.style.width = w;
     if (p.indexOf("mo2:") === 0) {
       var box = el("span", "upper"); box.appendChild(img);
@@ -256,7 +257,7 @@
       var scene = HJ.bgScenes && HJ.bgScenes["w" + bw.n] ? HJ.bgScenes["w" + bw.n]("is" + bw.n + "_", dark).replace(/<rect y="300"[^>]*veil\)"\/>/, "") : "";
       c.innerHTML = '<span class="isl-art">' + scene + "</span>" +
         '<span class="isl-n">' + (bw.n < 7 ? bw.n : HJ.art("book", 18)) + "</span>" +
-        (bw.n === cur.w ? '<span class="isl-mo"><img src="' + MO("run") + '" alt=""></span>' : "") +
+        (bw.n === cur.w ? '<span class="isl-mo"><img class="mo-g" src="' + MO("run") + '" alt=""></span>' : "") +
         '<span class="isl-tx"><b>' + esc(tr(bw.name)) + "</b>" +
         (locked ? '<small class="isl-lock">' + ic("lock") + "</small>" : '<span class="hm-bar"><i style="width:' + Math.round(dn / bw.levels.length * 100) + '%"></i></span><small>' + dn + " / " + bw.levels.length + "</small>") + "</span>";
       c.setAttribute("aria-label", (bw.n < 7 ? t("book") + " " + bw.n + " · " : "") + tr(bw.name) + (locked ? " · " + t("locked") : " · " + dn + "/" + bw.levels.length));
@@ -320,7 +321,7 @@
           }, 900);
           delete st.justUnlocked; S.save();
         }
-        if (lv === cur) { var mo = el("img", "map-mo"); mo.src = MO("pose-20"); mo.alt = ""; mo.style.left = "calc(" + x + "% + 36px)"; row.appendChild(mo); curNode = row; }
+        if (lv === cur) { var mo = el("img", "map-mo mo-g"); mo.src = MO("pose-20"); mo.alt = ""; mo.style.left = "calc(" + x + "% + 36px)"; row.appendChild(mo); curNode = row; }
         path.appendChild(row);
       });
       var H = w.levels.length * 96, pts = w.levels.map(function (l, i) { return [50 + Math.sin(i * 0.9) * 26, i * 96 + 46 + 8]; });
@@ -368,7 +369,7 @@
     top.appendChild(x); top.appendChild(barWrap); if (boss) top.appendChild(hz);
     s.appendChild(top);
     var stage = el("div", "stage"); s.appendChild(stage);
-    var bw = el("div", "bubble-wrap"), moI = el("img"), bub = el("div", "bubble glass"); moI.alt = "Baby Mo"; bw.appendChild(moI); bw.appendChild(bub);
+    var bw = el("div", "bubble-wrap"), moI = el("img", "mo-g"), bub = el("div", "bubble glass"); moI.alt = "Baby Mo"; bw.appendChild(moI); bw.appendChild(bub);
     s.appendChild(bw);
     function drawHearts() { hz.innerHTML = [0, 1, 2].map(function (i) { return HJ.art(i < hearts ? "heart" : "heartOff", 24); }).join(""); }
     drawHearts();

@@ -24,7 +24,7 @@
   /* Mo introduces the level */
   G.intro = function (s, ctx) {
     var st = ctx.stage;
-    var big = HJ.moImg(s.mo && s.mo.indexOf("mo2:") === 0 ? s.mo : (s.mo || "pose-41"), "150px"); big.classList.add("intro-mo"); st.appendChild(big);
+    var big = HJ.moImg(s.mo && s.mo.indexOf("mo2:") === 0 ? s.mo : (s.mo || "pose-41"), "150px"); big.classList.add("intro-mo", "mo-pad"); st.appendChild(big);
     add(st, el("div", "ask", esc(tr(s.say))));
     if (s.show && s.show.length) {
       var row = el("div", "row");
@@ -293,7 +293,7 @@
     var river = el("div", "river"); river.innerHTML = '<div class="waves"></div><div class="bank r"></div><div class="bank l"></div>';
     var planks = el("div", "planks"); for (var i = 0; i < n; i++) planks.appendChild(el("div", "plank"));
     river.appendChild(planks);
-    var mo = el("img", "bridge-mo"); mo.src = "assets/mo/mo-run.webp"; mo.style.right = "1%"; mo.style.transform = "scaleX(-1)"; river.appendChild(mo);
+    var mo = el("img", "bridge-mo mo-g"); mo.src = "assets/mo/mo-run.webp"; mo.style.right = "1%"; mo.style.transform = "scaleX(-1)"; river.appendChild(mo);
     var chest = el("div", "chest", HJ.art("gift", 46)); river.appendChild(chest);
     var spk = speakerBtn(function () { A.say(s.rounds[r].q.au); });
     var opts = el("div", "opts");

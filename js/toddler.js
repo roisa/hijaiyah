@@ -123,7 +123,7 @@
     var st = ctx.stage, round = 0, rounds = s.rounds;
     ctx.mo(null);
     var ask = el("div", "ask"); st.appendChild(ask);
-    var moBox = el("div", "feed-mo"), mo = HJ.moImg("pose-41", "190px"), bubble = el("div", "feed-want glass"); moBox.appendChild(mo); moBox.appendChild(bubble); st.appendChild(moBox);
+    var moBox = el("div", "feed-mo"), mo = HJ.moImg("pose-41", "190px"), bubble = el("div", "feed-want glass"); mo.classList.add("mo-pad"); moBox.appendChild(mo); moBox.appendChild(bubble); st.appendChild(moBox);
     var tray = el("div", "fruits"); st.appendChild(tray);
     function setMo(p) { mo.src = mo.src.replace(/mo-[a-z0-9-]+\.webp/, "mo-" + p + ".webp"); }
     function show() {

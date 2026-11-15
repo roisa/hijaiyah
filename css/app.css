@@ -404,7 +404,7 @@ svg.ic { width: 1.15em; height: 1.15em; display: inline-block; vertical-align: -
 .plank { flex: 1; height: 20px; margin: 0 2px; border-radius: 6px; background: rgba(255,255,255,.2); border: 2px dashed rgba(255,255,255,.65); }
 .plank.set { background: linear-gradient(180deg,#D9A86C,#A87842); border: none; box-shadow: 0 4px 0 rgba(0,0,0,.15); animation: drop .3s; }
 @keyframes drop { from { transform: translateY(-40px); opacity: 0; } }
-.bridge-mo { position: absolute; width: 72px; bottom: 52%; transition: right .7s ease; z-index: 2; }
+.bridge-mo { position: absolute; width: 72px; bottom: calc(55% - 9px); transition: right .7s ease; z-index: 2; }
 .waves { position: absolute; inset: auto 0 0 0; height: 55%; background: repeating-radial-gradient(circle at 10px 10px, rgba(255,255,255,.15) 0 3px, transparent 4px 20px); }
 
 /* match */
@@ -1175,3 +1175,22 @@ html.big .tabbar { max-width: 600px; }
 .hw-drift3 { animation: hwDrift3 26s ease-in-out infinite alternate; }
 @keyframes hwDrift3 { from { transform: translateX(-8px); } to { transform: translateX(10px); } }
 @media (prefers-reduced-motion: reduce) { .hw-sway, .hw-drift3 { animation: none; } }
+
+/* ---------- Mo stands on the ground ----------
+   Every Mo picture (render 1, 480×480) has his feet at about 90–94% of the height. .mo-g draws a soft contact shadow
+   there, behind the picture, so he stands instead of floating (in a jump pose the shadow stays on the ground below him).
+   .mo-pad adds a little lit patch of ground for places with no scenery under him (level intro, Feed Mo). */
+img.mo-g, img.mo-pad { background-repeat: no-repeat; background-image: radial-gradient(closest-side, rgba(40,30,90,.32), rgba(40,30,90,.14) 60%, rgba(40,30,90,0));
+  background-size: 50% 6.5%; background-position: 50% 95%; }
+img.mo-pad { background-image: radial-gradient(closest-side, rgba(40,30,90,.32), rgba(40,30,90,.14) 60%, rgba(40,30,90,0)), radial-gradient(closest-side, rgba(255,255,255,.75), rgba(255,255,255,.35) 60%, rgba(255,255,255,0));
+  background-size: 50% 6.5%, 92% 15%; background-position: 50% 95%, 50% 97%; }
+[data-theme="dark"] img.mo-g { background-image: radial-gradient(closest-side, rgba(0,0,0,.5), rgba(0,0,0,.2) 60%, rgba(0,0,0,0)); }
+[data-theme="dark"] img.mo-pad { background-image: radial-gradient(closest-side, rgba(0,0,0,.5), rgba(0,0,0,.2) 60%, rgba(0,0,0,0)), radial-gradient(closest-side, rgba(170,160,255,.22), rgba(170,160,255,.08) 60%, rgba(170,160,255,0)); }
+/* the old drop shadows sat under his whole body (that read as floating): now only a light edge */
+.intro-mo, .feed-mo img, .map-mo, .bubble-wrap img, .result-mo, .isl-mo img, .bonus-mo, .rs-top img { filter: drop-shadow(0 1.5px 2px rgba(30,40,90,.16)); }
+.intro-mo { width: 170px; margin-bottom: -2px; }
+/* the dance: the shadow stays on the floor while Mo hops */
+.gift-stage { position: relative; isolation: isolate; }
+.gift-dance { position: relative; z-index: 1; filter: drop-shadow(0 1.5px 2px rgba(30,40,90,.16)); }
+.gift-stage:has(.gift-dance)::after { content: ""; position: absolute; left: 50%; bottom: 8px; width: 96px; height: 13px; margin-left: -48px; border-radius: 50%; z-index: 0;
+  background: radial-gradient(closest-side, rgba(40,30,90,.3), rgba(40,30,90,0)); }
