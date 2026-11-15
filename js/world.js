@@ -11,9 +11,9 @@
 
   // the toy letters on the island: glyph, x, baseline, size, [light, dark, edge] colours, wiggle delay
   var TOYS = [
-    { c: "ا", x: 62, y: 349, s: 128, col: ["#FF8A8A", "#F0464E", "#B8262E"], d: 0, f: [63, 292, .75], w: 17 },
-    { c: "ب", x: 136, y: 344, s: 104, col: ["#FFE066", "#FFB000", "#C77A00"], d: 2.4, f: [141, 331, .85] },
-    { c: "ن", x: 338, y: 324, s: 100, col: ["#C7B2FF", "#8B63F0", "#5B37B8"], d: 4.8, f: [338, 322, 1] }
+    { c: "ا", x: 62, y: 343, s: 128, col: ["#FF8A8A", "#F0464E", "#B8262E"], d: 0, f: [63, 286, .75], w: 17, g: 357 },
+    { c: "ب", x: 136, y: 344, s: 104, col: ["#FFE066", "#FFB000", "#C77A00"], d: 2.4, f: [141, 331, .85], g: 358, dot: 1 },
+    { c: "ن", x: 338, y: 324, s: 100, col: ["#C7B2FF", "#8B63F0", "#5B37B8"], d: 4.8, f: [338, 322, 1], g: 355 }
   ];
   var BALLOONS = [
     // [main, stripe, band] colours; far balloons are smaller and a little hazy
@@ -53,27 +53,38 @@
       // a band round the middle and a scalloped hem
       '<path d="M-50 14 Q0 26 50 14 V22 Q0 34 -50 22Z" fill="' + C[2] + '"/>' +
       '<path d="M-50 22 Q0 34 50 22 V26 Q0 38 -50 26Z" fill="#fff" opacity=".5"/>' +
+      // the letter is painted on the fabric: it follows the round shape a little and gets the same light and shade
+      '<g transform="translate(0 -8) scale(.86 1)"><text x="0" y="10" text-anchor="middle" style="font-family:var(--ar)" font-size="50" fill="#fff" stroke="' + C[3] + '" stroke-width="3" stroke-linejoin="round" paint-order="stroke" stroke-opacity=".85">' + b.c + "</text></g>" +
       '<rect x="-50" y="-50" width="100" height="100" fill="url(#' + e + 'h)"/></g>' +
       '<path d="' + env + '" fill="none" stroke="#000" stroke-opacity=".12" stroke-width="1.2"/>' +
       // skirt
       '<path d="M-14 44 L14 44 L10 52 L-10 52Z" fill="' + C[2] + '"/><path d="M-10 52 L10 52" stroke="#000" stroke-opacity=".2" stroke-width="1.4"/>' +
-      // the letter on a round badge
-      '<circle cx="0" cy="-12" r="14.5" fill="#fff"/><circle cx="0" cy="-12" r="14.5" fill="none" stroke="' + C[2] + '" stroke-width="2.4"/>' +
-      '<text x="0" y="-3.5" text-anchor="middle" style="font-family:var(--ar)" font-size="32" fill="' + C[3] + '" stroke="' + C[3] + '" stroke-width="1">' + b.c + "</text>" +
       "</g></g></g></g>";
     return out;
   }
 
   function toy(tc, n, id, i) {
-    var e = id + "t" + i, f = 'style="font-family:var(--ar)" font-size="' + tc.s + '" text-anchor="middle"';
-    return '<g class="hw-toy" data-say="' + tc.c + '" style="animation-delay:' + tc.d + 's">' +
-      '<defs>' + lg(e, tc.col[0], tc.col[1]) + "</defs>" +
-      '<ellipse cx="' + tc.x + '" cy="' + (i === 2 ? 352 : tc.y + 4) + '" rx="' + tc.s * .3 + '" ry="7" fill="#000" opacity="' + (n ? .28 : .14) + '"/>' +
-      // a chunky toy: a thick dark edge, a 3D side (offset), then the glossy face
-      '<text x="' + tc.x + '" y="' + (tc.y + 6) + '" ' + f + ' fill="' + tc.col[2] + '" stroke="' + tc.col[2] + '" stroke-width="' + (tc.w || 11) + '" stroke-linejoin="round">' + tc.c + "</text>" +
-      '<text x="' + tc.x + '" y="' + tc.y + '" ' + f + ' fill="url(#' + e + ')" stroke="' + tc.col[1] + '" stroke-width="' + ((tc.w || 11) - 2) + '" stroke-linejoin="round">' + tc.c + "</text>" +
-      '<text x="' + (tc.x - 1.5) + '" y="' + (tc.y - 2) + '" ' + f + ' fill="none" stroke="#fff" stroke-opacity="' + (n ? .18 : .4) + '" stroke-width="2.2" stroke-linejoin="round">' + tc.c + "</text>" +
-      face(tc.f[0], tc.f[1], tc.f[2], tc.col[2], i) + "</g>";
+    var e = id + "t" + i, f = 'style="font-family:var(--ar)" font-size="' + tc.s + '" text-anchor="middle"', w = tc.w || 11;
+    function glyph() {
+      return '<text x="' + tc.x + '" y="' + (tc.y + 6) + '" ' + f + ' fill="' + tc.col[2] + '" stroke="' + tc.col[2] + '" stroke-width="' + w + '" stroke-linejoin="round">' + tc.c + "</text>" +
+        '<text x="' + tc.x + '" y="' + tc.y + '" ' + f + ' fill="url(#' + e + ')" stroke="' + tc.col[1] + '" stroke-width="' + (w - 2) + '" stroke-linejoin="round">' + tc.c + "</text>" +
+        '<text x="' + (tc.x - 1.5) + '" y="' + (tc.y - 2) + '" ' + f + ' fill="none" stroke="#fff" stroke-opacity="' + (n ? .18 : .4) + '" stroke-width="2.2" stroke-linejoin="round">' + tc.c + "</text>";
+    }
+    function shadow(x, y, rx) {   // a soft shadow and a darker contact line: the toy rests on the grass
+      return '<ellipse cx="' + x + '" cy="' + y + '" rx="' + rx + '" ry="' + (rx * .17 + 3) + '" fill="#000" opacity="' + (n ? .26 : .13) + '"/>' +
+        '<ellipse cx="' + x + '" cy="' + (y - 1) + '" rx="' + rx * .62 + '" ry="2.6" fill="#000" opacity="' + (n ? .3 : .18) + '"/>';
+    }
+    var out = '<g class="hw-toy" data-say="' + tc.c + '" style="animation-delay:' + tc.d + 's"><defs>' + lg(e, tc.col[0], tc.col[1]) + "</defs>";
+    if (tc.dot) {
+      // ba: the body (dotless ٮ) stands on the grass, and its dot is a little block resting on the grass in front of it
+      var body = { c: "ٮ" }, dx = tc.x - 4, dy = tc.g + 2, h = 8.5;
+      var keep = tc.c; tc.c = body.c; var g0 = glyph(); tc.c = keep;
+      out += shadow(tc.x, tc.g, tc.s * .42) + g0 + shadow(dx, dy + h - 1, 11) +
+        '<path d="M' + dx + " " + (dy - h + 5) + " L" + (dx + h) + " " + (dy + 5) + " L" + dx + " " + (dy + h + 5) + " L" + (dx - h) + " " + (dy + 5) + 'Z" fill="' + tc.col[2] + '" stroke="' + tc.col[2] + '" stroke-width="5" stroke-linejoin="round"/>' +
+        '<path d="M' + dx + " " + (dy - h) + " L" + (dx + h) + " " + dy + " L" + dx + " " + (dy + h) + " L" + (dx - h) + " " + dy + 'Z" fill="url(#' + e + ')" stroke="' + tc.col[1] + '" stroke-width="4" stroke-linejoin="round"/>' +
+        '<path d="M' + (dx - h + 3) + " " + (dy - 1) + " L" + dx + " " + (dy - h + 2) + '" stroke="#fff" stroke-opacity=".55" stroke-width="2" stroke-linecap="round"/>';
+    } else out += shadow(tc.x, tc.g, tc.s * (tc.c === "ا" ? .14 : .3)) + glyph();
+    return out + face(tc.f[0], tc.f[1], tc.f[2], tc.col[2], i) + "</g>";
   }
   // a happy face on each toy letter (they are the child's letter friends)
   function face(x, y, k, ink, i) {
@@ -99,7 +110,7 @@
       rg(id + "glow", n ? "#C9C2FF" : "#FFF3B0", n ? .45 : .9) + rg(id + "mist", n ? "#8C7BD6" : "#FFFFFF", n ? .25 : .7) + "</defs>" +
       '<rect width="400" height="540" fill="url(#' + id + 'sky)"/>';
     // sun / moon (top right, beside the title)
-    var X = 352, Y = 116;
+    var X = 354, Y = 104;
     if (n) {
       s += '<circle cx="' + X + '" cy="' + Y + '" r="70" fill="url(#' + id + 'glow)"/><circle cx="' + X + '" cy="' + Y + '" r="30" fill="#F4F1FF"/><circle cx="' + (X + 13) + '" cy="' + (Y - 9) + '" r="27" fill="#26215C"/>' +
         '<circle cx="' + (X - 16) + '" cy="' + (Y + 6) + '" r="3" fill="#D9D3F5"/><circle cx="' + (X - 8) + '" cy="' + (Y + 18) + '" r="2" fill="#D9D3F5"/>';

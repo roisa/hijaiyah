@@ -193,11 +193,14 @@
     ttl.setAttribute("role", "heading"); ttl.setAttribute("aria-level", "1"); ttl.setAttribute("aria-label", t("worldT"));
     [].forEach.call(ttl.children, function (c) { c.setAttribute("aria-hidden", "true"); });
     hero.appendChild(ttl);
-    var bub = el("div", "hw-bub", (st.name ? esc(t("hello", { n: st.name })) : "Assalamu'alaikum!") + " " + HJ.art("hand", 22, "waving"));
+    // Mo talks like a friend: the salam, then one warm line that changes (time of day, or something fun)
+    var lines = [greetShort(hr), t("bub1"), t("bub2"), t("bub3")], line = lines[(new Date().getDate() + hr) % lines.length];
+    var bub = el("div", "hw-bub", "<b>Assalamu'alaikum" + (st.name ? ", " + esc(st.name) : "") + "!</b><span>" + esc(line) + "</span>");
     hero.appendChild(bub);
     if (!st.name) { var chip = el("button", "chip hw-name", ic("user") + " " + esc(t("nameQ"))); chip.onclick = function () { nameSheet(home); }; hero.appendChild(chip); }
     var cta = el("div", "hw-cta");
-    var info = el("button", "hw-where", wi(cur.w, true).outerHTML + "<span><small>" + esc(t("book")) + " " + w.n + " · Level " + cur.id + "</small><b>" + esc(tr(w.name)) + "</b></span>");
+    var badge = '<span class="hw-bk" style="background:linear-gradient(160deg,' + WI[w.n].g[0] + "," + WI[w.n].g[1] + ')">' + (w.n < 7 ? w.n : HJ.art("book", 20)) + "</span>";
+    var info = el("button", "hw-where", badge + "<span><small>" + esc(t("book")) + " " + w.n + " · Level " + cur.id + "</small><b>" + esc(tr(w.name)) + "</b></span>");
     info.onclick = function () { A.unlock(); A.fx.tap(); map(cur.w); };
     var play = el("button", "hw-play", '<span class="hw-play-ic">' + ic("play") + "</span><b>" + esc(t("playBig")) + "</b>");
     play.setAttribute("aria-label", t("playBig") + " · " + tr(w.name) + " · Level " + cur.id);
@@ -266,6 +269,7 @@
     if (HJ.extras) { HJ.extras.arcadeRow(sc); var ch = HJ.extras.chestCard(); ch.classList.add("hm-chest"); sc.appendChild(ch); }
     sc.appendChild(el("div", "foot", '<span class="ar">رَبِّ زِدْنِي عِلْمًا</span>' + esc(t("footDua"))));
   }
+  function greetShort(hr) { return t(hr < 11 ? "bubMorning" : hr < 15 ? "bubDay" : hr < 18 ? "bubAfternoon" : "bubNight"); }
   function greetLine(hr) {
     if (hr < 11) return t("gMorning"); if (hr < 15) return t("gDay"); if (hr < 18) return t("gAfternoon"); return t("gNight");
   }
