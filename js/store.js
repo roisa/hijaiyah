@@ -115,6 +115,7 @@
     bubAfternoon: ["Sore-sore enaknya main huruf!", "Afternoons are for letter games!"], bubNight: ["Main sebentar, terus bobo ya.", "A little play, then off to bed."],
     bub1: ["Aku kangen kamu! Main lagi, yuk.", "I missed you! Let's play again."], bub2: ["Huruf-huruf sudah menunggumu!", "The letters are waiting for you!"], bub3: ["Siap petualangan hari ini?", "Ready for today's adventure?"],
     raceT: ["Balap Hijaiyah", "Hijaiyah Race"],
+    raceThis: ["Ini bunyinya:", "This is the sound:"], raceFinishT: ["Finis!", "Finish!"],
     raceHorn: ["Klakson", "Horn"], raceMusic: ["Musik", "Music"], pwShield: ["Gelembung pelindung!", "Bubble shield!"], pwMagnet: ["Magnet koin!", "Coin magnet!"], pwSaved: ["Gelembung menjagamu!", "The bubble kept you safe!"],
     tutTap: ["Ketuk sisi ini!", "Tap this side!"], tutStay: ["Tetap di jalur ini!", "Stay in this lane!"],
     racePassed: ["Kamu menyalip {n}! Masya Allah!", "You passed {n}! Masha Allah!"], raceCatch: ["{n} menyalip! Ayo kejar!", "{n} got ahead! Catch up!"],
