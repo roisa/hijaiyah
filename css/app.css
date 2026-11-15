@@ -1351,3 +1351,4 @@ img.mo-pad { background-image: radial-gradient(closest-side, rgba(40,30,90,.32),
 .rm-kart { position: absolute; transform: translateX(-50%); pointer-events: none; animation: hwBob 1.6s ease-in-out infinite; }
 [data-theme="dark"] .rm-road path:nth-child(2) { stroke: #3D4560; }
 @media (prefers-reduced-motion: reduce) { .r3-hand.on, .rm-stop.cur .rm-dot, .rm-kart { animation: none; } }
+.car { padding-top: 9px; padding-bottom: 9px; }

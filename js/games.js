@@ -26,8 +26,8 @@
       e.style.transform = "translateY(" + (L / 2 - inkMid).toFixed(1) + "px)";
     } catch (x) {}
   }
-  function centerLater(e) { (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () { requestAnimationFrame(function () { centerInk(e); }); }); }
-  HJ.centerInk = centerInk;
+  // (js/ink.js now centres every letter on every screen; this just asks for it straight away)
+  function centerLater(e) { (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () { requestAnimationFrame(function () { if (HJ.centerInk) HJ.centerInk(e); }); }); }
   function isWordy(it) { return (it.ar || "").replace(/[ً-ْ\s]/g, "").length > 2; }
   function latinEl(it) { return HJ.store.get().settings.latin && it.tr ? el("div", "lat", esc(HJ.latinFor(it.tr, HJ.store.get().lang))) : el("div"); }
   function sizeCls(it) { return it.quran ? "q" : isWordy(it) ? "w" : ""; }
