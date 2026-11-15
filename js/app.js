@@ -402,8 +402,31 @@
       bw.style.display = "";
       if (pose) { if (pose.indexOf("mo2:") === 0) { bw.style.display = "none"; return; } moI.src = MO(pose); }
       moI.classList.remove("hop"); void moI.offsetWidth; moI.classList.add("hop");
-      if (text) { bub.textContent = text; bub.classList.add("on"); clearTimeout(bubT); bubT = setTimeout(function () { bub.classList.remove("on"); }, 2600); }
+      if (text) { bub.textContent = text; bub.classList.add("on"); requestAnimationFrame(placeBub); clearTimeout(bubT); bubT = setTimeout(function () { bub.classList.remove("on"); }, 2600); }
       else bub.classList.remove("on");
+    }
+    // Mo's speech bubble never covers the game: try a few heights beside him; if none is free, no text bubble
+    // this time (Mo still says it out loud)
+    function placeBub() {
+      if (!bub.classList.contains("on") || bw.style.display === "none") return;
+      var boxes = [];
+      [].forEach.call(stage.children, function (c) {
+        var cs = getComputedStyle(c); if (cs.visibility === "hidden" || cs.display === "none" || !c.offsetHeight) return;
+        var parts = c.children.length && c.offsetWidth > stage.offsetWidth * .85 && /flex|grid/.test(cs.display) ? c.children : [c];
+        [].forEach.call(parts, function (x) { if (x.offsetHeight && getComputedStyle(x).visibility !== "hidden") boxes.push(x.getBoundingClientRect()); });
+      });
+      // slide the bubble down beside Mo's body until it is clear of the game (it can go as low as Mo's knees)
+      var room = Math.max(0, bw.offsetHeight - bub.offsetHeight - 20), cands = [0, room * .35, room * .7, room];
+      bub.style.position = "relative"; bub.style.top = "0px";
+      var tr = bub.style.transition; bub.style.transition = "none";          // measure the bubble where it will rest
+      var r0 = bub.getBoundingClientRect(); bub.style.transition = tr;
+      for (var i = 0; i < cands.length; i++) {
+        bub.style.top = cands[i] + "px";
+        var L = r0.left, T = r0.top + cands[i], R = r0.right, B = r0.bottom + cands[i];
+        if (B > innerHeight - 4) break;
+        if (!boxes.some(function (k) { return k.left < R + 6 && k.right > L - 6 && k.top < B + 6 && k.bottom > T - 6; })) return;
+      }
+      bub.style.top = "0px"; bub.classList.remove("on");
     }
     function show() {
       if (my !== runId) return;
