@@ -12,12 +12,40 @@
   function lang() { return HJ.store.get().lang; }
   var MO = "assets/mo/mo-";
 
+  /* ---------- Mo's face for the road: cut from the render 1 picture, centred on his face (made once) ---------- */
+  var faceCache = null;
+  function faceUrl(cb) {
+    if (faceCache) return cb(faceCache);
+    var im = new Image();
+    im.onload = function () {
+      try {
+        var W0 = im.naturalWidth, H0 = im.naturalHeight, c = document.createElement("canvas"); c.width = 120; c.height = Math.round(120 * H0 / W0);
+        var g = c.getContext("2d"); g.drawImage(im, 0, 0, c.width, c.height);
+        var d = g.getImageData(0, 0, c.width, c.height).data, top = c.height, x0 = c.width, x1 = 0;
+        for (var y = 0; y < c.height; y++) for (var x = 0; x < c.width; x++) if (d[(y * c.width + x) * 4 + 3] > 60) { if (y < top) top = y; }
+        // the head is the top ~30% of the figure; find its width on the row through the eyes
+        var row = top + Math.round(c.height * .12);
+        for (x = 0; x < c.width; x++) if (d[(row * c.width + x) * 4 + 3] > 60) { if (x < x0) x0 = x; if (x > x1) x1 = x; }
+        var k = W0 / c.width, side = (x1 - x0) * k * 1.12, cx = (x0 + x1) / 2 * k, cy = top * k + side * .5;
+        var o = document.createElement("canvas"); o.width = o.height = 128; var q = o.getContext("2d");
+        var bgr = q.createLinearGradient(0, 0, 0, 128); bgr.addColorStop(0, "#BFE6FF"); bgr.addColorStop(1, "#E9F7FF");
+        q.beginPath(); q.arc(64, 64, 64, 0, 7); q.clip(); q.fillStyle = bgr; q.fillRect(0, 0, 128, 128);
+        q.drawImage(im, cx - side / 2, cy - side / 2, side, side, 0, 0, 128, 128);
+        faceCache = o.toDataURL();
+      } catch (e) { faceCache = MO + "pose-41.webp"; }
+      cb(faceCache);
+    };
+    im.onerror = function () { cb(MO + "pose-41.webp"); };
+    im.src = MO + "pose-41.webp";
+  }
+
   /* ---------- the road ---------- */
   function track(boss) {
     var w = el("div", "road"), n = 0;
     w.innerHTML = '<div class="road-in"><div class="road-line"><i></i></div><div class="road-dots"></div>' +
-      '<div class="road-mo"><span class="rm-head" style="background-image:url(' + MO + 'pose-41.webp)"></span></div></div>' +
+      '<div class="road-mo"><span class="rm-head"></span><i class="rm-tail"></i></div></div>' +
       '<div class="road-end">' + HJ.art(boss ? "trophy" : "gift", 34) + "</div>";
+    faceUrl(function (u) { var h = w.querySelector(".rm-head"); if (h) h.style.backgroundImage = "url(" + u + ")"; });
     var fill = w.querySelector(".road-line i"), mo = w.querySelector(".road-mo"), dots = w.querySelector(".road-dots"), end = w.querySelector(".road-end");
     function dotsFor(total) {
       if (dots.childElementCount === total) return;

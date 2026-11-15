@@ -1426,3 +1426,11 @@ button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
   box-shadow: 0 0 18px rgba(91,227,138,.7); animation: hitRing .6s ease-out forwards; }
 @keyframes hitRing { to { transform: translate(-50%, -50%) scale(1.5); opacity: 0; border-width: 1px; } }
 @media (prefers-reduced-motion: reduce) { .hit-ring { animation-duration: .01s; } }
+/* Mo on the progress road: a round face badge with a ring and a little pointer, never over the close button */
+.road-in { margin-left: 30px; }
+.road-mo { width: 44px; height: 52px; margin: -27px 0 0 -22px; display: flex; flex-direction: column; align-items: center; }
+.rm-head { width: 44px; height: 44px; border: 3px solid #fff; background-size: cover !important; background-position: center !important; background-color: #CFEFFF;
+  box-shadow: 0 0 0 2.5px #22C06E, 0 4px 10px rgba(20,60,110,.35); }
+.rm-tail { width: 0; height: 0; margin-top: -1px; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 7px solid #22C06E; }
+[data-theme="dark"] .rm-head { border-color: #fff; box-shadow: 0 0 0 2.5px #5BE38A, 0 4px 10px rgba(0,0,0,.5); }
+[data-theme="dark"] .rm-tail { border-top-color: #5BE38A; }
