@@ -66,7 +66,9 @@
     said3.onclick = function () {
       if (said >= 3 || said3.disabled) return; said++; A.fx.coin();
       dots.children[said - 1].classList.add("on"); HJ.juice.burst(null, null, 8);
-      if (said === 3) { ready(false); ctx.cheer(); nextB.style.visibility = "visible"; HJ.juice.bump(nextB); }
+      // every time the child says it, the letter does a different little trick (a reason to say it again)
+      card.classList.remove("r1", "r2", "r3"); void card.offsetWidth; card.classList.add("r" + said);
+      if (said === 3) { ready(false); ctx.cheer(); nextB.style.visibility = "visible"; HJ.juice.bump(nextB); after(ctx, 1600, ctx.next); }
       else { ready(false); after(ctx, 700, play); }
     };
     ready(false);

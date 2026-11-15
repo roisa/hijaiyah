@@ -88,8 +88,11 @@
     // 10 steps at most (was 12): short enough for a 4–5 year old's attention, every game type still visits often
     if (!lv.noTrace) st.push(S.trace(BY[newK[0]].seat ? "ا" : BY[newK[0]].c));
     st.push(S.pick(pick(nw), pool));
-    st.push(S.pop(pick(nw), pool));
-    st.push(S.train(randChain(pool, Math.min(4, 3 + pool.length / 8 | 0), nw)));
+    // a "play" game in the middle of every level (Feed Mo / bubbles / shadows), so it never feels like a worksheet
+    var play = playStep(lv, pool, nw);
+    if (pool.length >= 4 && play && levelNo(lv) % 2 === 0) st.push(play); else st.push(S.pop(pick(nw), pool));
+    if (pool.length < 4 && play) st.push(play);
+    else st.push(S.train(randChain(pool, Math.min(4, 3 + pool.length / 8 | 0), nw)));
     if (!lv.noTrace && newK[1]) st.push(S.trace(BY[newK[1]].c));
     else st.push(S.yesno(pick(nw), pool));
     st.push(S.bridge(pool, nw, 3));
@@ -98,6 +101,18 @@
       st.push(S.match(ps.map(function (x) { return [x, { ar: x.ar, au: x.au, soundOnly: 1 }]; })));   // hear the sound, find the letter
     } else st.push(S.train(randChain(pool, Math.min(5, 3 + pool.length / 8 | 0), nw)));
     return st;
+  }
+
+  function levelNo(lv) { return parseInt(String(lv.id).split("-")[1], 10) || 0; }
+  function playStep(lv, pool, nw) {
+    if (!HJ.toddlerSteps) return null;
+    var kinds = pool.length >= 3 ? ["feed", "bubbles", "shadow"] : ["feed", "bubbles"];
+    var k = kinds[levelNo(lv) % kinds.length];
+    // the new letters come first, so the game practises what was just learned
+    var P = uniqBy(shuffle(nw).concat(shuffle(pool)), function (x) { return x.ar; });
+    var s = HJ.toddlerSteps(k, P)[0];
+    if (s && s.rounds) s.rounds.forEach(function (r, i) { if (i < nw.length && nw[i]) { var q = nw[i]; if (r.options.some(function (o) { return o.ar === q.ar; })) r.q = q; } });
+    return s || null;
   }
 
   function reviewSteps(lv) {

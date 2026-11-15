@@ -356,7 +356,8 @@
     var top = el("div", "lv-top"), x = el("button", "nav-btn", ic("close")), bar = el("div", "bar", "<i></i>"), hz = el("div", "hearts glass");
     var goal = el("div", "bar-goal", HJ.art(boss ? "trophy" : "star", 30)), combo = 0, missed = [], replayed = false, collected = 0;
     x.setAttribute("aria-label", t("close"));
-    var barWrap = el("div", "bar-wrap"); barWrap.appendChild(bar); barWrap.appendChild(goal);
+    var barWrap = el("div", "bar-wrap"), road = HJ.fun ? HJ.fun.track(boss) : null, bonusDone = !road || boss || lv.kind === "arcade" || !!opts.onDone;
+    if (road) barWrap.appendChild(road.el); else { barWrap.appendChild(bar); barWrap.appendChild(goal); }
     top.appendChild(x); top.appendChild(barWrap); if (boss) top.appendChild(hz);
     s.appendChild(top);
     var stage = el("div", "stage"); s.appendChild(stage);
@@ -380,7 +381,7 @@
     s.addEventListener("pointerdown", function () { lastTouch = Date.now(); }, true);
     var idleT = setInterval(function () {
       if (my !== runId || !document.body.contains(s)) { clearInterval(idleT); return; }
-      if (document.querySelector(".veil") || document.visibilityState !== "visible") { lastTouch = Date.now(); return; }
+      if (document.querySelector(".veil,.bonus") || document.visibilityState !== "visible") { lastTouch = Date.now(); return; }
       if (nudgeStep !== idx) { nudgeStep = idx; nudges = 0; }
       if (Date.now() - lastTouch < 12000 || nudges >= 2 || bw.style.display === "none") return;
       var step = steps[idx]; if (!step || !INSTR[step.type]) return;
@@ -400,7 +401,13 @@
       if (my !== runId) return;
       stage.innerHTML = ""; var tok = ++stepToken;
       bar.firstChild.style.width = (idx / steps.length * 100) + "%";
+      if (road) road.set(idx, steps.length);
       if (idx >= steps.length) return finish();
+      // half way: a short "catch the stars" break (once a level, never on a test)
+      if (!bonusDone && idx >= 3 && idx === Math.floor(steps.length / 2)) {
+        bonusDone = true; bw.style.display = "none";
+        HJ.fun.bonus(function () { if (my === runId) show(); }); return;
+      }
       var step = steps[idx], g = HJ.games[step.type], nexted = false;
       var ctx = {
         stage: stage, lv: lv, step: step,
@@ -410,7 +417,7 @@
           A.fx.good(); combo++; collected++; react("yay");
           if (!quiet) mo(HJ.util.pick(CHEER), HJ.util.pick([t("great"), t("good"), "Yeay!", "Masya Allah!"])); else if (bw.style.display !== "none") mo(HJ.util.pick(CHEER));
           var p = J.at(); J.burst(p.x, p.y, 10); J.buzz(15);
-          J.fly(p, bar.firstChild.getBoundingClientRect().width > 4 ? bar.firstChild : bar, HJ.art("sparkle", 24));
+          J.fly(p, road ? road.el.querySelector(".road-mo") : bar.firstChild.getBoundingClientRect().width > 4 ? bar.firstChild : bar, HJ.art("sparkle", 24));
           if ([3, 5, 8, 12, 16].indexOf(combo) >= 0) {
             setTimeout(function () { if (!ctx.alive()) return; A.fx.combo(combo); J.banner(HJ.art("flame", 44) + "<b>" + esc(t("combo", { n: combo })) + "</b><small>" + esc(HJ.util.pick([t("great"), "Masya Allah!", t("good")])) + "</small>", "combo"); }, 350);
           }
@@ -463,7 +470,8 @@
       HJ.mission("level");
       var all = HJ.allLevels(), nxt = all[all.indexOf(lv) + 1];
       if (first && nxt) { S.get().justUnlocked = nxt.id; S.save(); }
-      results(lv, stars, first, before);
+      if (road) HJ.fun.gift(function () { results(lv, stars, first, before); });
+      else results(lv, stars, first, before);
     }
     show();
   }
