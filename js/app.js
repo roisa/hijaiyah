@@ -184,7 +184,15 @@
     // ---- Hijaiyah World: the floating island (js/world.js) ----
     var hero = el("section", "hw");
     hero.innerHTML = HJ.world.hero(dark);
-    hero.appendChild(el("div", "hw-title", '<small>Baby Mo</small><b>' + esc(t("worldT")) + "</b>"));
+    // the title: a candy word "Hijaiyah" (each letter its own colour) and a ribbon ("Dunia" above / "World" below)
+    var COLS = ["#FF5D73", "#FF9F1C", "#FFD23F", "#3DDC84", "#2EC4B6", "#4D96FF", "#9B6DFF", "#FF6FB5"];
+    var word = '<span class="hw-word">' + HJ.art("sparkle", 22, "hw-spk l") + "Hijaiyah".split("").map(function (ch, i) {
+      return '<span data-ch="' + ch + '" style="--c:' + COLS[i] + ";--r:" + (i % 2 ? 3 : -3) + "deg;animation-delay:" + (i * .13).toFixed(2) + 's">' + ch + "</span>"; }).join("") + HJ.art("sparkle", 18, "hw-spk r") + "</span>";
+    var rib = '<span class="hw-rib">' + esc(EN() ? "World" : "Dunia") + "</span>";
+    var ttl = el("div", "hw-title", EN() ? word + rib : rib + word);
+    ttl.setAttribute("role", "heading"); ttl.setAttribute("aria-level", "1"); ttl.setAttribute("aria-label", t("worldT"));
+    [].forEach.call(ttl.children, function (c) { c.setAttribute("aria-hidden", "true"); });
+    hero.appendChild(ttl);
     var bub = el("div", "hw-bub", (st.name ? esc(t("hello", { n: st.name })) : "Assalamu'alaikum!") + " " + HJ.art("hand", 22, "waving"));
     hero.appendChild(bub);
     if (!st.name) { var chip = el("button", "chip hw-name", ic("user") + " " + esc(t("nameQ"))); chip.onclick = function () { nameSheet(home); }; hero.appendChild(chip); }
