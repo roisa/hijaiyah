@@ -12,6 +12,22 @@
     return s;
   }
   function arEl(it, cls) { var e = el("div", "ar " + (cls || ""), arHtml(it)); return e; }
+  // put a glyph's ink in the middle of its line box (font metrics leave Arabic letters high or low)
+  var inkCv = null;
+  function centerInk(e) {
+    try {
+      var cs = getComputedStyle(e), fs = parseFloat(cs.fontSize), L = parseFloat(cs.lineHeight) || fs * 1.3;
+      inkCv = inkCv || document.createElement("canvas").getContext("2d");
+      inkCv.font = fs + "px " + cs.fontFamily;
+      var m = inkCv.measureText(e.textContent);
+      if (!m.fontBoundingBoxAscent) return;
+      var base = (L - (m.fontBoundingBoxAscent + m.fontBoundingBoxDescent)) / 2 + m.fontBoundingBoxAscent;
+      var inkMid = base - (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2;
+      e.style.transform = "translateY(" + (L / 2 - inkMid).toFixed(1) + "px)";
+    } catch (x) {}
+  }
+  function centerLater(e) { (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () { requestAnimationFrame(function () { centerInk(e); }); }); }
+  HJ.centerInk = centerInk;
   function isWordy(it) { return (it.ar || "").replace(/[ً-ْ\s]/g, "").length > 2; }
   function latinEl(it) { return HJ.store.get().settings.latin && it.tr ? el("div", "lat", esc(HJ.latinFor(it.tr, HJ.store.get().lang))) : el("div"); }
   function sizeCls(it) { return it.quran ? "q" : isWordy(it) ? "w" : ""; }
@@ -50,7 +66,8 @@
     }
     add(st, el("div", "ask", t("tapHear")));
     var card = el("button", "bigcard glass " + (it.quran ? "qq" : isWordy(it) ? "wordy" : ""));
-    card.appendChild(arEl(it)); card.appendChild(latinEl(it)); card.appendChild(el("span", "tap", HJ.ic("speaker")));
+    var bigAr = arEl(it); card.appendChild(bigAr); card.appendChild(latinEl(it)); card.appendChild(el("span", "tap", HJ.ic("speaker")));
+    if (!it.quran && !isWordy(it)) centerLater(bigAr);
     st.appendChild(card);
     var dots = el("div", "dots", "<i></i><i></i><i></i>");
     var lbl = el("div", "sub", t("copy3"));
@@ -174,7 +191,8 @@
   G.yesno = function (s, ctx) {
     var st = ctx.stage, locked = false, same = s.item.ar === s.heard.ar;
     add(st, el("div", "ask", t("isRight")));
-    var card = el("button", "bigcard glass " + (s.item.quran ? "qq" : isWordy(s.item) ? "wordy" : "")); card.appendChild(arEl(s.item));
+    var card = el("button", "bigcard glass " + (s.item.quran ? "qq" : isWordy(s.item) ? "wordy" : "")), yAr = arEl(s.item); card.appendChild(yAr);
+    if (!s.item.quran && !isWordy(s.item)) centerLater(yAr);
     card.onclick = function () { A.say(s.heard.au); };
     st.appendChild(card);
     var row = el("div", "row"), y = el("button", "btn big", HJ.ic("check") + " " + t("yes")), n = el("button", "btn big red", HJ.ic("close") + " " + t("no"));

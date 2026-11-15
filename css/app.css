@@ -999,7 +999,7 @@ html.big .tabbar { max-width: 600px; }
 .road-dots i.on { background: #FFD43B; transform: scale(1.25); box-shadow: 0 0 6px rgba(255,190,0,.8); }
 .road-mo { position: absolute; top: 50%; left: 0; width: 42px; height: 42px; margin: -23px 0 0 -21px; transition: left .6s cubic-bezier(.3,1.3,.5,1); z-index: 1; }
 .rm-head { display: block; width: 42px; height: 42px; border-radius: 50%; border: 3px solid #fff; background-color: #CFEFFF; background-repeat: no-repeat;
-  background-size: 134px 134px; background-position: -56px -27px; box-shadow: 0 3px 8px rgba(20,60,110,.3); }
+  background-size: 140px 140px; background-position: -49px -30px; box-shadow: 0 3px 8px rgba(20,60,110,.3); }
 .road-mo.jump { animation: roadJump .6s cubic-bezier(.3,1.4,.5,1); }
 @keyframes roadJump { 35% { transform: translateY(-14px) rotate(-8deg); } 70% { transform: translateY(0) rotate(4deg); } }
 .road-end { flex: 0 0 auto; display: grid; place-items: center; filter: drop-shadow(0 3px 4px rgba(200,60,60,.3)); animation: giftWait 2.6s ease-in-out infinite; transform-origin: 50% 90%; }
@@ -1198,3 +1198,10 @@ img.mo-pad { background-image: radial-gradient(closest-side, rgba(40,30,90,.32),
 /* Indonesian: the "Dunia" ribbon sits just above, behind the "Hijaiyah" letters */
 .hw-rib.back { z-index: 0; margin-bottom: -2px; }
 .hw-rib.back + .hw-word { z-index: 2; }
+/* the big letter card: the letter sits in the true middle. Each glyph's ink is measured in games.js (centerInk)
+   and nudged, since alif carries hamza+fathah high and ba's dot hangs low; the latin label sits at the bottom edge */
+.bigcard { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.bigcard:not(.qq):not(.wordy) { min-height: calc(clamp(92px, 30vw, 168px) * 1.3 + 46px); padding-bottom: 26px; padding-top: 20px; }
+.bigcard:not(.qq):not(.wordy) .ar { line-height: 1.3; padding: 0; margin: 0; }
+.bigcard:not(.qq):not(.wordy) .lat { position: absolute; left: 0; right: 0; bottom: 10px; margin: 0; padding: 0; }
+@media (max-height: 640px) { .bigcard:not(.qq):not(.wordy) { min-height: calc(88px * 1.3 + 46px); } }

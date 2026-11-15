@@ -16,7 +16,7 @@
   function track(boss) {
     var w = el("div", "road"), n = 0;
     w.innerHTML = '<div class="road-in"><div class="road-line"><i></i></div><div class="road-dots"></div>' +
-      '<div class="road-mo"><span class="rm-head" style="background-image:url(' + MO + 'run.webp)"></span></div></div>' +
+      '<div class="road-mo"><span class="rm-head" style="background-image:url(' + MO + 'pose-41.webp)"></span></div></div>' +
       '<div class="road-end">' + HJ.art(boss ? "trophy" : "gift", 34) + "</div>";
     var fill = w.querySelector(".road-line i"), mo = w.querySelector(".road-mo"), dots = w.querySelector(".road-dots"), end = w.querySelector(".road-end");
     function dotsFor(total) {
