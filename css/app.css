@@ -1352,3 +1352,11 @@ img.mo-pad { background-image: radial-gradient(closest-side, rgba(40,30,90,.32),
 [data-theme="dark"] .rm-road path:nth-child(2) { stroke: #3D4560; }
 @media (prefers-reduced-motion: reduce) { .r3-hand.on, .rm-stop.cur .rm-dot, .rm-kart { animation: none; } }
 .car { padding-top: 9px; padding-bottom: 9px; }
+/* letters sit in the true middle (js/ink.js): even padding where a card holds one letter or word */
+.bigcard:not(.qq):not(.wordy) { padding-top: 23px; padding-bottom: 23px; }
+.wi .card > span { display: inline-block; line-height: 1.3; }
+.rs-card { padding-top: 3px; padding-bottom: 3px; }
+.rm-tab .wi .card span { font-size: 10px; }
+/* word cards: the word in the middle, the latin label at the bottom edge (like the letter cards) */
+.bigcard.wordy { min-height: calc(clamp(54px, 15vw, 96px) * 1.5 + 46px); padding-top: 22px; padding-bottom: 26px; }
+.bigcard.wordy .lat { position: absolute; left: 0; right: 0; bottom: 10px; margin: 0; padding: 0; }

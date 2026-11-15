@@ -14,11 +14,17 @@
     if (m.fontBoundingBoxAscent == null || m.actualBoundingBoxAscent == null) return null;
     return (cache[k] = { fa: m.fontBoundingBoxAscent, fd: m.fontBoundingBoxDescent, ia: m.actualBoundingBoxAscent, id: m.actualBoundingBoxDescent, il: m.actualBoundingBoxLeft, ir: m.actualBoundingBoxRight, w: m.width });
   }
-  function short(txt) { return txt && txt.replace(/[ً-ْٰـ\s]/g, "").length <= 3; }
+  function short(txt) { return txt && txt.replace(/[ً-ْٰـ\s]/g, "").length <= 8; }   // a letter, a syllable or one word
   function eligible(e) {
-    if (!e.isConnected || e.closest(".qq, .q, .qw, .w, .wordy, .no-ink, svg")) return false;
+    if (!e.isConnected || e.closest(".qq, .q, .qw, .no-ink, svg")) return false;
+    if (HJ.QTEXT && HJ.QTEXT[e.textContent.trim().normalize("NFC")]) return false;           // Qur'an text is never moved
     var txt = e.textContent.trim(); if (!txt || !short(txt) || !/[؀-ۿ]/.test(txt)) return false;
-    var cs = getComputedStyle(e); if (cs.display === "inline" || cs.display === "none") return false;
+    var cs = getComputedStyle(e); if (cs.display === "none") return false;
+    if (cs.display === "inline") {
+      // a letter that is the only thing in its card (Feed Mo's bubble, the shadow pieces, bubbles) can be centred too
+      if (!e.parentElement || e.parentElement.textContent.trim() !== txt) return false;
+      e.style.display = "inline-block";
+    }
     return true;
   }
   function center(e) {
@@ -27,6 +33,7 @@
     var txt = e.textContent.trim(), m = metrics(cs.fontStyle + " " + cs.fontWeight + " " + fs + "px " + cs.fontFamily, txt); if (!m) return;
     var padT = parseFloat(cs.paddingTop) || 0, padB = parseFloat(cs.paddingBottom) || 0, H = e.clientHeight - padT - padB;
     var LH = parseFloat(cs.lineHeight); if (!LH) LH = m.fa + m.fd;
+    if (H > LH * 1.6) return;                                   // wrapped onto two lines: leave it
     // where the ink sits from the element's top (text is laid out in the first line box)
     var base = padT + (LH - (m.fa + m.fd)) / 2 + m.fa, inkMid = base - (m.ia - m.id) / 2;
     var dy = padT + H / 2 - inkMid;
