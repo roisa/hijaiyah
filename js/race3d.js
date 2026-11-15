@@ -280,6 +280,7 @@
     var hud = el("div", "r3-hud", '<div class="r3-pos"><b>1</b><small>/3</small></div><div class="r3-lap"></div>'); sc.appendChild(hud);
     var cam = el("div", "r3-cam"), camImg = el("img"); camImg.alt = "Baby Mo"; cam.appendChild(camImg); sc.appendChild(cam);
     var callout = el("div", "r3-call"); sc.appendChild(callout);
+    var listen = el("div", "r3-listen", '<span class="rl-ear">' + HJ.ic("speaker") + "</span><b>" + esc(t("raceListen")) + "</b>"); sc.appendChild(listen);
     var horn = el("button", "r3-horn", '<svg viewBox="0 0 48 48" width="34" height="34" aria-hidden="true"><path d="M8 20h8l16-10v28L16 28H8z" fill="#fff"/><path d="M36 17c3 2 4 5 4 7s-1 5-4 7" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/></svg>');
     horn.setAttribute("aria-label", t("raceHorn")); sc.appendChild(horn);
     var mus = el("button", "nav-btn rt-mus" + ((S.get().settings || {}).raceMusic === false ? " off" : ""), '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 18V6l11-2v12" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.8" fill="currentColor"/><circle cx="17.5" cy="16" r="2.8" fill="currentColor"/></svg>');
@@ -488,23 +489,43 @@
       // speaker symbol on the banner
       q.fillStyle = "#fff"; q.beginPath(); q.moveTo(w / 2 - 30, 26); q.lineTo(w / 2 - 14, 26); q.lineTo(w / 2 + 4, 12); q.lineTo(w / 2 + 4, 62); q.lineTo(w / 2 - 14, 48); q.lineTo(w / 2 - 30, 48); q.closePath(); q.fill();
       q.strokeStyle = "#fff"; q.lineWidth = 6; q.lineCap = "round"; q.beginPath(); q.arc(w / 2 + 8, 37, 16, -.8, .8); q.stroke(); q.beginPath(); q.arc(w / 2 + 8, 37, 28, -.8, .8); q.stroke();
-      for (var l = 0; l < 3; l++) {
-        var cx = w / 2 + LANES[l] / 2.4 * w, bw = 300, bh = 270, by = 92, item = G.signs[l];
-        var state = G.done ? (l === G.good ? "good" : l === G.picked ? "bad" : "dim") : "";
-        q.strokeStyle = "#8E9BB0"; q.lineWidth = 6; q.beginPath(); q.moveTo(cx - 60, 74); q.lineTo(cx - 60, by + 10); q.moveTo(cx + 60, 74); q.lineTo(cx + 60, by + 10); q.stroke();
-        q.fillStyle = state === "good" ? "#22C06E" : state === "bad" ? "#FF6B6B" : ["#FFD43B", "#7CC8FF", "#C9A7FF"][l];
-        rr(q, cx - bw / 2, by, bw, bh, 36); q.fill();
-        q.fillStyle = state === "dim" ? "rgba(255,255,255,.55)" : "#fff"; rr(q, cx - bw / 2 + 14, by + 14, bw - 28, bh - 28, 26); q.fill();
-        q.fillStyle = "#1E2A3A"; q.textAlign = "center"; q.direction = "rtl";
-        var fs = item.ar.replace(/[ً-ْ]/g, "").length > 2 ? 120 : 190; q.font = fs + "px 'Scheherazade New', serif";
-        var m = q.measureText(item.ar); if (m.width > bw - 50) { fs = fs * (bw - 50) / m.width; q.font = fs + "px 'Scheherazade New', serif"; m = q.measureText(item.ar); }
-        var mid = m.actualBoundingBoxAscent != null ? (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2 : fs * .3;
-        q.fillText(item.ar, cx, by + bh / 2 + mid); q.direction = "ltr";
-      }
+      // hangers for the three boards (the boards themselves are drawn on their own, so they can swing)
+      for (var l = 0; l < 3; l++) { var hx = w / 2 + LANES[l] / 2.4 * w; q.strokeStyle = "#8E9BB0"; q.lineWidth = 6; q.beginPath(); q.moveTo(hx - 60, 74); q.lineTo(hx - 60, 104); q.moveTo(hx + 60, 74); q.lineTo(hx + 60, 104); q.stroke(); }
       G.spr = { c: c, w: w, h: h, ww: 2.4 }; G.sprState = G.done + "" + G.picked;
       return G.spr;
     }
-    function drawGate(G, P, clip) { drawSprite(gateSprite(G), P, 0, clip, 0); }
+    // one letter board: a chunky toy sign with a coloured rim and lip, the letter big and bold in a deep colour
+    var BOARD = [["#FFD43B", "#E0A800", "#B8410E"], ["#7CC8FF", "#3D8FE0", "#173F8C"], ["#C9A7FF", "#8B63F0", "#4B2A9E"]];
+    function boardSprite(G, l) {
+      G.bspr = G.bspr || []; var st = G.done ? (l === G.good ? "good" : l === G.picked ? "bad" : "dim") : "";
+      if (G.bspr[l] && G.bspr[l].st === st) return G.bspr[l];
+      var w = 320, h = 320, c = document.createElement("canvas"); c.width = w; c.height = h; var q = c.getContext("2d");
+      var C = st === "good" ? ["#5BE38A", "#17A35B", "#0B6B3A"] : st === "bad" ? ["#FF8A8A", "#D93A3A", "#8A1A1A"] : BOARD[l];
+      q.globalAlpha = st === "dim" ? .55 : 1;
+      q.fillStyle = "rgba(0,0,0,.18)"; rr(q, 16, 30, w - 32, h - 40, 44); q.fill();                 // shadow
+      q.fillStyle = C[1]; rr(q, 10, 22, w - 20, h - 34, 44); q.fill();                                // lip
+      q.fillStyle = C[0]; rr(q, 10, 6, w - 20, h - 40, 44); q.fill();                                  // rim
+      q.fillStyle = "#fff"; rr(q, 28, 24, w - 56, h - 76, 32); q.fill();                               // face
+      q.fillStyle = "rgba(255,255,255,.55)"; rr(q, 30, 12, w - 120, 10, 5); q.fill();                  // shine
+      var item = G.signs[l], fs = item.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? 120 : 196;
+      q.direction = "rtl"; q.textAlign = "center"; q.font = fs + "px 'Scheherazade New', serif";
+      var m = q.measureText(item.ar); if (m.width > w - 90) { fs = fs * (w - 90) / m.width; q.font = fs + "px 'Scheherazade New', serif"; m = q.measureText(item.ar); }
+      var mid = m.actualBoundingBoxAscent != null ? (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2 : fs * .3, cy = 24 + (h - 76) / 2 + mid;
+      q.lineJoin = "round"; q.strokeStyle = C[2]; q.lineWidth = 7; q.strokeText(item.ar, w / 2, cy);       // bold: a stroke in the same deep colour
+      q.fillStyle = C[2]; q.fillText(item.ar, w / 2, cy); q.direction = "ltr";
+      if (st === "good") { q.fillStyle = "#17A35B"; q.beginPath(); q.arc(w - 40, 40, 30, 0, 7); q.fill(); q.strokeStyle = "#fff"; q.lineWidth = 9; q.lineCap = "round"; q.beginPath(); q.moveTo(w - 54, 40); q.lineTo(w - 44, 52); q.lineTo(w - 26, 28); q.stroke(); }
+      return (G.bspr[l] = { c: c, w: w, h: h, ww: 2.4 * w / 1100, st: st });
+    }
+    function drawGate(G, P, clip) {
+      var gs = gateSprite(G); drawSprite(gs, P, 0, clip, 0);
+      var gw = P.s * gs.ww * ROADW * W / 2, gh = gw * gs.h / gs.w;
+      for (var l = 0; l < 3; l++) {
+        // each board swings a little on its own; while the letter is being called they all bounce
+        var callNow = curGate === G && !G.done && listen.classList.contains("on");
+        var bob = calm ? 0 : Math.sin(tRace * 3 + l * 2.1) * .012 + (callNow ? Math.abs(Math.sin(tRace * 9 + l)) * .03 : 0);
+        drawSprite(boardSprite(G, l), P, LANES[l], clip, gh * ((560 - 104 - 300) / 560 + bob));
+      }
+    }
 
     /* ---- particles (screen space) ---- */
     var parts = [];
@@ -569,14 +590,14 @@
       gates.forEach(function (G) {
         if (G.done) return;
         var dist = G.seg - pSeg;
-        if (!G.said && dist < 210 && phase === "race") { G.said = true; curGate = G; sayGate(); if (tut && G === gates[0]) { tutOn = true; tip.classList.add("gone"); } }
+        if (!G.said && dist < 400 && phase === "race") { G.said = true; curGate = G; callGate(G); if (tut && G === gates[0]) { tutOn = true; tip.classList.add("gone"); } }
         if (tutOn && G === gates[0]) { var dir = G.good - laneI; hand.className = "r3-hand on " + (dir < 0 ? "l" : dir > 0 ? "r" : "c"); hand.setAttribute("data-say", dir === 0 ? t("tutStay") : t("tutTap")); }
         if (dist <= 0) {
           G.done = true; G.picked = lane;
           if (tutOn) { tutOn = false; tut = false; hand.className = "r3-hand"; S.get().raceTut = 1; S.save(); }
           if (lane === G.good) { okN++; boost = 2.2; slow = 0; setCam("yes"); puff(W / 2, H * .6, 30, "star"); A.fx.combo(okN); J.buzz(15); callText(HJ.util.pick([t("raceTurbo"), "Masya Allah!", t("great")]), "green"); }
           else { if (shield > 0) { shield = 0; callText(t("pwSaved"), "blue"); } else { slow = 1.2; boost = 0; } setCam("oh"); A.fx.bad(); J.buzz([20, 30, 20]); if (G.q.k && S.addMiss) S.addMiss(G.q);
-            callText('<small>' + HJ.ic("speaker") + " " + esc(t("raceThis")) + '</small><span class="ans-box' + (G.q.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? " w" : "") + '"><span class="ar">' + esc(G.q.ar) + "</span></span>", "ans"); shake = .4; setTimeout(function () { if (my === live) A.say(G.q.au); }, 300); }
+            callText('<small>' + HJ.ic("speaker") + " " + esc(t("raceThis")) + '</small><span class="ans-box' + (G.q.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? " w" : "") + '"><span class="ar">' + esc(G.q.ar) + "</span></span>", "ans"); shake = .4; setTimeout(function () { if (my === live) A.sayNow(G.q.au); }, 250); }
           setTimeout(function () { if (my === live) setCam("mo"); }, 1600);
         }
       });
@@ -595,14 +616,20 @@
       hud.querySelector(".r3-pos b").textContent = place;
       if (place !== lastPlace && phase === "race" && tRace - talkT > 8 && !gates.some(function (G) { return !G.done && G.seg - pSeg < 300; })) {
         var who2 = riv.filter(function (rv) { return Math.abs(rv.z - pAbs) < 40 * SEG; })[0];
-        if (who2) { talkT = tRace; var nm = who2.k === "ais" ? "Ais" : "Kak Adam"; var line = place < lastPlace ? t("racePassed", { n: nm }) : t("raceCatch", { n: nm }); callText(esc(line), place < lastPlace ? "green" : "gold"); A.talk(line, lang()); }
+        if (who2) { talkT = tRace; var nm = who2.k === "ais" ? "Ais" : "Kak Adam"; var line = place < lastPlace ? t("racePassed", { n: nm }) : t("raceCatch", { n: nm }); callText(esc(line), place < lastPlace ? "green" : "gold"); }
       }
       if (place !== lastPlace) { lastPlace = place; J.bump(hud.querySelector(".r3-pos")); }
       function pc(z) { return Math.max(0, Math.min(1, (z - PLAYERZ) / (TOTAL - PLAYERZ))) * 100 + "%"; }
       heads.mo.style.left = pc(pAbs); heads.ais.style.left = pc(riv[0].z); heads.adam.style.left = pc(riv[1].z);
       if (phase === "race" && pos + PLAYERZ >= TOTAL) finish();
     }
-    function sayGate() { if (curGate && !curGate.done) { spk.classList.remove("ping"); void spk.offsetWidth; spk.classList.add("ping"); snd.duck(true); A.say(curGate.q.au).then(function () { snd.duck(false); }); } }
+    function sayGate() { if (curGate && !curGate.done) { spk.classList.remove("ping"); void spk.offsetWidth; spk.classList.add("ping"); snd.duck(true); A.sayNow(curGate.q.au).then(function () { snd.duck(false); }); } }
+    // as an arch comes: "Listen!" + the sound, then the sound again ("ba … ba!")
+    function callGate(G) {
+      callout.classList.remove("on"); listen.classList.add("on"); J.bump(listen); sayGate();
+      setTimeout(function () { if (my === live && !G.done && curGate === G) { J.bump(listen); sayGate(); } }, 1700);
+      setTimeout(function () { listen.classList.remove("on"); }, 3600);
+    }
     function power() {
       var k = U.pick(["shield", "magnet", "turbo"]); A.fx.unlock(); J.buzz(20);
       if (k === "shield") { shield = 12; callText(esc(t("pwShield")), "blue"); }
@@ -641,12 +668,13 @@
 
     /* ---- countdown ---- */
     var cd = el("div", "race-count", '<div class="rc-lights"><i></i><i></i><i></i></div><b class="rc-say"></b>'); stage.appendChild(cd);
+    A.preload(R.pool.concat(R.targets).map(function (x) { return x.au; }));
     var sounds = U.shuffle(R.targets.slice()).slice(0, 3), ci2 = 0;
     A.talk(t("raceReady"), lang());
     function light() {
       if (my !== live) return;
       if (ci2 < 3) { cd.querySelectorAll("i")[ci2].classList.add("on"); var it = sounds[ci2 % sounds.length]; cd.querySelector(".rc-say").innerHTML = '<span class="ar">' + esc(it.ar) + "</span>"; A.fx.note(ci2);
-        A.say(it.au).then(function () { setTimeout(light, 380); }); ci2++; return; }
+        A.sayNow(it.au).then(function () { setTimeout(light, 380); }); ci2++; return; }
       cd.querySelectorAll("i").forEach(function (i) { i.classList.add("go"); }); cd.querySelector(".rc-say").textContent = t("raceGo"); A.fx.unlock(); J.buzz(30);
       phase = "race"; setTimeout(function () { cd.classList.add("out"); }, 600); setTimeout(function () { cd.remove(); }, 1000);
     }

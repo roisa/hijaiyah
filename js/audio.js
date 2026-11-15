@@ -27,6 +27,25 @@
   A.hasClip = function (t) { return !!clipFor(t); };
   A.clipUrl = function (t) { return clipFor(t); };
 
+  /* ---------- sounds that play without a tap (the race calls a letter as an arch comes) ----------
+     Phones block <audio> that starts without a tap, so these clips are decoded once and played through the
+     (already unlocked) Web Audio context: instant, never blocked, never queued behind Mo's talking. */
+  var bufs = {};
+  function buf(t) {
+    t = norm(t); var u = clipFor(t), c = ac(); if (!u || !c) return Promise.reject();
+    if (!bufs[u]) bufs[u] = fetch(u).then(function (r) { return r.arrayBuffer(); }).then(function (ab) { return new Promise(function (res, rej) { c.decodeAudioData(ab, res, rej); }); });
+    return bufs[u];
+  }
+  A.preload = function (list) { (list || []).forEach(function (t) { buf(t).catch(function () {}); }); };
+  var nowSrc = null;
+  A.sayNow = function (au) {
+    A.stop(); if (nowSrc) { try { nowSrc.stop(); } catch (e) {} nowSrc = null; }
+    var t = Array.isArray(au) ? au[0] : au, c = ac();
+    return buf(t).then(function (b) {
+      return new Promise(function (res) { var s = c.createBufferSource(), g = c.createGain(); g.gain.value = 1.15; s.buffer = b; s.connect(g); g.connect(c.destination); s.onended = res; s.start(); nowSrc = s; setTimeout(res, b.duration * 1000 + 300); });
+    }).catch(function () { return A.say(au); });
+  };
+
   var voices = [];
   function loadVoices() { try { voices = speechSynthesis.getVoices() || []; } catch (e) {} }
   if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
@@ -54,6 +73,7 @@
   function playUrl(url, rate) {
     return new Promise(function (res, rej) {
       var a = new Audio(url); cur = a;
+      a.addEventListener("loadedmetadata", function () { if (isFinite(a.duration)) setTimeout(res, (a.duration / (rate || 1)) * 1000 + 800); });   // never hang on a lost "ended"
       a.playbackRate = rate || 1;
       a.onended = function () { res(); };
       a.onerror = function () { rej(new Error("audio")); };

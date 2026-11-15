@@ -1448,3 +1448,17 @@ button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
 [data-theme="dark"] .ans-box { background: linear-gradient(180deg, #27325A, #1F2849); } [data-theme="dark"] .r3-call.ans .ans-box .ar { color: #fff; }
 @media (prefers-reduced-motion: reduce) { .r3-call.ans.on { animation: none; } }
 .ans-box.w { width: auto; min-width: 150px; padding: 0 18px; } .r3-call.ans .ans-box.w .ar { font-size: 54px; }
+/* race: "Listen!" while a letter is being called */
+.r3-listen { position: absolute; left: 50%; top: 20%; z-index: 5; display: flex; align-items: center; gap: 8px; padding: 8px 18px 8px 8px; border-radius: 99px;
+  background: #fff; color: #E07000; font-family: 'Fredoka One', var(--font); font-size: 22px; box-shadow: 0 6px 0 #F0B400, 0 14px 24px -10px rgba(0,0,0,.4);
+  transform: translate(-50%, -20px) scale(.7); opacity: 0; transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .25s; pointer-events: none; }
+.r3-listen.on { transform: translate(-50%, 0) scale(1); opacity: 1; }
+.rl-ear { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: linear-gradient(180deg, #FFB43A, #FF8A00); position: relative; }
+.rl-ear svg.ic { width: 24px; height: 24px; }
+.r3-listen.on .rl-ear::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 3px solid rgba(255,150,0,.6); animation: tapRing 1s ease-out infinite; }
+[data-theme="dark"] .r3-listen { background: #1D2440; color: #FFC24D; }
+/* the answer card's letter is alive too: it pops and wiggles in */
+.r3-call.ans.on .ans-box .ar { animation: ansLetter .7s cubic-bezier(.34,1.56,.64,1) .15s backwards; }
+.r3-call.ans .ans-box .ar { color: #0B6B3A; } [data-theme="dark"] .r3-call.ans .ans-box .ar { color: #A8F0C6; }
+@keyframes ansLetter { 0% { scale: .3; rotate: -12deg; } 60% { scale: 1.15; rotate: 4deg; } 100% { scale: 1; rotate: 0deg; } }
+@media (prefers-reduced-motion: reduce) { .r3-call.ans.on .ans-box .ar, .r3-listen.on .rl-ear::after { animation: none; } }
