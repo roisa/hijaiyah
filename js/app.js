@@ -247,6 +247,7 @@
       if (i < 2) row.appendChild(el("i", "td-link" + (md[m.k] ? " on" : "")));
     });
     td.appendChild(row); sc.appendChild(td);
+    if (HJ.race) sc.appendChild(HJ.race.card());
 
     // ---- the 7 islands: swipe through the books ----
     sc.appendChild(el("div", "sec-h", "<h3>" + esc(t("islands")) + "</h3><small>" + S.totalStars() + " " + HJ.art("star", 16) + "</small>"));
