@@ -576,7 +576,7 @@
           if (tutOn) { tutOn = false; tut = false; hand.className = "r3-hand"; S.get().raceTut = 1; S.save(); }
           if (lane === G.good) { okN++; boost = 2.2; slow = 0; setCam("yes"); puff(W / 2, H * .6, 30, "star"); A.fx.combo(okN); J.buzz(15); callText(HJ.util.pick([t("raceTurbo"), "Masya Allah!", t("great")]), "green"); }
           else { if (shield > 0) { shield = 0; callText(t("pwSaved"), "blue"); } else { slow = 1.2; boost = 0; } setCam("oh"); A.fx.bad(); J.buzz([20, 30, 20]); if (G.q.k && S.addMiss) S.addMiss(G.q);
-            callText('<small>' + esc(t("raceThis")) + '</small><span class="ar">' + esc(G.q.ar) + "</span>", "ans"); shake = .4; setTimeout(function () { if (my === live) A.say(G.q.au); }, 300); }
+            callText('<small>' + HJ.ic("speaker") + " " + esc(t("raceThis")) + '</small><span class="ans-box' + (G.q.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? " w" : "") + '"><span class="ar">' + esc(G.q.ar) + "</span></span>", "ans"); shake = .4; setTimeout(function () { if (my === live) A.say(G.q.au); }, 300); }
           setTimeout(function () { if (my === live) setCam("mo"); }, 1600);
         }
       });

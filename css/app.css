@@ -1434,3 +1434,17 @@ button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
 .rm-tail { width: 0; height: 0; margin-top: -1px; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 7px solid #22C06E; }
 [data-theme="dark"] .rm-head { border-color: #fff; box-shadow: 0 0 0 2.5px #5BE38A, 0 4px 10px rgba(0,0,0,.5); }
 [data-theme="dark"] .rm-tail { border-top-color: #5BE38A; }
+/* race: the "this is the sound" card after a wrong arch */
+.r3-call.ans { top: 27%; gap: 8px; padding: 10px 12px 12px; min-width: 156px; border-radius: 28px; border: 0; background: #fff;
+  box-shadow: 0 0 0 4px #22C06E, 0 7px 0 4px #17A35B, 0 18px 30px -10px rgba(0,0,0,.4); }
+.r3-call.ans.on { animation: ansIn .5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes ansIn { from { transform: translate(-50%, -50%) scale(.5) rotate(-6deg); } }
+.r3-call.ans small { display: flex; align-items: center; gap: 5px; margin: 0; padding: 4px 12px; border-radius: 99px; background: #E6F8EE; color: #168A4E; font-size: 13px; }
+.r3-call.ans small svg.ic { width: 15px; height: 15px; }
+.ans-box { display: grid; place-items: center; width: 132px; height: 112px; border-radius: 20px; background: linear-gradient(180deg, #F4FBF7, #E3F5EA); overflow: hidden; }
+.r3-call.ans .ans-box .ar { display: block; font-size: 70px; line-height: 112px; height: 112px; padding: 0; color: #1E2A3A; }
+[data-theme="dark"] .r3-call.ans { background: #1D2440; box-shadow: 0 0 0 4px #22C06E, 0 7px 0 4px #17A35B, 0 18px 30px -10px rgba(0,0,0,.6); }
+[data-theme="dark"] .r3-call.ans small { background: rgba(34,192,110,.18); color: #5BE38A; }
+[data-theme="dark"] .ans-box { background: linear-gradient(180deg, #27325A, #1F2849); } [data-theme="dark"] .r3-call.ans .ans-box .ar { color: #fff; }
+@media (prefers-reduced-motion: reduce) { .r3-call.ans.on { animation: none; } }
+.ans-box.w { width: auto; min-width: 150px; padding: 0 18px; } .r3-call.ans .ans-box.w .ar { font-size: 54px; }
