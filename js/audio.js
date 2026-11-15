@@ -14,6 +14,7 @@
     return ctx;
   }
   A.unlock = function () { ac(); };
+  A.ac = function () { return ac(); };          // the race music / engine use the same audio context
 
   function norm(t) { return String(t || "").normalize("NFC").replace(/ـ/g, "").replace(/\s+/g, " ").trim(); }
   function clipFor(t) {

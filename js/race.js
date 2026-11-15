@@ -72,10 +72,11 @@
   function face(k) {
     if (faces[k]) return faces[k];
     var im = pics[k]; if (!im || !im.ok) return "";
-    var b = im.box, c = document.createElement("canvas"); c.width = c.height = 96; var g = c.getContext("2d");
-    var side = b.w * (k === "moFace" ? .62 : .7), cx = b.x + b.w * (k === "ais" ? .5 : .5), cy = b.y + side * .5;
-    g.beginPath(); g.arc(48, 48, 48, 0, 7); g.clip(); g.fillStyle = k === "moFace" ? "#CFEFFF" : k === "ais" ? "#FFE0EE" : "#DCE8FF"; g.fillRect(0, 0, 96, 96);
-    g.drawImage(im, cx - side / 2, cy - side / 2, side, side, 0, 0, 96, 96);
+    var b = im.box, c = document.createElement("canvas"); c.width = c.height = 128; var g = c.getContext("2d");
+    var mo = k.indexOf("mo") === 0, side = b.w * (mo ? .66 : .74), cx = b.x + b.w / 2, cy = b.y + side * (mo ? .5 : .48);
+    if (k === "ais") cx = b.x + b.w * .56;                              // her raised fist makes the picture wider on one side
+    g.beginPath(); g.arc(64, 64, 64, 0, 7); g.clip(); g.fillStyle = mo ? "#CFEFFF" : k.indexOf("ais") === 0 ? "#FFE0EE" : "#DCE8FF"; g.fillRect(0, 0, 128, 128);
+    g.drawImage(im, cx - side / 2, cy - side / 2, side, side, 0, 0, 128, 128);
     return (faces[k] = c.toDataURL());
   }
 
@@ -102,6 +103,10 @@
     // the karts on the start line
     var hero = el("div", "rm-hero", heroSvg()); body.appendChild(hero);
     load(function () { hero.innerHTML = heroSvg(); });
+    // coins + the Garage
+    var gbar = el("div", "rm-gbar", '<span class="rm-coins"><i class="rt-coin"></i><b>' + (S.get().coins || 0) + '</b></span>');
+    var gb = el("button", "btn small rm-garage", HJ.ic("gear") + " " + esc(t("garage"))); gb.onclick = function () { A.fx.tap(); garage(); }; gbar.appendChild(gb);
+    body.appendChild(gbar);
     var tabs = el("div", "rm-tabs");
     WORLDS.forEach(function (n) {
       var w = HJ.worlds[n - 1], b = el("button", "rm-tab" + (n === curW ? " on" : ""), HJ.wi(n, true).outerHTML + "<span>" + esc(t("book")) + " " + n + "</span>");
@@ -109,25 +114,75 @@
     });
     body.appendChild(tabs);
     body.appendChild(el("div", "rm-wname", "<b>" + esc(tr(HJ.worlds[curW - 1].name)) + "</b>"));
-    var list = el("div", "rm-list");
-    races(curW).forEach(function (r) {
-      var op = isOpen(r), bp = best(r.id);
-      var c = el("button", "rm-race" + (r.gp ? " gp" : "") + (op ? "" : " locked"));
-      var preview = r.targets.slice(0, 3).map(function (x) { return '<span class="ar">' + esc(x.ar) + "</span>"; }).join("");
-      c.innerHTML = '<span class="rm-n">' + (r.gp ? HJ.art("trophy", 30) : r.i + 1) + "</span>" +
-        '<span class="rm-tx"><b>' + esc(r.gp ? t("raceGP") : t("raceN", { n: r.i + 1 })) + '</b><span class="rm-pre">' + preview + "</span></span>" +
-        '<span class="rm-cup">' + (op ? (bp ? cup(bp, 34) : '<span class="rm-go">' + HJ.ic("play") + "</span>") : HJ.ic("lock")) + "</span>";
-      c.setAttribute("aria-label", (r.gp ? t("raceGP") : t("raceN", { n: r.i + 1 })) + (bp ? " · " + t("place" + bp) : "") + (op ? "" : " · " + t("locked")));
+    // the tracks as a winding road: each race a stop, the Grand Prix a trophy at the end
+    var list = el("div", "rm-map"), RS = races(curW), stepY = 112, mapH = RS.length * stepY + 30;
+    list.style.height = mapH + "px";
+    var pts = RS.map(function (r, i) { return { x: [28, 72, 50, 26, 70, 50][i % 6], y: 50 + i * stepY }; });
+    var d = "M" + pts[0].x * 4 + " " + pts[0].y; for (var pi = 1; pi < pts.length; pi++) { var a0 = pts[pi - 1], b0 = pts[pi]; d += " C" + a0.x * 4 + " " + (a0.y + stepY * .55) + " " + b0.x * 4 + " " + (b0.y - stepY * .55) + " " + b0.x * 4 + " " + b0.y; }
+    list.innerHTML = '<svg class="rm-road" viewBox="0 0 400 ' + mapH + '" preserveAspectRatio="none" aria-hidden="true"><path d="' + d + '" stroke="rgba(0,0,0,.12)" stroke-width="40" fill="none" stroke-linecap="round" transform="translate(0 5)"/><path d="' + d + '" stroke="#6B7488" stroke-width="38" fill="none" stroke-linecap="round"/><path d="' + d + '" stroke="#fff" stroke-width="3" stroke-dasharray="12 12" fill="none"/></svg>';
+    var curI = -1; RS.forEach(function (r, i) { if (curI < 0 && isOpen(r) && !best(r.id)) curI = i; });
+    RS.forEach(function (r, i) {
+      var op = isOpen(r), bp = best(r.id), tm = (S.get().raceT || {})[r.id], P = pts[i];
+      var c = el("button", "rm-stop" + (r.gp ? " gp" : "") + (op ? "" : " locked") + (bp ? " done" : "") + (i === curI ? " cur" : ""));
+      c.style.left = P.x + "%"; c.style.top = P.y + "px";
+      c.innerHTML = '<span class="rm-dot">' + (op ? (r.gp ? HJ.art("trophy", 34) : '<b>' + (i + 1) + "</b>") : HJ.ic("lock")) + (bp ? '<span class="rm-medal">' + cup(bp, 30) + "</span>" : "") + "</span>" +
+        '<span class="rm-lbl"><b>' + esc(r.gp ? t("raceGP") : t("raceN", { n: i + 1 })) + "</b>" + (tm ? "<small>⏱ " + clock(tm) + "</small>" : '<small class="ar">' + r.targets.slice(0, 3).map(function (x) { return esc(x.ar); }).join(" ") + "</small>") + "</span>";
+      c.setAttribute("aria-label", (r.gp ? t("raceGP") : t("raceN", { n: i + 1 })) + (bp ? " · " + t("place" + bp) : "") + (op ? "" : " · " + t("locked")));
       c.onclick = function () {
         A.unlock();
         if (!op) { A.fx.bad(); HJ.toast(HJ.ic("lock") + " " + esc(t("raceLocked"))); A.talk(t("raceLocked"), lang()); return; }
         A.fx.tap(); play(r);
       };
       list.appendChild(c);
+      if (i === curI) { var kk = el("span", "rm-kart"); kk.innerHTML = '<svg viewBox="0 0 80 60" width="64" height="48" aria-hidden="true"><ellipse cx="40" cy="54" rx="30" ry="4" fill="rgba(0,0,0,.2)"/><rect x="6" y="32" width="14" height="20" rx="5" fill="#23262F"/><rect x="60" y="32" width="14" height="20" rx="5" fill="#23262F"/><path d="M14 46 Q12 22 28 20 H52 Q68 22 66 46Z" fill="#FF6B5B"/><circle cx="40" cy="14" r="11" fill="#FF6B5B"/><rect x="38" y="3" width="4" height="22" fill="#fff"/></svg>'; kk.style.left = P.x + "%"; kk.style.top = (P.y - 52) + "px"; list.appendChild(kk); }
     });
     body.appendChild(list);
     body.appendChild(el("p", "rm-note", esc(t("raceNote"))));
     A.talk(t("raceHow"), lang());
+  }
+  function clock(sec) { var m = Math.floor(sec / 60), s2 = Math.round(sec % 60); return m + ":" + (s2 < 10 ? "0" : "") + s2; }
+
+  /* ---------- the Garage: coins buy paint and wheels ---------- */
+  var SHOP = { paint: [["red", 0], ["orange", 30], ["yellow", 30], ["green", 40], ["blue", 40], ["purple", 50], ["pink", 50], ["gold", 120]], rim: [["classic", 0], ["star", 60], ["rainbow", 90]], horn: [["beep", 0], ["trumpet", 40], ["duck", 60]] };
+  function gst() { var s = S.get(); s.garage = s.garage || { paint: "red", rim: "classic", owned: ["paint:red", "rim:classic"] }; if (!s.garage.horn) { s.garage.horn = "beep"; s.garage.owned.push("horn:beep"); } return s.garage; }
+  function garage() {
+    HJ.modal(function (p, close) {
+      p.classList.add("garage");
+      var G = gst();
+      p.appendChild(el("h2", "", esc(t("garage"))));
+      var coins = el("div", "rm-coins big", '<i class="rt-coin"></i><b>' + (S.get().coins || 0) + "</b>"); p.appendChild(coins);
+      var cv = el("canvas", "gar-cv"); cv.width = 520; cv.height = 360; p.appendChild(cv);
+      function draw() {
+        var g = cv.getContext("2d"); g.clearRect(0, 0, cv.width, cv.height);
+        var q = g.createLinearGradient(0, 0, 0, cv.height); q.addColorStop(0, "#BDE5FF"); q.addColorStop(1, "#EAF6FF"); g.fillStyle = q; g.fillRect(0, 0, cv.width, cv.height);
+        g.fillStyle = "#6B7488"; g.beginPath(); g.moveTo(140, 200); g.lineTo(380, 200); g.lineTo(520, 360); g.lineTo(0, 360); g.closePath(); g.fill();
+        HJ.race3d.drawKart(g, 260, 340, 250, { paint: HJ.race3d.PAINT[G.paint], rim: HJ.race3d.RIMS[G.rim], helmet: HJ.race3d.PAINT[G.paint], shirt: ["#43B85C", "#FF8A3D"], num: "1", hair: "#22252E", star: true }, {});
+      }
+      draw();
+      [["paint", "garagePaint"], ["rim", "garageRims"], ["horn", "garageHorn"]].forEach(function (sec) {
+        p.appendChild(el("div", "gar-h", esc(t(sec[1]))));
+        var row = el("div", "gar-row");
+        SHOP[sec[0]].forEach(function (it) {
+          var key = sec[0] + ":" + it[0], own = G.owned.indexOf(key) >= 0, on = G[sec[0]] === it[0];
+          var col = sec[0] === "paint" ? HJ.race3d.PAINT[it[0]] : sec[0] === "rim" ? HJ.race3d.RIMS[it[0]] : ["#7CC8FF", "#3D7BFF"];
+          var face2 = sec[0] === "horn" ? '<i class="gar-horn" style="background:linear-gradient(160deg,' + col[0] + "," + col[1] + ')">' + esc(t("horn" + it[0])) + "</i>" : '<i style="background:linear-gradient(160deg,' + col[0] + "," + col[1] + ')"></i>';
+          var b = el("button", "gar-it" + (on ? " on" : "") + (own ? "" : " shop"), face2 +
+            (on ? '<small>' + HJ.ic("check") + "</small>" : own ? "" : '<small><i class="rt-coin"></i>' + it[1] + "</small>"));
+          b.setAttribute("aria-label", it[0] + (own ? "" : " · " + it[1]));
+          b.onclick = function () {
+            A.unlock(); var st = S.get(); if (sec[0] === "horn") HJ.race3d.HORNS[it[0]](1);
+            if (!own) {
+              if ((st.coins || 0) < it[1]) { A.fx.bad(); HJ.toast('<i class="rt-coin"></i> ' + esc(t("garageNeed", { n: it[1] - (st.coins || 0) }))); A.talk(t("garageNeed", { n: it[1] - (st.coins || 0) }), lang()); return; }
+              st.coins -= it[1]; G.owned.push(key); A.fx.unlock(); APP().confetti(30);
+            } else A.fx.tap();
+            G[sec[0]] = it[0]; S.save(); close(); garage();
+          };
+          row.appendChild(b);
+        });
+        p.appendChild(row);
+      });
+      var ok = el("button", "btn", t("next") + " " + HJ.ic("next")); ok.onclick = function () { close(); open(); }; p.appendChild(ok);
+    });
   }
   function cup(place, size) {
     var c = ["#FFC21A", "#C9D3E3", "#E0915A"][place - 1], d = ["#D98A00", "#8E9BB0", "#A65A2A"][place - 1], s = size || 30;
@@ -161,356 +216,59 @@
     return c;
   }
 
-  /* ---------- the race ---------- */
+  /* ---------- the race (engine in js/race3d.js) ---------- */
   var live = 0;
   function play(r) {
     if (S.overLimit()) return HJ.restScreen(function () { play(r); });
     var my = ++live;
-    load(function () { if (my === live) start(r, my); });
-  }
-
-  function start(R, my) {
-    var app = document.getElementById("app"); app.innerHTML = ""; A.stop();
-    if (HJ.bg) HJ.bg(null);
-    var sc = el("div", "screen race"); app.appendChild(sc);
-    // top bar (".lv-top" so play time is counted like a level)
-    var top = el("div", "lv-top race-top"), x = el("button", "nav-btn", HJ.ic("close"));
-    x.setAttribute("aria-label", t("close"));
-    var mini = el("div", "rt-track", '<i class="rt-line"></i><span class="rt-flag">' + flagSvg() + "</span>");
-    var who = ["ais", "adam", "moFace"].map(function (k) { var h = el("span", "rt-head " + k); h.style.backgroundImage = "url(" + face(k) + ")"; mini.appendChild(h); return h; });
-    var spk = el("button", "nav-btn rt-spk", HJ.ic("speaker")); spk.setAttribute("aria-label", t("listen"));
-    var starN = el("span", "rt-stars", HJ.art("star", 22) + "<b>0</b>");
-    top.appendChild(x); top.appendChild(mini); top.appendChild(spk); top.appendChild(starN); sc.appendChild(top);
-    var wrap = el("div", "race-stage"), cv = el("canvas", "race-cv"); wrap.appendChild(cv); sc.appendChild(wrap);
-    var tipEl = el("div", "race-tip glass", esc(t("raceHow"))); wrap.appendChild(tipEl);
-    var g = cv.getContext("2d"), W = 0, H = 0, dpr = Math.min(2, window.devicePixelRatio || 1);
-    function size() { var b = wrap.getBoundingClientRect(); W = b.width; H = b.height; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); g.setTransform(dpr, 0, 0, dpr, 0, 0); }
-    size(); window.addEventListener("resize", size);
-
-    var L = LOOK[R.w], night = dark() ? 1 : 0;
-    // track: gates every 4 units, start 4.5, finish after the last gate
-    var nG = R.gp ? GP_GATES : GATES, gates = [], targets = U.shuffle(R.targets.slice());
-    while (targets.length < nG) targets = targets.concat(U.shuffle(R.targets.slice()));
-    for (var i = 0; i < nG; i++) {
-      var q = targets[i], opts = distract(q, R), lanes = U.shuffle([0, 1, 2]);
-      gates.push({ d: 4.5 + i * 4, q: q, opts: [opts[0], opts[1], opts[2]], good: -1, lanes: lanes, said: false, done: false, hit: 0 });
-      // put the right answer in a random lane
-      var arr = [q, opts[1], opts[2]], laneOf = U.shuffle([0, 1, 2]); gates[i].signs = []; gates[i].good = laneOf[0];
-      for (var j = 0; j < 3; j++) gates[i].signs[laneOf[j]] = arr[j];
-    }
-    var LEN = 4.5 + (nG - 1) * 4 + 4;
-    // the stars on the road, between gates
-    var stars = [];
-    for (i = 0; i < nG - 1; i++) stars.push({ d: 4.5 + i * 4 + 2, lane: Math.floor(Math.random() * 3), got: false });
-    // rivals: tuned so a child who gets about 6 of 8 right wins, 3–5 → 2nd
-    var k = LEN / 38;
-    var riv = [
-      { k: "ais", lane: 0, d: 0, ly: 0, sp: LEN / (39 * k) * (R.gp ? 1.02 : 1), ph: 1.3, tFin: 0 },
-      { k: "adam", lane: 2, d: 0, ly: 2, sp: LEN / (35.2 * k) * (R.gp ? 1.02 : 1), ph: 0.2, tFin: 0 }
-    ];
-    var mo = { lane: 1, ly: 1, d: 0, v: 0, boost: 0, slow: 0, pose: "mo", poseT: 0, tFin: 0, shake: 0 };
-    var phase = "count", tRace = 0, last = 0, got = 0, okN = 0, parts = [], spokeAt = -1, finished = false, curGate = null;
-    HJ._race = { gates: gates, mo: mo, phase: function () { return phase; } };   // for tests
-
-    function distract(q, R) {
-      var cz = R.easy && q.k ? HJ.cousins(q.k) || [] : [];
-      var cands = U.shuffle(R.pool.filter(function (x) { return x.ar !== q.ar && cz.indexOf(x.k) < 0; }));
-      if (cands.length < 2) cands = cands.concat(U.shuffle(worldPool(R.w).filter(function (x) { return x.ar !== q.ar; })));
-      return [q, cands[0], cands[1]];
-    }
-
-    // geometry
-    function geo() {
-      var roadTop = H * .46, roadH = H * .44, laneH = roadH / 3;
-      return { roadTop: roadTop, roadH: roadH, laneH: laneH, x0: W * .2, ppu: (W * .8 + 70) / 3.6 };
-    }
-    function laneY(l, G) { return G.roadTop + (l + .5) * G.laneH; }
-    function laneScale(l) { return .86 + l * .09; }
-
-    /* --- drawing --- */
-    function bg(G, cam) {
-      var sky = g.createLinearGradient(0, 0, 0, G.roadTop); sky.addColorStop(0, L.sky[night][0]); sky.addColorStop(1, L.sky[night][1]);
-      g.fillStyle = sky; g.fillRect(0, 0, W, G.roadTop + 2);
-      if (night) { g.fillStyle = "rgba(255,246,200,.8)"; for (var s = 0; s < 26; s++) { var sx = ((s * 97.3 - cam * 3) % (W + 20) + W + 20) % (W + 20) - 10, sy = (s * 53.7) % (G.roadTop * .7); g.fillRect(sx, sy, 1.6, 1.6); } }
-      // sun / moon
-      g.fillStyle = night ? "#F4F1FF" : "#FFD43B"; g.beginPath(); g.arc(W * .84, G.roadTop * .26, Math.min(W, H) * .055, 0, 7); g.fill();
-      if (night) { g.fillStyle = L.sky[1][0]; g.beginPath(); g.arc(W * .84 + 9, G.roadTop * .26 - 6, Math.min(W, H) * .05, 0, 7); g.fill(); }
-      // clouds / bubbles drift
-      g.fillStyle = R.w === 4 ? "rgba(255,255,255,.35)" : night ? "rgba(120,120,190,.35)" : "rgba(255,255,255,.9)";
-      for (var c = 0; c < 4; c++) {
-        var cx = ((c * 173 - cam * 8) % (W + 160) + W + 160) % (W + 160) - 80, cy = G.roadTop * (.18 + (c % 2) * .2);
-        if (R.w === 4) { for (var b = 0; b < 4; b++) { g.beginPath(); g.arc(cx + b * 9, cy + ((tRace * 30 + b * 40 + c * 70) % (G.roadTop)) * -1 + G.roadTop, 4 + b, 0, 7); g.fill(); } }
-        else { g.beginPath(); g.ellipse(cx, cy, 34, 12, 0, 0, 7); g.arc(cx - 12, cy - 6, 13, 0, 7); g.arc(cx + 10, cy - 10, 16, 0, 7); g.fill(); }
-      }
-      // far layer
-      var fg = g.createLinearGradient(0, G.roadTop * .55, 0, G.roadTop); fg.addColorStop(0, L.far[night][0]); fg.addColorStop(1, L.far[night][1]); g.fillStyle = fg;
-      g.beginPath(); g.moveTo(0, G.roadTop);
-      for (var x = 0; x <= W + 20; x += 20) {
-        var u = (x + cam * 15) / 90, h = R.w === 3 ? Math.abs(((u % 2) + 2) % 2 - 1) * G.roadTop * .32 + G.roadTop * .08 : (Math.sin(u) * .5 + .5) * G.roadTop * .12 + G.roadTop * .06;
-        g.lineTo(x, G.roadTop * .9 - h);
-      }
-      g.lineTo(W, G.roadTop); g.closePath(); g.fill();
-      if (R.w === 3 && !night) { g.fillStyle = "rgba(255,255,255,.75)"; for (x = 0; x <= W + 180; x += 180) { var px = x - ((cam * 15) % 180), py = G.roadTop * .9 - G.roadTop * .4 + 2; g.beginPath(); g.moveTo(px - 14, py + 16); g.lineTo(px, py); g.lineTo(px + 14, py + 16); g.closePath(); g.fill(); } }
-      // roadside strip + decorations
-      var gg = g.createLinearGradient(0, G.roadTop - 16, 0, G.roadTop); gg.addColorStop(0, L.ground[night][0]); gg.addColorStop(1, L.ground[night][1]);
-      g.fillStyle = gg; g.fillRect(0, G.roadTop - 16, W, 18);
-      for (var dk = 0; dk < 7; dk++) { var dx = ((dk * 140 - cam * G.ppu * .55) % (W + 140) + W + 140) % (W + 140) - 70; deco(L.deco, dx, G.roadTop - 10, 1); }
-      // bottom verge
-      g.fillStyle = gg; g.fillRect(0, G.roadTop + G.roadH, W, H - G.roadTop - G.roadH);
-      for (dk = 0; dk < 6; dk++) { var bx = ((dk * 170 + 60 - cam * G.ppu * 1.15) % (W + 170) + W + 170) % (W + 170) - 85; flower(bx, G.roadTop + G.roadH + (H - G.roadTop - G.roadH) * .55); }
-    }
-    function deco(kind, x, y, s) {
-      g.save(); g.translate(x, y); g.scale(s, s);
-      var leaf = night ? "#2E6F6A" : "#3CC377";
-      if (kind === "palm") {
-        g.strokeStyle = night ? "#6B5070" : "#C98B50"; g.lineWidth = 6; g.lineCap = "round"; g.beginPath(); g.moveTo(0, 0); g.quadraticCurveTo(-4, -30, 6, -58); g.stroke();
-        g.strokeStyle = leaf; g.lineWidth = 7; [[-26, -50], [26, -54], [-18, -70], [20, -72], [0, -76]].forEach(function (p) { g.beginPath(); g.moveTo(6, -58); g.quadraticCurveTo((6 + p[0]) / 2, p[1] - 10, p[0], p[1]); g.stroke(); });
-      } else if (kind === "tree") {
-        g.fillStyle = night ? "#5A4560" : "#9C6A3E"; g.fillRect(-4, -26, 8, 26);
-        g.fillStyle = leaf; g.beginPath(); g.arc(0, -40, 20, 0, 7); g.arc(-14, -30, 13, 0, 7); g.arc(14, -30, 13, 0, 7); g.fill();
-        if (!night) { g.fillStyle = "#FF6B6B"; g.beginPath(); g.arc(-6, -44, 3, 0, 7); g.arc(8, -34, 3, 0, 7); g.fill(); }
-      } else if (kind === "pine") {
-        g.fillStyle = night ? "#5A4560" : "#8A5A3A"; g.fillRect(-3, -14, 6, 14);
-        g.fillStyle = night ? "#2B5A55" : "#2FA06A"; [[0, -70, 16], [0, -50, 20], [0, -30, 24]].forEach(function (p) { g.beginPath(); g.moveTo(p[0] - p[2], p[1] + 24); g.lineTo(p[0], p[1]); g.lineTo(p[0] + p[2], p[1] + 24); g.closePath(); g.fill(); });
-      } else {
-        g.strokeStyle = night ? "#7A4A8A" : "#FF7A8A"; g.lineWidth = 6; g.lineCap = "round";
-        [[0, -40], [-14, -30], [14, -34]].forEach(function (p) { g.beginPath(); g.moveTo(0, 0); g.quadraticCurveTo(p[0] / 2, p[1] / 2, p[0], p[1]); g.stroke(); });
-        g.strokeStyle = night ? "#2E6F6A" : "#3CC377"; g.lineWidth = 4; g.beginPath(); g.moveTo(26, 0); g.quadraticCurveTo(20 + Math.sin(tRace * 2) * 4, -24, 28, -46); g.stroke();
-      }
-      g.restore();
-    }
-    function flower(x, y) {
-      g.fillStyle = night ? "#3C8F77" : "#2FA25B"; g.fillRect(x - 1, y - 8, 2, 8);
-      g.fillStyle = night ? "#C9A7FF" : ["#FF8FB1", "#FFFFFF", "#FFB86B"][Math.abs(Math.round(x)) % 3];
-      for (var a = 0; a < 5; a++) { g.beginPath(); g.arc(x + Math.sin(a * 1.26) * 4, y - 10 - Math.cos(a * 1.26) * 4, 3, 0, 7); g.fill(); }
-      g.fillStyle = "#FFE27A"; g.beginPath(); g.arc(x, y - 10, 2.2, 0, 7); g.fill();
-    }
-    function road(G, cam) {
-      var rg = g.createLinearGradient(0, G.roadTop, 0, G.roadTop + G.roadH);
-      if (R.w === 4) { rg.addColorStop(0, night ? "#4A4F78" : "#E9CF96"); rg.addColorStop(1, night ? "#3A3E62" : "#D9B676"); }
-      else { rg.addColorStop(0, night ? "#3D4560" : "#6B7488"); rg.addColorStop(1, night ? "#2C3248" : "#4E566A"); }
-      g.fillStyle = rg; g.fillRect(0, G.roadTop, W, G.roadH);
-      // kerbs
-      var off = (cam * G.ppu) % 36;
-      for (var x = -36; x < W + 36; x += 36) { g.fillStyle = "#FF5D5D"; g.fillRect(x - off, G.roadTop - 4, 18, 7); g.fillRect(x - off + 18, G.roadTop + G.roadH - 3, 18, 7); g.fillStyle = "#fff"; g.fillRect(x - off + 18, G.roadTop - 4, 18, 7); g.fillRect(x - off, G.roadTop + G.roadH - 3, 18, 7); }
-      // lane lines
-      g.fillStyle = R.w === 4 ? "rgba(255,255,255,.55)" : "rgba(255,255,255,.75)"; var o2 = (cam * G.ppu) % 44;
-      for (var l = 1; l < 3; l++) for (x = -44; x < W + 44; x += 44) g.fillRect(x - o2, G.roadTop + l * G.laneH - 2, 24, 4);
-      // start and finish lines
-      [0.6, LEN].forEach(function (d) { var sx = G.x0 + 40 + (d - cam) * G.ppu; if (sx < -30 || sx > W + 30) return; for (var yy = 0; yy < G.roadH; yy += 10) for (var c = 0; c < 2; c++) { g.fillStyle = ((yy / 10) + c) % 2 ? "#222" : "#fff"; g.fillRect(sx + c * 10, G.roadTop + yy, 10, 10); } });
-      var fx = G.x0 + 40 + (LEN - cam) * G.ppu;
-      if (fx > -60 && fx < W + 80) { g.fillStyle = "#3A4256"; g.fillRect(fx - 3, G.roadTop - 70, 6, 70); g.fillRect(fx + 17, G.roadTop - 70, 6, 70);
-        g.fillStyle = "#FF5D73"; rr(fx - 30, G.roadTop - 92, 80, 26, 8); g.fill(); g.fillStyle = "#fff"; g.font = "900 13px Fredoka One, Nunito"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(t("raceFinish"), fx + 10, G.roadTop - 79); }
-    }
-    function rr(x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
-    function signs(G, cam) {
-      gates.forEach(function (gt) {
-        var sx = G.x0 + 40 + (gt.d - cam) * G.ppu; if (sx < -80 || sx > W + 80) return;
-        for (var l = 0; l < 3; l++) {
-          var y = laneY(l, G), s = laneScale(l), bw = Math.min(G.laneH * 1.05, 84) * s, bh = G.laneH * .78 * s, item = gt.signs[l];
-          var state = gt.done ? (l === gt.good ? "good" : l === gt.picked ? "bad" : "") : "";
-          g.save(); g.translate(sx, y);
-          if (state === "bad") g.translate(Math.sin(tRace * 40) * 3, 0);
-          // posts + board
-          g.fillStyle = "rgba(0,0,0,.18)"; g.beginPath(); g.ellipse(0, G.laneH * .38, bw * .45, 5, 0, 0, 7); g.fill();
-          g.fillStyle = "#8A6A45"; g.fillRect(-bw / 2 + 4, -bh / 2, 5, G.laneH * .86); g.fillRect(bw / 2 - 9, -bh / 2, 5, G.laneH * .86);
-          var bc = state === "good" ? "#22C06E" : state === "bad" ? "#FF6B6B" : ["#FFD43B", "#7CC8FF", "#C9A7FF"][l];
-          g.fillStyle = bc; rr(-bw / 2, -bh / 2 - bh * .25, bw, bh, 12); g.fill();
-          g.fillStyle = "rgba(255,255,255,.9)"; rr(-bw / 2 + 5, -bh / 2 - bh * .25 + 5, bw - 10, bh - 10, 9); g.fill();
-          g.fillStyle = "#1E2A3A"; g.textAlign = "center"; g.textBaseline = "alphabetic";
-          var fs = item.ar.replace(/[ً-ْ]/g, "").length > 2 ? bh * .4 : bh * .62;
-          g.font = fs + "px 'Scheherazade New', serif"; g.direction = "rtl";
-          var m = g.measureText(item.ar), mid = m.actualBoundingBoxAscent != null ? (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2 : fs * .3;
-          if (m.width > bw - 16) { g.font = (fs * (bw - 16) / m.width) + "px 'Scheherazade New', serif"; m = g.measureText(item.ar); mid = m.actualBoundingBoxAscent != null ? (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2 : fs * .3; }
-          g.fillText(item.ar, 0, -bh * .25 + mid);
-          g.direction = "ltr";
-          if (state === "good") { g.fillStyle = "#fff"; g.font = "900 16px Nunito"; g.fillText("✓", bw / 2 - 12, -bh / 2 - bh * .25 + 14); }
-          g.restore();
-        }
-      });
-    }
-    function starsDraw(G, cam) {
-      stars.forEach(function (s) {
-        if (s.got) return; var sx = G.x0 + 40 + (s.d - cam) * G.ppu; if (sx < -30 || sx > W + 30) return;
-        var y = laneY(s.lane, G) + Math.sin(tRace * 4 + s.d) * 4, r = 12 * laneScale(s.lane);
-        g.fillStyle = "#FFC21A"; g.strokeStyle = "#E08600"; g.lineWidth = 2; g.beginPath();
-        for (var i = 0; i < 10; i++) { var a = -Math.PI / 2 + i * Math.PI / 5, rr2 = i % 2 ? r * .45 : r; g.lineTo(sx + Math.cos(a) * rr2, y + Math.sin(a) * rr2); }
-        g.closePath(); g.fill(); g.stroke();
-      });
-    }
-    function kart(who, sx, ly, G, pose, boost, bump) {
-      var y = laneY(0, G) + ly * G.laneH, s = laneScale(ly) * Math.min(1.1, G.laneH / 82), col = KART[who === "mo" ? "mo" : who];
-      var im = pics[who === "mo" ? pose : who];
-      g.save(); g.translate(sx, y + G.laneH * .22 + Math.sin(tRace * 18 + sx) * (boost ? 1.4 : .6) + bump); g.scale(s, s);
-      // shadow
-      g.fillStyle = "rgba(0,0,0,.22)"; g.beginPath(); g.ellipse(4, 14, 52, 7, 0, 0, 7); g.fill();
-      // boost flame / exhaust
-      if (boost) { g.fillStyle = "rgba(255,170,40,.85)"; g.beginPath(); g.moveTo(-50, -6); g.lineTo(-74 - Math.random() * 10, -1); g.lineTo(-50, 4); g.closePath(); g.fill(); g.fillStyle = "rgba(255,240,140,.9)"; g.beginPath(); g.moveTo(-50, -3); g.lineTo(-62 - Math.random() * 6, -1); g.lineTo(-50, 2); g.closePath(); g.fill(); }
-      // driver (upper body from the picture)
-      if (im && im.ok) {
-        var b = im.box, ch = b.h * .5, dw = 50, dh = dw * ch / b.w;
-        g.drawImage(im, b.x, b.y, b.w, ch, -22, -14 - dh, dw, dh);
-      }
-      // body
-      g.fillStyle = col[0]; g.strokeStyle = col[1]; g.lineWidth = 3; g.lineJoin = "round";
-      g.beginPath(); g.moveTo(-48, 2); g.quadraticCurveTo(-48, -14, -30, -16); g.lineTo(18, -18); g.quadraticCurveTo(44, -18, 52, -4); g.lineTo(54, 6); g.lineTo(-48, 6); g.closePath(); g.fill(); g.stroke();
-      g.fillStyle = "rgba(255,255,255,.35)"; g.beginPath(); g.moveTo(-36, -10); g.lineTo(14, -12); g.lineTo(12, -8); g.lineTo(-36, -6); g.closePath(); g.fill();
-      // number plate / front bumper
-      g.fillStyle = "#fff"; rr(30, -10, 16, 11, 4); g.fill(); g.fillStyle = col[1]; g.font = "900 9px Nunito"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(who === "mo" ? "1" : who === "ais" ? "2" : "3", 38, -4.5);
-      // steering wheel
-      g.strokeStyle = "#2A2F3D"; g.lineWidth = 3; g.beginPath(); g.moveTo(10, -16); g.lineTo(18, -26); g.stroke(); g.beginPath(); g.ellipse(18, -27, 3, 7, .4, 0, 7); g.stroke();
-      // wheels
-      [-30, 34].forEach(function (wx) {
-        g.fillStyle = "#2A2F3D"; g.beginPath(); g.arc(wx, 8, 12, 0, 7); g.fill(); g.fillStyle = "#C9D3E3"; g.beginPath(); g.arc(wx, 8, 5, 0, 7); g.fill();
-        g.strokeStyle = "#8E9BB0"; g.lineWidth = 2; var a = tRace * 20; g.beginPath(); g.moveTo(wx + Math.cos(a) * 5, 8 + Math.sin(a) * 5); g.lineTo(wx - Math.cos(a) * 5, 8 - Math.sin(a) * 5); g.stroke();
-      });
-      g.restore();
-    }
-    function particles(dt) {
-      parts = parts.filter(function (p) { p.t += dt; return p.t < p.life; });
-      parts.forEach(function (p) { var k = p.t / p.life; g.globalAlpha = 1 - k; g.fillStyle = p.c; g.beginPath(); g.arc(p.x + p.vx * p.t, p.y + p.vy * p.t + 60 * p.t * p.t, p.r * (1 - k * .5), 0, 7); g.fill(); });
-      g.globalAlpha = 1;
-    }
-    function burst(x, y, c, n) { for (var i = 0; i < (n || 14); i++) { var a = Math.random() * 7, s = 60 + Math.random() * 120; parts.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 40, r: 3 + Math.random() * 4, t: 0, life: .7 + Math.random() * .4, c: c || ["#FFC93D", "#FF8FB1", "#5BE38A", "#7CC8FF"][i % 4] }); } }
-
-    /* --- the loop --- */
-    function frame(now) {
-      if (my !== live || !document.body.contains(cv)) return;
-      var dt = Math.min(.05, last ? (now - last) / 1000 : 0); last = now;
-      var G = geo();
-      if (phase === "race" || phase === "end") {
-        tRace += dt;
-        // Mo's speed: 1 unit/s, turbo 1.5×, slow 0.6×
-        var v = 1; if (mo.boost > 0) { v = 1.5; mo.boost -= dt; } else if (mo.slow > 0) { v = .6; mo.slow -= dt; }
-        if (phase === "end") v = Math.max(.25, (mo.v || 1) - dt * .5);
-        mo.v = v; mo.d += v * dt;
-        riv.forEach(function (rv) { rv.d += rv.sp * (1 + .12 * Math.sin(tRace * .8 + rv.ph)) * dt; if (!rv.tFin && rv.d >= LEN) rv.tFin = tRace; });
-        // rivals change lanes now and then, keeping out of Mo's way
-        riv.forEach(function (rv) {
-          if (Math.random() < dt * .25) { var near = Math.abs(rv.d - mo.d) < 1.4, choices = [0, 1, 2].filter(function (l) { return !near || l !== mo.lane; }).filter(function (l) { return riv.every(function (o) { return o === rv || o.lane !== l || Math.abs(o.d - rv.d) > 1.2; }); }); if (choices.length) rv.lane = U.pick(choices); }
-          rv.ly += (rv.lane - rv.ly) * Math.min(1, dt * 5);
-        });
-        mo.ly += (mo.lane - mo.ly) * Math.min(1, dt * 9);
-        if (mo.poseT > 0) { mo.poseT -= dt; if (mo.poseT <= 0) mo.pose = "mo"; }
-        if (phase === "race") gateLogic(G);
-        // stars
-        stars.forEach(function (s) { if (!s.got && Math.abs(s.d - mo.d - .35) < .25 && Math.round(mo.ly) === s.lane) { s.got = true; got++; starN.querySelector("b").textContent = got; A.fx.coin(); J.bump(starN); burst(G.x0 + 40, laneY(s.lane, G), "#FFC21A", 10); } });
-        if (phase === "race" && mo.d >= LEN) finish();
-      }
-      var cam = mo.d;
-      g.clearRect(0, 0, W, H);
-      bg(G, cam); road(G, cam); starsDraw(G, cam);
-      // karts drawn back to front (top lane first)
-      var all = riv.map(function (rv) { return { who: rv.k, x: G.x0 + (rv.d - cam) * G.ppu, ly: rv.ly }; });
-      all.push({ who: "mo", x: G.x0, ly: mo.ly, me: 1 });
-      // signs for the lanes behind each kart are drawn before it
-      signs(G, cam);
-      all.sort(function (a, b) { return a.ly - b.ly; }).forEach(function (k) { if (k.x < -90 || k.x > W + 90) return; kart(k.who, k.x, k.ly, G, k.me ? mo.pose : null, k.me ? mo.boost > 0 : false, k.me && mo.shake > 0 ? Math.sin(tRace * 50) * 2 : 0); });
-      if (mo.shake > 0) mo.shake -= dt;
-      particles(dt);
-      // the top bar track
-      var pos = function (d) { return Math.max(0, Math.min(1, d / LEN)); };
-      who[0].style.left = (pos(riv[0].d) * 100) + "%"; who[1].style.left = (pos(riv[1].d) * 100) + "%"; who[2].style.left = (pos(mo.d) * 100) + "%";
-      requestAnimationFrame(frame);
-    }
-    function gateLogic(G) {
-      gates.forEach(function (gt) {
-        if (gt.done) return;
-        var sx = G.x0 + 40 + (gt.d - mo.d) * G.ppu;
-        // the sound, as the gate comes into view
-        if (!gt.said && sx < W + 30) { gt.said = true; curGate = gt; sayTarget(); }
-        if (mo.d + .32 >= gt.d) {
-          gt.done = true; gt.picked = Math.round(mo.ly);
-          var y = laneY(gt.picked, G);
-          if (gt.picked === gt.good) {
-            okN++; mo.boost = 1.6; mo.slow = 0; mo.pose = "moYes"; mo.poseT = 1.4; A.fx.combo(okN); J.buzz(15); burst(G.x0 + 40, y, null, 18);
-            if (okN === 3 || okN === 6) HJ.toast(HJ.art("flame", 22) + " " + esc(t("raceTurbo")));
-          } else {
-            mo.slow = 1.2; mo.boost = 0; mo.pose = "moOh"; mo.poseT = 1.2; mo.shake = .35; A.fx.bad(); J.buzz([20, 30, 20]);
-            if (gt.q.k) S.addMiss && S.addMiss(gt.q);
-            setTimeout(function () { if (my === live) A.say(gt.q.au); }, 350);
-          }
-        }
-      });
-    }
-    function sayTarget() { if (curGate && !curGate.done) { spk.classList.remove("ping"); void spk.offsetWidth; spk.classList.add("ping"); A.say(curGate.q.au); } }
-
-    /* --- controls: tap a lane (or a sign), swipe up/down, arrow keys --- */
-    function laneAt(clientY) { var b = cv.getBoundingClientRect(), G = geo(), y = clientY - b.top; if (y < G.roadTop - G.laneH * .6) return null; return Math.max(0, Math.min(2, Math.floor((y - G.roadTop) / G.laneH))); }
-    var sy = null;
-    cv.addEventListener("pointerdown", function (e) { A.unlock(); sy = e.clientY; var l = laneAt(e.clientY); if (l != null && phase === "race") { if (l !== mo.lane) A.fx.step(); mo.lane = l; tipEl.classList.add("gone"); } });
-    cv.addEventListener("pointerup", function (e) { if (sy != null && phase === "race") { var d = e.clientY - sy; if (Math.abs(d) > 40) { mo.lane = Math.max(0, Math.min(2, mo.lane + (d > 0 ? 1 : -1))); } } sy = null; });
-    function key(e) { if (phase !== "race") return; if (e.key === "ArrowUp") mo.lane = Math.max(0, mo.lane - 1); if (e.key === "ArrowDown") mo.lane = Math.min(2, mo.lane + 1); }
-    document.addEventListener("keydown", key);
-    spk.onclick = function () { A.unlock(); A.fx.tap(); sayTarget(); };
-    x.onclick = function () {
-      HJ.modal(function (p, close) {
-        p.appendChild(APP().moImg("pose-23", "120px"));
-        p.appendChild(el("h2", "", esc(t("quit"))));
-        var r = el("div", "row"), y = el("button", "btn ghost", t("yesQuit")), n = el("button", "btn", t("keepPlaying"));
-        y.onclick = function () { close(); stop(); open(R.w); }; n.onclick = close;
-        r.appendChild(y); r.appendChild(n); p.appendChild(r);
-      });
-    };
-    function stop() { live++; document.removeEventListener("keydown", key); window.removeEventListener("resize", size); A.stop(); }
-
-    /* --- countdown: three lights, each says a sound from this race --- */
-    var cd = el("div", "race-count", '<div class="rc-lights"><i></i><i></i><i></i></div><b class="rc-say"></b>'); wrap.appendChild(cd);
-    var sounds = U.shuffle(R.targets.slice()).slice(0, 3);
-    A.talk(t("raceReady"), lang());
-    var ci = 0;
-    function light() {
+    load(function () {
       if (my !== live) return;
-      if (ci < 3) {
-        cd.querySelectorAll("i")[ci].classList.add("on"); var it = sounds[ci % sounds.length];
-        cd.querySelector(".rc-say").innerHTML = '<span class="ar">' + esc(it.ar) + "</span>"; A.fx.note(ci);
-        A.say(it.au).then(function () { setTimeout(light, 380); }); ci++; return;
-      }
-      cd.querySelectorAll("i").forEach(function (i) { i.classList.add("go"); });
-      cd.querySelector(".rc-say").textContent = t("raceGo"); A.fx.unlock(); J.buzz(30);
-      phase = "race"; setTimeout(function () { cd.classList.add("out"); }, 600); setTimeout(function () { cd.remove(); }, 1000);
-    }
-    setTimeout(light, 900);
-    requestAnimationFrame(frame);
-
-    /* --- finish: places, stars, the podium --- */
-    function finish() {
-      phase = "end"; mo.tFin = tRace; A.fx.win();
-      // rivals that haven't crossed yet: their finishing time from their pace
-      riv.forEach(function (rv) { if (!rv.tFin) rv.tFin = tRace + (LEN - rv.d) / rv.sp; });
-      var place = 1 + riv.filter(function (rv) { return rv.tFin < mo.tFin; }).length;
-      var st = S.get(), old = best(R.id), nb = old ? Math.min(old, place) : place;
-      rst()[R.id] = nb;
-      var gain = (4 - nb) - (old ? 4 - old : 0) + Math.floor(got / 3);   // stars: 3/2/1 for the place (once, improvable) + 1 per 3 road stars
-      if (gain > 0) st.bonus = (st.bonus || 0) + gain;
-      S.save();
-      setTimeout(function () { if (my === live) podium(R, place, gain); }, 1400);
-    }
-    function podium(R, place, gain) {
-      stop(); APP().confetti(place === 1 ? 90 : 40);
-      var order = [{ k: "mo", t: mo.tFin }].concat(riv.map(function (rv) { return { k: rv.k, t: rv.tFin }; })).sort(function (a, b) { return a.t - b.t; });
-      HJ.modal(function (p, close) {
-        p.classList.add("race-pod");
-        p.appendChild(el("div", "kicker", esc(t("raceT")) + " · " + esc(R.gp ? t("raceGP") : t("raceN", { n: R.i + 1 }))));
-        p.appendChild(el("h2", "", esc(t("place" + place)) + " " + (place === 1 ? "🏆" : "")));
-        var pod = el("div", "pod");
-        [1, 0, 2].forEach(function (i) {
-          var o = order[i], col = el("div", "pod-col p" + (i + 1) + (o.k === "mo" ? " me" : ""));
-          var im = el("img", "mo-g"); im.alt = o.k === "mo" ? "Baby Mo" : o.k === "ais" ? "Ais" : "Kak Adam";
-          im.src = o.k === "mo" ? (i === 0 ? IMG.moWin : "assets/mo/mo-ok.webp") : o.k === "ais" ? (i === 0 ? IMG.aisWin : IMG.ais) : (i === 0 ? IMG.adamWin : IMG.adam);
-          col.appendChild(im); col.appendChild(el("div", "pod-step", "<b>" + (i + 1) + "</b>")); pod.appendChild(col);
-        });
-        p.appendChild(pod);
-        p.appendChild(el("div", "row res-chips", '<span class="chip glass">' + cup(Math.min(3, place), 26) + " " + esc(t("raceRight", { n: okN, m: gates.length })) + '</span><span class="chip glass">' + HJ.art("star", 22) + " <b>" + (gain > 0 ? "+" + gain : got) + "</b></span>"));
-        var r = el("div", "row"), again = el("button", "btn ghost", HJ.ic("replay") + " " + t("again")), list = races(R.w), nx = list[R.i + 1];
-        var go = el("button", "btn", (nx ? t("next") : t("raceMenu")) + " " + HJ.ic("next"));
-        again.onclick = function () { close(); play(R); };
-        go.onclick = function () { close(); if (nx) play(nx); else open(R.w); };
-        r.appendChild(again); r.appendChild(go); p.appendChild(r);
-        var menu = el("button", "btn small ghost", HJ.ic("map") + " " + t("raceMenu")); menu.onclick = function () { close(); open(R.w); }; p.appendChild(menu);
-        A.talk(t("place" + place), lang());
-      }, { sticky: true });
-    }
+      HJ.race3d.run(r, {
+        face: face,
+        faceOf: function (k) { return face({ mo: "moFace", yes: "moYes", oh: "moOh", win: "moWin" }[k] || "moFace"); },
+        onQuit: function () { open(r.w); },
+        onFinish: function (res) { reward(r, res); }
+      });
+    });
+  }
+  function reward(R, res) {
+    var st = S.get(), old = best(R.id), nb = old ? Math.min(old, res.place) : res.place;
+    rst()[R.id] = nb;
+    var gain = (4 - nb) - (old ? 4 - old : 0);                         // stars: 3/2/1 for the place (once, can improve)
+    if (gain > 0) st.bonus = (st.bonus || 0) + gain;
+    st.coins = (st.coins || 0) + res.coins;                             // coins go to the Garage
+    var bt = st.raceT = st.raceT || {}, rec = !bt[R.id] || res.time < bt[R.id]; if (rec) bt[R.id] = Math.round(res.time * 10) / 10;
+    S.save();
+    podium(R, res, gain, rec && old);
+  }
+  function podium(R, res, gain, record) {
+    APP().confetti(res.place === 1 ? 90 : 40); A.fx.win();
+    var IMGS = { mo: [IMG.moWin, "assets/mo/mo-ok.webp"], ais: [IMG.aisWin, IMG.ais], adam: [IMG.adamWin, IMG.adam] };
+    HJ.modal(function (p, close) {
+      p.classList.add("race-pod");
+      p.appendChild(el("div", "kicker", esc(t("raceT")) + " · " + esc(R.gp ? t("raceGP") : t("raceN", { n: R.i + 1 }))));
+      p.appendChild(el("h2", "", esc(t("place" + res.place))));
+      var pod = el("div", "pod");
+      [1, 0, 2].forEach(function (i) {
+        var o = res.order[i], col = el("div", "pod-col p" + (i + 1) + (o.k === "mo" ? " me" : ""));
+        var im = el("img", "mo-g"); im.alt = o.k === "mo" ? "Baby Mo" : o.k === "ais" ? "Ais" : "Kak Adam"; im.src = IMGS[o.k][i === 0 ? 0 : 1];
+        col.appendChild(im); col.appendChild(el("div", "pod-step", "<b>" + (i + 1) + "</b>")); pod.appendChild(col);
+      });
+      p.appendChild(pod);
+      var mm = Math.floor(res.time / 60), ss = Math.round(res.time % 60);
+      p.appendChild(el("div", "row res-chips",
+        '<span class="chip glass">' + cup(res.place, 24) + " " + esc(t("raceRight", { n: res.ok, m: res.total })) + "</span>" +
+        '<span class="chip glass"><i class="rt-coin"></i> <b>+' + res.coins + "</b></span>" +
+        (gain > 0 ? '<span class="chip glass">' + HJ.art("star", 20) + " <b>+" + gain + "</b></span>" : "") +
+        '<span class="chip glass' + (record ? " lit" : "") + '">⏱ ' + mm + ":" + (ss < 10 ? "0" : "") + ss + (record ? " · " + esc(t("raceRecord")) : "") + "</span>"));
+      var r = el("div", "row"), again = el("button", "btn ghost", HJ.ic("replay") + " " + t("again")), list = races(R.w), nx = list[R.i + 1];
+      var go = el("button", "btn", (nx ? t("next") : t("raceMenu")) + " " + HJ.ic("next"));
+      again.onclick = function () { close(); play(R); };
+      go.onclick = function () { close(); if (nx) play(nx); else open(R.w); };
+      r.appendChild(again); r.appendChild(go); p.appendChild(r);
+      var menu = el("button", "btn small ghost", HJ.ic("map") + " " + t("raceMenu")); menu.onclick = function () { close(); open(R.w); }; p.appendChild(menu);
+      A.talk(t("place" + res.place), lang());
+    }, { sticky: true });
   }
   function flagSvg() { return '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2v17" stroke="#3A4256" stroke-width="2"/>' + [0, 1, 2, 3, 4, 5].map(function (i) { return '<rect x="' + (4 + (i % 3) * 4) + '" y="' + (2 + (i / 3 | 0) * 4) + '" width="4" height="4" fill="' + ((i + (i / 3 | 0)) % 2 ? "#222" : "#fff") + '"/>'; }).join("") + "</svg>"; }
 
