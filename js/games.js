@@ -45,7 +45,7 @@
     if (s.show && s.show.length) {
       var row = el("div", "row");
       s.show.forEach(function (it) {
-        var c = el("button", "tile " + sizeCls(it)); c.appendChild(arEl(it));
+        var c = el("button", "tile " + sizeCls(it)); c.appendChild(arEl(it)); c.appendChild(el("span", "tap mini", HJ.ic("speaker")));
         c.onclick = function () { A.say(it.au); }; row.appendChild(c);
       });
       st.appendChild(row);
@@ -79,7 +79,8 @@
       ready(false); card.classList.add("speaking");
       A.say(it.au).then(function () { card.classList.remove("speaking"); heard++; if (ctx.alive() && said < 3) { ready(true); ctx.mo("pose-12", t("yourTurnSay")); } });
     }
-    card.onclick = function () { A.fx.tap(); play(); };
+    card.classList.add("tapme");
+    card.onclick = function () { card.classList.remove("tapme"); A.fx.tap(); play(); };
     said3.onclick = function () {
       if (said >= 3 || said3.disabled) return; said++; A.fx.coin();
       dots.children[said - 1].classList.add("on"); HJ.juice.burst(null, null, 8);
@@ -193,7 +194,8 @@
     add(st, el("div", "ask", t("isRight")));
     var card = el("button", "bigcard glass " + (s.item.quran ? "qq" : isWordy(s.item) ? "wordy" : "")), yAr = arEl(s.item); card.appendChild(yAr);
     if (!s.item.quran && !isWordy(s.item)) centerLater(yAr);
-    card.onclick = function () { A.say(s.heard.au); };
+    card.appendChild(el("span", "tap", HJ.ic("speaker")));
+    card.onclick = function () { A.fx.tap(); A.say(s.heard.au); };
     st.appendChild(card);
     var row = el("div", "row"), y = el("button", "btn big", HJ.ic("check") + " " + t("yes")), n = el("button", "btn big red", HJ.ic("close") + " " + t("no"));
     function ans(v, b) {

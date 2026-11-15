@@ -1360,3 +1360,51 @@ img.mo-pad { background-image: radial-gradient(closest-side, rgba(40,30,90,.32),
 /* word cards: the word in the middle, the latin label at the bottom edge (like the letter cards) */
 .bigcard.wordy { min-height: calc(clamp(54px, 15vw, 96px) * 1.5 + 46px); padding-top: 22px; padding-bottom: 26px; }
 .bigcard.wordy .lat { position: absolute; left: 0; right: 0; bottom: 10px; margin: 0; padding: 0; }
+
+/* ---------- tappable letter boxes look like buttons: a raised 3D lip, a clear speaker badge, a press-down ----------
+   (button cards only; plain display cards and drop slots stay flat) */
+:root { --lip: #C9DAEE; --lip-sh: rgba(30,60,110,.38); }
+:root[data-theme="dark"] { --lip: #0B1022; --lip-sh: rgba(0,0,0,.6); }
+button.bigcard, button.tile:not(.mystery), .car, .titem, .rs-card {
+  border: 2.5px solid rgba(255,255,255,.95);
+  box-shadow: 0 7px 0 var(--lip), 0 16px 22px -12px var(--lip-sh), inset 0 -3px 0 rgba(30,60,110,.05), inset 0 2px 0 #fff;
+  transition: transform 160ms cubic-bezier(.34,1.56,.64,1), box-shadow 160ms, background .2s; cursor: pointer; }
+:root[data-theme="dark"] button.bigcard, :root[data-theme="dark"] button.tile:not(.mystery), :root[data-theme="dark"] .car, :root[data-theme="dark"] .titem, :root[data-theme="dark"] .rs-card {
+  border-color: rgba(255,255,255,.12); box-shadow: 0 7px 0 var(--lip), 0 16px 22px -12px var(--lip-sh), inset 0 2px 0 rgba(255,255,255,.1); }
+button.bigcard { background: linear-gradient(180deg, #FFFFFF, #F1F7FF); }
+:root[data-theme="dark"] button.bigcard { background: linear-gradient(180deg, #233052, #1A2440); }
+button.tile:not(.mystery) { background: linear-gradient(180deg, #FFFFFF, #F3F8FF); }
+:root[data-theme="dark"] button.tile:not(.mystery) { background: linear-gradient(180deg, #24304F, #1B2440); }
+/* pressed: sinks onto its lip */
+button.bigcard:active, button.tile:not(.mystery):active, .car:active, .titem:active, .rs-card:active {
+  transform: translateY(5px) !important; box-shadow: 0 2px 0 var(--lip), 0 6px 10px -8px var(--lip-sh), inset 0 2px 0 rgba(255,255,255,.6) !important; }
+/* states keep the lip, in their colour */
+button.bigcard.speaking { box-shadow: 0 7px 0 #F0B400, 0 0 0 8px rgba(255,201,61,.22), 0 16px 22px -12px var(--lip-sh) !important; border-color: #FFD966; }
+button.tile.ok { background: linear-gradient(180deg,#E9FBF1,#CFF3DE); border-color: #22C06E; box-shadow: 0 7px 0 #17A35B, 0 16px 22px -12px rgba(18,161,90,.6) !important; }
+button.tile.no { background: #FFF0EF; border-color: #FF3B30; box-shadow: 0 7px 0 #D9302A, 0 16px 22px -12px rgba(200,40,30,.4) !important; }
+:root[data-theme="dark"] button.tile.ok { background: linear-gradient(180deg,#14402A,#0F3220); } :root[data-theme="dark"] button.tile.no { background: #3A1A1C; }
+.car.on { box-shadow: 0 7px 0 #E0A800, 0 16px 22px -12px var(--lip-sh) !important; border-color: #FFE08A; }
+.car.next { border-color: #22C06E; box-shadow: 0 7px 0 #17A35B, 0 0 0 6px rgba(34,192,110,.22), 0 16px 22px -12px var(--lip-sh) !important; }
+.car.read { border-color: #A8E8C4; box-shadow: 0 7px 0 #8FD6AE, 0 16px 22px -12px var(--lip-sh) !important; }
+.rs-card { border-color: rgba(255,255,255,.7); box-shadow: 0 7px 0 rgba(0,0,0,.16), 0 16px 22px -12px var(--lip-sh), inset 0 2px 0 rgba(255,255,255,.6); }
+/* the face-down match cards: a lip too */
+.mcard .f { box-shadow: 0 6px 0 #087A70, 0 14px 20px -10px rgba(10,148,136,.6), inset 0 2px 0 rgba(255,255,255,.45); border: 2.5px solid rgba(255,255,255,.6); }
+.mcard:active .in { transform: translateY(4px); } .mcard.flip:active .in { transform: rotateY(180deg); }
+
+/* the speaker badge: a real little button that sits on the corner, outside the letter (never covers it) */
+.bigcard .tap { top: -14px; right: -14px; width: 48px; height: 48px; color: #fff; font-size: 24px; z-index: 2;
+  background: linear-gradient(180deg, #FFB43A, #FF8A00); border: 3px solid #fff; box-shadow: 0 4px 0 #D96E00, 0 8px 14px -6px rgba(200,100,0,.6); }
+.bigcard .tap svg.ic { width: 24px; height: 24px; }
+.bigcard .tap::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 3px solid rgba(255,150,0,.55); animation: tapRing 1.8s ease-out infinite; }
+@keyframes tapRing { from { transform: scale(1); opacity: .9; } to { transform: scale(1.7); opacity: 0; } }
+:root[data-theme="dark"] .bigcard .tap { border-color: #1A2440; }
+.tile .tap.mini { position: absolute; top: -10px; right: -10px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff;
+  background: linear-gradient(180deg, #FFB43A, #FF8A00); border: 2.5px solid #fff; box-shadow: 0 3px 0 #D96E00; font-size: 15px; pointer-events: none; }
+.tile .tap.mini svg.ic { width: 16px; height: 16px; }
+button.tile { position: relative; }
+.stage { padding-top: 18px; }
+/* until the first tap, a big letter card gently invites a tap */
+button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
+@keyframes tapMe { 0%, 82%, 100% { transform: none; } 88% { transform: translateY(-6px) rotate(-1.2deg); } 94% { transform: translateY(0) rotate(1deg); } }
+@media (prefers-reduced-motion: reduce) { .bigcard .tap::after, button.bigcard.tapme { animation: none; } }
+.car { padding-bottom: 18px; } .car.w { min-height: 62px; }
