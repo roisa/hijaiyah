@@ -1408,3 +1408,21 @@ button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
 @keyframes tapMe { 0%, 82%, 100% { transform: none; } 88% { transform: translateY(-6px) rotate(-1.2deg); } 94% { transform: translateY(0) rotate(1deg); } }
 @media (prefers-reduced-motion: reduce) { .bigcard .tap::after, button.bigcard.tapme { animation: none; } }
 .car { padding-bottom: 18px; } .car.w { min-height: 62px; }
+
+/* ---------- comfort pass: bigger touch targets, readable labels, softer feedback ---------- */
+.vw.compact .vw-mic { width: 56px; height: 56px; font-size: 26px; }
+.btn.small { min-height: 46px; font-size: 15px; padding: 0 16px; }
+.crayon { width: 50px; height: 50px; }
+.stage .chip { min-height: 44px; }
+.mon-name { font-size: 14px !important; font-weight: 900; padding: 3px 10px; border-radius: 12px; background: rgba(255,255,255,.88); color: #1E2A3A; }
+:root[data-theme="dark"] .mon-name { background: rgba(20,24,50,.85); color: #fff; }
+/* the instruction stays readable over the scenery */
+.stage .ask { text-shadow: 0 1px 0 rgba(255,255,255,.85), 0 0 14px rgba(255,255,255,.7); }
+:root[data-theme="dark"] .stage .ask { text-shadow: 0 1px 0 rgba(0,0,0,.5), 0 0 14px rgba(10,16,40,.8); }
+/* a soft no-no instead of a hard shake */
+.tile.no { animation: none; }
+/* the ring of light on a right answer */
+.hit-ring { position: fixed; z-index: 80; transform: translate(-50%, -50%) scale(.6); border-radius: 50%; border: 5px solid #5BE38A; pointer-events: none;
+  box-shadow: 0 0 18px rgba(91,227,138,.7); animation: hitRing .6s ease-out forwards; }
+@keyframes hitRing { to { transform: translate(-50%, -50%) scale(1.5); opacity: 0; border-width: 1px; } }
+@media (prefers-reduced-motion: reduce) { .hit-ring { animation-duration: .01s; } }

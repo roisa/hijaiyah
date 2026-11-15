@@ -230,7 +230,7 @@
     var sky = el("div", "sky"); st.appendChild(sky);
     ctx.mo("yes", null);
     var n = 0, lastTarget = 0, pause = 0, again = setInterval(function () { if (!ctx.alive()) { clearInterval(again); return; } A.say(s.q.au); }, 5200);
-    function spawn() {
+    function spawn(pre) {
       if (!ctx.alive()) { clearInterval(timer); return; }
       n++;
       var isT = (n - lastTarget >= 2) || Math.random() < 0.4;
@@ -240,6 +240,7 @@
       var BC = (HJ.prize && HJ.prize.balloons()) || COLORS; b.style.background = BC[n % BC.length];
       b.style.left = (5 + Math.random() * 70) + "%";
       b.style.animationDuration = (6.5 + Math.random() * 2.5) + "s";
+      if (pre) b.style.animationDelay = (-pre) + "s";
       b.appendChild(arEl(it));
       b.onpointerdown = function (e) {
         e.preventDefault(); if (b.classList.contains("burst") || performance.now() < pause) return;
@@ -254,7 +255,7 @@
       sky.appendChild(b);
     }
     after(ctx, 300, function () { A.say(s.q.au); });
-    spawn(); timer = setInterval(spawn, 1050);
+    spawn(3.2); spawn(1.8); spawn(.4); timer = setInterval(spawn, 1050);
   };
 
   /* Reading train: listen (cars light up), then the child reads, tapping car by car */

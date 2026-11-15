@@ -33,12 +33,13 @@
     var head = el("div", "row"), cnt = el("div", "count glass", HJ.art("sparkle", 24) + " 0 / " + need);
     head.appendChild(cnt); st.appendChild(head);
     var sky = el("div", "sky td-sky"); st.appendChild(sky);
-    function spawn() {
+    function spawn(pre) {
       if (!ctx.alive()) { clearInterval(timer); return; }
       if (sky.querySelectorAll(".bub:not(.pop)").length > 5) return;
       var it = s.pool[n++ % s.pool.length], b = el("button", "bub");
       b.style.left = (4 + Math.random() * 64) + "%"; b.style.animationDuration = (7 + Math.random() * 3) + "s";
       b.style.setProperty("--c", COLS[n % COLS.length]);
+      if (pre) b.style.animationDelay = (-pre) + "s";            // start part-way up, so the sky is never empty
       b.appendChild(el("span", "ar", it.ar));
       b.onpointerdown = function () {
         if (b.classList.contains("pop")) return;
@@ -50,7 +51,7 @@
       b.addEventListener("animationend", function (e) { if (e.animationName === "bubUp") b.remove(); });
       sky.appendChild(b);
     }
-    spawn(); setTimeout(spawn, 500); timer = setInterval(spawn, 900);
+    spawn(3.6); spawn(2.2); spawn(.8); timer = setInterval(spawn, 900);
   };
 
   /* ---------- 2. paint the letter ---------- */

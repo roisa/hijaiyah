@@ -354,6 +354,35 @@
     });
   }
 
+  /* ---------- motion: how a step arrives, how a right / wrong tap feels ---------- */
+  var calmM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function anim(e, kf, o) { try { return e.animate(kf, o); } catch (x) { return null; } }
+  // the step's parts pop in one after another: the question, the card, then each answer
+  function enter(stage) {
+    var list = [];
+    [].forEach.call(stage.children, function (c) {
+      if (c.classList.contains("opts") || (c.classList.contains("row") && c.children.length > 1 && c.querySelector("button.tile"))) [].forEach.call(c.children, function (k) { list.push(k); });
+      else list.push(c);
+    });
+    list.forEach(function (e, i) {
+      if (calmM) { anim(e, [{ opacity: 0 }, { opacity: 1 }], { duration: 220, delay: i * 40, fill: "backwards" }); return; }
+      anim(e, [{ opacity: 0, transform: "translateY(18px) scale(.86)" }, { opacity: 1, transform: "translateY(-3px) scale(1.03)", offset: .7 }, { opacity: 1, transform: "none" }],
+        { duration: 460, delay: 60 + i * 70, easing: "cubic-bezier(.2,.8,.3,1)", fill: "backwards" });
+    });
+  }
+  // a right tap: the answer jumps with a jelly squash and a ring of light; a wrong one: a soft "no-no" wiggle
+  var lastHit = null;
+  document.addEventListener("pointerdown", function (e) { var t2 = e.target.closest && e.target.closest(".stage button, .stage .fruit, .stage .bub, .stage .mcard, .stage .sh-piece"); if (t2) lastHit = t2; }, true);
+  function feel(kind) {
+    var e = lastHit; if (!e || !document.body.contains(e)) return;
+    if (kind === "good") {
+      if (!calmM) anim(e, [{ transform: "scale(1)" }, { transform: "scale(1.18,.86)", offset: .25 }, { transform: "scale(.92,1.1) translateY(-8px)", offset: .5 }, { transform: "scale(1.04,.97)", offset: .75 }, { transform: "scale(1)" }], { duration: 520, easing: "ease-out" });
+      var r = e.getBoundingClientRect(), ring = document.createElement("div"); ring.className = "hit-ring";
+      ring.style.left = (r.left + r.width / 2) + "px"; ring.style.top = (r.top + r.height / 2) + "px"; ring.style.width = ring.style.height = Math.max(r.width, r.height) + "px";
+      document.body.appendChild(ring); setTimeout(function () { ring.remove(); }, 650);
+    } else if (!calmM) anim(e, [{ transform: "none" }, { transform: "translateX(-7px) rotate(-3deg)" }, { transform: "translateX(6px) rotate(2deg)" }, { transform: "translateX(-3px)" }, { transform: "none" }], { duration: 420, easing: "ease-in-out" });
+  }
+
   /* ---------- level runner ---------- */
   var runId = 0;
   function runLevel(lv, opts) {
@@ -446,7 +475,7 @@
         alive: function () { return my === runId && tok === stepToken; },
         next: function () { if (nexted || !ctx.alive()) return; nexted = true; A.stop(); idx++; show(); },
         good: function (quiet) {
-          A.fx.good(); combo++; collected++; react("yay");
+          A.fx.good(); combo++; collected++; react("yay"); feel("good");
           if (!quiet) mo(HJ.util.pick(CHEER), HJ.util.pick([t("great"), t("good"), "Yeay!", "Masya Allah!"])); else if (bw.style.display !== "none") mo(HJ.util.pick(CHEER));
           var p = J.at(); J.burst(p.x, p.y, 10); J.buzz(15);
           J.fly(p, road ? road.el.querySelector(".road-mo") : bar.firstChild.getBoundingClientRect().width > 4 ? bar.firstChild : bar, HJ.art("sparkle", 24));
@@ -456,7 +485,7 @@
         },
         cheer: function (txt, quiet) { if (!quiet) mo(HJ.util.pick(CHEER), txt || t("great")); J.burst(null, null, 16, true); },
         bad: function (soft, item, options) {
-          A.fx.bad(); mo(HJ.util.pick(OOPS), t("oops")); react("oh"); combo = 0; J.buzz([20, 40, 20]);
+          A.fx.bad(); mo(HJ.util.pick(OOPS), t("oops")); react("oh"); combo = 0; J.buzz([20, 40, 20]); feel("bad");
           if (item) S.addMiss(item);
           if (item && options && !replayed && missed.length < 3 && !missed.some(function (m) { return m.q.ar === item.ar; })) missed.push({ q: item, options: options });
           if (soft) return;
@@ -472,6 +501,7 @@
       var say = INSTR[step.type] && (step.again ? t("again2") : step.type === "sort" && step.say ? tr(step.say) : t(INSTR[step.type]));
       if (say && !spoken[step.type + (step.again ? "a" : "")]) { spoken[step.type + (step.again ? "a" : "")] = 1; A.talk(say, S.get().lang); }
       g(step, ctx);
+      enter(stage);
       firstTimeHand(step.type);
     }
     var finalStars = null, lostFor = {}, spoken = {}, noAyahShown = false;
