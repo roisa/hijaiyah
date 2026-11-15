@@ -136,6 +136,43 @@
     g.fillStyle = "rgba(255,255,255,.35)"; rr(g, 18, 14, w - 36, 18, 9); g.fill();
     g.fillStyle = "#fff"; g.font = "900 " + (h * .55) + "px 'Fredoka One', Nunito"; g.textAlign = "center"; g.textBaseline = "middle"; g.lineWidth = 8; g.strokeStyle = "#9B6DFF"; g.strokeText("?", w / 2, h / 2); g.fillText("?", w / 2, h / 2);
   }, 120, 120, .36); }
+  // flag bunting strung across the road on two poles
+  function buntSpr(night) { return sprite("bunt", night, function (g, w, h, n) {
+    g.fillStyle = "#8E9BB0"; rr(g, 6, 40, 22, h - 40, 8); g.fill(); rr(g, w - 28, 40, 22, h - 40, 8); g.fill();
+    g.fillStyle = "#FFD43B"; g.beginPath(); g.arc(17, 36, 14, 0, 7); g.arc(w - 17, 36, 14, 0, 7); g.fill();
+    var cols = n ? ["#C46AA0", "#E6B84A", "#4FA8C8", "#6EC08A", "#9A7AE0"] : ["#FF5D73", "#FFD43B", "#3D9BFF", "#22C06E", "#9B6DFF", "#FF9F3D"];
+    for (var row = 0; row < 2; row++) {
+      var y0 = 46 + row * 46, sag = 70 - row * 20; g.strokeStyle = n ? "#C8C2E8" : "#fff"; g.lineWidth = 4; g.beginPath(); g.moveTo(17, y0);
+      g.quadraticCurveTo(w / 2, y0 + sag * 2, w - 17, y0); g.stroke();
+      for (var i = 1; i < 22; i++) { var t2 = i / 22, x = (1 - t2) * (1 - t2) * 17 + 2 * (1 - t2) * t2 * (w / 2) + t2 * t2 * (w - 17), y = (1 - t2) * (1 - t2) * y0 + 2 * (1 - t2) * t2 * (y0 + sag * 2) + t2 * t2 * y0;
+        g.fillStyle = cols[(i + row * 2) % cols.length]; g.beginPath(); g.moveTo(x - 18, y); g.lineTo(x + 18, y); g.lineTo(x, y + 36); g.closePath(); g.fill();
+        g.fillStyle = "rgba(255,255,255,.3)"; g.beginPath(); g.moveTo(x - 18, y); g.lineTo(x - 2, y); g.lineTo(x - 9, y + 16); g.closePath(); g.fill(); }
+    }
+  }, 1100, 440, 2.5); }
+  // a little grandstand full of round, cheerful fans waving flags (abstract figures, no faces of real people)
+  function standSpr(night, side) { return sprite("stand" + side, night, function (g, w, h, n) {
+    g.fillStyle = n ? "#4A4370" : "#E9E3F7"; g.beginPath(); g.moveTo(10, h); g.lineTo(10, h * .35); g.lineTo(w - 10, h * .2); g.lineTo(w - 10, h); g.closePath(); g.fill();
+    g.fillStyle = n ? "#5C5488" : "#FF5D73"; g.fillRect(0, h * .14, w, 22); for (var s2 = 0; s2 < 10; s2++) { g.fillStyle = s2 % 2 ? (n ? "#C8C2E8" : "#fff") : (n ? "#5C5488" : "#FF5D73"); g.beginPath(); g.moveTo(s2 * w / 10, h * .14 + 22); g.lineTo((s2 + 1) * w / 10, h * .14 + 22); g.lineTo((s2 + .5) * w / 10, h * .14 + 44); g.closePath(); g.fill(); }
+    var skin = ["#F2C9A0", "#E0A97E", "#C98B63", "#F7D7B5"], tops = ["#3D9BFF", "#FF8FB1", "#22C06E", "#FFB000", "#9B6DFF", "#FF6B5B"], hats = ["#FFD43B", "#7CC8FF", "#FF8FB1", null];
+    for (var r2 = 0; r2 < 3; r2++) for (var i = 0; i < 8; i++) {
+      var x = 30 + i * (w - 60) / 7 + (r2 % 2) * 14, y = h * (.5 + r2 * .17), k = (i * 3 + r2 * 5) % 6;
+      g.fillStyle = tops[k]; rr(g, x - 16, y, 32, 34, 12); g.fill();
+      g.fillStyle = skin[(i + r2) % 4]; g.beginPath(); g.arc(x, y - 6, 13, 0, 7); g.fill();
+      var hc = hats[(i + r2 * 2) % 4]; if (hc) { g.fillStyle = hc; g.beginPath(); g.arc(x, y - 10, 13, Math.PI, 0); g.fill(); }
+      if ((i + r2) % 3 === 0) { g.strokeStyle = "#8E9BB0"; g.lineWidth = 3; g.beginPath(); g.moveTo(x + 14, y + 6); g.lineTo(x + 22, y - 34); g.stroke(); g.fillStyle = tops[(k + 2) % 6]; g.beginPath(); g.moveTo(x + 22, y - 34); g.lineTo(x + 46, y - 26); g.lineTo(x + 22, y - 18); g.closePath(); g.fill(); }
+    }
+  }, 520, 300, 1.25); }
+  // a hot-air balloon carrying a letter, drifting in the sky (made once per letter)
+  function skyBalloon(letter, cols) { return sprite("sb" + letter + cols[0], 0, function (g, w, h) {
+    g.save(); g.beginPath(); g.ellipse(w / 2, h * .38, w * .44, h * .36, 0, 0, 7); g.clip();
+    g.fillStyle = cols[0]; g.fillRect(0, 0, w, h); g.fillStyle = cols[1]; for (var i = -2; i < 3; i++) { g.beginPath(); g.ellipse(w / 2 + i * w * .2, h * .38, w * .05, h * .4, 0, 0, 7); g.fill(); }
+    g.fillStyle = cols[2]; g.fillRect(0, h * .4, w, h * .14);
+    var q = g.createRadialGradient(w * .35, h * .2, 4, w / 2, h * .4, w * .5); q.addColorStop(0, "rgba(255,255,255,.5)"); q.addColorStop(.5, "rgba(255,255,255,0)"); q.addColorStop(1, "rgba(0,0,0,.18)"); g.fillStyle = q; g.fillRect(0, 0, w, h);
+    g.fillStyle = "#fff"; g.font = (h * .3) + "px 'Scheherazade New', serif"; g.textAlign = "center"; g.direction = "rtl"; g.lineWidth = 3; g.strokeStyle = cols[0]; g.strokeText(letter, w / 2, h * .5); g.fillText(letter, w / 2, h * .5); g.direction = "ltr";
+    g.restore();
+    g.strokeStyle = "#8A6346"; g.lineWidth = 2; g.beginPath(); g.moveTo(w * .36, h * .7); g.lineTo(w * .42, h * .86); g.moveTo(w * .64, h * .7); g.lineTo(w * .58, h * .86); g.stroke();
+    g.fillStyle = "#C98B50"; rr(g, w * .4, h * .85, w * .2, h * .13, 4); g.fill();
+  }, 90, 120, 0); }
   function coinSpr() { return sprite("coin", 0, function (g, w, h) {
     var q = g.createRadialGradient(w * .38, h * .35, 4, w / 2, h / 2, w / 2); q.addColorStop(0, "#FFF3A6"); q.addColorStop(.6, "#FFC21A"); q.addColorStop(1, "#D98A00");
     g.fillStyle = q; g.beginPath(); g.arc(w / 2, h / 2, w / 2 - 2, 0, 7); g.fill(); g.strokeStyle = "#B87400"; g.lineWidth = 4; g.stroke();
@@ -208,6 +245,17 @@
     if (who.ears) { g.fillStyle = H[0]; g.beginPath(); g.moveTo(-50, -320); g.lineTo(-44, -360); g.lineTo(-22, -338); g.closePath(); g.moveTo(50, -320); g.lineTo(44, -360); g.lineTo(22, -338); g.closePath(); g.fill(); }
     // spoiler wing
     g.fillStyle = P[1]; g.fillRect(-150, -176, 16, 30); g.fillRect(134, -176, 16, 30); g.fillStyle = P[0]; rr(g, -166, -190, 332, 22, 10); g.fill();
+    // gloves on the steering wheel, peeking out at the sides
+    g.fillStyle = who.glove || "#FFFFFF"; g.beginPath(); g.arc(-82, -150, 15, 0, 7); g.arc(82, -150, 15, 0, 7); g.fill();
+    g.strokeStyle = "rgba(0,0,0,.12)"; g.lineWidth = 3; g.beginPath(); g.arc(-82, -150, 15, 0, 7); g.stroke(); g.beginPath(); g.arc(82, -150, 15, 0, 7); g.stroke();
+    // a whippy antenna with a little flag (Mo's has a hijaiyah letter on it)
+    if (who.flag) {
+      var fw = o.flap || 0;
+      g.strokeStyle = "#5A6275"; g.lineWidth = 5; g.lineCap = "round"; g.beginPath(); g.moveTo(132, -176); g.quadraticCurveTo(140 + fw * 6, -290, 150 + fw * 10, -380); g.stroke();
+      g.fillStyle = who.flag; g.beginPath(); g.moveTo(150 + fw * 10, -390); g.quadraticCurveTo(215, -380 + fw * 12, 262, -362 + fw * 16); g.quadraticCurveTo(215, -330 - fw * 8, 148 + fw * 9, -310); g.closePath(); g.fill();
+      g.fillStyle = "rgba(255,255,255,.25)"; g.beginPath(); g.moveTo(150 + fw * 10, -390); g.quadraticCurveTo(200, -384, 240, -370); g.lineTo(150, -372); g.closePath(); g.fill();
+      if (who.flagTxt) { g.fillStyle = "#fff"; g.font = "64px 'Scheherazade New', serif"; g.textAlign = "center"; g.direction = "rtl"; g.fillText(who.flagTxt, 196, -334); g.direction = "ltr"; }
+    }
     g.restore();
   }
 
@@ -263,7 +311,7 @@
     if (HJ.bg) HJ.bg(null);
     var night = dark() ? 1 : 0, TH = THEME[R.w], rand = rng(R.id + "-track");
     var st = S.get(), gar = st.garage || {}, myPaint = PAINT[gar.paint] || PAINT.red, myRim = RIMS[gar.rim] || RIMS.classic;
-    var ME = { paint: myPaint, rim: myRim, helmet: [myPaint[0], myPaint[1]], shirt: ["#43B85C", "#FF8A3D"], num: "1", hair: "#22252E", star: true };
+    var ME = { paint: myPaint, rim: myRim, helmet: [myPaint[0], myPaint[1]], shirt: ["#43B85C", "#FF8A3D"], num: "1", hair: "#22252E", star: true, flag: "#22C06E", flagTxt: ["ب", "ج", "ق", "ن"][R.w - 1] || "ب" };
     var RIV = {
       ais: { paint: PAINT.pink, rim: RIMS.classic, helmet: ["#FFB3D6", "#E86AA6"], shirt: ["#FF8FC8", "#9B6DFF"], hijab: "#FFC4E1", num: "2", ears: true },
       adam: { paint: PAINT.blue, rim: RIMS.classic, helmet: ["#7FB3FF", "#2F6BE0"], shirt: ["#3D7BFF", "#FFFFFF"], num: "3" }
@@ -320,6 +368,9 @@
     N = segs.length; var LAPLEN = N * SEG, TOTAL = laps * LAPLEN;
     // scenery on both sides
     for (k = 20; k < N; k += 30) segs[k].sp.push({ s: function (n) { return n ? lampSpr() : null; }, x: (k / 30) % 2 ? 1.2 : -1.2 });
+    // festive bunting across the road now and then, grandstands of cheering fans at the start / finish straight
+    for (k = 70; k < N - 60; k += 150) segs[k].sp.push({ s: function (n) { return buntSpr(n); }, x: 0, over: 1 });
+    [6, 26, 46, N - 34, N - 14].forEach(function (kk, j) { if (segs[kk]) segs[kk].sp.push({ s: function (n) { return standSpr(n, j % 2); }, x: j % 2 ? 1.75 : -1.75, fans: 1 }); });
     for (k = 12; k < N; k += 5) {
       var dk = TH.deco[Math.floor(rand() * TH.deco.length)], side = rand() < .5 ? -1 : 1;
       segs[k].sp.push({ s: DECO[dk], x: side * (1.3 + rand() * 1.1) });
@@ -388,6 +439,23 @@
         if (TH.name === "sea") { g.fillStyle = "rgba(255,255,255,.35)"; for (var b = 0; b < 3; b++) { g.beginPath(); g.arc(cx + b * 14, ((cy - tRace * 30 * (1 + b * .2)) % (H * .5) + H * .5) % (H * .5), 4 + b * 2, 0, 7); g.fill(); } }
         else { g.fillStyle = night ? "rgba(110,110,180,.4)" : "rgba(255,255,255,.92)"; g.beginPath(); g.ellipse(cx, cy, 44, 14, 0, 0, 7); g.arc(cx - 16, cy - 6, 16, 0, 7); g.arc(cx + 12, cy - 12, 20, 0, 7); g.fill(); }
       }
+      // letter balloons drifting high up (letters from this race), birds flapping by (fish under the sea)
+      if (TH.name !== "sea") for (var bi = 0; bi < 3; bi++) {
+        var BC = [["#FF6B81", "#FFD1D9", "#FFB000"], ["#2EC4B6", "#D4F7F2", "#FF8FA3"], ["#FFB000", "#FFF0C2", "#8B63F0"]][bi];
+        var sp2 = skyBalloon(R.targets[bi % R.targets.length].ar, BC), sc2 = (.55 + bi * .18) * Math.min(1, W / 400);
+        var bx = ((bi * (W + 160) / 3 + 40 - skyX * (.15 + bi * .05) - tRace * (3 + bi * 2)) % (W + 160) + W + 160) % (W + 160) - 80, by = H * (.12 + bi * .09) + Math.sin(tRace * .8 + bi * 2) * 6;
+        g.globalAlpha = night ? .75 : 1; g.drawImage(sp2.c, bx, by, sp2.w * sc2, sp2.h * sc2); g.globalAlpha = 1;
+      }
+      for (var bd = 0; bd < 4; bd++) {
+        var fx = ((bd * 133 - tRace * (28 + bd * 6) - skyX * .4) % (W + 100) + W + 100) % (W + 100) - 50, fy = H * (.22 + (bd % 2) * .08) + Math.sin(tRace * 2 + bd) * 8;
+        if (TH.name === "sea") {
+          g.fillStyle = ["#FFB000", "#FF7AA8", "#7CC8FF", "#5BE38A"][bd]; g.beginPath(); g.ellipse(fx, fy, 14, 8, 0, 0, 7); g.fill();
+          g.beginPath(); g.moveTo(fx + 12, fy); g.lineTo(fx + 24, fy - 8); g.lineTo(fx + 24, fy + 8); g.closePath(); g.fill(); g.fillStyle = "#fff"; g.beginPath(); g.arc(fx - 7, fy - 2, 2.5, 0, 7); g.fill();
+        } else if (!night || bd < 2) {
+          var fl = Math.sin(tRace * 12 + bd * 1.7) * 6; g.strokeStyle = night ? "rgba(220,215,255,.7)" : "#5A6275"; g.lineWidth = 2.4; g.lineCap = "round";
+          g.beginPath(); g.moveTo(fx - 10, fy - fl); g.quadraticCurveTo(fx - 5, fy - 4, fx, fy); g.quadraticCurveTo(fx + 5, fy - 4, fx + 10, fy - fl); g.stroke();
+        }
+      }
       // far layer (mountains / sea line) and near hills, both slide with the curves
       var hz = H * .5;
       g.fillStyle = TH.far[night]; g.beginPath(); g.moveTo(0, hz);
@@ -439,7 +507,11 @@
       for (n = list.length - 1; n > 0; n--) {
         var it = list[n], sg = it.seg, A1 = it.a; if (A1.cz <= DEPTH) continue;
         var behind = it.abs < pSegAbs;
-        sg.sp.forEach(function (o) { var sp = typeof o.s === "function" ? o.s(night) : o.s; if (sp) drawSprite(sp, A1, o.x, it.clip, 0); });
+        sg.sp.forEach(function (o) {
+          var sp = typeof o.s === "function" ? o.s(night) : o.s; if (!sp || (o.over && behind)) return;
+          var lift = o.fans && !calm ? Math.abs(Math.sin(tRace * 7 + sg.i)) * A1.s * ROADW * W / 2 * .04 : 0;
+          drawSprite(sp, A1, o.x, it.clip, lift);
+        });
         if (behind) continue;
         (ev[it.abs] || []).forEach(function (e) {
           if (e.k === "gate") drawGate(e.o, A1, it.clip);
@@ -469,7 +541,7 @@
       var kw = Math.min(W * .38, 230);
       if (shield > 0) { var bq = g.createRadialGradient(W / 2, H - kw * .55, kw * .2, W / 2, H - kw * .55, kw * .78); bq.addColorStop(0, "rgba(124,200,255,0)"); bq.addColorStop(.8, "rgba(124,200,255,.25)"); bq.addColorStop(1, "rgba(255,255,255,.7)"); g.fillStyle = bq; g.beginPath(); g.arc(W / 2, H - kw * .55, kw * .78 + Math.sin(tRace * 6) * 3, 0, 7); g.fill(); }
       if (magnet > 0) { g.strokeStyle = "rgba(255,212,59," + (.4 + Math.sin(tRace * 10) * .2) + ")"; g.lineWidth = 4; for (var mr = 0; mr < 2; mr++) { g.beginPath(); g.arc(W / 2, H - kw * .5, kw * (.62 + mr * .14 + (tRace * .3 % .14)), Math.PI * 1.1, Math.PI * 1.9); g.stroke(); } }
-      drawKart(g, W / 2, H - 14, kw, ME, { tilt: tilt, turbo: boost > 0 || padT > 0, air: air * 120, night: night, roll: roll, wob: calm ? 0 : Math.sin(tRace * 22) * 1.2 });
+      drawKart(g, W / 2, H - 14, kw, ME, { flap: Math.sin(tRace * 14) * (speed / BASE), tilt: tilt, turbo: boost > 0 || padT > 0, air: air * 120, night: night, roll: roll, wob: calm ? 0 : Math.sin(tRace * 22) * 1.2 });
     }
     function drawSprite(sp, P, offX, clip, lift, scaleX, forceW) {
       var w = forceW || (P.s * sp.ww * ROADW * W / 2), h = w * sp.h / sp.w, x = P.x + P.s * offX * ROADW * W / 2 - w / 2 * (scaleX || 1), y = P.y - h - (lift || 0);
@@ -685,7 +757,7 @@
     /* ---- finish ---- */
     function finish() {
       phase = "end"; finT = tRace; A.fx.win(); setCam("win");
-      callText(esc(t("raceFinishT")), "gold"); puff(W / 2, H * .45, 40, "star"); puff(W * .25, H * .4, 20, "box"); puff(W * .75, H * .4, 20, "box");
+      callText(esc(t("raceFinishT")), "gold"); if (HJ._app && HJ._app.confetti) HJ._app.confetti(calm ? 30 : 110); puff(W / 2, H * .45, 40, "star"); puff(W * .25, H * .4, 20, "box"); puff(W * .75, H * .4, 20, "box");
       riv.forEach(function (rv) { if (!rv.fin) rv.fin = tRace + (TOTAL - rv.z) / (BASE * rv.pace); });
       var place = 1 + riv.filter(function (rv) { return rv.fin < finT; }).length;
       var order = [{ k: "mo", t: finT }].concat(riv.map(function (rv) { return { k: rv.k, t: rv.fin }; })).sort(function (a, b) { return a.t - b.t; });
