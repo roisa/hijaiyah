@@ -1195,6 +1195,6 @@ img.mo-pad { background-image: radial-gradient(closest-side, rgba(40,30,90,.32),
 .gift-stage:has(.gift-dance)::after { content: ""; position: absolute; left: 50%; bottom: 8px; width: 96px; height: 13px; margin-left: -48px; border-radius: 50%; z-index: 0;
   background: radial-gradient(closest-side, rgba(40,30,90,.3), rgba(40,30,90,0)); }
 
-/* Indonesian: the "Dunia" ribbon sits in front, overlapping just the tops of the "Hijaiyah" letters */
-.hw-rib.back { z-index: 3; margin-bottom: -2px; }
-.hw-rib.back + .hw-word { z-index: 1; }
+/* Indonesian: the "Dunia" ribbon sits just above, behind the "Hijaiyah" letters */
+.hw-rib.back { z-index: 0; margin-bottom: -2px; }
+.hw-rib.back + .hw-word { z-index: 2; }
