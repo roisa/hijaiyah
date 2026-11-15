@@ -1206,3 +1206,9 @@ img.mo-pad { background-image: radial-gradient(closest-side, rgba(40,30,90,.32),
 .bigcard:not(.qq):not(.wordy) .lat { position: absolute; left: 0; right: 0; bottom: 10px; margin: 0; padding: 0; }
 @media (max-height: 640px) { .bigcard:not(.qq):not(.wordy) { min-height: calc(88px * 1.3 + 46px); } }
 @media (max-height: 640px) { .bubble-wrap .bubble { margin-left: -12px; } }
+/* train: the engine leads (it faces away from the carriages) and pulls the train off to the right; letters sit
+   inside their carriage (room for hamza/harakat, ink centred by games.js) */
+.engine-wrap svg.engine { transform: none; }
+.train.go { transform: translateX(120vw); }
+.car:not(.w) .ar { line-height: 1.75; }
+.car { overflow: visible; }

@@ -258,19 +258,22 @@
   /* Reading train: listen (cars light up), then the child reads, tapping car by car */
   G.train = function (s, ctx) {
     var st = ctx.stage, parts = s.item.parts || s.item.au.map(function (a) { return { ar: a, au: a }; });
-    var phase = 0, idx = 0;
+    var phase = 0, idx = 0, miss = 0, skipT = null;
     var ask = el("div", "ask", t("listenFirst"));
     var track = el("div", "track"), train = el("div", "train");
     train.appendChild(el("div", "engine-wrap", HJ.engine()));
     var cars = parts.map(function (p, i) {
-      var c = el("button", "car " + (isWordy(p) || p.quran ? "w" : "")); c.appendChild(arEl(p));
+      var c = el("button", "car " + (isWordy(p) || p.quran ? "w" : "")), ca = arEl(p); c.appendChild(ca);
+      if (!isWordy(p) && !p.quran) centerLater(ca);
       c.onclick = function () {
         if (phase !== 1) { A.say(p.au); return; }
-        if (i !== idx) { A.fx.tap(); return; }
-        c.classList.remove("next"); c.classList.add("read"); A.fx.step(); A.say(p.au);
+        // the next carriage is the one by the engine (we read right → left). A wrong one gets a hint the first time,
+        // after that any tap reads the next carriage, so a small child is never stuck
+        if (i !== idx && ++miss < 2) { A.fx.tap(); HJ.juice.bump(cars[idx]); ctx.mo("pose-15", t("trainHint")); A.talk(t("trainHint"), HJ.store.get().lang); return; }
+        var cur = cars[idx]; cur.classList.remove("next"); cur.classList.add("read"); A.fx.step(); A.say(parts[idx].au);
         idx++;
         if (idx < cars.length) cars[idx].classList.add("next");
-        else { phase = 2; ctx.cheer(t("great")); after(ctx, 900, function () { A.fx.whoosh(); train.classList.add("go"); }); after(ctx, 2300, ctx.next); }
+        else { phase = 2; clearTimeout(skipT); skip.style.display = "none"; ctx.cheer(t("great")); after(ctx, 900, function () { A.fx.whoosh(); train.classList.add("go"); }); after(ctx, 2300, ctx.next); }
       };
       return c;
     });
@@ -285,6 +288,8 @@
     row.appendChild(lb);
     st.appendChild(recorder(typeof s.item.au === "string" ? s.item.au : null));
     var go = el("button", "btn", HJ.ic("bubble") + " " + (HJ.store.get().lang === "en" ? "My turn" : "Giliranku")); go.style.display = "none"; row.appendChild(go);
+    // a way on if it still doesn't go (shown a while after "My turn")
+    var skip = el("button", "btn small ghost", t("next") + " " + HJ.ic("next")); skip.style.display = "none"; skip.onclick = function () { ctx.next(); }; st.appendChild(skip);
     function listen() {
       phase = 0; var my = {};
       var i = 0;
@@ -298,7 +303,8 @@
     lb.onclick = function () { A.fx.tap(); listen(); };
     go.onclick = function () {
       A.stop(); phase = 1; idx = 0; cars.forEach(function (c) { c.classList.remove("on", "read", "next"); });
-      cars[0].classList.add("next"); ask.textContent = t("yourTurn"); go.style.display = "none"; ctx.mo("pose-15", t("tapSlow"));
+      cars[0].classList.add("next"); HJ.juice.bump(cars[0]); ask.textContent = t("yourTurn"); go.style.display = "none"; ctx.mo("pose-15", t("tapSlow"));
+      miss = 0; clearTimeout(skipT); skipT = setTimeout(function () { if (ctx.alive() && phase === 1) { skip.style.display = ""; HJ.juice.bump(skip); } }, 12000);
     };
     ctx.mo("pose-12", t("listenFirst"));
     after(ctx, 400, listen);
