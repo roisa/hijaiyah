@@ -176,91 +176,86 @@
 
   /* ---------- HOME ---------- */
   function home() {
-    var sc = shell("home", "Baby Mo Hijaiyah"), st = S.get();
-    var pane = el("section", "has-scene"); sc.appendChild(pane);
-    var scene = el("div", "pd-scene"); scene.innerHTML = window.HJ_SCENE || ""; scene.setAttribute("aria-hidden", "true"); pane.appendChild(scene);
+    var sc = shell("home", ""), st = S.get(), dark = document.documentElement.getAttribute("data-theme") === "dark";
+    sc.parentNode.classList.add("is-home");
+    sc.addEventListener("scroll", function () { sc.parentNode.classList.toggle("scrolled", sc.scrollTop > 40); }, { passive: true });
+    var hr = new Date().getHours(), cur = S.current(), w = HJ.worlds[cur.w - 1];
 
-    // Mo peeking + glass speech bubble
-    var g = el("div", "mo-greet");
-    var pic = el("button", "mo-pic"); pic.setAttribute("aria-label", "Baby Mo");
-    var hr = new Date().getHours();
-    var pose = hr < 11 ? "pose-05" : hr < 15 ? "pose-41" : hr < 18 ? "yes" : "pose-12";
-    pic.appendChild(moImg(pose));
-    pic.onclick = function () { A.unlock(); A.fx.pop(); var im = pic.querySelector("img"); im.src = MO(HJ.util.pick(CHEER)); A.talk(st.name ? t("hello", { n: st.name }) : "Assalamu'alaikum!", st.lang); };
+    // ---- Hijaiyah World: the floating island (js/world.js) ----
+    var hero = el("section", "hw");
+    hero.innerHTML = HJ.world.hero(dark);
+    hero.appendChild(el("div", "hw-title", '<small>Baby Mo</small><b>' + esc(t("worldT")) + "</b>"));
+    var bub = el("div", "hw-bub", (st.name ? esc(t("hello", { n: st.name })) : "Assalamu'alaikum!") + " " + HJ.art("hand", 22, "waving"));
+    hero.appendChild(bub);
+    if (!st.name) { var chip = el("button", "chip hw-name", ic("user") + " " + esc(t("nameQ"))); chip.onclick = function () { nameSheet(home); }; hero.appendChild(chip); }
+    var cta = el("div", "hw-cta");
+    var info = el("button", "hw-where", wi(cur.w, true).outerHTML + "<span><small>" + esc(t("book")) + " " + w.n + " · Level " + cur.id + "</small><b>" + esc(tr(w.name)) + "</b></span>");
+    info.onclick = function () { A.unlock(); A.fx.tap(); map(cur.w); };
+    var play = el("button", "hw-play", '<span class="hw-play-ic">' + ic("play") + "</span><b>" + esc(t("playBig")) + "</b>");
+    play.setAttribute("aria-label", t("playBig") + " · " + tr(w.name) + " · Level " + cur.id);
+    play.onclick = function () { A.unlock(); A.fx.tap(); levelSheet(cur); };
+    cta.appendChild(play); cta.appendChild(info); hero.appendChild(cta);
+    // tap the toys, the balloons and Mo
+    var svg = hero.querySelector("svg");
+    svg.addEventListener("click", function (e) {
+      var tgt = e.target.closest(".hw-toy,.hw-balloon,.hw-mo"); if (!tgt) return;
+      A.unlock();
+      tgt.classList.remove("boing"); void tgt.getBoundingClientRect(); tgt.classList.add("boing");
+      if (tgt.classList.contains("hw-mo")) {
+        A.fx.pop(); tgt.querySelector("image").setAttribute("href", MO(HJ.util.pick(CHEER)));
+        A.talk(st.name ? t("hello", { n: st.name }) : "Assalamu'alaikum!", st.lang); return;
+      }
+      var c = tgt.getAttribute("data-say"), L = HJ.BY[c]; A.fx.note(c.charCodeAt(0) % 8);
+      var r = tgt.getBoundingClientRect(); J.burst(r.left + r.width / 2, r.top + r.height / 3, 10, true);
+      A.say(c === "ا" ? "أَلِف" : (L && L.n) || c);
+    });
+    sc.appendChild(hero);
     // Mo greets once a day, on the first touch of the home screen (phones only allow sound after a tap)
     if (st.greeted !== today()) sc.addEventListener("pointerdown", function once(e) {
-      sc.removeEventListener("pointerdown", once, true); if (S.get().greeted === today() || pic.contains(e.target)) return;
-      S.set("greeted", today()); setTimeout(function () { A.talk((st.name ? t("hello", { n: st.name }) : "Assalamu'alaikum!") + " " + greetLine(new Date().getHours()), st.lang); }, 250);
+      sc.removeEventListener("pointerdown", once, true); if (S.get().greeted === today() || e.target.closest(".hw-mo")) return;
+      S.set("greeted", today()); setTimeout(function () { A.talk((st.name ? t("hello", { n: st.name }) : "Assalamu'alaikum!") + " " + greetLine(hr), st.lang); }, 250);
     }, true);
-    var bub = el("div", "mo-bub glass");
-    bub.appendChild(el("div", "mo-hello", st.name ? "Assalamu'alaikum,<br><em>" + esc(st.name) + "</em>! " + HJ.art("hand", 26, "waving")
-      : "Assalamu'alaikum! " + HJ.art("hand", 26, "waving")));
-    bub.appendChild(el("div", "mo-sub", esc(greetLine(hr))));
-    if (!st.name) { var chip = el("button", "chip", ic("user") + " " + esc(t("nameQ"))); chip.onclick = function () { nameSheet(home); }; bub.appendChild(chip); }
-    g.appendChild(pic); g.appendChild(bub); pane.appendChild(g);
 
-    // "now" card: continue where Ibra stopped
-    var cur = S.current(), w = HJ.worlds[cur.w - 1];
-    var done = w.levels.filter(function (l) { return st.stars[l.id]; }).length;
-    var now = el("button", "hm-now glass");
-    var tx = el("span", "hm-tx");
-    tx.innerHTML = '<span class="hm-k">' + esc(t("continue")) + " · " + t("book") + " " + w.n + "</span><b>" + esc(tr(w.name)) + "</b>" +
-      '<small><span class="ar" style="font-size:20px">' + esc(cur.kind === "surah" ? HJ.surah(cur.surah).arabicName : levelName(cur)) + "</span> · Level " + cur.id + "</small>" +
-      '<span class="hm-bar"><i style="width:' + Math.round(done / w.levels.length * 100) + '%"></i></span>';
-    now.appendChild(tx);
-    now.appendChild(el("span", "hm-play", ic("play")));
-    now.onclick = function () { A.unlock(); A.fx.tap(); levelSheet(cur); };
-    pane.appendChild(now);
-
-    // Misi Hari Ini
+    // ---- today: three tokens to collect ----
     var md = missions(), list = [
-      { k: "level", icon: wi(cur.w, true), b: t("mLevel"), s: levelName(cur), go: function () { levelSheet(cur); } },
-      { k: "review", img: "assets/icons/calendar.svg", b: t("daily"), s: t("dailySub"), go: startDaily },
-      { k: "tashih", img: "assets/icons/child.svg", b: t("mTashih"), s: t("mTashihSub"), go: startTashih }
+      { k: "level", img: "assets/icons/mission.svg", b: t("tokPlay"), go: function () { levelSheet(cur); } },
+      { k: "review", img: "assets/icons/calendar.svg", b: t("tokReview"), go: startDaily },
+      { k: "tashih", img: "assets/icons/child.svg", b: t("tokRead"), go: startTashih }
     ];
-    var nDone = list.filter(function (m) { return md[m.k]; }).length;
-    var dm = el("section", "dm-card glass");
-    var dateStr = new Date().toLocaleDateString(EN() ? "en-GB" : "id-ID", { weekday: "long", day: "numeric", month: "long" });
-    var lit = st.streak.last === today();
-    dm.innerHTML = '<div class="dm-head"><img class="dm-cal" src="assets/icons/mission.svg" alt=""><div class="dm-titles"><div class="dm-kicker">' + esc(dateStr) +
-      '</div><div class="dm-title">' + esc(t("mission")) + '</div><div class="dm-sub">' + esc(nDone === 3 ? t("missionAll") : t(3 - nDone === 1 ? "missionSub1" : "missionSub", { n: 3 - nDone })) +
-      '</div></div><div class="dm-streak' + (lit ? "" : " off") + '"><span class="dm-fire">' + HJ.art("flame", 26) + '</span><span class="dm-sn">' + (st.streak.n || 0) + '</span><span class="dm-sl">' + esc(t("day")) + "</span></div></div>" +
-      '<div class="dm-prog">' + list.map(function (m) { return "<i" + (md[m.k] ? ' class="on"' : "") + "></i>"; }).join("") + "</div>";
-    var dl = el("div", "dm-list");
-    list.forEach(function (m) {
-      var r = el("button", "dm-row" + (md[m.k] ? " done" : ""));
-      var art = el("span", "dm-art"); if (m.icon) art.appendChild(m.icon); else art.innerHTML = '<img src="' + m.img + '" alt="">';
-      r.appendChild(art);
-      r.appendChild(el("span", "dm-txt", "<b>" + esc(m.b) + "</b><small>" + esc(md[m.k] ? t("doneToday") : m.s) + "</small>"));
-      r.appendChild(el("span", "dm-go", md[m.k] ? ic("check") : ic("play")));
-      r.onclick = function () { A.unlock(); A.fx.tap(); m.go(); };
-      dl.appendChild(r);
+    var nDone = list.filter(function (m) { return md[m.k]; }).length, lit = st.streak.last === today();
+    var td = el("section", "td-card glass");
+    td.appendChild(el("div", "td-h", "<span><b>" + esc(t("mission")) + "</b><small>" + esc(nDone === 3 ? t("missionAll") : t(3 - nDone === 1 ? "missionSub1" : "missionSub", { n: 3 - nDone })) + "</small></span>" +
+      '<span class="td-streak' + (lit ? "" : " off") + '">' + HJ.art("flame", 24) + "<b>" + (st.streak.n || 0) + "</b><small>" + esc(t("day")) + "</small></span>"));
+    var row = el("div", "td-row");
+    list.forEach(function (m, i) {
+      var b = el("button", "td-tok t" + i + (md[m.k] ? " done" : ""), '<span class="td-ic"><img src="' + m.img + '" alt=""></span><span class="td-lb">' + esc(m.b) + "</span>" +
+        (md[m.k] ? '<span class="td-ok">' + ic("check") + "</span>" : ""));
+      b.onclick = function () { A.unlock(); A.fx.tap(); m.go(); };
+      row.appendChild(b);
+      if (i < 2) row.appendChild(el("i", "td-link" + (md[m.k] ? " on" : "")));
     });
-    dm.appendChild(dl); pane.appendChild(dm);
-    if (HJ.extras) { pane.appendChild(HJ.extras.chestCard()); HJ.extras.arcadeRow(sc); }
+    td.appendChild(row); sc.appendChild(td);
 
-    // the 7 books as app icons
-    sc.appendChild(el("div", "sec-h", "<h3>" + esc(t("books")) + "</h3><small>" + S.totalStars() + " " + HJ.art("star", 16) + "</small>"));
-    var grid = el("div", "icon-grid");
-    HJ.worlds.forEach(function (w) {
-      var locked = !S.unlocked(w.levels[0]), dn = w.levels.filter(function (l) { return st.stars[l.id]; }).length;
-      var a = el("button", "app-icon" + (locked ? " locked" : ""));
-      a.appendChild(wi(w.n));
-      a.appendChild(el("div", "ai-label", esc(w.n < 7 ? t("book") + " " + w.n : "Al-Qur'an")));
-      a.appendChild(el("div", "ai-sub", esc(tr(w.name))));
-      if (locked) a.appendChild(el("span", "ai-badge", ic("lock")));
-      else if (dn === w.levels.length) a.appendChild(el("span", "ai-badge ok", ic("check")));
-      else if (dn) a.appendChild(el("span", "ai-badge", dn + "/" + w.levels.length));
-      a.onclick = function () { A.unlock(); A.fx.tap(); map(w.n); };
-      grid.appendChild(a);
+    // ---- the 7 islands: swipe through the books ----
+    sc.appendChild(el("div", "sec-h", "<h3>" + esc(t("islands")) + "</h3><small>" + S.totalStars() + " " + HJ.art("star", 16) + "</small>"));
+    var strip = el("div", "isl-row");
+    HJ.worlds.forEach(function (bw) {
+      var locked = !S.unlocked(bw.levels[0]), dn = bw.levels.filter(function (l) { return st.stars[l.id]; }).length;
+      var c = el("button", "isl" + (locked ? " locked" : "") + (bw.n === cur.w ? " here" : ""));
+      var scene = HJ.bgScenes && HJ.bgScenes["w" + bw.n] ? HJ.bgScenes["w" + bw.n]("is" + bw.n + "_", dark).replace(/<rect y="300"[^>]*veil\)"\/>/, "") : "";
+      c.innerHTML = '<span class="isl-art">' + scene + "</span>" +
+        '<span class="isl-n">' + (bw.n < 7 ? bw.n : HJ.art("book", 18)) + "</span>" +
+        (bw.n === cur.w ? '<span class="isl-mo"><img src="' + MO("run") + '" alt=""></span>' : "") +
+        '<span class="isl-tx"><b>' + esc(tr(bw.name)) + "</b>" +
+        (locked ? '<small class="isl-lock">' + ic("lock") + "</small>" : '<span class="hm-bar"><i style="width:' + Math.round(dn / bw.levels.length * 100) + '%"></i></span><small>' + dn + " / " + bw.levels.length + "</small>") + "</span>";
+      c.setAttribute("aria-label", (bw.n < 7 ? t("book") + " " + bw.n + " · " : "") + tr(bw.name) + (locked ? " · " + t("locked") : " · " + dn + "/" + bw.levels.length));
+      c.onclick = function () { A.unlock(); A.fx.tap(); map(bw.n); };
+      strip.appendChild(c);
     });
-    // extra icons, like the Baby Mo grid
-    [["assets/icons/calendar.svg", t("daily"), startDaily], ["assets/icons/sticker.svg", t("stickers"), stickers]].forEach(function (x) {
-      var a = el("button", "app-icon", '<img class="sq" src="' + x[0] + '" alt=""><div class="ai-label">' + esc(x[1]) + "</div>");
-      a.onclick = function () { A.unlock(); A.fx.tap(); x[2](); }; grid.appendChild(a);
-    });
-    sc.appendChild(grid);
+    sc.appendChild(strip);
+    setTimeout(function () { var h = strip.querySelector(".here"); if (h && h.offsetLeft > 40) strip.scrollLeft = h.offsetLeft - 16; }, 0);
 
+    if (HJ.extras) { HJ.extras.arcadeRow(sc); var ch = HJ.extras.chestCard(); ch.classList.add("hm-chest"); sc.appendChild(ch); }
     sc.appendChild(el("div", "foot", '<span class="ar">رَبِّ زِدْنِي عِلْمًا</span>' + esc(t("footDua"))));
   }
   function greetLine(hr) {

@@ -111,6 +111,8 @@
     practiceDone: ["Latihan selesai! Makin lancar!", "Practice done! Getting better!"],
     iSaid: ["Aku sudah baca!", "I said it!"],
     nudge: ["Ayo, kamu pasti bisa!", "Come on, you can do it!"],
+    worldT: ["Dunia Hijaiyah", "Hijaiyah World"], playBig: ["Main!", "Play!"], islands: ["Pulau-pulau Hijaiyah", "The Hijaiyah islands"],
+    tokPlay: ["Main 1 level", "Play a level"], tokReview: ["Murajaah", "Review"], tokRead: ["Baca ke Abi/Umi", "Read to a parent"],
     bonusT: ["Bonus! Tangkap bintangnya!", "Bonus! Catch the stars!"], bonusDone: ["Hebat! {n} bintang tertangkap!", "Wow! You caught {n} stars!"],
     giftT: ["Ada hadiah! Ketuk 3 kali!", "A present! Tap it 3 times!"],
     gift_dance: ["Pesta joget Mo!", "Mo's dance party!"], gift_fireworks: ["Kembang api!", "Fireworks!"], gift_balloons: ["Hujan balon! Pecahkan!", "Balloon rain! Pop them!"],
