@@ -1,0 +1,805 @@
+[
+ {
+  "id": "lines-687781ec",
+  "text": "New letters: Zay & Sin. Listen, then copy me!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "new letters z and sin listen then copy me",
+   "new letters z and sin listened then copy me",
+   "new letters z and cin listen then copy me"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-687781ec.mp3"
+ },
+ {
+  "id": "lines-d9f6a232",
+  "text": "New letters: Shin & Ṣad. Listen, then copy me!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "new letters Shinn and sad listen then copy me",
+   "new letters shin and sad listen then copy me",
+   "new letters Shinn and sad listened then copy me"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-d9f6a232.mp3"
+ },
+ {
+  "id": "lines-f17a24e7",
+  "text": "New letters: Ḍad & Ṭa. Listen, then copy me!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "new letters dad and ta listen then copy me",
+   "new letters dad and te listen then copy me",
+   "new letters dad and ta listened then copy me"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-f17a24e7.mp3"
+ },
+ {
+  "id": "lines-657f7bc7",
+  "text": "New letters: Ẓa & 'Ayn. Listen, then copy me!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "new letters Za and I listened then copy me",
+   "new letters Za and I listen then copy me",
+   "Nu letters Za and I listened then copy me"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-657f7bc7.mp3"
+ },
+ {
+  "id": "lines-4c4c5ff9",
+  "text": "New letters: Ghayn & Fa. Listen, then copy me!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "new letters gain and Fa listen then copy me",
+   "new letters gain and FAA listen then copy me",
+   "new letters gain and efe listen then copy me"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-4c4c5ff9.mp3"
+ },
+ {
+  "id": "lines-c673ad42",
+  "text": "New letters: Qaf & Kaf. Listen, then copy me!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "new letters cough and cough listen then copy me",
+   "new letters cough and cough listened then copy me",
+   "new letters cough and Cog listen then copy me"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-c673ad42.mp3"
+ },
+ {
+  "id": "lines-6c989604",
+  "text": "New letters: Lam & Mim. Listen, then copy me!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "new letters lamb and MIM listen then copy me",
+   "new letters lamb and MIM listened then copy me",
+   "new letters lamb and mihm listen then copy me"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-6c989604.mp3"
+ },
+ {
+  "id": "lines-05ad924a",
+  "text": "New letters: Nun & Waw. Listen, then copy me!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "new letters none and W listen then copy me",
+   "new letters none and W listened then copy me",
+   "new letters none and ew listen then copy me"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-05ad924a.mp3"
+ },
+ {
+  "id": "lines-2a0dea5c",
+  "text": "New letters: Ha & Ya. Listen, then copy me!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "new letters ha and ya listen then copy me",
+   "new letters ha and yaw listen then copy me",
+   "new letters ha and yah listen then copy me"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-2a0dea5c.mp3"
+ },
+ {
+  "id": "lines-28f4c2c2",
+  "text": "Book test! You have 3 hearts. Be careful!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "book test you have 3 Hearts be careful",
+   "book tests you have 3 Hearts be careful",
+   "booked test you have 3 Hearts be careful"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-28f4c2c2.mp3"
+ },
+ {
+  "id": "lines-1e72ee26",
+  "text": "Letters can hold hands! They change shape a little, but sound the same.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "letters can hold hands they change shape a little but sound the same",
+   "letters can hold hands they change shape a little butt sound the same",
+   "letterz can hold hands they change shape a little but sound the same"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-1e72ee26.mp3"
+ },
+ {
+  "id": "lines-66e9ca8b",
+  "text": "Read these joined words.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "read these joined words",
+   "read these joind words",
+   "read these joynd words"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-66e9ca8b.mp3"
+ },
+ {
+  "id": "lines-1909f7e7",
+  "text": "Heavy letters: kho, sho, dho, tho, zho, gho, qo, ro.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "heavy letters",
+   "hevi letters",
+   "hevy letters",
+   " Co",
+   " Coe",
+   " show",
+   " SHO",
+   " choe",
+   " d h o",
+   " d h oh",
+   " dho",
+   " though",
+   " Joe g h o",
+   " Joe g h oh",
+   " Joe g g h o",
+   " co r o",
+   " Coe r o",
+   " Koh r o"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-1909f7e7.mp3"
+ },
+ {
+  "id": "lines-dfd46cca",
+  "text": "Good words: patient, thankful, truthful!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "good words patient thankful truthful",
+   "good words patient thankfull truthful",
+   "good words paytient thankful truthful"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-dfd46cca.mp3"
+ },
+ {
+  "id": "lines-28a7928c",
+  "text": "never join to the next letter. Look at the gap!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "never joined to the next letter look at the Gap",
+   "never joined to the next letter look up a gap",
+   "never joined to the next letter look at the gaap"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-28a7928c.mp3"
+ },
+ {
+  "id": "lines-73520c99",
+  "text": "An alif after fathah? Read it long, 2 beats: baa!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Alf after fata read it long 2 Beats",
+   "Alf after fata read it long 2 beats B",
+   "Alf after feita read it long 2 Beats"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-73520c99.mp3"
+ },
+ {
+  "id": "lines-e46353fb",
+  "text": "Words with a long vowel (mad).",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "words with a long vowel mad",
+   "words with a long vowel MADD",
+   "words with a long vowel Maad"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-e46353fb.mp3"
+ },
+ {
+  "id": "lines-50271e0d",
+  "text": "A line UNDER the letter is kasrah. It sounds i: bi, ti!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "a line under the letter is Kasra it sounds i b t",
+   "a line under the letter is kasrah it sounds i b t",
+   "a line under the letter is khasra it sounds i b t"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-50271e0d.mp3"
+ },
+ {
+  "id": "lines-350615ec",
+  "text": "A little curl ON TOP is dhammah. It sounds u: bu, tu!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "a little curl on top is dhamma it sounds a b a",
+   "a little curl on top is dhamma it sounds a b a 2",
+   "a little curl on top is dhamma it sounds a b a to"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-350615ec.mp3"
+ },
+ {
+  "id": "lines-29cb967f",
+  "text": "A, i, u! Listen carefully — which mark is it?",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "AIU listen carefully which Mark is it",
+   "AIU listened carefully which Mark is it",
+   "AI U listen carefully which Mark is it"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-29cb967f.mp3"
+ },
+ {
+  "id": "lines-5c960521",
+  "text": "Words with fathah, kasrah and dhammah.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "words with and",
+   "words with fat and",
+   "words with"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-5c960521.mp3"
+ },
+ {
+  "id": "lines-f3e265e7",
+  "text": "Kasrah then ya long: bii. Dhammah then waw long: buu.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Kasra Thena long B II Dalma then Wong Buu",
+   "Kasra thina long B II Dalma then Wong Buu",
+   "kasrah Thena long B II Dalma then Wong Buu"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-f3e265e7.mp3"
+ },
+ {
+  "id": "lines-f4116877",
+  "text": "Words with long vowels.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "words with long vowels",
+   "wirds with long vowels",
+   "wordz with long vowels"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-f4116877.mp3"
+ },
+ {
+  "id": "lines-7f14cce1",
+  "text": "Double marks are tanwin: an, in, un — a little n at the end!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "double marks are tanwen on in on a little n at the end",
+   "double marks are tanwin on in on a little n at the end",
+   "Dubble marks are tanwen on in on a little n at the end"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-7f14cce1.mp3"
+ },
+ {
+  "id": "lines-1ac4a26d",
+  "text": "Things with tanwin!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "things with tanwen",
+   "things with tanwin",
+   "things with tanin"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-1ac4a26d.mp3"
+ },
+ {
+  "id": "lines-dcbac0dd",
+  "text": "The little circle is sukun: the letter has no vowel and joins the one before — ab!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "the little circle is sukun the letter has no vowel and joins the 1 before AB",
+   "the little circle is sukun the letter has no vowel and joins the 1 before abbr",
+   "the little circle is sukun the letter has no vowel and joins the 1 before Abbe"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-dcbac0dd.mp3"
+ },
+ {
+  "id": "lines-bf6631b4",
+  "text": "Short words with sukun.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "short words with sukun",
+   "short words with sukune",
+   "short words width sukun"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-bf6631b4.mp3"
+ },
+ {
+  "id": "lines-7ceb9db9",
+  "text": "bounce when they have sukun: qalqalah! Like a ball.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "bounce when they have sukon",
+   "bounce when they have sukuna",
+   "bounce when they have sukhan",
+   " like a ball",
+   " like a BAL",
+   " like a Baal"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-7ceb9db9.mp3"
+ },
+ {
+  "id": "lines-8a64f27f",
+  "text": "Fathah then a still waw or ya: read softly, ai / au.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "FAA then a still wore or ya read softly I to",
+   "FAA then a still wore or ya read softly I tell",
+   "FAA then a still war or ya read softly I to"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-8a64f27f.mp3"
+ },
+ {
+  "id": "lines-e9205104",
+  "text": "The little w is shaddah: the letter is doubled, pressed!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "the little W is shayda the letter is doubled pressed",
+   "the little W is Shada the letter is doubled pressed",
+   "the little W is shaddaa the letter is doubled pressed"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-e9205104.mp3"
+ },
+ {
+  "id": "lines-4e32b26c",
+  "text": "Doubled and hum for 2 beats (ghunnah). Nnnn!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "doubled in whom for 2 Beats",
+   "doubled in hum for 2 Beats",
+   "doubled in whom for 2 beets"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-4e32b26c.mp3"
+ },
+ {
+  "id": "lines-737ed489",
+  "text": "Moon letters: the lam is clear. Al-qamar!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Moon letters the lamb is clear Alomar",
+   "Moon letters the lamb is clear Olimar",
+   "Moon letters the lamb is clear Alamar"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-737ed489.mp3"
+ },
+ {
+  "id": "lines-2fd33e44",
+  "text": "Sun letters: the lam disappears, the next letter doubles. Ash-shams!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Sun letters the lamb disappears the next letter doubles",
+   "son letters the lamb disappears the next letter doubles",
+   "Sun letters the lamb disappears the next letter Doublz",
+   " Ash shams",
+   " Ashe shams",
+   " OSH shams"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-2fd33e44.mp3"
+ },
+ {
+  "id": "lines-74b7f9c1",
+  "text": "Moon or sun? Sort them!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Moon or Sun sort them",
+   "moon or son sort them",
+   "Moon ore Sun sort them"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-74b7f9c1.mp3"
+ },
+ {
+  "id": "lines-5a2831d0",
+  "text": "Allah is read full after a / u, and light after i.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Allah is read full after a the Lasha you and light after I",
+   "Allah is read full after ah the Lasha you and light after I",
+   "Allah is read full after a the Lasha you and Lite after I"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-5a2831d0.mp3"
+ },
+ {
+  "id": "lines-4623b7e3",
+  "text": "Waqaf = stopping. At the end of a verse, the last vowel goes still.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "equals stopping at the end of a verse the last vowel goes still",
+   "equals stopping at the end of a vers the last vowel goes still",
+   "equalz stopping at the end of a verse the last vowel goes still"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-4623b7e3.mp3"
+ },
+ {
+  "id": "lines-96130168",
+  "text": "Izhar: before the n is CLEAR.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "is her before the end is clear",
+   "ishar before the N is clear",
+   "ishar before the end is clear"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-96130168.mp3"
+ },
+ {
+  "id": "lines-b3e4fcf0",
+  "text": "Idgham: before (with hum) or (no hum) the n merges in.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "IGM before with whom or know whom the N merges in",
+   "IGM before with whom or no whom the N merges in",
+   "IGM before with whom or no hum the N merges in"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-b3e4fcf0.mp3"
+ },
+ {
+  "id": "lines-f3a4c908",
+  "text": "Iqlab: before the n turns into m.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Hub before the end turns It To Em",
+   "H club before the end turns It To Em",
+   "Hub before the end turns it to m"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-f3a4c908.mp3"
+ },
+ {
+  "id": "lines-f76c915b",
+  "text": "Ikhfa: before the other 15 letters the n is hidden, with a hum.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Ika before the other 15 letters the N is hidden with a hum",
+   "Ika before the other 15 letters the N is hidden with a whom",
+   "Ika before the other 15 letters the N is hidden with a humm"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-f76c915b.mp3"
+ },
+ {
+  "id": "lines-bfc740fd",
+  "text": "Which rule? Put it in the right box!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "which rule put it in the right box",
+   "which Ruel put it in the right box",
+   "which rool put it in the right box"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-bfc740fd.mp3"
+ },
+ {
+  "id": "lines-b5a5ffa5",
+  "text": "Mim sakinah: hidden before, merged into, clear before the rest.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "mimika hidden before",
+   "mimica hidden before",
+   "Mima hidden before",
+   " merged into clear before the rest",
+   " merged into clearer before the rest",
+   " merged into xlear before the rest"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-b5a5ffa5.mp3"
+ },
+ {
+  "id": "lines-61f7a92f",
+  "text": "A long vowel before hamzah: same word = wajib (5 beats), next word = jaiz.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "a long vowel before Hamza same word equals wajib",
+   "a long vowel before hamzah same word equals wajib",
+   "a long vowel before hamzy same word equals wajib",
+   " 5 beats next word equals jais",
+   " 5 beats next word equals jaies",
+   " 5 beets next word equals jais"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-61f7a92f.mp3"
+ },
+ {
+  "id": "lines-b1a103f7",
+  "text": "Let's read Surah Al-Fatihah!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read Surah Al Fatiha",
+   "let's read",
+   "let's read Surah Fatiha"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-b1a103f7.mp3"
+ },
+ {
+  "id": "lines-2d6e7937",
+  "text": "Let's read Surah Al-Ikhlas!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read",
+   "let's read s",
+   "let's read ES"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-2d6e7937.mp3"
+ },
+ {
+  "id": "lines-c039e1c2",
+  "text": "Let's read Surah An-Nas!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read Surah Nas",
+   "let's read",
+   "let's read Surah Naas"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-c039e1c2.mp3"
+ },
+ {
+  "id": "lines-82d837b4",
+  "text": "Let's read Surah Al-Falaq!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read s",
+   "let's read Sak",
+   "let's read sick"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-82d837b4.mp3"
+ },
+ {
+  "id": "lines-905c0135",
+  "text": "Let's read Surah Al-Kautsar!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read Surah Al kawthar",
+   "let's read Surah Al kothur",
+   "let's read Surah Al cother"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-905c0135.mp3"
+ },
+ {
+  "id": "lines-06220fb7",
+  "text": "Let's read Surah Al-Asr!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read s",
+   "let's read ES",
+   "let's read Sur"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-06220fb7.mp3"
+ },
+ {
+  "id": "lines-53c9418d",
+  "text": "Let's read Surah An-Nasr!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read s",
+   "let's read sasur",
+   "let's read sutan Naser"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-53c9418d.mp3"
+ },
+ {
+  "id": "lines-a3e1b932",
+  "text": "Let's read Surah Quraysh!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read Surah quraish",
+   "let's read",
+   "let's read Suresh"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-a3e1b932.mp3"
+ },
+ {
+  "id": "lines-11d53e9e",
+  "text": "Let's read Surah Al-Lahab!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read",
+   "let's read Surah"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-11d53e9e.mp3"
+ },
+ {
+  "id": "lines-f8ebce37",
+  "text": "Let's read Surah Al-Fil!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read",
+   "let's read Surah Phil"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-f8ebce37.mp3"
+ },
+ {
+  "id": "lines-52d35eb8",
+  "text": "Let's read Surah Al-Kafirun!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read suron",
+   "let's read Surah kefon",
+   "let's read Surah kayfan"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-52d35eb8.mp3"
+ },
+ {
+  "id": "lines-88f6820c",
+  "text": "Let's read Surah Al-Ma'un!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read",
+   "let's read Surah maroon",
+   "let's read Surah maroun"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-88f6820c.mp3"
+ },
+ {
+  "id": "lines-ce35e3bf",
+  "text": "Let's read Surah Al-Humazah!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read",
+   "let's read Surah hamizah",
+   "let's read Surah haza"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-ce35e3bf.mp3"
+ },
+ {
+  "id": "lines-f821c20c",
+  "text": "Let's read Surah At-Takathur!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read",
+   "let's read Sur",
+   "let's read suhr"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-f821c20c.mp3"
+ },
+ {
+  "id": "lines-b8f796d2",
+  "text": "Let's read Surah Al-Qari'ah!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "let's read"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-b8f796d2.mp3"
+ },
+ {
+  "id": "lines-6a00a439",
+  "text": "Bonus! Catch the stars!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "bonus catch the Stars",
+   "bowness catch the Stars",
+   "bonis catch the Stars"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-6a00a439.mp3"
+ },
+ {
+  "id": "lines-bdbb9e92",
+  "text": "A present! Tap it 3 times!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "a present tap it 3 times",
+   "a present Tapp it 3 times",
+   "a present tappe it 3 times"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-bdbb9e92.mp3"
+ }
+]
