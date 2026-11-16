@@ -1701,6 +1701,11 @@ button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
    navbar / top-menu difference here (scoped under html.hj-app) and it survives web updates:
    edit the web freely, then `npm run ios` re-syncs without clashing. Structural differences
    (adding/removing buttons) go in js/app.js behind `if (window.HJ_APP_BUILD)`. */
-html.hj-app .navbar { height: 60px; padding-top: 10px; }
+/* the bar absorbs each phone's top inset (SE 20px, notch 47px, Dynamic Island 59px): its box
+   reaches up under the status bar — so the frosted blur covers it like a native nav bar —
+   while the padding keeps the buttons below it. #app already pads by the same inset, so the
+   negative margin cancels out and nothing else moves. */
+html.hj-app .navbar { height: calc(60px + env(safe-area-inset-top)); padding-top: calc(10px + env(safe-area-inset-top));
+  margin-top: calc(-1 * env(safe-area-inset-top)); }
 html.hj-app .nav-btn { width: 44px; height: 44px; } /* Apple HIG minimum touch target */
 html.hj-app .lang-pill { width: auto; }
