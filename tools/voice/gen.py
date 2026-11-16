@@ -78,15 +78,19 @@ Use one of:
 (--dry-run lists the clips without any credentials.)"""
 
 def call(url, body):
-    headers = {"Content-Type": "application/json"}
-    token, project = auth()
+    global _auth
     if KEY:
         url += ("&" if "?" in url else "?") + "key=" + KEY
-    elif token:
-        headers["Authorization"] = "Bearer " + token
-        if project:
-            headers["x-goog-user-project"] = project
-    req = urllib.request.Request(url, data=json.dumps(body).encode(), headers=headers)
+    refreshed = False
+    def build():
+        headers = {"Content-Type": "application/json"}
+        token, project = auth()
+        if token and not KEY:
+            headers["Authorization"] = "Bearer " + token
+            if project:
+                headers["x-goog-user-project"] = project
+        return urllib.request.Request(url, data=json.dumps(body).encode(), headers=headers), token
+    req, token = build()
     for attempt in range(4):
         try:
             return json.load(urllib.request.urlopen(req, timeout=40))
@@ -104,6 +108,11 @@ def call(url, body):
                     except urllib.error.HTTPError as e2:
                         if e2.code != 403: raise
                 continue
+            # a gcloud access token lasts about an hour: on a long run it expires — get a fresh one and carry on
+            if e.code == 401 and token and not KEY and not refreshed and not os.environ.get("GOOGLE_ACCESS_TOKEN"):
+                refreshed = True; _auth = None
+                print("   …access token expired, getting a fresh one", flush=True)
+                req, token = build(); continue
             if e.code in (401, 403):
                 how = "API key (GOOGLE_TTS_API_KEY)" if KEY else "gcloud / access token" if token else "none found (no GOOGLE_TTS_API_KEY, no signed-in gcloud)"
                 raise SystemExit(f"AUTH ERROR — HTTP {e.code} from {url.split('?')[0]}\nCredentials used: {how}\n"
