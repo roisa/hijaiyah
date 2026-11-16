@@ -12,6 +12,8 @@ MODE="${1:-all}"; VOICE="${2:-}"
 case "$MODE" in all|kata|lines|huruf) ;; *) echo "usage: bash tools/voice/cloudshell.sh [all|kata|lines|huruf] [voice]" >&2; exit 2 ;; esac
 echo "▶ Project: $(gcloud config get-value project 2>/dev/null)"
 gcloud services enable texttospeech.googleapis.com speech.googleapis.com >/dev/null
+# ffmpeg lets gen.py hear whether a clip is really silent (a size check alone let a silent كِ through)
+command -v ffmpeg >/dev/null || { echo "▶ Installing ffmpeg for the silence check…"; sudo apt-get -qq update >/dev/null 2>&1; sudo apt-get -qq install -y ffmpeg >/dev/null 2>&1 || echo "  (ffmpeg not installed: only the size check will run)"; }
 git fetch -q origin && git checkout -q "${BASE:-main}" && git pull -q
 ARGS=(); [ -n "$VOICE" ] && ARGS+=(--voice "$VOICE")
 [ "$MODE" != "all" ] && ARGS+=(--only "$MODE")
