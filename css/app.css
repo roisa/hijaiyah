@@ -1736,3 +1736,18 @@ html.hj-app .lang-pill { width: auto; }
 /* Mo's home greeting fades away after a few seconds (tap Mo to see it again) */
 .hw-bub { transition: opacity .6s ease; }
 .hw-bub.gone { opacity: 0; pointer-events: none; }
+
+/* the big letter card, the speaker button and the "say it twice" dots: cleaner, and right at night too
+   (the flat 8px halo turned muddy grey on navy and hid the card's lip; the badge's ring and the grey dots looked off) */
+button.bigcard.speaking { border-color: #FFD24D; box-shadow: 0 7px 0 #F0B400, 0 0 0 1px rgba(255,210,77,.6), 0 0 28px -2px rgba(255,190,40,.45), 0 16px 22px -12px var(--lip-sh) !important; }
+:root[data-theme="dark"] button.bigcard.speaking { border-color: rgba(255,210,77,.85); box-shadow: 0 7px 0 #C98F00, 0 0 30px -4px rgba(255,190,40,.4), 0 18px 24px -12px rgba(0,0,0,.55) !important; }
+.bigcard .tap { top: -12px; right: -12px; width: 46px; height: 46px; border: 3px solid #fff;
+  background: radial-gradient(circle at 35% 28%, #FFC85A, #FF9A10 55%, #F47C00); box-shadow: 0 3px 0 #D96E00, 0 6px 12px -4px rgba(200,100,0,.55); }
+:root[data-theme="dark"] .bigcard .tap { border-color: #FFE7B8; box-shadow: 0 3px 0 #A85400, 0 0 16px -2px rgba(255,150,0,.55); }
+.bigcard .tap::after { inset: -3px; border: 0; box-shadow: 0 0 0 0 rgba(255,150,0,.55); animation: tapGlow 1.8s ease-out infinite; }
+@keyframes tapGlow { 0% { box-shadow: 0 0 0 0 rgba(255,150,0,.5); } 100% { box-shadow: 0 0 0 14px rgba(255,150,0,0); } }
+.dots { margin-top: 2px; }
+.dots i { width: 16px; height: 16px; background: rgba(255,255,255,.65); box-shadow: inset 0 0 0 2px rgba(30,42,58,.16); }
+:root[data-theme="dark"] .dots i { background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 2px rgba(255,255,255,.3); }
+.dots i.on, :root[data-theme="dark"] .dots i.on { background: linear-gradient(180deg,#FFD66B,#F5A300); box-shadow: 0 0 0 2px rgba(255,214,107,.35), 0 4px 10px -4px rgba(245,163,0,.8); }
+@media (prefers-reduced-motion: reduce) { .bigcard .tap::after { animation: none; } }
