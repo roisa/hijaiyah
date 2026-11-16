@@ -60,7 +60,7 @@ Urutan materinya mengikuti Iqra jilid 1–6 (langsung bunyi, tanpa dieja, langka
 • Al-Qur'an · Al-Fatihah dan 14 surat Juz 'Amma, lalu wisuda dengan sertifikat
 
 BALAP HIJAIYAH
-Balapan go-kart bersama Ais dan Kak Adam di pantai, hutan, gunung, dan bawah laut. Dengarkan bunyi hurufnya, lalu masuk ke gerbang huruf yang benar untuk turbo! 24 balapan mengikuti Jilid 1–4, koin untuk menghias kart di garasi.
+Balapan go-kart bersama Ais dan Kak Adam di 12 lintasan: pantai, salju, angkasa, pulau dino, gurun, dan lainnya. Dengarkan bunyinya, lalu masuk ke gerbang huruf yang benar untuk turbo! Jalurnya bertahap: huruf, huruf mirip, kasrah, dhammah, mad, tanwin, sukun, lalu kata dari Jilid 1–4. Ada Balap Balon untuk si kecil (2+) dan koin untuk menghias kart di garasi.
 
 GAME DI SETIAP LANGKAH
 Tebalkan huruf, pecahkan balon, naik kereta baca, bantu Mo menyeberang jembatan, cari pasangan kartu, susun kata dan ayat, kelompokkan hukum tajwid — semuanya dengan suara Arab yang jelas.
@@ -91,7 +91,7 @@ The lessons follow the Iqra order, books 1–6 (sounds first, no spelling out, s
 • Al-Qur'an · Al-Fatihah and 14 surahs of Juz 'Amma, then a graduation certificate
 
 HIJAIYAH RACE
-Go-kart races with Ais and Kak Adam on the beach, in the forest, up the mountains and under the sea. Listen to the letter sound, then drive through the arch with the right letter for a turbo! 24 races follow Books 1–4, with coins to paint your kart in the garage.
+Go-kart races with Ais and Kak Adam on 12 tracks: the beach, snow, outer space, dino island, the desert and more. Listen to the sound, then drive through the arch with the right letter for a turbo! The tracks build step by step: letters, look-alike letters, kasrah, dhammah, long vowels, tanwin, sukun, then words from Books 1–4. A Balloon Race for little ones (2+), and coins to paint your kart in the garage.
 
 A GAME IN EVERY STEP
 Trace letters, pop balloons, ride the reading train, help Mo cross the bridge, match cards, build words and verses, sort the tajwid rules — all with clear Arabic audio.

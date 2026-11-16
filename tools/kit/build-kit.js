@@ -56,8 +56,11 @@ async function scene(p, key) {
       for (let i = 0; i < 80; i++) { await p.waitForTimeout(200); if (await go("!!(HJ._race&&HJ._race.phase()==='race')")) break; }
       const g1 = await go("HJ._race.gates[2].seg");
       await p.waitForTimeout(1200);
-      await go("HJ._race.gates.forEach(function(G,i){if(i<2){G.done=true;G.picked=G.good;}})");      // earlier arches: all right
-      await go(`HJ._race.warp(${g1} - 40, true)`); await go(`HJ._race.setLane(1)`);
+      await go("HJ._race.gates.forEach(function(G,i){if(i<2){G.done=true;G.picked=G.good;}});HJ._race.setOk(2)");      // earlier arches: all right
+      // Mo 2nd, chasing Kak Adam to the next arch (Ais behind); the race is frozen so the rivals stay where they are put
+      const back = (await go("innerWidth")) > 700 ? 80 : 40;                                 // the wide iPad view sees the arch closer
+      await go(`HJ._race.warp(${g1} - ${back}, true);HJ._race.placeRiv([-40,14]);HJ._race.setLane(1)`);
+      await p.waitForTimeout(120); await go("HJ._race.placeRiv([-40,14]);window.__raceTS=0");
       await p.waitForTimeout(450);
       await go("document.querySelectorAll('.race-count').forEach(function(x){x.remove()})");
       await go("document.querySelector('.rt-coins b').textContent='18'");

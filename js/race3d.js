@@ -663,7 +663,9 @@
       { k: "ais", z: PLAYERZ + 4 * SEG, lane: 0, x: LANES[0], pace: BABY ? .8 : .985, ph: 1.1, fin: 0 },
       { k: "adam", z: PLAYERZ + 6 * SEG, lane: 2, x: LANES[2], pace: BABY ? .84 : 1.02, ph: .2, fin: 0 }
     ];
-    HJ._race = { gates: gates, setLane: function (l) { laneI = l; }, phase: function () { return phase; }, pos: function () { return pos; }, total: TOTAL, coins: coins,
+    HJ._race = { gates: gates, setLane: function (l) { laneI = l; },
+      // for the store screenshots: where the rivals are (segments from Mo, ais then adam) and how many he got right
+      placeRiv: function (d) { riv.forEach(function (rv, i) { rv.z = pos + PLAYERZ + d[i] * SEG; rv.lane = i ? 2 : 0; rv.x = LANES[rv.lane]; }); }, setOk: function (n) { okN = n; }, phase: function () { return phase; }, pos: function () { return pos; }, total: TOTAL, coins: coins,
       // for tests: put Mo (and the rivals beside him) just before a spot on the track
       warp: function (seg, near) { pos = Math.max(0, seg * SEG - PLAYERZ); riv.forEach(function (rv, i) { rv.z = pos + PLAYERZ + (near ? 3 + i * 3 : 6 + i * 9) * SEG; if (near) { rv.lane = rv.x = 0; rv.lane = i ? 2 : 0; rv.x = LANES[rv.lane]; } }); },
       ev: ev, ramps: ramps, pads: pads, fps: function () { var m = FT.reduce(function (x, y) { return x + y; }, 0) / Math.max(1, FT.length); return Math.round(1 / Math.max(.001, m)); },
