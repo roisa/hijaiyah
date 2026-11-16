@@ -203,7 +203,9 @@
       var H = G(), R2 = H && H._race; if (!R2 || Date.now() > end) { if (Date.now() > end) clearInterval(iv); return; }
       if (R2.phase() !== "race") return;
       var gt = R2.gates.filter(function (x) { return !x.done; })[0]; if (!gt) return;
-      var d2 = gt.seg - R2.seg(), lane = R2.lane();
+      var d2 = gt.seg - R2.seg(), lane = R2.lane(), fd = frame.contentDocument;
+      var bb = fd.querySelector(".r3-baby.on:not(.go)"); if (bb) { tap(bb); return; }
+      var pb = fd.querySelector(".r3-pick.on .rp-b.l" + gt.good + ":not(.me)"); if (pb && d2 < 300) { tap(pb); return; }
       if (d2 < 260 && d2 > 20 && lane !== gt.good) {
         var st = frame.contentDocument.querySelector(".race-stage"), r = st.getBoundingClientRect(), right = gt.good > lane;
         var box = { left: r.left + r.width * (right ? .72 : .14), top: r.top + r.height * .62, width: r.width * .14, height: 40 };

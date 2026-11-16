@@ -758,7 +758,7 @@
     g2.appendChild(row(ic("globe"), "teal", esc(t("language")) + "<small>" + esc(t("langNote")) + "</small>", lsg));
     seg('<img src="assets/icons/theme.svg" alt="">', "", t("theme"), "theme", [["auto", t("themeAuto")], ["light", t("themeLight")], ["dark", t("themeDark")]]);
     function tog(icon, cls, label, key, sub) {
-      var sw = el("button", "switch" + (st.settings[key] ? " on" : "")); sw.setAttribute("role", "switch");
+      var sw = el("button", "switch" + (st.settings[key] ? " on" : "")); sw.setAttribute("role", "switch"); sw.setAttribute("aria-label", label); sw.setAttribute("aria-checked", String(!!st.settings[key]));
       sw.onclick = function () { S.setting(key, !st.settings[key]); sw.classList.toggle("on", st.settings[key]); A.fx.tap(); if (HJ.ambience) HJ.ambience.sync(); };
       g2.appendChild(row(icon, cls, esc(label) + (sub ? "<small>" + esc(sub) + "</small>" : ""), sw));
     }

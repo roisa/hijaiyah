@@ -94,6 +94,25 @@ window.REELS = [
       [16.5, "confetti"]
     ] },
 
+  { id: "balloon", name: "Balap Balon 2+", theme: "pink", dur: 16, cover: 8, side: "left",
+    caption: {
+      id: "Untuk si kecil 2+ 🎈 Satu balon, satu huruf: ketuk balonnya, POP! lalu TURBO! Balap Balon di Baby Mo Hijaiyah — mudah sekali untuk balita.\n#BabyMo #HurufHijaiyah #Balita #BelajarNgaji",
+      en: "For little ones 2+ 🎈 One balloon, one letter: tap it, POP! then TURBO! Balloon Race in Baby Mo Hijaiyah — easy for toddlers.\n#BabyMo #ArabicLetters #Toddlers #MuslimKids" },
+    steps: [
+      [0, "mo", "yeyy", "in-left"],
+      [0.3, "title", { id: ["Balap Balon", "untuk si kecil"], en: ["Balloon Race", "for little ones"] }],
+      [0.5, "phone", { race: "baby-1" }],
+      [1.2, "say", { id: "Ketuk balonnya!", en: "Tap the balloon!" }],
+      [4.5, "say", null],
+      [5.0, "drive", 9.5],
+      [7.6, "mo", "pose-37", "jump"],
+      [8.0, "big", { id: "POP!", en: "POP!" }, "balloon"],
+      [10.5, "title", { id: ["Satu huruf,", "langsung turbo!"], en: ["One letter,", "straight to turbo!"] }],
+      [13.4, "cta"],
+      [13.5, "mo", "yeyy", "pop"],
+      [13.7, "confetti"]
+    ] },
+
   { id: "train", name: "Kereta baca", theme: "sun", dur: 15.5, cover: 8,
     caption: {
       id: "Tuut tuut! 🚂 Naik kereta baca: dengar dulu, lalu baca sendiri gerbong demi gerbong — dari kanan ke kiri, seperti halaman Iqra.\n#BabyMo #Iqro #BelajarMembacaAlquran #AnakMuslim",
