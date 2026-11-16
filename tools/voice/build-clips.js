@@ -57,6 +57,7 @@ function arabic() {
     if (st.note && st.note.name) visit({ ar: st.note.name, au: st.note.name }, lv.id);
   }));
   HJ.L.forEach(l => l.n && visit({ ar: l.n, au: l.n }, 'huruf'));          // letter names (trace says them)
+  ['an', 'in', 'un'].forEach(v => HJ.L.forEach(l => visit(HJ.syl(l.k, v), 'race')));   // the tanwin race track: every letter with tanwin
   const lvOrder = HJ.allLevels().map(l => l.id);
   const rows = [...seen.values()].filter(x => !have.has(x.t) && !quran.has(x.t)).map(x => {
     const lv = [...x.lv].filter(v => lvOrder.includes(v)).sort((a, b) => lvOrder.indexOf(a) - lvOrder.indexOf(b));

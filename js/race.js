@@ -15,13 +15,18 @@
   function dark() { return document.documentElement.getAttribute("data-theme") === "dark"; }
 
   /* ---------- content: the races follow Books 1–4 ---------- */
-  var WORLDS = [1, 2, 3, 4, "hill", "snow", "desert", "candy"], PER = 5, GATES = 8, GP_GATES = 10;
+  var WORLDS = [1, 2, 3, 4, "kasrah", "dhammah", "tanwin", "hill", "snow", "desert", "candy"], PER = 5, GATES = 8, GP_GATES = 10;
   // the bonus tracks: new places, letters from the books (snow = the look-alike letters, candy = a bit of everything)
   var EXTRA = {
     hill: { src: [1], flag: "ح", bg: "w2", name: ["Bukit Hijau", "Green Hills"], icon: ["#8FE38A", "#3DB86B"] },
     snow: { src: [1], flag: "ث", bg: "w3", name: ["Negeri Salju", "Snowland"], icon: ["#BFE4FF", "#5BA8F0"], hard: 1 },
     desert: { src: [3], flag: "ص", bg: "w1", name: ["Gurun Pasir", "Desert Dunes"], icon: ["#FFD08A", "#F0903A"] },
-    candy: { src: [1, 2, 3, 4], flag: "ق", bg: "stickers", name: ["Negeri Permen", "Candy Land"], icon: ["#FFB3E1", "#FF5FA2"] }
+    candy: { src: [1, 2, 3, 4], flag: "ق", bg: "stickers", name: ["Negeri Permen", "Candy Land"], icon: ["#FFB3E1", "#FF5FA2"] },
+    // the vowel tracks: every letter with kasrah / dhammah / tanwin; from race 3 the other choices are the same letter
+    // with a different vowel (بِ or بَ or بُ?) so the ear learns the harakat
+    kasrah: { vow: "i", th: "rainbow", flag: "بِ", bg: "w3", name: ["Taman Pelangi · Kasrah", "Rainbow Park · Kasrah"], icon: ["#B8D8FF", "#9B6DFF"], vmix: ["a", "i", "u"], order: 1 },
+    dhammah: { vow: "u", th: "space", flag: "بُ", bg: "w3", name: ["Luar Angkasa · Dhammah", "Outer Space · Dhammah"], icon: ["#5A3EA0", "#140C3A"], vmix: ["a", "i", "u"], order: 1 },
+    tanwin: { tanwin: 1, th: "dino", flag: "بٌ", bg: "w4", name: ["Pulau Dino · Tanwin", "Dino Island · Tanwin"], icon: ["#8FE38A", "#FF8A3D"], vmix: ["an", "in", "un"] }
   };
   function wName(n) { return EXTRA[n] ? EXTRA[n].name[S.get().lang === "en" ? 1 : 0] : tr(HJ.worlds[n - 1].name); }
   function wIcon(n) {
@@ -30,6 +35,9 @@
       hill: '<path d="M2 26 Q10 12 18 20 Q24 10 34 26Z" fill="#fff" opacity=".9"/><circle cx="27" cy="9" r="4" fill="#FFE27A"/>',
       snow: '<path d="M18 5v26M7 11l22 14M29 11L7 25" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="18" cy="18" r="3" fill="#fff"/>',
       desert: '<path d="M18 30V9M18 18h-6v-6M18 15h6v-5" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M3 31 Q18 24 33 31Z" fill="#fff" opacity=".7"/>',
+      kasrah: '<path d="M4 26 A14 14 0 0 1 32 26" stroke="#FF5D73" stroke-width="3" fill="none"/><path d="M8 26 A10 10 0 0 1 28 26" stroke="#FFD43B" stroke-width="3" fill="none"/><path d="M12 26 A6 6 0 0 1 24 26" stroke="#22C06E" stroke-width="3" fill="none"/><path d="M12 31 L24 28" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
+      dhammah: '<circle cx="15" cy="19" r="8" fill="#FFB86B"/><ellipse cx="15" cy="19" rx="13" ry="3.5" fill="none" stroke="#FFE27A" stroke-width="2" transform="rotate(-20 15 19)"/><circle cx="29" cy="8" r="1.6" fill="#fff"/><circle cx="6" cy="6" r="1.2" fill="#fff"/><path d="M28 18c4 0 4 6 0 6" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
+      tanwin: '<path d="M6 28 Q10 16 20 18 Q24 8 30 10 Q28 14 26 14 Q24 22 22 28" fill="#fff"/><circle cx="28" cy="11.5" r="1.3" fill="#2A1F3D"/><path d="M9 7l8-2M9 11l8-2" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>',
       candy: '<path d="M18 30V18" stroke="#fff" stroke-width="3"/><circle cx="18" cy="12" r="8" fill="#fff"/><path d="M18 12m-5 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0" fill="none" stroke="#FF5FA2" stroke-width="2.5"/>'
     }[n];
     return '<span class="wi" style="background:linear-gradient(160deg,' + c[0] + "," + c[1] + ')"><svg viewBox="0 0 36 36" width="70%" height="70%" aria-hidden="true">' + art + "</svg></span>";
@@ -49,7 +57,15 @@
   function races(n) {
     if (cache[n]) return cache[n];
     var X = EXTRA[n], pool;
-    if (X) {   // a mix from the books it draws on, in a fixed (seeded) order
+    if (X && (X.vow || X.tanwin)) {
+      var hasC = function (x) { return x && HJ.audio.hasClip(x.ar); };
+      if (X.vow) pool = HJ.L.map(function (l) { return HJ.syl(l.k, X.vow); }).filter(hasC);            // in hijaiyah order
+      else {
+        var seenT = {}; pool = [];
+        HJ.L.forEach(function (l) { ["an", "in", "un"].forEach(function (v) { var x = HJ.syl(l.k, v); if (hasC(x) && !seenT[x.ar]) { seenT[x.ar] = 1; pool.push(x); } }); });
+        worldPool(4).forEach(function (x) { if (/[\u064B-\u064D]/.test(x.ar) && !seenT[x.ar]) { seenT[x.ar] = 1; pool.push(x); } });   // Book 4 tanwin words
+      }
+    } else if (X) {   // a mix from the books it draws on, in a fixed (seeded) order
       pool = []; X.src.forEach(function (b) { pool = pool.concat(worldPool(b)); });
       var h = function (s2) { var v = 0; for (var q = 0; q < s2.length; q++) v = (v * 31 + s2.charCodeAt(q)) >>> 0; return v; };
       pool = pool.map(function (x) { return { x: x, k: h(n + x.ar) }; }).sort(function (a, b) { return a.k - b.k; }).map(function (o) { return o.x; });
@@ -58,9 +74,9 @@
     for (var i = 0; i < PER; i++) {
       var chunk = pool.slice(i * k, (i + 1) * k);
       if (!chunk.length) chunk = pool.slice(-k);
-      list.push({ id: n + "-" + (i + 1), w: n, th: X ? n : null, flag: X ? X.flag : null, i: i, gp: false, targets: chunk, pool: X && X.hard ? pool : pool.slice(0, Math.max((i + 1) * k, 6)), easy: n === 1 && i < 3 });
+      list.push({ id: n + "-" + (i + 1), w: n, th: X ? X.th || n : null, vmix: X && X.vmix && i >= 2 ? X.vmix : null, flag: X ? X.flag : null, i: i, gp: false, targets: chunk, pool: X && X.hard ? pool : pool.slice(0, Math.max((i + 1) * k, 6)), easy: n === 1 && i < 3 });
     }
-    list.push({ id: n + "-gp", w: n, th: X ? n : null, flag: X ? X.flag : null, i: PER, gp: true, targets: pool, pool: pool, easy: false });
+    list.push({ id: n + "-gp", w: n, th: X ? X.th || n : null, vmix: X && X.vmix ? X.vmix : null, flag: X ? X.flag : null, i: PER, gp: true, targets: pool, pool: pool, easy: false });
     return (cache[n] = list);
   }
   function rst() { var s = S.get(); s.race = s.race || {}; return s.race; }
