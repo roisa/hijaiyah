@@ -9,7 +9,7 @@
    Mo says its name. It never fails: the child can always write it again. */
 (function () {
   var A = HJ.audio, t = HJ.t;
-  var TOL = 10, FAR = 21, START = 14, ROAD = 13;      // in letter units (the box is 100 × 100)
+  var TOL = 13, FAR = 28, START = 20, ROAD = 13;   // generous: small fingers wobble      // in letter units (the box is 100 × 100)
 
   function sampler(d) {
     var ns = "http://www.w3.org/2000/svg", svg = document.getElementById("hj-sampler");

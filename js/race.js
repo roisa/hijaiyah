@@ -84,7 +84,7 @@
     for (var i = 0; i < PER; i++) {
       var chunk = pool.slice(i * k, (i + 1) * k);
       if (!chunk.length) chunk = pool.slice(-k);
-      list.push({ id: n + "-" + (i + 1), w: n, th: X ? X.th || n : null, vmix: X && X.vmix && i >= 2 ? X.vmix : null, flag: X ? X.flag : null, i: i, gp: false, targets: chunk, pool: X && X.hard ? pool : pool.slice(0, Math.max((i + 1) * k, 6)), easy: n === 1 && i < 3 });
+      list.push({ hint: n === 1 || i < 2, id: n + "-" + (i + 1), w: n, th: X ? X.th || n : null, vmix: X && X.vmix && i >= 2 ? X.vmix : null, flag: X ? X.flag : null, i: i, gp: false, targets: chunk, pool: X && X.hard ? pool : pool.slice(0, Math.max((i + 1) * k, 6)), easy: n === 1 && i < 3 });
     }
     list.push({ id: n + "-gp", w: n, th: X ? X.th || n : null, vmix: X && X.vmix ? X.vmix : null, flag: X ? X.flag : null, i: PER, gp: true, targets: pool, pool: pool, easy: false });
     return (cache[n] = list);
@@ -246,22 +246,54 @@
       '<text x="20" y="18" text-anchor="middle" font-size="10" font-weight="900" fill="' + d + '" font-family="Fredoka One, Nunito">' + place + "</text></svg>";
   }
   // a small kart drawing for the menu and the home card (Mo's face from the picture)
+  // the race menu / home banner: a sunny track seen from the side — hills, a grandstand with bunting, a two-lane road
+  // with kerbs, the three karts racing (Kak Adam and Ais on the far lane, Mo leading on the near lane) and a proper
+  // checkered finish arch over the road
   function heroSvg() {
-    return '<svg viewBox="0 0 360 120" aria-hidden="true"><defs><linearGradient id="rhr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5A6275"/><stop offset="1" stop-color="#3A4256"/></linearGradient></defs>' +
-      '<rect x="0" y="78" width="360" height="34" rx="10" fill="url(#rhr)"/><path class="hk-dash" d="M0 95 H400" stroke="#fff" stroke-width="3" stroke-dasharray="18 14" opacity=".6"/>' +
-      '<g transform="translate(300 52)">' + [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (i) { return '<rect x="' + (i % 2) * 8 + '" y="' + (i >> 1) * 8 + '" width="8" height="8" fill="' + ((i + (i >> 1)) % 2 ? "#222" : "#fff") + '"/>'; }).join("") + "</g>" +
-      '<g class="hk hk1">' + kartSvg(34, 50, KART.adam, "adam", .92) + '</g><g class="hk hk2">' + kartSvg(122, 52, KART.ais, "ais", .9) + '</g><g class="hk hk3">' + kartSvg(210, 52, KART.mo, "mo", .9) + "</g></svg>";
+    var u = "rh" + (++heroN), chk = function (x, y, w, h, n2, m2) { var o = ""; for (var r = 0; r < m2; r++) for (var c = 0; c < n2; c++) o += '<rect x="' + (x + c * w / n2) + '" y="' + (y + r * h / m2) + '" width="' + (w / n2 + .2) + '" height="' + (h / m2 + .2) + '" fill="' + ((r + c) % 2 ? "#232733" : "#fff") + '"/>'; return o; };
+    var flags = ""; for (var f = 0; f < 18; f++) flags += '<path d="M' + (8 + f * 15) + " " + (30 + Math.sin(f * .9) * 1.5) + " l7 0 l-3.5 8z" + '" fill="' + ["#FF5D73", "#FFD43B", "#3D9BFF", "#22C06E", "#9B6DFF"][f % 5] + '"/>';
+    return '<svg viewBox="0 0 360 150" aria-hidden="true"><defs>' +
+      '<linearGradient id="' + u + 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FD3FF"/><stop offset="1" stop-color="#E4F5FF"/></linearGradient>' +
+      '<linearGradient id="' + u + 'r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6B7488"/><stop offset="1" stop-color="#4E566A"/></linearGradient></defs>' +
+      '<rect width="360" height="150" fill="url(#' + u + 's)"/>' +
+      '<circle cx="320" cy="26" r="13" fill="#FFD43B"/><circle cx="320" cy="26" r="20" fill="#FFD43B" opacity=".25"/>' +
+      '<g fill="#fff" opacity=".9"><ellipse cx="60" cy="18" rx="18" ry="6"/><circle cx="54" cy="14" r="7"/><circle cx="64" cy="12" r="8"/><ellipse cx="200" cy="14" rx="14" ry="5"/><circle cx="204" cy="10" r="6"/></g>' +
+      '<path d="M0 70 Q60 46 120 64 T240 60 T360 66 V82 H0Z" fill="#9AD9A0"/><path d="M0 76 Q90 60 180 72 T360 72 V84 H0Z" fill="#7CC97F"/>' +
+      // a little grandstand with bunting
+      '<rect x="6" y="38" width="270" height="34" rx="4" fill="#E9E3F7"/><rect x="6" y="38" width="270" height="6" fill="#FF5D73"/>' +
+      '<path d="M8 30 Q140 42 274 30" stroke="#8E9BB0" stroke-width="1" fill="none"/>' + flags +
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(function (i) { return '<circle cx="' + (18 + i * 15.5) + '" cy="' + (54 + (i % 2) * 8) + '" r="4.2" fill="' + ["#F2C9A0", "#E0A97E", "#C98B63"][i % 3] + '"/><rect x="' + (14 + i * 15.5) + '" y="' + (58 + (i % 2) * 8) + '" width="8" height="7" rx="3" fill="' + ["#3D9BFF", "#FF8FB1", "#22C06E", "#FFB000", "#9B6DFF"][i % 5] + '"/>'; }).join("") +
+      // the road: kerbs, two lanes
+      '<rect x="0" y="82" width="360" height="5" fill="#fff"/>' + [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(function (i) { return '<rect x="' + i * 32 + '" y="82" width="16" height="5" fill="#FF5D5D"/>'; }).join("") +
+      '<rect x="0" y="87" width="360" height="56" fill="url(#' + u + 'r)"/>' +
+      '<path class="hk-dash" d="M0 115 H400" stroke="#fff" stroke-width="3" stroke-dasharray="18 14" opacity=".7"/>' +
+      '<rect x="0" y="143" width="360" height="7" fill="#fff"/>' + [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(function (i) { return '<rect x="' + (i * 32 + 16) + '" y="143" width="16" height="7" fill="#FF5D5D"/>'; }).join("") +
+      // the finish line on the road and the arch over it
+      chk(300, 87, 12, 56, 2, 8) +
+      '<rect x="296" y="40" width="5" height="104" rx="2" fill="#5A6275"/><rect x="311" y="40" width="5" height="104" rx="2" fill="#5A6275"/>' +
+      '<rect x="282" y="34" width="48" height="16" rx="4" fill="#FF5D73"/><text x="306" y="45.5" text-anchor="middle" font-size="8.5" font-weight="900" fill="#fff" font-family="Fredoka One, Nunito">FINISH</text>' +
+      chk(282, 50, 48, 6, 8, 1) +
+      // the karts: far lane (Kak Adam, Ais), near lane (Mo, in front)
+      '<g class="hk hk1">' + kartSvg(150, 92, KART.adam, "adam", .62) + '</g>' +
+      '<g class="hk hk2">' + kartSvg(58, 92, KART.ais, "ais", .6) + '</g>' +
+      speed(186, 128) + '<g class="hk hk3">' + kartSvg(200, 118, KART.mo, "mo", .64) + "</g></svg>";
   }
+  var heroN = 0;
+  function speed(x, y) { return '<g stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".75"><path d="M' + (x - 34) + " " + (y - 6) + " h22" + '"/><path d="M' + (x - 44) + " " + (y + 2) + " h28" + '"/><path d="M' + (x - 30) + " " + (y + 10) + " h18" + '"/></g>'; }
   function kartSvg(x, y, col, k, s) {
     // the driver: the top half of the picture's painted part (a nested svg crops it), sitting in the seat
     var im = pics[k], drv = "";
     if (im && im.ok) {
       // head + shoulders, the same size for everyone (the picture's arms never change the scale)
-      var b = im.box, ch = b.h * (k === "ais" ? .46 : .4), cw = ch * 1.04, cx = b.x + b.w * (k === "ais" ? .56 : .5), dh = k === "adam" ? 46 : 42, dw = dh * 1.04;
-      drv = '<svg x="' + (30 - dw / 2) + '" y="' + (9 - dh) + '" width="' + dw + '" height="' + dh + '" viewBox="' + (cx - cw / 2) + " " + b.y + " " + cw + " " + ch + '" preserveAspectRatio="xMidYMin slice"><image href="' + IMG[k] + '" width="' + im.naturalWidth + '" height="' + im.naturalHeight + '"/></svg>'; }
-    return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')">' + drv +
-      '<path d="M-6 20 Q-6 6 10 4 L46 2 Q66 2 72 16 L74 26 L-6 26Z" fill="' + col[0] + '" stroke="' + col[1] + '" stroke-width="2.5"/>' +
-      '<circle cx="8" cy="28" r="9" fill="#2A2F3D"/><circle cx="8" cy="28" r="3.5" fill="#C9D3E3"/><circle cx="60" cy="28" r="9" fill="#2A2F3D"/><circle cx="60" cy="28" r="3.5" fill="#C9D3E3"/></g>';
+      var b = im.box, fr = k === "ais" ? .46 : k === "mo" ? .5 : .4, ch = b.h * fr, cw = b.h * .4 * 1.04, cx = b.x + b.w * (k === "ais" ? .56 : .5), dw = (k === "adam" ? 46 : 42) * 1.04, dh = dw * ch / cw;
+      drv = '<svg x="' + (36 - dw / 2) + '" y="' + (k === "mo" ? -49 : 1 - dh) + '" width="' + dw + '" height="' + dh + '" viewBox="' + (cx - cw / 2) + " " + b.y + " " + cw + " " + ch + '" preserveAspectRatio="none"><image href="' + IMG[k] + '" width="' + im.naturalWidth + '" height="' + im.naturalHeight + '"/></svg>'; }
+    return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')">' +
+      '<ellipse cx="34" cy="37" rx="42" ry="4" fill="rgba(0,0,0,.22)"/>' + drv +
+      '<path d="M-8 24 Q-10 10 6 8 L18 6 Q24 -2 34 -2 L44 -2 Q52 -2 56 6 L66 8 Q78 10 78 22 L78 28 L-8 28Z" fill="' + col[0] + '" stroke="' + col[1] + '" stroke-width="2.4" stroke-linejoin="round"/>' +
+      '<path d="M2 14 Q4 10 12 10 L60 10" stroke="#fff" stroke-width="2.4" opacity=".45" fill="none" stroke-linecap="round"/>' +
+      '<rect x="62" y="12" width="12" height="8" rx="3" fill="#fff"/><text x="68" y="18.5" text-anchor="middle" font-size="7" font-weight="900" fill="' + col[1] + '" font-family="Nunito">' + ({ mo: 1, ais: 2, adam: 3 }[k]) + "</text>" +
+      '<rect x="-12" y="4" width="6" height="14" rx="2" fill="' + col[1] + '"/>' +
+      '<circle cx="10" cy="29" r="10" fill="#23262F"/><circle cx="10" cy="29" r="4" fill="#C9D3E3"/><circle cx="62" cy="29" r="10" fill="#23262F"/><circle cx="62" cy="29" r="4" fill="#C9D3E3"/></g>';
   }
 
   /* ---------- the home card ---------- */

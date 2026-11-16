@@ -187,7 +187,7 @@
     yourTurn: ["Giliranmu! Mulai dari gerbong dekat kereta, ketuk sambil membaca ←", "Your turn! Start by the engine, tap each carriage as you read ←"],
     trainHint: ["Mulai dari gerbong dekat kereta, ya!", "Start with the carriage next to the engine!"],
     listenFirst: ["Dengarkan dulu, lalu tirukan", "Listen first, then copy"],
-    tapHear: ["Ketuk huruf untuk mendengar", "Tap the letter to hear it"], copy3: ["Tirukan 3 kali!", "Say it 3 times!"],
+    tapHear: ["Ketuk huruf untuk mendengar", "Tap the letter to hear it"], copy3: ["Tirukan 2 kali!", "Say it 2 times!"],
     letterName: ["Nama hurufnya", "Letter name"], trace: ["Tebalkan hurufnya dengan jarimu!", "Trace the letter with your finger!"],
     whichOne: ["Mana yang Mo baca?", "Which one did Mo read?"], isRight: ["Apakah bunyinya benar?", "Is this the right sound?"],
     yes: ["Benar", "Right"], no: ["Salah", "Wrong"], popIt: ["Pecahkan balon", "Pop the balloons"],

@@ -1077,7 +1077,7 @@
     }
     function callGate(G) {
       callout.classList.remove("on"); listen.classList.add("on"); J.bump(listen); sayGate(); showPick(G);
-      setTimeout(function () { if (my === live && !G.done && curGate === G) { J.bump(listen); sayGate(); G.hint = tRace; if (!G.baby) { pickBtns[G.good].classList.add("hint"); snd.fx("ping"); } } }, 1700);
+      setTimeout(function () { if (my === live && !G.done && curGate === G) { J.bump(listen); sayGate(); if (R.hint || G.baby) G.hint = tRace; if (!G.baby && R.hint) { pickBtns[G.good].classList.add("hint"); snd.fx("ping"); } } }, 1700);
       setTimeout(function () { listen.classList.remove("on"); }, 3600);
     }
     function power() {

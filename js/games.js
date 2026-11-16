@@ -69,7 +69,8 @@
     var bigAr = arEl(it); card.appendChild(bigAr); card.appendChild(latinEl(it)); card.appendChild(el("span", "tap", HJ.ic("speaker")));
     if (!it.quran && !isWordy(it)) centerLater(bigAr);
     st.appendChild(card);
-    var dots = el("div", "dots", "<i></i><i></i><i></i>");
+    var NEED = 2;                      // listen → say it, twice (short and sweet for little ones)
+    var dots = el("div", "dots", "<i></i><i></i>");
     var lbl = el("div", "sub", t("copy3"));
     var nextB = el("button", "btn", t("next") + " " + HJ.ic("next")); nextB.style.visibility = "hidden";
     var said3 = el("button", "btn gold small", HJ.ic("bubble") + " " + t("iSaid"));
@@ -77,22 +78,22 @@
     function ready(on) { said3.disabled = !on; said3.classList.toggle("wait", !on); if (on) HJ.juice.bump(said3); }
     function play() {
       ready(false); card.classList.add("speaking");
-      A.say(it.au).then(function () { card.classList.remove("speaking"); heard++; if (ctx.alive() && said < 3) { ready(true); ctx.mo("pose-12", t("yourTurnSay")); } });
+      A.say(it.au).then(function () { card.classList.remove("speaking"); heard++; if (ctx.alive() && said < NEED) { ready(true); ctx.mo("pose-12", t("yourTurnSay")); } });
     }
     card.classList.add("tapme");
     card.onclick = function () { card.classList.remove("tapme"); A.fx.tap(); play(); };
     said3.onclick = function () {
-      if (said >= 3 || said3.disabled) return; said++; A.fx.coin();
+      if (said >= NEED || said3.disabled) return; said++; A.fx.coin();
       dots.children[said - 1].classList.add("on"); HJ.juice.burst(null, null, 8);
       // every time the child says it, the letter does a different little trick (a reason to say it again)
       card.classList.remove("r1", "r2", "r3"); void card.offsetWidth; card.classList.add("r" + said);
-      if (said === 3) { ready(false); ctx.cheer(); nextB.style.visibility = "visible"; HJ.juice.bump(nextB); after(ctx, 1600, ctx.next); }
+      if (said === NEED) { ready(false); ctx.cheer(); nextB.style.visibility = "visible"; HJ.juice.bump(nextB); after(ctx, 1600, ctx.next); }
       else { ready(false); after(ctx, 700, play); }
     };
     ready(false);
     add(st, dots, el("div", "row"));
     var r = st.lastChild; r.appendChild(said3);
-    var rec = recorder(it.au, { onDone: function () { if (said < 3) { said3.disabled = false; said3.onclick(); } } }); st.appendChild(rec);
+    var rec = recorder(it.au, { onDone: function () { if (said < NEED) { said3.disabled = false; said3.onclick(); } } }); st.appendChild(rec);
     // one clear action: with a microphone the child just taps the mic and reads; "I said it!" only shows without one
     if (HJ.voice && HJ.voice.ok && !rec.classList.contains("nomic")) {
       said3.style.display = "none";
