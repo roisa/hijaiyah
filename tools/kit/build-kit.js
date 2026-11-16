@@ -19,19 +19,20 @@ const STATE = (lang, dark) => `(function(){localStorage.clear();var s=HJ.store.g
 s.theme=${JSON.stringify(dark ? "dark" : "light")};s.settings.moVoice=false;s.settings.sfx=false;s.settings.cdn=false;
 var d=new Date(),t=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 ["1-1","1-2","1-3","1-4","1-5","1-6","1-7"].forEach(function(id,i){s.stars[id]=i%3===1?2:3;s.stickers.push(id);s.tashih[id]=i<4?1:0;});
-s.streak={last:t,n:4};s.plays=12;s.seen={pick:1,yesno:1,pop:1,train:1,bridge:1,match:1,build:1,sort:1,learn:1,trace:1,ayahbuild:1,ayahfill:1};s.daily={date:t,done:{level:1}};HJ.store.save();})()`;
+s.streak={last:t,n:4};s.plays=12;s.raceTut=1;s.coins=46;s.race={"1-1":1};s.seen={pick:1,yesno:1,pop:1,train:1,bridge:1,match:1,build:1,sort:1,learn:1,trace:1,ayahbuild:1,ayahfill:1};s.daily={date:t,done:{level:1}};HJ.store.save();})()`;
 
 async function scene(p, key) {
   const go = (js) => p.evaluate(js);
   const step = async (id, type, unlock) => {
-    await go(`HJ.store.setting("unlockAll",${!!unlock});HJ.runLevel(HJ.level(${JSON.stringify(id)}))`);
+    // onDone: no half-way star break and no end gift while we look for the step
+    await go(`HJ.store.setting("unlockAll",${!!unlock});HJ.runLevel(HJ.level(${JSON.stringify(id)}),{onDone:function(){},noReplay:true})`);
     for (let i = 0; i < 20; i++) { await p.waitForTimeout(120); const t = await go("HJ._ctx&&HJ._ctx.step.type"); if (t === type) break; await go("HJ._ctx.next()"); }
   };
   switch (key) {
     case "home": await go("HJ.go.home()"); await p.waitForTimeout(1200); break;
     case "learn": await step("1-8", "learn"); await p.waitForTimeout(1300); break;
     case "train": await step("1-8", "train"); await go("document.querySelectorAll('.car')[1].classList.add('on')"); await p.waitForTimeout(600); break;
-    case "pop": await step("1-8", "pop"); await p.waitForTimeout(3300); break;
+    case "pop": await step("1-9", "pop"); await p.waitForTimeout(3300); break;
     case "map": await go("HJ.go.map()"); await p.waitForTimeout(900); break;
     case "results":
       await step("1-8", "intro"); for (let i = 0; i < 30; i++) { const a = await go("!!(HJ._ctx&&HJ._ctx.alive())"); if (!a) break; await go("HJ._ctx.next()"); await p.waitForTimeout(60); }
@@ -49,6 +50,19 @@ async function scene(p, key) {
       await p.waitForTimeout(500); break;
     }
     case "dark": await go("HJ.go.home()"); await p.waitForTimeout(1200); break;
+    case "race": {
+      // Mo in turbo just after a right arch, the next arch ahead, Ais and Kak Adam racing alongside
+      await go(`HJ.race.play("1-2")`);
+      for (let i = 0; i < 80; i++) { await p.waitForTimeout(200); if (await go("!!(HJ._race&&HJ._race.phase()==='race')")) break; }
+      const g1 = await go("HJ._race.gates[2].seg");
+      await p.waitForTimeout(1200);
+      await go("HJ._race.gates.forEach(function(G,i){if(i<2){G.done=true;G.picked=G.good;}})");      // earlier arches: all right
+      await go(`HJ._race.warp(${g1} - 40, true)`); await go(`HJ._race.setLane(1)`);
+      await p.waitForTimeout(450);
+      await go("document.querySelectorAll('.race-count').forEach(function(x){x.remove()})");
+      await go("document.querySelector('.rt-coins b').textContent='18'");
+      await go("document.querySelectorAll('.race-tip,.r3-listen,.r3-call').forEach(function(x){x.style.display='none'})"); break;
+    }
   }
   await go("document.querySelectorAll('.jp,.jfly,.jbanner,.toast,.tap-hand').forEach(function(x){x.remove()})");
 }

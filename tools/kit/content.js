@@ -7,6 +7,9 @@ const SHOTS = [
   { key: "home", mo: "pose-41",
     id: { k: "BABY MO HIJAIYAH", t1: "Belajar ngaji", t2: "sambil bermain", sub: "Dari alif sampai surat pendek, bersama Baby Mo", pills: ["Tanpa iklan", "Bisa offline"] },
     en: { k: "BABY MO HIJAIYAH", t1: "Learn to read", t2: "the Qur'an by playing", sub: "From alif to short surahs, with Baby Mo", pills: ["No ads", "Works offline"] } },
+  { key: "race", mo: "yeyy",
+    id: { k: "BALAP HIJAIYAH", t1: "Ngebut sambil", t2: "belajar bunyi huruf", sub: "Dengar bunyinya, lewati gerbang huruf yang benar — turbo!" },
+    en: { k: "HIJAIYAH RACE", t1: "Race and learn", t2: "letter sounds", sub: "Hear the sound, drive through the right letter — turbo!" } },
   { key: "learn", mo: "pose-08",
     id: { k: "TALAQQI", t1: "Dengar, tirukan,", t2: "lalu baca sendiri", sub: "Mo membaca dulu, si kecil menirukan — seperti di Ummi" },
     en: { k: "LISTEN & COPY", t1: "Listen, copy,", t2: "then read alone", sub: "Mo reads first, your child copies — the talaqqi way" } },
@@ -14,14 +17,11 @@ const SHOTS = [
     id: { k: "KERETA BACA", t1: "Membaca seperti", t2: "halaman Iqra", sub: "Dari kanan ke kiri, langsung bunyi tanpa dieja" },
     en: { k: "READING TRAIN", t1: "Read like a", t2: "real Iqra page", sub: "Right to left, sounding out without spelling" } },
   { key: "pop", mo: "yeyy",
-    id: { k: "MINI-GAME", t1: "Ada game seru", t2: "di setiap langkah", sub: "Balon, jembatan, kereta, kartu memori & lainnya" },
-    en: { k: "MINI-GAMES", t1: "A fun game", t2: "in every step", sub: "Balloons, bridges, trains, memory cards & more" } },
+    id: { k: "MINI-GAME", t1: "Ada game seru", t2: "di setiap langkah", sub: "Balon, gelembung, kasih makan Mo, kartu memori & lainnya" },
+    en: { k: "MINI-GAMES", t1: "A fun game", t2: "in every step", sub: "Balloons, bubbles, feed Mo, memory cards & more" } },
   { key: "map", mo: "pose-20",
-    id: { k: "PETA BELAJAR", t1: "7 jilid,", t2: "77 level", sub: "Urutan Iqra dari alif sampai Al-Qur'an" },
-    en: { k: "LEARNING MAP", t1: "7 books,", t2: "77 levels", sub: "The Iqra order, from alif to the Qur'an" } },
-  { key: "results", mo: "wow",
-    id: { k: "HADIAH", t1: "Bintang, stiker", t2: "& hari beruntun", sub: "Hadiah yang bikin si kecil ingin lanjut belajar" },
-    en: { k: "REWARDS", t1: "Stars, stickers", t2: "& daily streaks", sub: "Rewards that make little ones want one more level" } },
+    id: { k: "PETA BELAJAR", t1: "7 jilid,", t2: "77 level", sub: "Urutan Iqra dari alif sampai Al-Qur'an · bintang, stiker & peti harta" },
+    en: { k: "LEARNING MAP", t1: "7 books,", t2: "77 levels", sub: "The Iqra order, from alif to the Qur'an · stars, stickers & treasure" } },
   { key: "tajwid", mo: "ok",
     id: { k: "TAJWID", t1: "Tajwid jadi", t2: "mudah dan seru", sub: "Izhar, idgham, iqlab & ikhfa langsung di ayat Al-Qur'an" },
     en: { k: "TAJWID", t1: "Tajwid made", t2: "simple and fun", sub: "Izhar, idgham, iqlab & ikhfa inside real verses" } },
@@ -59,14 +59,18 @@ Urutan materinya mengikuti Iqra jilid 1–6 (langsung bunyi, tanpa dieja, langka
 • Jilid 6 · Istana Tajwid — hukum nun & mim mati, mad, langsung di ayat Al-Qur'an
 • Al-Qur'an · Al-Fatihah dan 14 surat Juz 'Amma, lalu wisuda dengan sertifikat
 
+BALAP HIJAIYAH
+Balapan go-kart bersama Ais dan Kak Adam di pantai, hutan, gunung, dan bawah laut. Dengarkan bunyi hurufnya, lalu masuk ke gerbang huruf yang benar untuk turbo! 24 balapan mengikuti Jilid 1–4, koin untuk menghias kart di garasi.
+
 GAME DI SETIAP LANGKAH
 Tebalkan huruf, pecahkan balon, naik kereta baca, bantu Mo menyeberang jembatan, cari pasangan kartu, susun kata dan ayat, kelompokkan hukum tajwid — semuanya dengan suara Arab yang jelas.
 
 HADIAH YANG BIKIN SEMANGAT
-Bintang di setiap level, buku stiker, kombo, peta pulau yang terbuka satu per satu, misi harian, hari beruntun, dan ujian jilid dengan 3 hati. Yang tadi salah diulang lagi dengan lembut di akhir level.
+Bintang di setiap level, peti harta, kado di ujung level, buku stiker, kombo, peta pulau yang terbuka satu per satu, misi harian, hari beruntun, dan ujian jilid dengan 3 hati. Yang tadi salah diulang lagi dengan lembut di akhir level.
 
 UNTUK ABI & UMI
-• Laporan belajar per jilid dan tashih (cek bacaan) di setiap level
+• Laporan belajar per jilid, laporan mingguan, dan tashih (cek bacaan) di setiap level
+• Main Bebas untuk si kecil 3+ dan batas waktu main harian
 • Bahasa Indonesia dan English, tampilan terang dan gelap
 • Tanpa iklan, tanpa akun, tanpa pelacakan — progres hanya tersimpan di perangkat
 • Area orang tua dilindungi gerbang orang tua
@@ -86,14 +90,18 @@ The lessons follow the Iqra order, books 1–6 (sounds first, no spelling out, s
 • Book 6 · Tajwid Palace — nun and mim rules and mad, inside real verses
 • Al-Qur'an · Al-Fatihah and 14 surahs of Juz 'Amma, then a graduation certificate
 
+HIJAIYAH RACE
+Go-kart races with Ais and Kak Adam on the beach, in the forest, up the mountains and under the sea. Listen to the letter sound, then drive through the arch with the right letter for a turbo! 24 races follow Books 1–4, with coins to paint your kart in the garage.
+
 A GAME IN EVERY STEP
 Trace letters, pop balloons, ride the reading train, help Mo cross the bridge, match cards, build words and verses, sort the tajwid rules — all with clear Arabic audio.
 
 REWARDS THAT KEEP THEM GOING
-Stars in every level, a sticker book, combos, an island map that opens step by step, daily missions, streaks, and book tests with 3 hearts. Anything missed comes back gently at the end of the level.
+Stars in every level, treasure chests, a present at the end of each level, a sticker book, combos, an island map that opens step by step, daily missions, streaks, and book tests with 3 hearts. Anything missed comes back gently at the end of the level.
 
 FOR PARENTS
-• A progress report for every book and a reading check in every level
+• A progress report for every book, a weekly report, and a reading check in every level
+• Free Play for little ones (3+) and a daily play-time limit
 • English and Bahasa Indonesia, light and dark mode
 • No ads, no account, no tracking — progress stays on the device
 • Parent area behind a parental gate

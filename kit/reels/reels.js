@@ -20,7 +20,7 @@ window.REELS = [
       [3.4, "title", { id: ["Belajar ngaji", "sambil bermain"], en: ["Learn to read", "by playing"] }],
       [3.5, "phone", { screen: "home" }],
       [3.8, "mo", "wow", "jump"],
-      [5.2, "tap", ".hm-play"],
+      [5.2, "tap", ".hw-play"],
       [6.6, "tap", "start"],
       [8.0, "tap", "start"],
       [9.0, "mo", "yeyy", "jump"],
@@ -59,7 +59,7 @@ window.REELS = [
     steps: [
       [0, "mo", "yeyy", "in-right"],
       [0.3, "title", { id: ["Pecahkan", "balon hurufnya!"], en: ["Pop the", "letter balloons!"] }],
-      [0.5, "phone", { level: "1-8", at: "pop", hold: true }],
+      [0.5, "phone", { level: "1-9", at: "pop", hold: true }],
       [1.4, "say", { id: "Dengar, lalu pecahkan!", en: "Listen, then pop it!" }],
       [2.6, "tap", "speaker"],
       [3.4, "say", null],
@@ -70,6 +70,28 @@ window.REELS = [
       [12.0, "cta"],
       [12.1, "mo", "yeyy", "pop"],
       [12.3, "confetti"]
+    ] },
+
+  { id: "race", name: "Balap Hijaiyah", theme: "sky", dur: 19, cover: 11, side: "left",
+    caption: {
+      id: "Brum brum! 🏎️ Balap Hijaiyah: dengar bunyi hurufnya, lalu masuk ke gerbang huruf yang benar untuk turbo! Balapan bareng Ais & Kak Adam di pantai, hutan, gunung, dan bawah laut.\n#BabyMo #HurufHijaiyah #GameEdukasi #BelajarNgaji",
+      en: "Vroom! 🏎️ Hijaiyah Race: listen to the letter sound, then drive through the right letter arch for a turbo! Race Ais & Kak Adam on the beach, in the forest, up the mountains and under the sea.\n#BabyMo #ArabicLetters #MuslimKids #LearningGames" },
+    steps: [
+      [0, "mo", "yeyy", "in-left"],
+      [0.3, "title", { id: ["Balap", "Hijaiyah!"], en: ["Hijaiyah", "Race!"] }],
+      [0.5, "phone", { race: "1-2" }],
+      [1.2, "say", { id: "Siap? Dengar bunyinya!", en: "Ready? Listen to the sound!" }],
+      [4.6, "say", null],
+      [5.2, "title", { id: ["Dengar,", "lalu pilih gerbangnya"], en: ["Listen, then", "pick the arch"] }],
+      [5.6, "drive", 12.5],
+      [8.5, "mo", "pose-37", "jump"],
+      [9.0, "say", { id: "Turbo! Masya Allah!", en: "Turbo! Masha Allah!" }],
+      [11.5, "say", null],
+      [12.0, "mo", "wow", "jump"],
+      [12.2, "title", { id: ["Ngebut sambil", "belajar huruf"], en: ["Race and learn", "letter sounds"] }],
+      [16.2, "cta"],
+      [16.3, "mo", "yeyy", "pop"],
+      [16.5, "confetti"]
     ] },
 
   { id: "train", name: "Kereta baca", theme: "sun", dur: 15.5, cover: 8,

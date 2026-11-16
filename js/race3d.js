@@ -414,8 +414,8 @@
     ];
     HJ._race = { gates: gates, setLane: function (l) { laneI = l; }, phase: function () { return phase; }, pos: function () { return pos; }, total: TOTAL, coins: coins,
       // for tests: put Mo (and the rivals beside him) just before a spot on the track
-      warp: function (seg) { pos = seg * SEG - PLAYERZ; riv.forEach(function (rv, i) { rv.z = pos + PLAYERZ + (6 + i * 9) * SEG; }); },
-      ev: ev, ramps: ramps, pads: pads };
+      warp: function (seg, near) { pos = seg * SEG - PLAYERZ; riv.forEach(function (rv, i) { rv.z = pos + PLAYERZ + (near ? 3 + i * 3 : 6 + i * 9) * SEG; if (near) { rv.lane = rv.x = 0; rv.lane = i ? 2 : 0; rv.x = LANES[rv.lane]; } }); },
+      ev: ev, ramps: ramps, pads: pads, lane: function () { return laneI; }, seg: function () { return Math.floor((pos + PLAYERZ) / SEG); } };
 
     /* ---- drawing ---- */
     function project(p, camX, camY, camZ) {

@@ -394,7 +394,7 @@
     var top = el("div", "lv-top"), x = el("button", "nav-btn", ic("close")), bar = el("div", "bar", "<i></i>"), hz = el("div", "hearts glass");
     var goal = el("div", "bar-goal", HJ.art(boss ? "trophy" : "star", 30)), combo = 0, missed = [], replayed = false, collected = 0;
     x.setAttribute("aria-label", t("close"));
-    var barWrap = el("div", "bar-wrap"), road = HJ.fun ? HJ.fun.track(boss) : null, bonusDone = !road || boss || lv.kind === "arcade" || !!opts.onDone;
+    var barWrap = el("div", "bar-wrap"), road = HJ.fun ? HJ.fun.track(boss) : null, bonusDone = !road || boss || lv.kind === "arcade" || !!opts.onDone || !!opts.noFun;
     if (road) barWrap.appendChild(road.el); else { barWrap.appendChild(bar); barWrap.appendChild(goal); }
     top.appendChild(x); top.appendChild(barWrap); if (boss) top.appendChild(hz);
     s.appendChild(top);
@@ -532,7 +532,7 @@
       HJ.mission("level");
       var all = HJ.allLevels(), nxt = all[all.indexOf(lv) + 1];
       if (first && nxt) { S.get().justUnlocked = nxt.id; S.save(); }
-      if (road) HJ.fun.gift(function () { results(lv, stars, first, before); });
+      if (road && !opts.noFun) HJ.fun.gift(function () { results(lv, stars, first, before); });
       else results(lv, stars, first, before);
     }
     show();

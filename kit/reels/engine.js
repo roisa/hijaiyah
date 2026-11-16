@@ -18,6 +18,7 @@
      ["train"]                  read the train car by car
      ["bridge"]                 cross the whole bridge
      ["finish"]                 jump to the end of the level (results: stars, sticker)
+     ["drive", secs]            race mode (phone setup {race:"1-2"}): the finger steers through the right letter arches
      ["burst", x, y]            stars burst (stage coordinates 0–1080 / 0–1920); ["confetti"]; ["letters"] floating letters
      ["big", {id, en}, art]     a big springy word in the middle ("3 in a row!") with an art icon
      ["cta"]                    the end card: logo, app name, "Coba sekarang / Try it now"
@@ -74,7 +75,7 @@
         var d = new Date(), today = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
         (setup.done || ["1-1", "1-2", "1-3", "1-4", "1-5", "1-6", "1-7"]).forEach(function (id, i) { s.stars[id] = i % 3 === 1 ? 2 : 3; s.stickers.push(id); });
         s.streak = { last: today, n: 4 }; s.daily = { date: today, done: { level: 1 } };
-        s.seen = { pick: 1, yesno: 1, pop: 1, train: 1, bridge: 1, match: 1, build: 1, sort: 1, learn: 1, trace: 1, ayahbuild: 1, ayahfill: 1 };
+        s.raceTut = 1; s.coins = 18; s.seen = { pick: 1, yesno: 1, pop: 1, train: 1, bridge: 1, match: 1, build: 1, sort: 1, learn: 1, trace: 1, ayahbuild: 1, ayahfill: 1 };
         w.HJ.store.save();
         frame.onload = function () {
           var H = w.HJ;
@@ -88,9 +89,10 @@
               return { type: "pick", q: q, options: U.shuffle([q].concat(o)) };
             });
           }
-          if (setup.screen) H.go[setup.screen]();
+          if (setup.race) H.race.play(setup.race);
+          else if (setup.screen) H.go[setup.screen]();
           else if (setup.level || setup.steps) {
-            H.runLevel(setup.level ? H.level(setup.level) : H.level("1-1"), setup.steps ? { steps: setup.steps, noReplay: true } : undefined);
+            H.runLevel(setup.level ? H.level(setup.level) : H.level("1-1"), setup.steps ? { steps: setup.steps, noReplay: true, noFun: true } : { noFun: true });
             if (setup.at) skipTo(setup.at);
             if (setup.hold && H._ctx) H._ctx.next = function () {};   // stay on this game until the reel ends
           }
@@ -194,6 +196,22 @@
       var t = [].slice.call(d.querySelectorAll(".tile.qw:not(.used)")).filter(function (x) { return x.textContent === wd; })[0]; if (t) tap(t); }, i * 900)); });
     timers.push(setTimeout(function () { log("win"); }, words.length * 900 + 500));
   }
+  // the race: the finger taps left / right to drive through the arch with the right letter
+  function drive(secs) {
+    var end = Date.now() + secs * 1000;
+    var iv = setInterval(function () {
+      var H = G(), R2 = H && H._race; if (!R2 || Date.now() > end) { if (Date.now() > end) clearInterval(iv); return; }
+      if (R2.phase() !== "race") return;
+      var gt = R2.gates.filter(function (x) { return !x.done; })[0]; if (!gt) return;
+      var d2 = gt.seg - R2.seg(), lane = R2.lane();
+      if (d2 < 260 && d2 > 20 && lane !== gt.good) {
+        var st = frame.contentDocument.querySelector(".race-stage"), r = st.getBoundingClientRect(), right = gt.good > lane;
+        var box = { left: r.left + r.width * (right ? .72 : .14), top: r.top + r.height * .62, width: r.width * .14, height: 40 };
+        tap({ getBoundingClientRect: function () { return box; }, dispatchEvent: function (e) { st.dispatchEvent(e); } });
+      }
+    }, 650);
+    timers.push(setTimeout(function () { clearInterval(iv); }, secs * 1000 + 100));
+  }
   function finishLevel() { var H = G(); for (var i = 0; i < 40 && H._ctx && H._ctx.alive(); i++) H._ctx.next(); log("win"); timers.push(setTimeout(function () { log("star"); }, 500)); timers.push(setTimeout(function () { log("star"); }, 920)); timers.push(setTimeout(function () { log("star"); }, 1340)); }
 
   /* ---------- Mo, words and effects ---------- */
@@ -246,7 +264,7 @@
     phone: function (a) { phone.className = "phone"; void phone.offsetWidth; phone.classList.add("go"); log("whoosh"); },
     "phone-out": function () { phone.className = "phone off"; finger.classList.add("off"); },
     tap: function (a) { tap(a[0]); }, trace: function (a) { traceLetter(a[0], a[1]); }, pop: function (a) { popBalloons(a[0]); },
-    train: function () { rideTrain(); }, build: function () { buildAyah(); }, bridge: function () { crossBridge(); }, finish: function () { finishLevel(); },
+    train: function () { rideTrain(); }, build: function () { buildAyah(); }, bridge: function () { crossBridge(); }, finish: function () { finishLevel(); }, drive: function (a) { drive(a[0] || 10); },
     next: function () { var H = G(); H && H._ctx && H._ctx.next(); },
     finger: function (a) { finger.classList.toggle("off", a[0] === false); },
     burst: function (a) { burst(a[0] == null ? 540 : a[0], a[1] == null ? 960 : a[1], a[2]); }, confetti: function () { confetti(); },
