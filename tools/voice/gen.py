@@ -216,11 +216,26 @@ def say_as(t, lang):
             return m.group(1) + TANWIN[m.group(2)] + "\u0646\u0652"
     return t.strip() + "."
 
+def loud_enough(mp3):
+    """True unless ffmpeg says the clip is near-silent (the voice sometimes returns ~0.5 s of hiss for a lone
+    syllable, big enough to pass the size check). Without ffmpeg only the size check applies."""
+    import shutil, tempfile
+    if not shutil.which("ffmpeg"):
+        return True
+    with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
+        f.write(mp3); fp = f.name
+    try:
+        o = subprocess.run(["ffmpeg", "-hide_banner", "-i", fp, "-af", "volumedetect", "-f", "null", "-"], capture_output=True, text=True).stderr
+        m = re.search(r"max_volume: (-?[\d.]+)", o)
+        return not m or float(m.group(1)) > -30
+    finally:
+        os.remove(fp)
+
 def synth_ok(t, lang, voice):
     """synth, retrying when the voice returns near-silence; None if it never gives a real sound"""
     for i, text in enumerate([t, t, t, say_as(t, lang), say_as(t, lang)]):
         mp3 = synth(text, lang, voice)
-        if len(mp3) >= MIN_BYTES:
+        if len(mp3) >= MIN_BYTES and loud_enough(mp3):
             if i: print(f"   (retry {i} gave sound{' as ' + speakable(text) if text != t else ''})", flush=True)
             return mp3
     return None
