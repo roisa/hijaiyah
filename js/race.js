@@ -15,9 +15,11 @@
   function dark() { return document.documentElement.getAttribute("data-theme") === "dark"; }
 
   /* ---------- content: the races follow Books 1–4 ---------- */
-  var WORLDS = [1, 2, 3, 4, "kasrah", "dhammah", "tanwin", "hill", "snow", "desert", "candy"], PER = 5, GATES = 8, GP_GATES = 10;
+  var WORLDS = ["baby", 1, 2, 3, 4, "kasrah", "dhammah", "tanwin", "hill", "snow", "desert", "candy"], PER = 5, GATES = 8, GP_GATES = 10;
   // the bonus tracks: new places, letters from the books (snow = the look-alike letters, candy = a bit of everything)
   var EXTRA = {
+    // for the littlest (about 2+): one big balloon with one letter, tap anywhere, always a turbo; 2 letters a race
+    baby: { baby: 1, th: "rainbow", flag: "أ", bg: "stickers", name: ["Balap Balon · 2+", "Balloon Race · 2+"], icon: ["#FFD43B", "#FF5D73"] },
     hill: { src: [1], flag: "ح", bg: "w2", name: ["Bukit Hijau", "Green Hills"], icon: ["#8FE38A", "#3DB86B"] },
     snow: { src: [1], flag: "ث", bg: "w3", name: ["Negeri Salju", "Snowland"], icon: ["#BFE4FF", "#5BA8F0"], hard: 1 },
     desert: { src: [3], flag: "ص", bg: "w1", name: ["Gurun Pasir", "Desert Dunes"], icon: ["#FFD08A", "#F0903A"] },
@@ -38,6 +40,7 @@
       kasrah: '<path d="M4 26 A14 14 0 0 1 32 26" stroke="#FF5D73" stroke-width="3" fill="none"/><path d="M8 26 A10 10 0 0 1 28 26" stroke="#FFD43B" stroke-width="3" fill="none"/><path d="M12 26 A6 6 0 0 1 24 26" stroke="#22C06E" stroke-width="3" fill="none"/><path d="M12 31 L24 28" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
       dhammah: '<circle cx="15" cy="19" r="8" fill="#FFB86B"/><ellipse cx="15" cy="19" rx="13" ry="3.5" fill="none" stroke="#FFE27A" stroke-width="2" transform="rotate(-20 15 19)"/><circle cx="29" cy="8" r="1.6" fill="#fff"/><circle cx="6" cy="6" r="1.2" fill="#fff"/><path d="M28 18c4 0 4 6 0 6" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
       tanwin: '<path d="M6 28 Q10 16 20 18 Q24 8 30 10 Q28 14 26 14 Q24 22 22 28" fill="#fff"/><circle cx="28" cy="11.5" r="1.3" fill="#2A1F3D"/><path d="M9 7l8-2M9 11l8-2" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>',
+      baby: '<ellipse cx="18" cy="14" rx="9" ry="11" fill="#fff"/><path d="M18 25 q-3 4 0 8" stroke="#fff" stroke-width="2" fill="none"/><text x="18" y="18" text-anchor="middle" font-size="12" font-weight="900" fill="#FF5D73" font-family="Nunito">2+</text>',
       candy: '<path d="M18 30V18" stroke="#fff" stroke-width="3"/><circle cx="18" cy="12" r="8" fill="#fff"/><path d="M18 12m-5 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0" fill="none" stroke="#FF5FA2" stroke-width="2.5"/>'
     }[n];
     return '<span class="wi" style="background:linear-gradient(160deg,' + c[0] + "," + c[1] + ')"><svg viewBox="0 0 36 36" width="70%" height="70%" aria-hidden="true">' + art + "</svg></span>";
@@ -57,6 +60,13 @@
   function races(n) {
     if (cache[n]) return cache[n];
     var X = EXTRA[n], pool;
+    if (X && X.baby) {
+      pool = worldPool(1);
+      var L2 = [], bl = [];
+      for (var bi = 0; bi < PER; bi++) L2.push({ id: n + "-" + (bi + 1), w: n, th: X.th, flag: pool[bi * 2].ar, baby: 1, i: bi, gp: false, targets: pool.slice(bi * 2, bi * 2 + 2), pool: pool.slice(0, 10), easy: true });
+      L2.push({ id: n + "-gp", w: n, th: X.th, flag: "ب", baby: 1, i: PER, gp: true, targets: pool.slice(0, 10), pool: pool.slice(0, 10), easy: true });
+      return (cache[n] = L2);
+    }
     if (X && (X.vow || X.tanwin)) {
       var hasC = function (x) { return x && HJ.audio.hasClip(x.ar); };
       if (X.vow) pool = HJ.L.map(function (l) { return HJ.syl(l.k, X.vow); }).filter(hasC);            // in hijaiyah order

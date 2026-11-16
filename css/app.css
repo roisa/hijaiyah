@@ -1511,3 +1511,20 @@ button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
 .rp-b.me::after { content: ""; }
 .r3-hud { z-index: 7; }
 .rm-tabs { flex-wrap: wrap; overflow: visible; }
+/* race, toddler mode: one huge balloon button over the balloon's lane, a tapping finger on it */
+.r3-baby { position: absolute; z-index: 7; top: calc(170px + env(safe-area-inset-top)); width: 128px; height: 168px; margin-left: -64px; padding: 0; border: 0; background: none; cursor: pointer;
+  opacity: 0; transform: scale(.4) translateY(40px); transition: transform .4s cubic-bezier(.34,1.56,.64,1), opacity .25s, left .3s; pointer-events: none; }
+.r3-baby.on { opacity: 1; transform: none; pointer-events: auto; }
+.r3-baby.l { left: 22%; } .r3-baby.c { left: 50%; } .r3-baby.r { left: 78%; }
+.rb-bal { position: absolute; left: 4px; right: 4px; top: 0; height: 140px; border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%; display: grid; place-items: center;
+  background: radial-gradient(circle at 34% 26%, #fff 0 8%, transparent 9%), radial-gradient(circle at 40% 35%, rgba(255,255,255,.45), transparent 55%), var(--bc, #FF5D73);
+  box-shadow: inset -10px -14px 0 rgba(0,0,0,.12), 0 14px 22px -10px rgba(0,0,0,.45); animation: rbBob 1.6s ease-in-out infinite; }
+.rb-bal::after { content: ""; position: absolute; left: 50%; bottom: -26px; width: 2px; height: 26px; background: rgba(60,60,80,.55); }
+.rb-bal .ar { width: 86px; height: 86px; border-radius: 50%; background: #fff; color: var(--bc, #FF5D73); font-size: 60px; line-height: 86px; display: block; text-align: center; font-weight: 700; }
+.rb-hand { position: absolute; right: -18px; bottom: -6px; width: 66px; height: 66px; filter: drop-shadow(0 6px 8px rgba(0,0,0,.3)); animation: tapHand 1s ease-in-out infinite; pointer-events: none; }
+.r3-baby.go .rb-hand { display: none; }
+.r3-baby.go .rb-bal { animation: rbGo .5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes rbBob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
+@keyframes rbGo { 40% { transform: scale(1.18); } }
+@media (prefers-reduced-motion: reduce) { .rb-bal, .rb-hand { animation: none; } }
+.r3-baby.on ~ .r3-listen { opacity: 0 !important; }

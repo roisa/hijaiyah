@@ -118,6 +118,7 @@
     raceListen: ["Dengar!", "Listen!"],
     racePick: ["Ketuk huruf yang kamu dengar!", "Tap the letter you heard!"],
     raceNew: ["Baru!", "New!"],
+    raceBabyTap: ["Ketuk balonnya!", "Tap the balloon!"],
     raceThis: ["Ini bunyinya:", "This is the sound:"], raceFinishT: ["Finis!", "Finish!"],
     raceHorn: ["Klakson", "Horn"], raceMusic: ["Musik", "Music"], pwShield: ["Gelembung pelindung!", "Bubble shield!"], pwMagnet: ["Magnet koin!", "Coin magnet!"], pwSaved: ["Gelembung menjagamu!", "The bubble kept you safe!"],
     tutTap: ["Ketuk sisi ini!", "Tap this side!"], tutStay: ["Tetap di jalur ini!", "Stay in this lane!"],

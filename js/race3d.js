@@ -501,12 +501,25 @@
       b.onclick = function (e) { e.stopPropagation(); if (phase !== "race" || !curGate || curGate.done) return; A.unlock(); if (laneI !== l) snd.fx("pass"); laneI = l; markPick(); J.bump(b);
         A.sayNow(curGate.signs[l].au); tip.classList.add("gone"); };
       pick.querySelector(".rp-row").appendChild(b); return b; });
+    var babyBtn = el("button", "r3-baby", '<span class="rb-bal"><span class="ar"></span></span><img class="rb-hand" src="assets/icons/tap-hand.svg" alt="">');
+    babyBtn.setAttribute("aria-label", t("raceBabyTap")); sc.appendChild(babyBtn);
+    babyBtn.addEventListener("pointerdown", function (e) { e.stopPropagation(); }); babyBtn.addEventListener("pointerup", function (e) { e.stopPropagation(); });
+    babyBtn.onclick = function (e) { e.stopPropagation(); babyGo(); };
+    function babyGo() {
+      if (phase !== "race" || !curGate || curGate.done || curGate.tapped) return;
+      A.unlock(); curGate.tapped = true; laneI = curGate.good; snd.fx("pass"); J.bump(babyBtn); babyBtn.classList.add("go"); A.sayNow(curGate.q.au);
+    }
     function showPick(G) {
+      if (G.baby) {
+        babyBtn.querySelector(".ar").textContent = G.q.ar; babyBtn.style.setProperty("--bc", G.col);
+        babyBtn.className = "r3-baby on " + ["l", "c", "r"][G.good]; return;
+      }
       pickBtns.forEach(function (b, l) { b.className = "rp-b l" + l; b.querySelector(".ar").textContent = G.signs[l].ar; b.classList.toggle("w", G.signs[l].ar.replace(/[\u064B-\u0652]/g, "").length > 2); });
       markPick(); pick.classList.add("on"); tip.classList.add("gone");
     }
     function markPick() { pickBtns.forEach(function (b, l) { b.classList.toggle("me", l === laneI); }); }
     function pickResult(G) {
+      if (G.baby) { babyBtn.className = "r3-baby"; return; }
       pickBtns.forEach(function (b, l) { b.classList.toggle("good", l === G.good); b.classList.toggle("bad", l === G.picked && l !== G.good); });
       setTimeout(function () { if (my === live && (!curGate || curGate.done)) pick.classList.remove("on"); }, 1100);
     }
@@ -529,7 +542,8 @@
     size(); window.addEventListener("resize", size);
 
     /* ---- build the track ---- */
-    var laps = R.gp ? 3 : 2, perLap = R.gp ? 4 : 5, gap = 520;   // a gate every 520 segments (~12 s)
+    var BABY = !!R.baby;
+    var laps = BABY ? 1 : R.gp ? 3 : 2, perLap = BABY ? (R.gp ? 7 : 5) : R.gp ? 4 : 5, gap = BABY ? 440 : 520;   // a gate every 520 segments (~12 s)
     var N = 120 + perLap * gap, segs = [];
     function lastY() { return segs.length ? segs[segs.length - 1].p2.y : 0; }
     function addSeg(curve, y) { var n = segs.length; segs.push({ i: n, curve: curve, p1: { y: lastY(), z: n * SEG }, p2: { y: y, z: (n + 1) * SEG }, sp: [], dark: Math.floor(n / 3) % 2 }); }
@@ -568,9 +582,9 @@
     var targets = U.shuffle(R.targets.slice()), need = laps * perLap; while (targets.length < need) targets = targets.concat(U.shuffle(R.targets.slice()));
     for (var L = 0; L < laps; L++) {
       for (var gi = 0; gi < perLap; gi++) {
-        var gs = L * N + 120 + gi * gap, q = targets[L * perLap + gi], opts = distract(q), lanes = U.shuffle([0, 1, 2]), signs = [];
+        var gs = L * N + 120 + gi * gap, q = targets[L * perLap + gi], opts = BABY ? [q, q] : distract(q), lanes = U.shuffle([0, 1, 2]), signs = [];
         signs[lanes[0]] = q; signs[lanes[1]] = opts[0]; signs[lanes[2]] = opts[1];
-        var G = { seg: gs, q: q, signs: signs, good: lanes[0], said: false, done: false, picked: -1, spr: null };
+        var G = { seg: gs, q: q, signs: signs, good: lanes[0], said: false, done: false, picked: -1, spr: null, baby: BABY, col: ["#FF5D73", "#FFB000", "#22C06E", "#3D9BFF", "#9B6DFF", "#FF5FA2"][(L * perLap + gi) % 6] };
         gates.push(G); at(gs, { k: "gate", o: G });
         // a row of coins, a turbo pad and (once a lap) a ramp between this gate and the next
         var cl = Math.floor(rand() * 3); for (var ci = 0; ci < 6; ci++) { var C = { seg: gs + 120 + ci * 9, lane: cl, got: false }; coins.push(C); at(C.seg, { k: "coin", o: C }); }
@@ -598,12 +612,12 @@
     var snd = sound(), tut = !S.get().raceTut, tutOn = false, hornK = (st.garage || {}).horn || "beep";
     // rivals: tuned so about 8 of 10 right wins, 3–7 → 2nd (a pace factor of Mo's cruising speed)
     var riv = [
-      { k: "ais", z: PLAYERZ + 4 * SEG, lane: 0, x: LANES[0], pace: .985, ph: 1.1, fin: 0 },
-      { k: "adam", z: PLAYERZ + 6 * SEG, lane: 2, x: LANES[2], pace: 1.02, ph: .2, fin: 0 }
+      { k: "ais", z: PLAYERZ + 4 * SEG, lane: 0, x: LANES[0], pace: BABY ? .8 : .985, ph: 1.1, fin: 0 },
+      { k: "adam", z: PLAYERZ + 6 * SEG, lane: 2, x: LANES[2], pace: BABY ? .84 : 1.02, ph: .2, fin: 0 }
     ];
     HJ._race = { gates: gates, setLane: function (l) { laneI = l; }, phase: function () { return phase; }, pos: function () { return pos; }, total: TOTAL, coins: coins,
       // for tests: put Mo (and the rivals beside him) just before a spot on the track
-      warp: function (seg, near) { pos = seg * SEG - PLAYERZ; riv.forEach(function (rv, i) { rv.z = pos + PLAYERZ + (near ? 3 + i * 3 : 6 + i * 9) * SEG; if (near) { rv.lane = rv.x = 0; rv.lane = i ? 2 : 0; rv.x = LANES[rv.lane]; } }); },
+      warp: function (seg, near) { pos = Math.max(0, seg * SEG - PLAYERZ); riv.forEach(function (rv, i) { rv.z = pos + PLAYERZ + (near ? 3 + i * 3 : 6 + i * 9) * SEG; if (near) { rv.lane = rv.x = 0; rv.lane = i ? 2 : 0; rv.x = LANES[rv.lane]; } }); },
       ev: ev, ramps: ramps, pads: pads, lane: function () { return laneI; }, seg: function () { return Math.floor((pos + PLAYERZ) / SEG); } };
 
     /* ---- drawing ---- */
@@ -719,7 +733,7 @@
         });
         if (behind) continue;
         (ev[it.abs] || []).forEach(function (e) {
-          if (e.k === "gate") drawGate(e.o, A1, it.clip);
+          if (e.k === "gate") { if (e.o.baby) drawBalloon(e.o, A1, it.clip); else drawGate(e.o, A1, it.clip); }
           else if (e.k === "coin" && !e.o.got) drawSprite(coinSpr(), A1, LANES[e.o.lane], it.clip, 0, Math.abs(Math.cos(tRace * 4 + e.o.seg)) * .8 + .2, A1.s * ROADW * .1 * W / 2);
           else if (e.k === "pad") { g.globalAlpha = .75 + Math.sin(tRace * 10) * .25; drawSprite(padSpr(), A1, LANES[e.o.lane], it.clip, 0); g.globalAlpha = 1; }
           else if (e.k === "box" && !e.o.got) { var bxw = A1.s * ROADW * W / 2, bx = A1.x + A1.s * LANES[e.o.lane] * ROADW * W / 2, by2 = A1.y - bxw * (.22 + Math.sin(tRace * 3 + e.o.seg) * .03);
@@ -796,6 +810,31 @@
       }
       if (st === "good") { q.fillStyle = "#17A35B"; q.beginPath(); q.arc(w - 40, 40, 30, 0, 7); q.fill(); q.strokeStyle = "#fff"; q.lineWidth = 9; q.lineCap = "round"; q.beginPath(); q.moveTo(w - 54, 40); q.lineTo(w - 44, 52); q.lineTo(w - 26, 28); q.stroke(); }
       return (G.bspr[l] = { c: c, w: w, h: h, ww: 2.4 * w / 1100, st: st });
+    }
+    // toddler mode: one big shiny balloon carrying the letter, floating over its lane
+    function balloonSprite(G) {
+      if (G.bal) return G.bal;
+      var w = 300, h = 470, c = document.createElement("canvas"); c.width = w; c.height = h; var q = c.getContext("2d");
+      q.strokeStyle = "rgba(60,60,80,.55)"; q.lineWidth = 4; q.beginPath(); q.moveTo(w / 2, 330); q.bezierCurveTo(w / 2 - 30, 380, w / 2 + 30, 420, w / 2, h); q.stroke();
+      q.fillStyle = G.col; q.beginPath(); q.moveTo(w / 2 - 14, 330); q.lineTo(w / 2 + 14, 330); q.lineTo(w / 2, 312); q.closePath(); q.fill();
+      var gr = q.createRadialGradient(w * .38, 110, 10, w / 2, 170, 170); gr.addColorStop(0, "#fff"); gr.addColorStop(.18, G.col); gr.addColorStop(1, G.col);
+      q.fillStyle = gr; q.beginPath(); q.ellipse(w / 2, 170, 140, 160, 0, 0, 7); q.fill();
+      q.fillStyle = "rgba(0,0,0,.12)"; q.beginPath(); q.ellipse(w / 2 + 30, 200, 100, 120, 0, 0, 7); q.globalCompositeOperation = "source-atop"; q.fill(); q.globalCompositeOperation = "source-over";
+      q.fillStyle = "rgba(255,255,255,.7)"; q.beginPath(); q.ellipse(w * .32, 90, 26, 40, -.5, 0, 7); q.fill();
+      q.fillStyle = "#fff"; q.beginPath(); q.arc(w / 2, 180, 92, 0, 7); q.fill();
+      var fs = G.q.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? 80 : 128;
+      q.font = fs + "px 'Scheherazade New', serif"; q.textAlign = "center"; q.direction = "rtl";
+      var m = q.measureText(G.q.ar), mid = m.actualBoundingBoxAscent != null ? (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2 : fs * .3;
+      q.lineJoin = "round"; q.strokeStyle = G.col; q.lineWidth = 6; q.strokeText(G.q.ar, w / 2, 180 + mid); q.fillStyle = G.col; q.fillText(G.q.ar, w / 2, 180 + mid); q.direction = "ltr";
+      return (G.bal = { c: c, w: w, h: h, ww: .9 });
+    }
+    function drawBalloon(G, P, clip) {
+      if (G.done) return;
+      var sp = balloonSprite(G), bw2 = P.s * sp.ww * ROADW * W / 2, bob = calm ? 0 : Math.sin(tRace * 3 + G.seg) * .04;
+      // a ring of light on the road under it
+      var gx = P.x + P.s * LANES[G.good] * ROADW * W / 2, gy = P.y;
+      if (bw2 > 12 && gy < clip + 4) { g.save(); g.globalAlpha = .45 + Math.sin(tRace * 8) * .15; g.fillStyle = "#FFE27A"; g.beginPath(); g.ellipse(gx, gy - 2, bw2 * .5, bw2 * .12, 0, 0, 7); g.fill(); g.restore(); }
+      drawSprite(sp, P, LANES[G.good], clip, bw2 * (.25 + bob));
     }
     function drawGate(G, P, clip) {
       var gs = gateSprite(G); drawSprite(gs, P, 0, clip, 0);
@@ -887,9 +926,11 @@
       gates.forEach(function (G) {
         if (G.done) return;
         var dist = G.seg - pSeg;
-        if (!G.said && dist < 400 && phase === "race") { G.said = true; curGate = G; callGate(G); if (tut && G === gates[0]) { tutOn = true; tip.classList.add("gone"); } }
+        if (!G.said && dist < 400 && phase === "race") { G.said = true; curGate = G; callGate(G); if (tut && G === gates[0] && !BABY) { tutOn = true; tip.classList.add("gone"); } if (BABY) tip.classList.add("gone"); }
         if (tutOn && G === gates[0]) { var dir = G.good - laneI; hand.className = "r3-hand on " + (dir < 0 ? "l" : dir > 0 ? "r" : "c"); hand.setAttribute("data-say", dir === 0 ? t("tutStay") : t("tutTap")); }
+        if (G.baby && dist < 70 && laneI !== G.good) laneI = G.good;
         if (dist <= 0) {
+          if (G.baby) { G.done = true; G.picked = G.good; pickResult(G); popBalloon(G); return; }
           G.done = true; G.picked = lane;
           if (tutOn) { tutOn = false; tut = false; hand.className = "r3-hand"; S.get().raceTut = 1; S.save(); }
           pickResult(G);
@@ -940,6 +981,12 @@
     }
     function sayGate() { if (curGate && !curGate.done) { spk.classList.remove("ping"); void spk.offsetWidth; spk.classList.add("ping"); snd.duck(true); A.sayNow(curGate.q.au).then(function () { snd.duck(false); }); } }
     // as an arch comes: "Listen!" + the sound, then the sound again ("ba … ba!")
+    function popBalloon(G) {
+      okN++; boost = 3; slow = 0; setCam("yes"); snd.fx("box"); snd.fx("turbo"); J.buzz([20, 30, 40]);
+      for (var k = 0; k < 3; k++) puff(W / 2 + (k - 1) * 40, H * .5, 16, "box");
+      puff(W / 2, H * .55, 30, "star"); flashT = .45; kickT = .6; turboText(); A.sayNow(G.q.au);
+      setTimeout(function () { if (my === live) setCam("mo"); }, 1600);
+    }
     function callGate(G) {
       callout.classList.remove("on"); listen.classList.add("on"); J.bump(listen); sayGate(); showPick(G);
       setTimeout(function () { if (my === live && !G.done && curGate === G) { J.bump(listen); sayGate(); } }, 1700);
@@ -961,6 +1008,7 @@
     stage.addEventListener("pointerdown", function (e) { A.unlock(); sx0 = e.clientX; });
     stage.addEventListener("pointerup", function (e) {
       if (phase !== "race" || sx0 == null) return;
+      if (BABY) { sx0 = null; babyGo(); return; }
       var d = e.clientX - sx0, b = stage.getBoundingClientRect();
       var dir = Math.abs(d) > 30 ? (d > 0 ? 1 : -1) : (e.clientX - b.left < b.width / 2 ? -1 : 1);
       var nl = Math.max(0, Math.min(2, laneI + dir)); if (nl !== laneI) { laneI = nl; A.fx.step(); markPick(); } tip.classList.add("gone"); sx0 = null;
