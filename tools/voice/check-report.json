@@ -1754,5 +1754,329 @@
   ],
   "ok": false,
   "file": "audio/extra/kata-be62b809.mp3"
+ },
+ {
+  "id": "lines-e6ba0cd2",
+  "text": "Assalamu'alaikum! Selamat pagi! Yuk mulai ngaji, Bismillah.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "Selamat pagi"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-e6ba0cd2.mp3"
+ },
+ {
+  "id": "lines-9573680f",
+  "text": "Assalamu'alaikum! Siang ini kita belajar huruf baru, yuk!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "yang ini kita belajar huruf baru",
+   "yang ini kita belajar huruf",
+   "siang ini kita belajar huruf baru"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-9573680f.mp3"
+ },
+ {
+  "id": "lines-57f8ae20",
+  "text": "Assalamu'alaikum! Sore yang seru untuk membaca, ayo!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-57f8ae20.mp3"
+ },
+ {
+  "id": "lines-fe697665",
+  "text": "Assalamu'alaikum! Sebelum tidur, murajaah sebentar yuk.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "Assalamualaikum sebelum tidur",
+   "Assalamualaikum sebelum tidur murojaah",
+   "Assalamualaikum sebelum tidur murah"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-fe697665.mp3"
+ },
+ {
+  "id": "lines-45e9d066",
+  "text": "Siap-siap! Dengarkan bunyinya.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "dengarkan bunyinya",
+   "bunyinya"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-45e9d066.mp3"
+ },
+ {
+  "id": "lines-c557a272",
+  "text": "Dengar bunyinya, lalu ketuk jalur yang hurufnya benar!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-c557a272.mp3"
+ },
+ {
+  "id": "lines-459abd0c",
+  "text": "Selesaikan balapan sebelumnya dulu, ya",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-459abd0c.mp3"
+ },
+ {
+  "id": "lines-0b09010f",
+  "text": "Juara 1! Masya Allah!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-0b09010f.mp3"
+ },
+ {
+  "id": "lines-3ab3b2c4",
+  "text": "Juara 2! Hebat!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "hebat",
+   "juara hebat"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-3ab3b2c4.mp3"
+ },
+ {
+  "id": "lines-3bae42bc",
+  "text": "Juara 3! Ayo coba lagi!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-3bae42bc.mp3"
+ },
+ {
+  "id": "lines-763fc783",
+  "text": "Mulai dari gerbong dekat kereta, ya!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-763fc783.mp3"
+ },
+ {
+  "id": "lines-2c794297",
+  "text": "Pesta joget Mo!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-2c794297.mp3"
+ },
+ {
+  "id": "lines-f8b5a765",
+  "text": "Kembang api!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-f8b5a765.mp3"
+ },
+ {
+  "id": "lines-412fcf76",
+  "text": "Hujan balon! Pecahkan!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-412fcf76.mp3"
+ },
+ {
+  "id": "lines-ecc9d5fc",
+  "text": "Assalamu'alaikum! Good morning! Let's start, Bismillah.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "assalamu alaykum good morning let's start Bismillah",
+   "assalamu alaykum good morning let's start",
+   "assalamu alaykum good mourning let's start Bismillah"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-ecc9d5fc.mp3"
+ },
+ {
+  "id": "lines-c425f455",
+  "text": "Assalamu'alaikum! Let's learn a new letter this afternoon!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "salamu alaykum let's learn a new letter this afternoon",
+   "salamu alaykum let's learn a new lettere this afternoon",
+   "salamu alaykum let's learn a new letter' this afternoon"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-c425f455.mp3"
+ },
+ {
+  "id": "lines-c488f7a3",
+  "text": "Assalamu'alaikum! A lovely afternoon to read, come on!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "assalam alaikum a lovely afternoon to read come on",
+   "asalaam alaykum a lovely afternoon to read come on",
+   "asalam alaykum a lovely afternoon to read come on"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-c488f7a3.mp3"
+ },
+ {
+  "id": "lines-2b1d10af",
+  "text": "Assalamu'alaikum! A little review before bed?",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "alemu alaykum a little review before bed",
+   "alamu alaykum a little review before bed",
+   "am a little review before bed"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-2b1d10af.mp3"
+ },
+ {
+  "id": "lines-a4c0b63f",
+  "text": "Get ready! Listen to the sounds.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "get ready listen to The Sounds",
+   "gett ready listen to The Sounds",
+   "get ready listen to the Soundz"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-a4c0b63f.mp3"
+ },
+ {
+  "id": "lines-3e79a15e",
+  "text": "Listen to the sound, then tap the lane with the right letter!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "listen to the sound then tap the lane with the right letter",
+   "listen to the sound then tap the lane with the write letter",
+   "listen to the sound then tap the lane width the right letter"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-3e79a15e.mp3"
+ },
+ {
+  "id": "lines-2ae7f5fd",
+  "text": "Finish the race before this one first",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "finish the race before this 1 first",
+   "finish the race before this 1 ferst",
+   "finish the race before this 1 frst"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-2ae7f5fd.mp3"
+ },
+ {
+  "id": "lines-165396f7",
+  "text": "1st place! Masha Allah!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "first place mashallah",
+   "first plac mashallah",
+   "first plas mashallah"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-165396f7.mp3"
+ },
+ {
+  "id": "lines-50e94456",
+  "text": "2nd place! Great!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "second place great",
+   "second plas great",
+   "second plac great"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-50e94456.mp3"
+ },
+ {
+  "id": "lines-040e34fc",
+  "text": "3rd place! Let's try again!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "third place let's try again",
+   "third plas let's try again",
+   "third plac let's try again"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-040e34fc.mp3"
+ },
+ {
+  "id": "lines-3463b2a9",
+  "text": "Start with the carriage next to the engine!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "start with the carrots next to the engine",
+   "start with the carets next to the engine",
+   "start with the carats next to the engine"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-3463b2a9.mp3"
+ },
+ {
+  "id": "lines-cb3942f8",
+  "text": "Mo's dance party!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "most dance party",
+   "maast dance party",
+   "moste dance party"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-cb3942f8.mp3"
+ },
+ {
+  "id": "lines-a10dfb07",
+  "text": "Fireworks!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "fireworks",
+   "fireworx",
+   "fire-works"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-a10dfb07.mp3"
+ },
+ {
+  "id": "lines-8ce106ad",
+  "text": "Balloon rain! Pop them!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "balloon rain popped them",
+   "balloon rain pop them",
+   "balloon Reign popped them"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-8ce106ad.mp3"
  }
 ]
