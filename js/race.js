@@ -305,9 +305,10 @@
       '<rect x="282" y="34" width="48" height="16" rx="4" fill="#FF5D73"/><text x="306" y="45.5" text-anchor="middle" font-size="8.5" font-weight="900" fill="#fff" font-family="Fredoka One, Nunito">FINISH</text>' +
       chk(282, 50, 48, 6, 8, 1) +
       // the karts: far lane (Kak Adam, Ais), near lane (Mo, in front)
-      '<g class="hk hk2">' + kartSvg(48, 96, KART.ais, "ais", .58) + '</g>' +
-      '<g class="hk hk1">' + kartSvg(142, 95, KART.adam, "adam", .62) + '</g>' +
-      speed(196, 124) + '<g class="hk hk3">' + kartSvg(196, 120, KART.mo, "mo", .62) + "</g></svg>";
+      // all three in one row on the far lane, Mo leading toward the finish, Ais a little behind
+      '<g class="hk hk2">' + kartSvg(44, 92, KART.ais, "ais", .58) + '</g>' +
+      '<g class="hk hk1">' + kartSvg(136, 95, KART.adam, "adam", .62) + '</g>' +
+      speed(226, 99) + '<g class="hk hk3">' + kartSvg(226, 95, KART.mo, "mo", .62) + "</g></svg>";
   }
   var heroN = 0;
   function speed(x, y) { return '<g stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".75"><path d="M' + (x - 34) + " " + (y - 6) + " h22" + '"/><path d="M' + (x - 44) + " " + (y + 2) + " h28" + '"/><path d="M' + (x - 30) + " " + (y + 10) + " h18" + '"/></g>'; }
@@ -317,8 +318,9 @@
     if (hfaces[k]) return hfaces[k];
     var im = pics[k]; if (!im || !im.ok) return "";
     var b = im.box, c = document.createElement("canvas"); c.width = c.height = 128; var g = c.getContext("2d");
-    var F = window.__hf || { mo: [.52, .5, .24], ais: [.66, .6, .31], adam: [.54, .48, .21] }, fz = F[k] || [.5, .5, .25];
-    var side = b.w * fz[0], cx = b.x + b.w * fz[1], cy = b.y + b.h * fz[2];
+    // [size, x, y] of the face as parts of the picture's painted box; a 4th value 1 = size from the height (poses with arms out)
+    var F = window.__hf || { mo: [.52, .5, .24], moWin: [.42, .47, .23, 1], ais: [.66, .6, .31], adam: [.54, .48, .21] }, fz = F[k] || [.5, .5, .25];
+    var side = (fz[3] ? b.h : b.w) * fz[0], cx = b.x + b.w * fz[1], cy = b.y + b.h * fz[2];
     g.beginPath(); g.arc(64, 64, 64, 0, 7); g.clip(); g.drawImage(im, cx - side / 2, cy - side / 2, side, side, 0, 0, 128, 128);
     return (hfaces[k] = c.toDataURL());
   }
@@ -326,7 +328,7 @@
   // racing pose (leaning forward, both hands on the wheel) wearing an open-face helmet with their own face in it
   var SHIRT = { mo: ["#43B85C", "#2F9A47"], ais: ["#C9A7FF", "#9B6DFF"], adam: ["#3D7BFF", "#2A5FD0"] };
   function kartSvg(x, y, col, k, s) {
-    var sh = SHIRT[k], hc = { mo: ["#FF6B5B", "#C9372A"], ais: ["#FF8FC8", "#D9579A"], adam: ["#5B9BFF", "#2F6BE0"] }[k], u = "kf" + k + (++heroN), f = hface(k);
+    var sh = SHIRT[k], hc = { mo: ["#FF6B5B", "#C9372A"], ais: ["#FF8FC8", "#D9579A"], adam: ["#5B9BFF", "#2F6BE0"] }[k], u = "kf" + k + (++heroN), f = hface(k === "mo" ? "moWin" : k);   // Mo drives with his big happy grin
     return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')">' +
       '<defs><clipPath id="' + u + '"><circle cx="41" cy="-17" r="8.6"/></clipPath></defs>' +
       '<ellipse cx="38" cy="38" rx="46" ry="4.5" fill="rgba(0,0,0,.22)"/>' +
