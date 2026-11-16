@@ -801,5 +801,668 @@
   ],
   "ok": true,
   "file": "audio/lines/lines-bdbb9e92.mp3"
+ },
+ {
+  "id": "kata-66b0d1cb",
+  "text": "أً",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-66b0d1cb.mp3"
+ },
+ {
+  "id": "kata-0f34dab6",
+  "text": "ثًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-0f34dab6.mp3"
+ },
+ {
+  "id": "kata-52e83ce7",
+  "text": "جًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "جن",
+   "جنى",
+   "جنه"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-52e83ce7.mp3"
+ },
+ {
+  "id": "kata-c9689722",
+  "text": "حًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-c9689722.mp3"
+ },
+ {
+  "id": "kata-a9beb163",
+  "text": "خًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-a9beb163.mp3"
+ },
+ {
+  "id": "kata-a1042eb8",
+  "text": "دًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "ده",
+   "دا"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-a1042eb8.mp3"
+ },
+ {
+  "id": "kata-5746b98f",
+  "text": "ذًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "فيلم",
+   "ذهب"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-5746b98f.mp3"
+ },
+ {
+  "id": "kata-695974d8",
+  "text": "رًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-695974d8.mp3"
+ },
+ {
+  "id": "kata-d43c40e6",
+  "text": "زًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-d43c40e6.mp3"
+ },
+ {
+  "id": "kata-b0728c92",
+  "text": "سًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-b0728c92.mp3"
+ },
+ {
+  "id": "kata-22a2509c",
+  "text": "شًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-22a2509c.mp3"
+ },
+ {
+  "id": "kata-94fec243",
+  "text": "صًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-94fec243.mp3"
+ },
+ {
+  "id": "kata-560c7d97",
+  "text": "ضًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-560c7d97.mp3"
+ },
+ {
+  "id": "kata-9a2548c5",
+  "text": "طًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-9a2548c5.mp3"
+ },
+ {
+  "id": "kata-6ed9c03d",
+  "text": "ظًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "ظن",
+   "ضم",
+   "ظلم"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-6ed9c03d.mp3"
+ },
+ {
+  "id": "kata-f1d08de3",
+  "text": "عًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "عن",
+   "عند"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-f1d08de3.mp3"
+ },
+ {
+  "id": "kata-bcc0f4ec",
+  "text": "غًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "غن",
+   "غنم",
+   "غني"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-bcc0f4ec.mp3"
+ },
+ {
+  "id": "kata-8a45712a",
+  "text": "فًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-8a45712a.mp3"
+ },
+ {
+  "id": "kata-079f9c33",
+  "text": "قًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-079f9c33.mp3"
+ },
+ {
+  "id": "kata-f9c0fdb4",
+  "text": "كًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-f9c0fdb4.mp3"
+ },
+ {
+  "id": "kata-c43a6ef9",
+  "text": "لًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "لا",
+   "لا لا",
+   "لا لا لا"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-c43a6ef9.mp3"
+ },
+ {
+  "id": "kata-bba83b8c",
+  "text": "وًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-bba83b8c.mp3"
+ },
+ {
+  "id": "kata-ac37166b",
+  "text": "هًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-ac37166b.mp3"
+ },
+ {
+  "id": "kata-de8308a1",
+  "text": "يًا",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-de8308a1.mp3"
+ },
+ {
+  "id": "kata-473523bc",
+  "text": "أٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-473523bc.mp3"
+ },
+ {
+  "id": "kata-30be6745",
+  "text": "ثٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-30be6745.mp3"
+ },
+ {
+  "id": "kata-266bfe11",
+  "text": "جٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-266bfe11.mp3"
+ },
+ {
+  "id": "kata-cf93dba7",
+  "text": "حٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-cf93dba7.mp3"
+ },
+ {
+  "id": "kata-08fe6982",
+  "text": "خٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-08fe6982.mp3"
+ },
+ {
+  "id": "kata-97273069",
+  "text": "دٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-97273069.mp3"
+ },
+ {
+  "id": "kata-a88e649a",
+  "text": "ذٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "ذي",
+   "زي",
+   "في"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-a88e649a.mp3"
+ },
+ {
+  "id": "kata-fa256d44",
+  "text": "رٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-fa256d44.mp3"
+ },
+ {
+  "id": "kata-74d5723f",
+  "text": "زٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-74d5723f.mp3"
+ },
+ {
+  "id": "kata-81b551a5",
+  "text": "سٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-81b551a5.mp3"
+ },
+ {
+  "id": "kata-648d7680",
+  "text": "شٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-648d7680.mp3"
+ },
+ {
+  "id": "kata-8936fb34",
+  "text": "صٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-8936fb34.mp3"
+ },
+ {
+  "id": "kata-e21bbfe3",
+  "text": "ضٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-e21bbfe3.mp3"
+ },
+ {
+  "id": "kata-0749c1a7",
+  "text": "طٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-0749c1a7.mp3"
+ },
+ {
+  "id": "kata-75c8b2ba",
+  "text": "ظٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-75c8b2ba.mp3"
+ },
+ {
+  "id": "kata-4a291f00",
+  "text": "عٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-4a291f00.mp3"
+ },
+ {
+  "id": "kata-57d11de1",
+  "text": "غٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "غن",
+   "غنم",
+   "غني"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-57d11de1.mp3"
+ },
+ {
+  "id": "kata-96ca734c",
+  "text": "فٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-96ca734c.mp3"
+ },
+ {
+  "id": "kata-2a1ed1f2",
+  "text": "قٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-2a1ed1f2.mp3"
+ },
+ {
+  "id": "kata-c82f9d70",
+  "text": "كٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-c82f9d70.mp3"
+ },
+ {
+  "id": "kata-8a9025cb",
+  "text": "لٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-8a9025cb.mp3"
+ },
+ {
+  "id": "kata-52ce8a64",
+  "text": "وٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-52ce8a64.mp3"
+ },
+ {
+  "id": "kata-7e34377d",
+  "text": "هٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-7e34377d.mp3"
+ },
+ {
+  "id": "kata-97b7205d",
+  "text": "يٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-97b7205d.mp3"
+ },
+ {
+  "id": "kata-fac886a0",
+  "text": "أٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-fac886a0.mp3"
+ },
+ {
+  "id": "kata-0e6441a4",
+  "text": "ثٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-0e6441a4.mp3"
+ },
+ {
+  "id": "kata-78f487a1",
+  "text": "جٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "جيمي",
+   "جيميل",
+   "جيبي"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-78f487a1.mp3"
+ },
+ {
+  "id": "kata-ead68bd7",
+  "text": "حٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-ead68bd7.mp3"
+ },
+ {
+  "id": "kata-ca357e71",
+  "text": "خٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-ca357e71.mp3"
+ },
+ {
+  "id": "kata-432583f2",
+  "text": "ذٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "زي",
+   "في"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-432583f2.mp3"
+ },
+ {
+  "id": "kata-0792dd40",
+  "text": "زٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-0792dd40.mp3"
+ },
+ {
+  "id": "kata-3a6c14c4",
+  "text": "شٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-3a6c14c4.mp3"
+ },
+ {
+  "id": "kata-1b860145",
+  "text": "صٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-1b860145.mp3"
+ },
+ {
+  "id": "kata-dc6698fa",
+  "text": "ضٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "بو",
+   "بوي",
+   "بول"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-dc6698fa.mp3"
+ },
+ {
+  "id": "kata-500d2840",
+  "text": "طٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-500d2840.mp3"
+ },
+ {
+  "id": "kata-5a59a8a1",
+  "text": "ظٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "ضي",
+   "ضد",
+   "ضب"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-5a59a8a1.mp3"
+ },
+ {
+  "id": "kata-5608427a",
+  "text": "عٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "اي",
+   "اي اي"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-5608427a.mp3"
+ },
+ {
+  "id": "kata-339d7e10",
+  "text": "غٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-339d7e10.mp3"
+ },
+ {
+  "id": "kata-a5eb4d37",
+  "text": "فٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-a5eb4d37.mp3"
+ },
+ {
+  "id": "kata-cf9b3665",
+  "text": "قٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-cf9b3665.mp3"
+ },
+ {
+  "id": "kata-6743ec34",
+  "text": "نٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-6743ec34.mp3"
+ },
+ {
+  "id": "kata-6f9b0446",
+  "text": "وٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-6f9b0446.mp3"
+ },
+ {
+  "id": "kata-be62b809",
+  "text": "هٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-be62b809.mp3"
+ },
+ {
+  "id": "kata-e23b8cf5",
+  "text": "يٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-e23b8cf5.mp3"
  }
 ]
