@@ -1,0 +1,33 @@
+# Publishes the web game to the gh-pages branch → https://roisa.github.io/hijaiyah/
+# Runs on every push to main or to the development branch, and by hand (Actions → Publish game → Run workflow).
+name: Publish game
+on:
+  push:
+    branches: [main, "claude/**"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check the curriculum (exact Qur'an text)
+        run: node tools/check-curriculum.js
+      - name: Build the site
+        run: node tools/build-sw.js && node tools/build-web.js site
+      - name: Push to gh-pages
+        run: |
+          cd site
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Publish ${GITHUB_SHA::7} from ${GITHUB_REF_NAME}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" gh-pages

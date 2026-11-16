@@ -1,0 +1,7 @@
+dist/
+node_modules/
+ios/App/Pods/
+.DS_Store
+site/
+tools/kit/_render.html
+audio/quran/
