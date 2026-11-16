@@ -291,6 +291,7 @@
   var live = 0;
   function play(r) {
     if (S.overLimit()) return HJ.restScreen(function () { play(r); });
+    if (HJ.music) HJ.music.stop();
     var my = ++live;
     load(function () {
       if (my !== live) return;
@@ -311,6 +312,7 @@
     var bt = st.raceT = st.raceT || {}, rec = !bt[R.id] || res.time < bt[R.id]; if (rec) bt[R.id] = Math.round(res.time * 10) / 10;
     S.save();
     podium(R, res, gain, rec && old);
+    if (HJ.badges) setTimeout(HJ.badges.check, 2600);
   }
   function podium(R, res, gain, record) {
     APP().confetti(res.place === 1 ? 90 : 40); A.fx.win();

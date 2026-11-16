@@ -75,7 +75,7 @@
         var d = new Date(), today = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
         (setup.done || ["1-1", "1-2", "1-3", "1-4", "1-5", "1-6", "1-7"]).forEach(function (id, i) { s.stars[id] = i % 3 === 1 ? 2 : 3; s.stickers.push(id); });
         s.streak = { last: today, n: 4 }; s.daily = { date: today, done: { level: 1 } };
-        s.raceTut = 1; s.coins = 18; s.seen = { pick: 1, yesno: 1, pop: 1, train: 1, bridge: 1, match: 1, build: 1, sort: 1, learn: 1, trace: 1, ayahbuild: 1, ayahfill: 1 };
+        s.raceTut = 1; s.settings.holidayPreview = "off"; s.badges = {}; if (w.HJ.badges) w.HJ.badges.list.forEach(function (b) { s.badges[b.id] = 1; }); s.coins = 18; s.seen = { pick: 1, yesno: 1, pop: 1, train: 1, bridge: 1, match: 1, build: 1, sort: 1, learn: 1, trace: 1, ayahbuild: 1, ayahfill: 1 };
         w.HJ.store.save();
         frame.onload = function () {
           var H = w.HJ;

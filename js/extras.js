@@ -102,7 +102,7 @@
         opened = true; reveal();
       };
       function reveal() {
-        var s = st(); s.chest++;
+        var s = st(); s.chest++; if (HJ.badges) setTimeout(HJ.badges.check, 2400);
         var pr = nextPrize(), kind, key;
         if (pr) { kind = pr.split(":")[0]; key = pr.split(":")[1]; s.owned.push(pr); }
         else s.bonus = (s.bonus || 0) + 2;

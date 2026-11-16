@@ -4,7 +4,7 @@
   // first language guess: the phone's language (Indonesian → id, anything else → en); the picker confirms it
   var navLang = ((navigator.languages && navigator.languages[0]) || navigator.language || "en").toLowerCase();
   var DEF = { name: "", lang: /^(id|ms)/.test(navLang) ? "id" : "en", langChosen: false, theme: "auto", stars: {}, tashih: {}, stickers: [], streak: { last: "", n: 0 }, plays: 0, limit: "0", playDay: { d: "", ms: 0 }, log: {}, chest: 0, owned: [], equip: { train: "classic", balloons: "classic", ink: "classic" },
-    settings: { moVoice: true, sfx: true, latin: true, cdn: true, unlockAll: false, nature: false, arcadeAll: false } };
+    settings: { moVoice: true, sfx: true, latin: true, cdn: true, unlockAll: false, nature: false, arcadeAll: false, lessonMusic: true, holidayPreview: false } };
   var st;
   function load() {
     try { st = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { st = null; }
@@ -117,7 +117,9 @@
     raceT: ["Balap Hijaiyah", "Hijaiyah Race"],
     raceListen: ["Dengar!", "Listen!"],
     racePick: ["Ketuk huruf yang kamu dengar!", "Tap the letter you heard!"],
-    raceNew: ["Baru!", "New!"], raceShelf: ["Rak Piala Balap", "Racing trophies"],
+    raceNew: ["Baru!", "New!"], badgeNew: ["Lencana baru!", "New badge!"], badgeWall: ["Lencanaku", "My badges"], badgeMany: ["{n} lencana baru!", "{n} new badges!"], badgeSee: ["Lihat di buku stiker", "See them in the sticker book"],
+    lessonMusic: ["Musik belajar", "Lesson music"], lessonMusicSub: ["Musik lembut saat belajar, mengecil saat Mo bicara", "Soft music in lessons, quieter while Mo speaks"],
+    holidayPreview: ["Hiasan hari raya", "Holiday decorations"], holidayPreviewSub: ["Lampion Ramadan & Idul Fitri muncul otomatis; nyalakan untuk melihatnya sekarang", "Ramadan & Eid lanterns appear by themselves; switch on to see them now"], raceShelf: ["Rak Piala Balap", "Racing trophies"],
     raceBabyTap: ["Ketuk balonnya!", "Tap the balloon!"],
     raceThis: ["Ini bunyinya:", "This is the sound:"], raceFinishT: ["Finis!", "Finish!"],
     raceHorn: ["Klakson", "Horn"], raceMusic: ["Musik", "Music"], pwShield: ["Gelembung pelindung!", "Bubble shield!"], pwMagnet: ["Magnet koin!", "Coin magnet!"], pwSaved: ["Gelembung menjagamu!", "The bubble kept you safe!"],

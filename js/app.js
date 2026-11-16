@@ -144,6 +144,7 @@
   var curScreen = null;
   function shell(tab, title) {
     curScreen = { home: home, map: map, stickers: stickers, parents: parents }[tab];
+    if (HJ.music) HJ.music.stop();
     var TABS = ["home", "map", "stickers", "parents"], ti = TABS.indexOf(tab), dir = lastTab < 0 || ti === lastTab ? "" : ti > lastTab ? " from-r" : " from-l"; lastTab = ti;
     var s = bare(); if (dir) s.className += dir;
     if (HJ.bg) HJ.bg({ map: "map", stickers: "stickers", parents: "parents" }[tab] || null);
@@ -224,6 +225,7 @@
       A.say(c === "ا" ? "أَلِف" : (L && L.n) || c);
     });
     sc.appendChild(hero);
+    if (HJ.holiday) HJ.holiday.decorate(hero);
     // Mo greets once a day, on the first touch of the home screen (phones only allow sound after a tap)
     if (st.greeted !== today()) sc.addEventListener("pointerdown", function once(e) {
       sc.removeEventListener("pointerdown", once, true); if (S.get().greeted === today() || e.target.closest(".hw-mo")) return;
@@ -250,6 +252,7 @@
     });
     td.appendChild(row); sc.appendChild(td);
     if (HJ.race) sc.appendChild(HJ.race.card());
+    if (HJ.badges) HJ.badges.check();
 
     // ---- the 7 islands: swipe through the books ----
     sc.appendChild(el("div", "sec-h", "<h3>" + esc(t("islands")) + "</h3><small>" + S.totalStars() + " " + HJ.art("star", 16) + "</small>"));
@@ -333,6 +336,18 @@
       path.insertAdjacentHTML("afterbegin", '<svg class="map-path" viewBox="0 0 100 ' + (H + 16) + '" preserveAspectRatio="none" style="height:' + (H + 16) + 'px">' +
         line(0, pts.length - 1, "todo") + (lastDone >= 0 ? line(0, Math.min(pts.length - 1, lastDone + 1), "done") : "") + "</svg>");
       box.appendChild(path);
+      var jn = -1; w.levels.forEach(function (l, i) { if (path.querySelectorAll(".node")[i] && path.querySelectorAll(".node")[i].classList.contains("unlocking")) jn = i; });
+      if (jn > 0) (function (a, b2) {
+        var sp = el("div", "path-spark"); path.appendChild(sp);
+        var t0 = performance.now(), d = 850;
+        (function step(now) {
+          var k = Math.min(1, (now - t0) / d), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+          var x = a[0] + (b2[0] - a[0]) * e, y = a[1] + (b2[1] - a[1]) * e;
+          sp.style.left = x + "%"; sp.style.top = y + "px";
+          if (Math.random() < .5) { var tr2 = el("i", "path-trail"); tr2.style.left = x + "%"; tr2.style.top = y + "px"; path.appendChild(tr2); setTimeout(function () { tr2.remove(); }, 600); }
+          if (k < 1) requestAnimationFrame(step); else sp.remove();
+        })(t0);
+      })(pts[jn - 1], pts[jn]);
       sc.appendChild(box);
       if (focusWorld === w.n) focusEl = box;
     });
@@ -393,6 +408,7 @@
     var steps = opts.steps || HJ.buildSteps(lv), idx = 0, mistakes = 0, hearts = 3, boss = lv.kind === "boss", my = ++runId;
     var s = bare();
     if (HJ.bg) HJ.bg(lv.kind === "arcade" ? "stickers" : "w" + Math.min(7, Math.max(1, lv.w || 1)));
+    if (HJ.music) HJ.music.play();
     var top = el("div", "lv-top"), x = el("button", "nav-btn", ic("close")), bar = el("div", "bar", "<i></i>"), hz = el("div", "hearts glass");
     var goal = el("div", "bar-goal", HJ.art(boss ? "trophy" : "star", 30)), combo = 0, missed = [], replayed = false, collected = 0;
     x.setAttribute("aria-label", t("close"));
@@ -567,7 +583,8 @@
   }
 
   function results(lv, stars, first, before) {
-    A.fx.win(); confetti(70);
+    A.fx.win(); confetti(70); if (HJ.music) HJ.music.stop();
+    if (HJ.badges) setTimeout(HJ.badges.check, 2600);
     if (S.overLimit()) setTimeout(function () { if (document.querySelector(".result-mo")) restScreen(); }, 4200);
     before = before || { total: S.totalStars(), streak: S.get().streak.n, worldDone: 0, missions: 0 };
     var all = HJ.allLevels(), nxt = all[all.indexOf(lv) + 1], w = HJ.worlds[lv.w - 1], st = S.get();
@@ -679,6 +696,7 @@
     sc.appendChild(el("div", "large-title", esc(t("stickerTitle1")) + " <em>" + esc(t("stickerTitle2")) + "</em>"));
     sc.appendChild(el("div", "large-sub", got + " / " + HJ.allLevels().length + " " + esc(t("stickers").toLowerCase())));
     if (HJ.extras) HJ.extras.treasures(sc);
+    if (HJ.badges) sc.appendChild(HJ.badges.shelf());
     if (HJ.race && HJ.race.shelf) sc.appendChild(HJ.race.shelf());
     HJ.worlds.forEach(function (w) {
       var have = w.levels.filter(function (l) { return st.stickers.indexOf(l.id) >= 0; }).length;
@@ -750,6 +768,8 @@
     tog(ic("speaker"), "gold", t("moVoice"), "moVoice");
     tog('<img src="assets/icons/sound.svg" alt="">', "", t("sfx"), "sfx");
     tog(HJ.art("sun", 22), "green", t("nature"), "nature", t("natureSub"));
+    tog(HJ.art("sparkle", 22), "purple", t("lessonMusic"), "lessonMusic", t("lessonMusicSub"));
+    tog(HJ.art("moon", 22), "gold", t("holidayPreview"), "holidayPreview", t("holidayPreviewSub"));
     tog(ic("textA"), "purple", t("latin"), "latin", t("latinSub"));
     if (!window.HJ_APP_BUILD) tog(ic("book"), "teal", t("cdn"), "cdn", t("cdnSub"));
     tog(ic("lock"), "gray", t("unlockAll"), "unlockAll", t("unlockSub"));

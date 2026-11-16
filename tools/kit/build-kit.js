@@ -19,7 +19,7 @@ const STATE = (lang, dark) => `(function(){localStorage.clear();var s=HJ.store.g
 s.theme=${JSON.stringify(dark ? "dark" : "light")};s.settings.moVoice=false;s.settings.sfx=false;s.settings.cdn=false;
 var d=new Date(),t=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 ["1-1","1-2","1-3","1-4","1-5","1-6","1-7"].forEach(function(id,i){s.stars[id]=i%3===1?2:3;s.stickers.push(id);s.tashih[id]=i<4?1:0;});
-s.streak={last:t,n:4};s.plays=12;s.raceTut=1;s.coins=46;s.race={"1-1":1};s.seen={pick:1,yesno:1,pop:1,train:1,bridge:1,match:1,build:1,sort:1,learn:1,trace:1,ayahbuild:1,ayahfill:1};s.daily={date:t,done:{level:1}};HJ.store.save();})()`;
+s.streak={last:t,n:4};s.plays=12;s.raceTut=1;s.settings.holidayPreview="off";s.badges={};HJ.badges&&HJ.badges.list.forEach(function(b){s.badges[b.id]=1;});s.coins=46;s.race={"1-1":1};s.seen={pick:1,yesno:1,pop:1,train:1,bridge:1,match:1,build:1,sort:1,learn:1,trace:1,ayahbuild:1,ayahfill:1};s.daily={date:t,done:{level:1}};HJ.store.save();})()`;
 
 async function scene(p, key) {
   const go = (js) => p.evaluate(js);
