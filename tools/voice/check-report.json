@@ -2050,15 +2050,6 @@
   "file": "audio/lines/lines-8ce106ad.mp3"
  },
  {
-  "id": "sd51eedf0",
-  "text": "كِ",
-  "lang": "ar",
-  "sec": "huruf",
-  "heard": [],
-  "ok": false,
-  "file": "audio/huruf/sd51eedf0.mp3"
- },
- {
   "id": "sf27e4b76",
   "text": "هَ",
   "lang": "ar",
@@ -2523,5 +2514,14 @@
   ],
   "ok": true,
   "file": "audio/lines/lines-97965ce2.mp3"
+ },
+ {
+  "id": "sd51eedf0",
+  "text": "كِ",
+  "lang": "ar",
+  "sec": "huruf",
+  "heard": [],
+  "ok": false,
+  "file": "audio/huruf/sd51eedf0.mp3"
  }
 ]
