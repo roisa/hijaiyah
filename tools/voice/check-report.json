@@ -1466,16 +1466,6 @@
   "file": "audio/huruf/sd8a82d80.mp3"
  },
  {
-  "id": "sd51eedf0",
-  "text": "كِ",
-  "lang": "ar",
-  "sec": "huruf",
-  "heard": [],
-  "ok": false,
-  "silent": true,
-  "file": "audio/huruf/sd51eedf0.mp3"
- },
- {
   "id": "se43a63dd",
   "text": "مِ",
   "lang": "ar",
@@ -1514,26 +1504,6 @@
   ],
   "ok": true,
   "file": "audio/huruf/sba8b0a81.mp3"
- },
- {
-  "id": "sf27e4b76",
-  "text": "هَ",
-  "lang": "ar",
-  "sec": "huruf",
-  "heard": [],
-  "ok": false,
-  "silent": true,
-  "file": "audio/huruf/sf27e4b76.mp3"
- },
- {
-  "id": "s36869348",
-  "text": "هِ",
-  "lang": "ar",
-  "sec": "huruf",
-  "heard": [],
-  "ok": false,
-  "silent": true,
-  "file": "audio/huruf/s36869348.mp3"
  },
  {
   "id": "s254b8c9d",
@@ -2078,5 +2048,480 @@
   ],
   "ok": true,
   "file": "audio/lines/lines-8ce106ad.mp3"
+ },
+ {
+  "id": "sd51eedf0",
+  "text": "كِ",
+  "lang": "ar",
+  "sec": "huruf",
+  "heard": [],
+  "ok": false,
+  "file": "audio/huruf/sd51eedf0.mp3"
+ },
+ {
+  "id": "sf27e4b76",
+  "text": "هَ",
+  "lang": "ar",
+  "sec": "huruf",
+  "heard": [],
+  "ok": false,
+  "file": "audio/huruf/sf27e4b76.mp3"
+ },
+ {
+  "id": "s36869348",
+  "text": "هِ",
+  "lang": "ar",
+  "sec": "huruf",
+  "heard": [],
+  "ok": false,
+  "file": "audio/huruf/s36869348.mp3"
+ },
+ {
+  "id": "lines-a248e0e0",
+  "text": "Warnai juga titiknya!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-a248e0e0.mp3"
+ },
+ {
+  "id": "lines-b42a5176",
+  "text": "Koinnya belum cukup. Ayo balapan lagi!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-b42a5176.mp3"
+ },
+ {
+  "id": "lines-c96d7e2c",
+  "text": "Hebat! Bintangnya tertangkap!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "bintang nya tertangkap",
+   "bintangnya tertangkap",
+   "bintang yang tertangkap"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-c96d7e2c.mp3"
+ },
+ {
+  "id": "lines-e45ae114",
+  "text": "Lencana baru!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-e45ae114.mp3"
+ },
+ {
+  "id": "lines-6f878a2e",
+  "text": "Langkah Pertama",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "langkah pertama",
+   "langkah ke-1"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-6f878a2e.mp3"
+ },
+ {
+  "id": "lines-57c1c2bf",
+  "text": "30 Bintang",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "30 bintang",
+   "tiga puluh Bintang"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-57c1c2bf.mp3"
+ },
+ {
+  "id": "lines-927d9605",
+  "text": "100 Bintang",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "Bintang",
+   "Lintang",
+   "binatang"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-927d9605.mp3"
+ },
+ {
+  "id": "lines-1b034531",
+  "text": "Jilid 1 Selesai",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "selesai",
+   "Doodle"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-1b034531.mp3"
+ },
+ {
+  "id": "lines-8154c511",
+  "text": "Jilid 2 Selesai",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "dua",
+   "2"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-8154c511.mp3"
+ },
+ {
+  "id": "lines-2920733c",
+  "text": "Jilid 4 Selesai",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-2920733c.mp3"
+ },
+ {
+  "id": "lines-11a0f13c",
+  "text": "3 Hari Beruntun",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-11a0f13c.mp3"
+ },
+ {
+  "id": "lines-8848acb3",
+  "text": "7 Hari Beruntun",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "7 hari beruntun",
+   "tujuh hari beruntun",
+   "7 hari beruntung"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-8848acb3.mp3"
+ },
+ {
+  "id": "lines-5f88a48f",
+  "text": "Baca ke Abi/Umi",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-5f88a48f.mp3"
+ },
+ {
+  "id": "lines-15ff6d56",
+  "text": "Pemburu Harta",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "pemburu harta",
+   "pemburu",
+   "Pemburu Hantu"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-15ff6d56.mp3"
+ },
+ {
+  "id": "lines-64cd1d8f",
+  "text": "Juara Balap",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-64cd1d8f.mp3"
+ },
+ {
+  "id": "lines-49f09fad",
+  "text": "Juara Grand Prix",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "juara Grand Prix",
+   "juara Grand Prime",
+   "juara Grand Slam"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-49f09fad.mp3"
+ },
+ {
+  "id": "lines-46536613",
+  "text": "Pembalap Hebat",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-46536613.mp3"
+ },
+ {
+  "id": "lines-ec6ead3b",
+  "text": "100 Koin",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-ec6ead3b.mp3"
+ },
+ {
+  "id": "lines-b6fe2667",
+  "text": "Wisuda!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-b6fe2667.mp3"
+ },
+ {
+  "id": "lines-e613f668",
+  "text": "Colour the dots too!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "color the dots too",
+   "Colour the dots too",
+   "color the dots"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-e613f668.mp3"
+ },
+ {
+  "id": "lines-ef71028e",
+  "text": "Not enough coins yet. Let's race again!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "not enough coins yet let's race again",
+   "knot enough coins yet let's race again",
+   "not enough koins yet let's race again"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-ef71028e.mp3"
+ },
+ {
+  "id": "lines-f22804b9",
+  "text": "Wow! You caught the stars!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "wow you caught the Stars",
+   "wow you caught the Starz",
+   "wow you caught the starrs"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-f22804b9.mp3"
+ },
+ {
+  "id": "lines-54da94b7",
+  "text": "New badge!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "new badge",
+   "Nu badge",
+   "knew badge"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-54da94b7.mp3"
+ },
+ {
+  "id": "lines-4e0932cb",
+  "text": "First Step",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "first step",
+   "first steppe",
+   "first stepp"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-4e0932cb.mp3"
+ },
+ {
+  "id": "lines-f9d2c66f",
+  "text": "30 Stars",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "30 Stars",
+   "30 Starz",
+   "30 starrs"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-f9d2c66f.mp3"
+ },
+ {
+  "id": "lines-84e928a1",
+  "text": "100 Stars",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "100 Stars",
+   "100 Starz",
+   "100 starrs"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-84e928a1.mp3"
+ },
+ {
+  "id": "lines-a2c5a217",
+  "text": "Book 1 Done",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "book 1 done",
+   "book 1 Doane",
+   "book 1 Doan"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-a2c5a217.mp3"
+ },
+ {
+  "id": "lines-56a31524",
+  "text": "Book 2 Done",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "book 2",
+   "Book 2 done",
+   "Book 2 Doane"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-56a31524.mp3"
+ },
+ {
+  "id": "lines-9c617f49",
+  "text": "Book 4 Done",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "book 4 done",
+   "book 4 Doane",
+   "book 4 Doan"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-9c617f49.mp3"
+ },
+ {
+  "id": "lines-39dc98bc",
+  "text": "3-Day Streak",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "3-day streak",
+   "3-day streaked",
+   "3-day streek"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-39dc98bc.mp3"
+ },
+ {
+  "id": "lines-a86b889e",
+  "text": "7-Day Streak",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "7-Day streak",
+   "7-Day streaked",
+   "7-Day streek"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-a86b889e.mp3"
+ },
+ {
+  "id": "lines-025ff6f5",
+  "text": "Read to a Parent",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "read to a parent",
+   "read Tio a parent",
+   "read to ah parent"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-025ff6f5.mp3"
+ },
+ {
+  "id": "lines-ea89f148",
+  "text": "Treasure Hunter",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "treasure hunter",
+   "Treasurer Hunter",
+   "tresure Hunter"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-ea89f148.mp3"
+ },
+ {
+  "id": "lines-e1b67b75",
+  "text": "Race Winner",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "race winner",
+   "Reis winner",
+   "rayce winner"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-e1b67b75.mp3"
+ },
+ {
+  "id": "lines-1804a60e",
+  "text": "Grand Prix Champion",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Grand Prix champion",
+   "Grand Prix shampion",
+   "Grande Prix champion"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-1804a60e.mp3"
+ },
+ {
+  "id": "lines-500bfee4",
+  "text": "Super Racer",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "super racer",
+   "Souper racer",
+   "super reisser"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-500bfee4.mp3"
+ },
+ {
+  "id": "lines-62ab9615",
+  "text": "100 Coins",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "100 coins",
+   "100 koins",
+   "100 coinz"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-62ab9615.mp3"
+ },
+ {
+  "id": "lines-97965ce2",
+  "text": "Graduation!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "graduation"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-97965ce2.mp3"
  }
 ]
