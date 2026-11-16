@@ -116,6 +116,8 @@
     bub1: ["Aku kangen kamu! Main lagi, yuk.", "I missed you! Let's play again."], bub2: ["Huruf-huruf sudah menunggumu!", "The letters are waiting for you!"], bub3: ["Siap petualangan hari ini?", "Ready for today's adventure?"],
     raceT: ["Balap Hijaiyah", "Hijaiyah Race"],
     raceListen: ["Dengar!", "Listen!"],
+    racePick: ["Ketuk huruf yang kamu dengar!", "Tap the letter you heard!"],
+    raceNew: ["Baru!", "New!"],
     raceThis: ["Ini bunyinya:", "This is the sound:"], raceFinishT: ["Finis!", "Finish!"],
     raceHorn: ["Klakson", "Horn"], raceMusic: ["Musik", "Music"], pwShield: ["Gelembung pelindung!", "Bubble shield!"], pwMagnet: ["Magnet koin!", "Coin magnet!"], pwSaved: ["Gelembung menjagamu!", "The bubble kept you safe!"],
     tutTap: ["Ketuk sisi ini!", "Tap this side!"], tutStay: ["Tetap di jalur ini!", "Stay in this lane!"],

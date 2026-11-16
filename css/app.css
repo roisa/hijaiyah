@@ -1462,3 +1462,52 @@ button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
 .r3-call.ans .ans-box .ar { color: #0B6B3A; } [data-theme="dark"] .r3-call.ans .ans-box .ar { color: #A8F0C6; }
 @keyframes ansLetter { 0% { scale: .3; rotate: -12deg; } 60% { scale: 1.15; rotate: 4deg; } 100% { scale: 1; rotate: 0deg; } }
 @media (prefers-reduced-motion: reduce) { .r3-call.ans.on .ans-box .ar, .r3-listen.on .rl-ear::after { animation: none; } }
+
+/* ---------- race: the letter chooser, turbo banner, timer and speed ---------- */
+.r3-pick { position: absolute; left: 10px; right: 90px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 6; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  transform: translateY(140%); transition: transform .35s cubic-bezier(.34,1.56,.64,1); pointer-events: none; }
+.r3-pick.on { transform: none; pointer-events: auto; }
+.rp-say { padding: 4px 14px; border-radius: 99px; background: rgba(255,255,255,.95); color: #1E2A3A; font-weight: 900; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,.2); }
+[data-theme="dark"] .rp-say { background: rgba(29,36,64,.95); color: #fff; }
+.rp-row { display: flex; gap: 10px; width: 100%; justify-content: center; }
+.rp-b { position: relative; flex: 1; max-width: 96px; height: 84px; border-radius: 22px; border: 4px solid #fff; display: grid; place-items: center; cursor: pointer; font: inherit; padding: 0;
+  background: #fff; box-shadow: 0 6px 0 var(--c2), 0 12px 18px -8px rgba(0,0,0,.45); transition: transform .15s, box-shadow .15s; animation: rpIn .45s cubic-bezier(.34,1.56,.64,1) backwards; }
+.rp-b.l0 { --c1: #FFD43B; --c2: #E0A800; --c3: #B8410E; animation-delay: 0s; } .rp-b.l1 { --c1: #7CC8FF; --c2: #3D8FE0; --c3: #173F8C; animation-delay: .07s; } .rp-b.l2 { --c1: #C9A7FF; --c2: #8B63F0; --c3: #4B2A9E; animation-delay: .14s; }
+.rp-b { border-color: var(--c1); }
+.rp-b .ar { font-size: 46px; line-height: 1.3; color: var(--c3); font-weight: 700; }
+.rp-b.w .ar { font-size: 26px; }
+.rp-b:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--c2); }
+.rp-b.me { transform: translateY(-6px) scale(1.06); box-shadow: 0 0 0 4px #fff, 0 0 0 8px var(--c1), 0 10px 0 var(--c2), 0 18px 24px -8px rgba(0,0,0,.5); }
+.rp-b.me::after { content: "▲"; position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); color: #fff; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+.rp-bolt { position: absolute; top: -12px; left: -10px; width: 30px; height: 30px; border-radius: 50%; background: #FF8A00; border: 3px solid #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13 2L5 13h6l-2 9 9-12h-6z' fill='%23FFF3A6'/%3E%3C/svg%3E"); background-size: 70%; background-repeat: no-repeat; background-position: center; }
+.r3-pick.on .rp-b:not(.good):not(.bad) { animation: rpIn .45s cubic-bezier(.34,1.56,.64,1) backwards, rpPulse 1.2s ease-in-out .6s infinite; }
+@keyframes rpIn { from { transform: translateY(30px) scale(.6); opacity: 0; } }
+@keyframes rpPulse { 50% { box-shadow: 0 6px 0 var(--c2), 0 0 0 6px rgba(255,212,59,.55), 0 12px 18px -8px rgba(0,0,0,.45); } }
+.rp-b.good { background: #E6F8EE; border-color: #22C06E; box-shadow: 0 6px 0 #17A35B; transform: scale(1.12); } .rp-b.good .ar { color: #0B6B3A; }
+.rp-b.bad { background: #FFF0EF; border-color: #FF6B6B; box-shadow: 0 6px 0 #D93A3A; opacity: .8; }
+.r3-pick.on ~ .r3-horn { opacity: .0; pointer-events: none; }
+.r3-horn { transition: opacity .2s; }
+/* TURBO! */
+.r3-turbo { position: absolute; left: 50%; top: 36%; z-index: 6; display: flex; align-items: center; gap: 8px; transform: translate(-50%, -50%) scale(.3); opacity: 0; pointer-events: none; }
+.r3-turbo b { font-family: 'Fredoka One', var(--font); font-size: 54px; color: #FFD43B; -webkit-text-stroke: 8px #E04E00; paint-order: stroke fill; text-shadow: 0 6px 0 #9A2E00, 0 10px 24px rgba(255,120,0,.6); letter-spacing: .02em; }
+.tb-bolt { width: 54px; height: 54px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13 2L5 13h6l-2 9 9-12h-6z' fill='%23FFD43B' stroke='%23E04E00' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat; }
+.r3-turbo.on { animation: turboIn 1.4s cubic-bezier(.2,.9,.3,1) forwards; }
+@keyframes turboIn { 0% { transform: translate(-50%, -50%) scale(.3) rotate(-8deg); opacity: 0; } 18% { transform: translate(-50%, -50%) scale(1.25) rotate(3deg); opacity: 1; } 30% { transform: translate(-50%, -50%) scale(1) rotate(-2deg); } 75% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; } 100% { transform: translate(-50%, -90%) scale(.8); opacity: 0; } }
+.r3-time, .r3-spd { padding: 3px 10px; border-radius: 12px; background: rgba(20,24,40,.6); color: #fff; font-weight: 800; font-size: 13px; width: max-content; font-variant-numeric: tabular-nums; }
+.r3-spd b { font-family: 'Fredoka One', var(--font); font-size: 16px; color: #7CF3FF; margin-right: 3px; } .r3-spd small { opacity: .8; font-size: 11px; }
+@media (prefers-reduced-motion: reduce) { .r3-turbo.on { animation-duration: .01s; } .r3-pick.on .rp-b { animation: none !important; } }
+.rm-tab.x { background: linear-gradient(120deg, #FFF3C4, #FFE2F2); } [data-theme="dark"] .rm-tab.x { background: linear-gradient(120deg, #3A2E10, #3A1A34); }
+.rm-tab.on.x { background: #FF4F7B; }
+.rm-new { display: inline-block; margin-left: 6px; padding: 2px 10px; border-radius: 99px; background: #FF4F7B; color: #fff; font-size: 12px; font-weight: 900; vertical-align: 3px; }
+/* the chooser sits in the sky, under the top bar, so Mo's kart and the road stay in view */
+.r3-pick { left: 12px; right: 12px; top: calc(184px + env(safe-area-inset-top)); bottom: auto; transform: translateY(-30px) scale(.9); opacity: 0; transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .25s; }
+.r3-pick.on { transform: none; opacity: 1; }
+.rp-say { display: inline-flex; align-items: center; gap: 6px; border: 0; cursor: pointer; font: inherit; font-weight: 900; font-size: 15px; padding: 6px 14px 6px 8px; color: #E07000; }
+.rp-say svg.ic { width: 26px; height: 26px; padding: 4px; border-radius: 50%; background: linear-gradient(180deg,#FFB43A,#FF8A00); color: #fff; }
+.r3-pick.on ~ .r3-listen { opacity: 0 !important; }
+.r3-pick ~ .r3-horn { opacity: 1 !important; pointer-events: auto !important; }
+.rp-b { height: 78px; max-width: 104px; }
+.rp-b.me::after { content: ""; }
+.r3-hud { z-index: 7; }
+.rm-tabs { flex-wrap: wrap; overflow: visible; }

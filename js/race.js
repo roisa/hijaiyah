@@ -15,7 +15,25 @@
   function dark() { return document.documentElement.getAttribute("data-theme") === "dark"; }
 
   /* ---------- content: the races follow Books 1–4 ---------- */
-  var WORLDS = [1, 2, 3, 4], PER = 5, GATES = 8, GP_GATES = 10;
+  var WORLDS = [1, 2, 3, 4, "hill", "snow", "desert", "candy"], PER = 5, GATES = 8, GP_GATES = 10;
+  // the bonus tracks: new places, letters from the books (snow = the look-alike letters, candy = a bit of everything)
+  var EXTRA = {
+    hill: { src: [1], flag: "ح", bg: "w2", name: ["Bukit Hijau", "Green Hills"], icon: ["#8FE38A", "#3DB86B"] },
+    snow: { src: [1], flag: "ث", bg: "w3", name: ["Negeri Salju", "Snowland"], icon: ["#BFE4FF", "#5BA8F0"], hard: 1 },
+    desert: { src: [3], flag: "ص", bg: "w1", name: ["Gurun Pasir", "Desert Dunes"], icon: ["#FFD08A", "#F0903A"] },
+    candy: { src: [1, 2, 3, 4], flag: "ق", bg: "stickers", name: ["Negeri Permen", "Candy Land"], icon: ["#FFB3E1", "#FF5FA2"] }
+  };
+  function wName(n) { return EXTRA[n] ? EXTRA[n].name[S.get().lang === "en" ? 1 : 0] : tr(HJ.worlds[n - 1].name); }
+  function wIcon(n) {
+    if (!EXTRA[n]) return HJ.wi(n, true).outerHTML;
+    var c = EXTRA[n].icon, art = {
+      hill: '<path d="M2 26 Q10 12 18 20 Q24 10 34 26Z" fill="#fff" opacity=".9"/><circle cx="27" cy="9" r="4" fill="#FFE27A"/>',
+      snow: '<path d="M18 5v26M7 11l22 14M29 11L7 25" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="18" cy="18" r="3" fill="#fff"/>',
+      desert: '<path d="M18 30V9M18 18h-6v-6M18 15h6v-5" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M3 31 Q18 24 33 31Z" fill="#fff" opacity=".7"/>',
+      candy: '<path d="M18 30V18" stroke="#fff" stroke-width="3"/><circle cx="18" cy="12" r="8" fill="#fff"/><path d="M18 12m-5 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0" fill="none" stroke="#FF5FA2" stroke-width="2.5"/>'
+    }[n];
+    return '<span class="wi" style="background:linear-gradient(160deg,' + c[0] + "," + c[1] + ')"><svg viewBox="0 0 36 36" width="70%" height="70%" aria-hidden="true">' + art + "</svg></span>";
+  }
   function worldPool(n) {
     var w = HJ.worlds[n - 1], seen = {}, out = [];
     w.levels.forEach(function (l) {
@@ -30,13 +48,19 @@
   var cache = {};
   function races(n) {
     if (cache[n]) return cache[n];
-    var pool = worldPool(n), k = Math.ceil(pool.length / PER), list = [];
+    var X = EXTRA[n], pool;
+    if (X) {   // a mix from the books it draws on, in a fixed (seeded) order
+      pool = []; X.src.forEach(function (b) { pool = pool.concat(worldPool(b)); });
+      var h = function (s2) { var v = 0; for (var q = 0; q < s2.length; q++) v = (v * 31 + s2.charCodeAt(q)) >>> 0; return v; };
+      pool = pool.map(function (x) { return { x: x, k: h(n + x.ar) }; }).sort(function (a, b) { return a.k - b.k; }).map(function (o) { return o.x; });
+    } else pool = worldPool(n);
+    var k = Math.ceil(pool.length / PER), list = [];
     for (var i = 0; i < PER; i++) {
       var chunk = pool.slice(i * k, (i + 1) * k);
       if (!chunk.length) chunk = pool.slice(-k);
-      list.push({ id: n + "-" + (i + 1), w: n, i: i, gp: false, targets: chunk, pool: pool.slice(0, Math.max((i + 1) * k, 6)), easy: n === 1 && i < 3 });
+      list.push({ id: n + "-" + (i + 1), w: n, th: X ? n : null, flag: X ? X.flag : null, i: i, gp: false, targets: chunk, pool: X && X.hard ? pool : pool.slice(0, Math.max((i + 1) * k, 6)), easy: n === 1 && i < 3 });
     }
-    list.push({ id: n + "-gp", w: n, i: PER, gp: true, targets: pool, pool: pool, easy: false });
+    list.push({ id: n + "-gp", w: n, th: X ? n : null, flag: X ? X.flag : null, i: PER, gp: true, targets: pool, pool: pool, easy: false });
     return (cache[n] = list);
   }
   function rst() { var s = S.get(); s.race = s.race || {}; return s.race; }
@@ -95,7 +119,7 @@
     if (w) curW = w;
     var app = document.getElementById("app"); app.innerHTML = "";
     var sc = el("div", "screen race-menu"); app.appendChild(sc);
-    if (HJ.bg) HJ.bg("w" + curW);
+    if (HJ.bg) HJ.bg(EXTRA[curW] ? EXTRA[curW].bg : "w" + curW);
     var top = el("div", "rm-top"), back = el("button", "nav-btn", HJ.ic("back"));
     back.setAttribute("aria-label", t("close")); back.onclick = function () { A.fx.tap(); HJ.go.home(); };
     top.appendChild(back); top.appendChild(el("div", "rm-title", "<b>" + esc(t("raceT")) + "</b><small>" + esc(t("raceSub")) + "</small>")); sc.appendChild(top);
@@ -109,11 +133,11 @@
     body.appendChild(gbar);
     var tabs = el("div", "rm-tabs");
     WORLDS.forEach(function (n) {
-      var w = HJ.worlds[n - 1], b = el("button", "rm-tab" + (n === curW ? " on" : ""), HJ.wi(n, true).outerHTML + "<span>" + esc(t("book")) + " " + n + "</span>");
+      var b = el("button", "rm-tab" + (n === curW ? " on" : "") + (EXTRA[n] ? " x" : ""), wIcon(n) + "<span>" + esc(EXTRA[n] ? wName(n) : t("book") + " " + n) + "</span>");
       b.onclick = function () { A.fx.tap(); open(n); }; tabs.appendChild(b);
     });
     body.appendChild(tabs);
-    body.appendChild(el("div", "rm-wname", "<b>" + esc(tr(HJ.worlds[curW - 1].name)) + "</b>"));
+    body.appendChild(el("div", "rm-wname", "<b>" + esc(wName(curW)) + "</b>" + (EXTRA[curW] ? ' <span class="rm-new">' + esc(t("raceNew")) + "</span>" : "")));
     // the tracks as a winding road: each race a stop, the Grand Prix a trophy at the end
     var list = el("div", "rm-map"), RS = races(curW), stepY = 112, mapH = RS.length * stepY + 30;
     list.style.height = mapH + "px";
@@ -272,5 +296,5 @@
   }
   function flagSvg() { return '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2v17" stroke="#3A4256" stroke-width="2"/>' + [0, 1, 2, 3, 4, 5].map(function (i) { return '<rect x="' + (4 + (i % 3) * 4) + '" y="' + (2 + (i / 3 | 0) * 4) + '" width="4" height="4" fill="' + ((i + (i / 3 | 0)) % 2 ? "#222" : "#fff") + '"/>'; }).join("") + "</svg>"; }
 
-  HJ.race = { open: open, card: card, races: races, play: function (id) { var w = +String(id).split("-")[0]; races(w).forEach(function (r) { if (r.id === id) play(r); }); } };
+  HJ.race = { open: open, card: card, races: races, play: function (id) { var w0 = String(id).split("-")[0], w = EXTRA[w0] ? w0 : +w0; races(w).forEach(function (r) { if (r.id === id) play(r); }); } };
 })();
