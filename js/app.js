@@ -226,6 +226,7 @@
     });
     sc.appendChild(hero);
     if (HJ.holiday) HJ.holiday.decorate(hero);
+    if (HJ.race) sc.appendChild(HJ.race.card());
     // Mo greets once a day, on the first touch of the home screen (phones only allow sound after a tap)
     if (st.greeted !== today()) sc.addEventListener("pointerdown", function once(e) {
       sc.removeEventListener("pointerdown", once, true); if (S.get().greeted === today() || e.target.closest(".hw-mo")) return;
@@ -251,7 +252,6 @@
       if (i < 2) row.appendChild(el("i", "td-link" + (md[m.k] ? " on" : "")));
     });
     td.appendChild(row); sc.appendChild(td);
-    if (HJ.race) sc.appendChild(HJ.race.card());
     if (HJ.badges) HJ.badges.check();
 
     // ---- the 7 islands: swipe through the books ----

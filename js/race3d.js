@@ -340,14 +340,21 @@
     // shadow
     g.fillStyle = "rgba(0,0,0," + (o.night ? .35 : .22) + ")"; g.beginPath(); g.ellipse(0, -4 + (o.air || 0) * 0, 160 - (o.air || 0) * .4, 20, 0, 0, 7); g.fill();
     g.translate(0, -(o.air || 0) + wob);
+    var BODY = who.body || "kart";
+    if (BODY === "monster") { g.translate(0, -58); }                       // sits high on big wheels
     // turbo flames from the two exhausts
     if (o.turbo) for (var i = -1; i <= 1; i += 2) { var fl = (40 + Math.random() * 30) * (o.big ? 2 : 1); var q = g.createLinearGradient(0, -40, 0, -40 + fl); q.addColorStop(0, "#FFF3A6"); q.addColorStop(.4, "#FFB000"); q.addColorStop(1, "rgba(255,80,40,0)"); g.fillStyle = q; g.beginPath(); g.ellipse(i * 40, -30 + fl / 2, 16, fl / 2, 0, 0, 7); g.fill(); }
     // rear tyres
+    var TW = BODY === "monster" ? 1.75 : BODY === "racer" ? 1.1 : 1, TX = BODY === "bubble" ? 128 : 150;
+    if (BODY === "monster") { g.strokeStyle = "#5A6275"; g.lineWidth = 10; [-1, 1].forEach(function (sd) { g.beginPath(); g.moveTo(sd * 60, -60); g.lineTo(sd * 120, 10); g.stroke(); }); }
     [-1, 1].forEach(function (sd) {
-      g.fillStyle = "#23262F"; rr(g, sd * 150 - (sd > 0 ? 62 : 0), -122, 62, 118, 22); g.fill();
+      g.save(); if (TW !== 1) { g.translate(sd * TX, -4); g.scale(TW, TW); g.translate(-sd * TX, 4); }
+      g.fillStyle = "#23262F"; rr(g, sd * TX - (sd > 0 ? 62 : 0), -122, 62, 118, 22); g.fill();
       g.fillStyle = "#3A3F4C"; for (var k = 0; k < 5; k++) { var yy = -116 + ((k * 24 + (o.roll || 0)) % 116); g.fillRect(sd * 150 - (sd > 0 ? 58 : -4), yy, 54, 7); }
-      g.fillStyle = who.rim[0]; g.beginPath(); g.ellipse(sd * 150 - sd * 31, -62, 12, 26, 0, 0, 7); g.fill();
+      g.fillStyle = who.rim[0]; g.beginPath(); g.ellipse(sd * TX - sd * 31, -62, 12, 26, 0, 0, 7); g.fill();
+      g.restore();
     });
+    if (BODY === "racer") { g.save(); g.scale(1.08, .82); g.translate(0, -16); }
     // body
     var P = who.paint;
     g.fillStyle = P[1]; rr(g, -122, -100, 244, 84, 30); g.fill();
@@ -360,6 +367,10 @@
     if (o.night) { g.fillStyle = "rgba(255,60,60,.35)"; g.beginPath(); g.arc(-91, -79, 30, 0, 7); g.arc(91, -79, 30, 0, 7); g.fill(); }
     g.fillStyle = "#8E9BB0"; [-40, 40].forEach(function (x) { g.beginPath(); g.arc(x, -30, 13, 0, 7); g.fill(); }); g.fillStyle = "#2A2F3D"; [-40, 40].forEach(function (x) { g.beginPath(); g.arc(x, -30, 7, 0, 7); g.fill(); });
     g.fillStyle = "#fff"; rr(g, -26, -98, 52, 34, 8); g.fill(); g.fillStyle = P[1]; g.font = "900 26px 'Fredoka One', Nunito"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(who.num || "1", 0, -80);
+    if (BODY === "racer") {         // side pods and racing stripes
+      g.restore(); g.fillStyle = P[1]; rr(g, -160, -96, 46, 60, 18); g.fill(); rr(g, 114, -96, 46, 60, 18); g.fill();
+      g.fillStyle = "#fff"; g.fillRect(-16, -150, 9, 100); g.fillRect(7, -150, 9, 100);
+    }
     // seat back + roll bar
     g.fillStyle = "#2A2F3D"; rr(g, -70, -214, 140, 70, 26); g.fill();
     g.strokeStyle = "#C9D3E3"; g.lineWidth = 10; g.beginPath(); g.moveTo(-74, -150); g.lineTo(-62, -232); g.quadraticCurveTo(0, -250, 62, -232); g.lineTo(74, -150); g.stroke();
@@ -374,18 +385,42 @@
     g.fillStyle = "rgba(255,255,255,.4)"; g.beginPath(); g.ellipse(-24, -318, 14, 20, -.5, 0, 7); g.fill();
     if (who.star) { g.fillStyle = "#FFD43B"; g.beginPath(); for (var si = 0; si < 10; si++) { var sa = -Math.PI / 2 + si * Math.PI / 5, srr = si % 2 ? 9 : 20; g.lineTo(30 + Math.cos(sa) * srr, -300 + Math.sin(sa) * srr); } g.closePath(); g.fill(); }
     if (who.ears) { g.fillStyle = H[0]; g.beginPath(); g.moveTo(-50, -320); g.lineTo(-44, -360); g.lineTo(-22, -338); g.closePath(); g.moveTo(50, -320); g.lineTo(44, -360); g.lineTo(22, -338); g.closePath(); g.fill(); }
-    // spoiler wing
-    g.fillStyle = P[1]; g.fillRect(-150, -176, 16, 30); g.fillRect(134, -176, 16, 30); g.fillStyle = P[0]; rr(g, -166, -190, 332, 22, 10); g.fill();
+    // spoiler wing (the racer's is tall and wide; the bubble car has a glass dome instead)
+    if (BODY === "racer") { g.fillStyle = "#2A2F3D"; g.fillRect(-150, -176, 14, 50); g.fillRect(136, -176, 14, 50); g.fillStyle = P[0]; rr(g, -196, -196, 392, 28, 12); g.fill(); g.fillStyle = "#fff"; rr(g, -196, -196, 392, 8, 4); g.fill(); g.fillStyle = P[1]; rr(g, -204, -204, 22, 44, 6); g.fill(); rr(g, 182, -204, 22, 44, 6); g.fill(); }
+    else if (BODY === "bubble") {
+      g.fillStyle = "rgba(190,230,255,.38)"; g.strokeStyle = "rgba(255,255,255,.9)"; g.lineWidth = 7;
+      g.beginPath(); g.moveTo(-112, -150); g.quadraticCurveTo(-118, -380, 0, -384); g.quadraticCurveTo(118, -380, 112, -150); g.closePath(); g.fill(); g.stroke();
+      g.fillStyle = "rgba(255,255,255,.55)"; g.beginPath(); g.ellipse(-56, -300, 16, 46, -.35, 0, 7); g.fill();
+      g.fillStyle = P[0]; rr(g, -40, -400, 80, 22, 10); g.fill();
+    }
+    else { g.fillStyle = P[1]; g.fillRect(-150, -176, 16, 30); g.fillRect(134, -176, 16, 30); g.fillStyle = P[0]; rr(g, -166, -190, 332, 22, 10); g.fill(); }
     // gloves on the steering wheel, peeking out at the sides
     g.fillStyle = who.glove || "#FFFFFF"; g.beginPath(); g.arc(-82, -150, 15, 0, 7); g.arc(82, -150, 15, 0, 7); g.fill();
     g.strokeStyle = "rgba(0,0,0,.12)"; g.lineWidth = 3; g.beginPath(); g.arc(-82, -150, 15, 0, 7); g.stroke(); g.beginPath(); g.arc(82, -150, 15, 0, 7); g.stroke();
     // a whippy antenna with a little flag (Mo's has a hijaiyah letter on it)
     if (who.flag) {
-      var fw = o.flap || 0;
-      g.strokeStyle = "#5A6275"; g.lineWidth = 5; g.lineCap = "round"; g.beginPath(); g.moveTo(132, -176); g.quadraticCurveTo(140 + fw * 6, -290, 150 + fw * 10, -380); g.stroke();
-      g.fillStyle = who.flag; g.beginPath(); g.moveTo(150 + fw * 10, -390); g.quadraticCurveTo(215, -380 + fw * 12, 262, -362 + fw * 16); g.quadraticCurveTo(215, -330 - fw * 8, 148 + fw * 9, -310); g.closePath(); g.fill();
-      g.fillStyle = "rgba(255,255,255,.25)"; g.beginPath(); g.moveTo(150 + fw * 10, -390); g.quadraticCurveTo(200, -384, 240, -370); g.lineTo(150, -372); g.closePath(); g.fill();
-      if (who.flagTxt) { g.fillStyle = "#fff"; g.font = "64px 'Scheherazade New', serif"; g.textAlign = "center"; g.direction = "rtl"; g.fillText(who.flagTxt, 196, -334); g.direction = "ltr"; }
+      // a cloth flag on a bendy pole: a rectangle that waves (two travelling ripples), shaded in its folds,
+      // with the letter printed in the middle and bending with the cloth
+      var fw = o.flap || 0, ph = (o.t || 0) * 9, px2 = 150 + fw * 8, top = -400, fh = 92, fl = 150;
+      g.strokeStyle = "#5A6275"; g.lineWidth = 6; g.lineCap = "round"; g.beginPath(); g.moveTo(132, -176); g.quadraticCurveTo(140 + fw * 5, -290, px2, top - 6); g.stroke();
+      g.fillStyle = "#FFD43B"; g.beginPath(); g.arc(px2, top - 8, 8, 0, 7); g.fill();
+      var wv = function (u) { return Math.sin(ph - u * 4.2) * 10 * u + fw * 8 * u; };         // the wave grows toward the free end
+      var N2 = 12;
+      g.beginPath(); g.moveTo(px2, top + wv(0));
+      for (var k2 = 1; k2 <= N2; k2++) { var u = k2 / N2; g.lineTo(px2 + u * fl, top + wv(u) + u * 6); }
+      for (k2 = N2; k2 >= 0; k2--) { var u2 = k2 / N2; g.lineTo(px2 + u2 * fl, top + fh + wv(u2) - u2 * 4); }
+      g.closePath(); g.fillStyle = who.flag; g.fill();
+      // folds: light and dark bands that follow the wave
+      g.save(); g.clip();
+      for (k2 = 0; k2 < N2; k2++) { var u3 = k2 / N2, sl = Math.cos(ph - u3 * 4.2); g.fillStyle = sl > 0 ? "rgba(255,255,255," + (sl * .22).toFixed(3) + ")" : "rgba(0,0,0," + (-sl * .18).toFixed(3) + ")"; g.fillRect(px2 + u3 * fl, top - 40, fl / N2 + 1, fh + 80); }
+      // the letter, centred on the cloth, riding the wave
+      if (who.flagTxt) {
+        var um = .52, cx3 = px2 + um * fl, cy3 = top + fh / 2 + wv(um) + 1, ang = Math.atan2(wv(um + .05) - wv(um - .05), fl * .1);
+        g.translate(cx3, cy3); g.rotate(ang); g.font = "66px 'Scheherazade New', serif"; g.textAlign = "center"; g.direction = "rtl";
+        var m3 = g.measureText(who.flagTxt), mid3 = m3.actualBoundingBoxAscent != null ? (m3.actualBoundingBoxAscent - m3.actualBoundingBoxDescent) / 2 : 22;
+        g.lineJoin = "round"; g.strokeStyle = "rgba(0,60,30,.45)"; g.lineWidth = 6; g.strokeText(who.flagTxt, 0, mid3); g.fillStyle = "#fff"; g.fillText(who.flagTxt, 0, mid3); g.direction = "ltr";
+      }
+      g.restore();
     }
     g.restore();
   }
@@ -442,6 +477,8 @@
       go: function (t0) { tn(880, t0, .6, "square", .12); tn(1320, t0, .6, "sine", .06); },
       lap: function (t0) { [0, 4, 7, 12].forEach(function (n2, k) { tn(523 * Math.pow(2, n2 / 12), t0 + k * .11, .22, "square", .08); }); tn(1046, t0 + .44, .5, "triangle", .12); },
       cheer: function (t0) { nz(t0, 2.2, "bandpass", 900, 1400, .28, .7); nz(t0 + .2, 1.8, "bandpass", 1600, 2400, .14, 1.2); for (var k = 0; k < 6; k++) tn(1500 + Math.random() * 900, t0 + .3 + Math.random() * 1.2, .09, "sine", .03); },
+      boing: function (t0) { tn(180, t0, .28, "sine", .45, 420); tn(420, t0 + .06, .3, "triangle", .16, 260); nz(t0, .25, "bandpass", 700, 1400, .12, 2); },
+      ping: function (t0) { tn(1318, t0, .18, "sine", .1); tn(1760, t0 + .08, .25, "sine", .08); },
       skid: function (t0) { nz(t0, .35, "bandpass", 3200, 2400, .06, 6); }
     };
     return {
@@ -475,7 +512,7 @@
     if (HJ.bg) HJ.bg(null);
     var night = dark() ? 1 : 0, TH = THEME[R.th || R.w], rand = rng(R.id + "-track");
     var st = S.get(), gar = st.garage || {}, myPaint = PAINT[gar.paint] || PAINT.red, myRim = RIMS[gar.rim] || RIMS.classic;
-    var ME = { paint: myPaint, rim: myRim, helmet: [myPaint[0], myPaint[1]], shirt: ["#43B85C", "#FF8A3D"], num: "1", hair: "#22252E", star: true, flag: "#22C06E", flagTxt: R.flag || ["ب", "ج", "ق", "ن"][R.w - 1] || "ب" };
+    var ME = { body: gar.body || "kart", paint: myPaint, rim: myRim, helmet: [myPaint[0], myPaint[1]], shirt: ["#43B85C", "#FF8A3D"], num: "1", hair: "#22252E", star: true, flag: "#22C06E", flagTxt: R.flag || ["ب", "ج", "ق", "ن"][R.w - 1] || "ب" };
     var RIV = {
       ais: { paint: PAINT.pink, rim: RIMS.classic, helmet: ["#FFB3D6", "#E86AA6"], shirt: ["#FF8FC8", "#9B6DFF"], hijab: "#FFC4E1", num: "2", ears: true },
       adam: { paint: PAINT.blue, rim: RIMS.classic, helmet: ["#7FB3FF", "#2F6BE0"], shirt: ["#3D7BFF", "#FFFFFF"], num: "3" }
@@ -514,13 +551,13 @@
         babyBtn.querySelector(".ar").textContent = G.q.ar; babyBtn.style.setProperty("--bc", G.col);
         babyBtn.className = "r3-baby on " + ["l", "c", "r"][G.good]; return;
       }
-      pickBtns.forEach(function (b, l) { b.className = "rp-b l" + l; b.querySelector(".ar").textContent = G.signs[l].ar; b.classList.toggle("w", G.signs[l].ar.replace(/[\u064B-\u0652]/g, "").length > 2); });
+      pickBtns.forEach(function (b, l) { b.className = "rp-b l" + l; b.classList.remove("hint"); b.querySelector(".ar").textContent = G.signs[l].ar; b.classList.toggle("w", G.signs[l].ar.replace(/[\u064B-\u0652]/g, "").length > 2); });
       markPick(); pick.classList.add("on"); tip.classList.add("gone");
     }
     function markPick() { pickBtns.forEach(function (b, l) { b.classList.toggle("me", l === laneI); }); }
     function pickResult(G) {
       if (G.baby) { babyBtn.className = "r3-baby"; return; }
-      pickBtns.forEach(function (b, l) { b.classList.toggle("good", l === G.good); b.classList.toggle("bad", l === G.picked && l !== G.good); });
+      pickBtns.forEach(function (b, l) { b.classList.remove("hint"); b.classList.toggle("good", l === G.good); if (l === G.good && G.picked === G.good) { b.classList.remove("hitme"); void b.offsetWidth; b.classList.add("hitme"); } b.classList.toggle("bad", l === G.picked && l !== G.good); });
       setTimeout(function () { if (my === live && (!curGate || curGate.done)) pick.classList.remove("on"); }, 1100);
     }
     var cam = el("div", "r3-cam"), camImg = el("img"); camImg.alt = "Baby Mo"; cam.appendChild(camImg); sc.appendChild(cam);
@@ -760,7 +797,7 @@
       var kw = Math.min(W * .38, 230);
       if (shield > 0) { var bq = g.createRadialGradient(W / 2, H - kw * .55, kw * .2, W / 2, H - kw * .55, kw * .78); bq.addColorStop(0, "rgba(124,200,255,0)"); bq.addColorStop(.8, "rgba(124,200,255,.25)"); bq.addColorStop(1, "rgba(255,255,255,.7)"); g.fillStyle = bq; g.beginPath(); g.arc(W / 2, H - kw * .55, kw * .78 + Math.sin(tRace * 6) * 3, 0, 7); g.fill(); }
       if (magnet > 0) { g.strokeStyle = "rgba(255,212,59," + (.4 + Math.sin(tRace * 10) * .2) + ")"; g.lineWidth = 4; for (var mr = 0; mr < 2; mr++) { g.beginPath(); g.arc(W / 2, H - kw * .5, kw * (.62 + mr * .14 + (tRace * .3 % .14)), Math.PI * 1.1, Math.PI * 1.9); g.stroke(); } }
-      drawKart(g, W / 2, H - 14, kw, ME, { flap: Math.sin(tRace * 14) * (speed / BASE), tilt: tilt, turbo: boost > 0 || padT > 0, big: boost > 0, air: air * 120, night: night, roll: roll, wob: calm ? 0 : Math.sin(tRace * 22) * 1.2 });
+      drawKart(g, W / 2, H - 14, kw, ME, { t: tRace * (.6 + speed / BASE * .6), flap: Math.sin(tRace * 3) * .4 + speed / BASE * .6, tilt: tilt, turbo: boost > 0 || padT > 0, big: boost > 0, air: air * 120, night: night, roll: roll, wob: calm ? 0 : Math.sin(tRace * 22) * 1.2 });
     }
     function drawSprite(sp, P, offX, clip, lift, scaleX, forceW) {
       var w = forceW || (P.s * sp.ww * ROADW * W / 2), h = w * sp.h / sp.w, x = P.x + P.s * offX * ROADW * W / 2 - w / 2 * (scaleX || 1), y = P.y - h - (lift || 0);
@@ -787,28 +824,45 @@
     }
     // one letter board: a chunky toy sign with a coloured rim and lip, the letter big and bold in a deep colour
     var BOARD = [["#FFD43B", "#E0A800", "#B8410E"], ["#7CC8FF", "#3D8FE0", "#173F8C"], ["#C9A7FF", "#8B63F0", "#4B2A9E"]];
+    // one letter block: a chunky 3D toy block (a top bevel, a deep side, a glossy face, an embossed letter)
+    function shade(hex, k) { return "#" + hex.slice(1).match(/../g).map(function (h2) { var v = Math.max(0, Math.min(255, Math.round(parseInt(h2, 16) * k))); return (v < 16 ? "0" : "") + v.toString(16); }).join(""); }
     function boardSprite(G, l) {
       G.bspr = G.bspr || []; var st = G.done ? (l === G.good ? "good" : l === G.picked ? "bad" : "dim") : "";
       if (G.bspr[l] && G.bspr[l].st === st) return G.bspr[l];
-      var w = 320, h = 320, c = document.createElement("canvas"); c.width = w; c.height = h; var q = c.getContext("2d");
+      var w = 320, h = 340, c = document.createElement("canvas"); c.width = w; c.height = h; var q = c.getContext("2d");
       var C = st === "good" ? ["#5BE38A", "#17A35B", "#0B6B3A"] : st === "bad" ? ["#FF8A8A", "#D93A3A", "#8A1A1A"] : BOARD[l];
+      var D = 40, x0 = 12, y0 = 6, bw = w - 24, bh = h - 24 - D;
       q.globalAlpha = st === "dim" ? .55 : 1;
-      q.fillStyle = "rgba(0,0,0,.18)"; rr(q, 16, 30, w - 32, h - 40, 44); q.fill();                 // shadow
-      q.fillStyle = C[1]; rr(q, 10, 22, w - 20, h - 34, 44); q.fill();                                // lip
-      q.fillStyle = C[0]; rr(q, 10, 6, w - 20, h - 40, 44); q.fill();                                  // rim
-      q.fillStyle = "#fff"; rr(q, 28, 24, w - 56, h - 76, 32); q.fill();                               // face
-      q.fillStyle = "rgba(255,255,255,.55)"; rr(q, 30, 12, w - 120, 10, 5); q.fill();                  // shine
-      var item = G.signs[l], fs = item.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? 120 : 196;
+      q.fillStyle = "rgba(0,0,0,.22)"; rr(q, x0 + 8, y0 + D + 10, bw - 16, bh, 50); q.fill();                 // shadow
+      // the deep side of the block (it reads as thickness), with vertical ribs
+      var sg = q.createLinearGradient(0, y0 + bh - 40, 0, y0 + bh + D); sg.addColorStop(0, shade(C[1], .95)); sg.addColorStop(1, shade(C[1], .7));
+      q.fillStyle = sg; rr(q, x0, y0 + D, bw, bh, 48); q.fill();
+      q.fillStyle = "rgba(255,255,255,.12)"; for (var r2 = 1; r2 < 6; r2++) q.fillRect(x0 + r2 * bw / 6 - 2, y0 + bh + 4, 4, D - 10);
+      // the top: a bevelled rim
+      var tg = q.createLinearGradient(0, y0, 0, y0 + bh); tg.addColorStop(0, shade(C[0], 1.12)); tg.addColorStop(1, C[0]);
+      q.fillStyle = tg; rr(q, x0, y0, bw, bh, 48); q.fill();
+      q.strokeStyle = "rgba(255,255,255,.7)"; q.lineWidth = 4; rr(q, x0 + 3, y0 + 3, bw - 6, bh - 6, 45); q.stroke();
+      // the face, sunk a little into the block
+      var fx = x0 + 20, fy = y0 + 20, fw = bw - 40, fh = bh - 40;
+      var fg = q.createLinearGradient(0, fy, 0, fy + fh); fg.addColorStop(0, "#FFFFFF"); fg.addColorStop(1, "#EEF4FF");
+      q.fillStyle = shade(C[1], .85); rr(q, fx - 2, fy - 3, fw + 4, fh + 4, 32); q.fill();
+      q.fillStyle = fg; rr(q, fx, fy, fw, fh, 30); q.fill();
+      q.fillStyle = "rgba(255,255,255,.9)"; rr(q, fx + 14, fy + 8, fw * .45, 12, 6); q.fill();             // gloss
+      var item = G.signs[l], fs = item.ar.replace(/[ً-ْ]/g, "").length > 2 ? 116 : 186;
       q.direction = "rtl"; q.textAlign = "center"; q.font = fs + "px 'Scheherazade New', serif";
-      var m = q.measureText(item.ar); if (m.width > w - 90) { fs = fs * (w - 90) / m.width; q.font = fs + "px 'Scheherazade New', serif"; m = q.measureText(item.ar); }
-      var mid = m.actualBoundingBoxAscent != null ? (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2 : fs * .3, cy = 24 + (h - 76) / 2 + mid;
-      q.lineJoin = "round"; q.strokeStyle = C[2]; q.lineWidth = 7; q.strokeText(item.ar, w / 2, cy);       // bold: a stroke in the same deep colour
-      q.fillStyle = C[2]; q.fillText(item.ar, w / 2, cy); q.direction = "ltr";
+      var m = q.measureText(item.ar); if (m.width > fw - 40) { fs = fs * (fw - 40) / m.width; q.font = fs + "px 'Scheherazade New', serif"; m = q.measureText(item.ar); }
+      var mid = m.actualBoundingBoxAscent != null ? (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2 : fs * .3, cy = fy + fh / 2 + mid;
+      // the letter is embossed: a darker drop, then the letter, then a fine light edge
+      q.lineJoin = "round";
+      q.fillStyle = shade(C[2], .6); q.strokeStyle = shade(C[2], .6); q.lineWidth = 8; q.strokeText(item.ar, w / 2, cy + 5); q.fillText(item.ar, w / 2, cy + 5);
+      q.strokeStyle = C[2]; q.lineWidth = 8; q.strokeText(item.ar, w / 2, cy); q.fillStyle = C[2]; q.fillText(item.ar, w / 2, cy);
+      q.direction = "ltr";
       if (!st) {            // the lightning badge: driving through the right letter gives a turbo
-        q.fillStyle = "#FF8A00"; q.beginPath(); q.arc(44, 40, 30, 0, 7); q.fill(); q.strokeStyle = "#fff"; q.lineWidth = 5; q.stroke();
-        q.fillStyle = "#FFF3A6"; q.beginPath(); q.moveTo(49, 18); q.lineTo(32, 44); q.lineTo(45, 44); q.lineTo(38, 62); q.lineTo(57, 34); q.lineTo(44, 34); q.closePath(); q.fill();
+        q.fillStyle = "#C25A00"; q.beginPath(); q.arc(46, 44, 30, 0, 7); q.fill();
+        q.fillStyle = "#FF8A00"; q.beginPath(); q.arc(46, 40, 30, 0, 7); q.fill(); q.strokeStyle = "#fff"; q.lineWidth = 5; q.stroke();
+        q.fillStyle = "#FFF3A6"; q.beginPath(); q.moveTo(51, 18); q.lineTo(34, 44); q.lineTo(47, 44); q.lineTo(40, 62); q.lineTo(59, 34); q.lineTo(46, 34); q.closePath(); q.fill();
       }
-      if (st === "good") { q.fillStyle = "#17A35B"; q.beginPath(); q.arc(w - 40, 40, 30, 0, 7); q.fill(); q.strokeStyle = "#fff"; q.lineWidth = 9; q.lineCap = "round"; q.beginPath(); q.moveTo(w - 54, 40); q.lineTo(w - 44, 52); q.lineTo(w - 26, 28); q.stroke(); }
+      if (st === "good") { q.fillStyle = "#17A35B"; q.beginPath(); q.arc(w - 44, 42, 30, 0, 7); q.fill(); q.strokeStyle = "#fff"; q.lineWidth = 9; q.lineCap = "round"; q.beginPath(); q.moveTo(w - 58, 42); q.lineTo(w - 48, 54); q.lineTo(w - 30, 30); q.stroke(); }
       return (G.bspr[l] = { c: c, w: w, h: h, ww: 2.4 * w / 1100, st: st });
     }
     // toddler mode: one big shiny balloon carrying the letter, floating over its lane
@@ -838,7 +892,29 @@
       // a ring of light on the road under it
       var gx = P.x + P.s * LANES[G.good] * ROADW * W / 2, gy = P.y;
       if (bw2 > 12 && gy < clip + 4) { g.save(); g.globalAlpha = .45 + Math.sin(tRace * 8) * .15; g.fillStyle = "#FFE27A"; g.beginPath(); g.ellipse(gx, gy - 2, bw2 * .5, bw2 * .12, 0, 0, 7); g.fill(); g.restore(); }
-      drawSprite(sp, P, LANES[G.good], clip, bw2 * (.25 + bob));
+      var lift2 = bw2 * (.25 + bob), bh2 = bw2 * sp.h / sp.w;
+      G.scr = { x: P.x + P.s * LANES[G.good] * ROADW * W / 2 - bw2 / 2, y: P.y - bh2 - lift2, w: bw2, h: bh2 };
+      drawSprite(sp, P, LANES[G.good], clip, lift2);
+    }
+    // balloons that were bumped: they bounce, then float up into the sky, swaying, and shrink away
+    var flyers = [];
+    function bumpBalloon(G) {
+      var sp = balloonSprite(G), sc0 = G.scr || { x: W / 2 - W * .2, y: H * .3, w: W * .4, h: W * .4 * sp.h / sp.w };
+      var w0 = Math.min(sc0.w, W * .42), h0 = w0 * sp.h / sp.w;
+      flyers.push({ sp: sp, x: sc0.x + sc0.w / 2, y: Math.max(H * .18, Math.min(sc0.y + sc0.h - h0, H * .5)), w: w0, h: h0, t: 0, dir: Math.random() < .5 ? -1 : 1 });
+    }
+    function drawFlyers(dt) {
+      flyers = flyers.filter(function (f) { f.t += dt; return f.t < 2.6; });
+      flyers.forEach(function (f) {
+        var t2 = f.t, k = Math.min(1, t2 / 2.6);
+        // a squashy bounce on the hit, then up, up and away
+        var sq = t2 < .35 ? 1 + Math.sin(t2 / .35 * Math.PI) * .22 : 1;
+        var rise = t2 < .2 ? -t2 * 60 : Math.pow(t2 - .2, 1.5) * H * .28 + 12;
+        var sw = Math.sin(t2 * 3.2) * W * .05 * k + f.dir * t2 * W * .05;
+        var sc = 1 - k * .55, rot = Math.sin(t2 * 2.6) * .14 + f.dir * k * .2, a = t2 > 2 ? 1 - (t2 - 2) / .6 : 1;
+        g.save(); g.globalAlpha = Math.max(0, a); g.translate(f.x + sw, f.y - rise + f.h * .4); g.rotate(rot); g.scale(sc * (2 - sq), sc * sq);
+        g.drawImage(f.sp.c, -f.w / 2, -f.h * .4, f.w, f.h); g.restore();
+      });
     }
     function drawGate(G, P, clip) {
       var gs = gateSprite(G); drawSprite(gs, P, 0, clip, 0);
@@ -851,7 +927,14 @@
           var bx2 = P.x + P.s * LANES[l] * ROADW * W / 2, by3 = P.y - gh * ((560 - 104 - 150) / 560 + bob), rg2 = gw * .16 * (1 + Math.sin(tRace * 8) * .12);
           if (by3 < clip) { var gl2 = g.createRadialGradient(bx2, by3, 2, bx2, by3, rg2); gl2.addColorStop(0, "rgba(255,240,150,.85)"); gl2.addColorStop(1, "rgba(255,240,150,0)"); g.fillStyle = gl2; g.beginPath(); g.arc(bx2, by3, rg2, 0, 7); g.fill(); }
         }
-        drawSprite(boardSprite(G, l), P, LANES[l], clip, gh * ((560 - 104 - 300) / 560 + bob));
+        var sp3 = boardSprite(G, l), pop = (l === G.good && G.hint && !G.done) ? Math.min(1, (tRace - G.hint) * 4) : 0;
+        if (pop > 0) {
+          var bw3 = P.s * sp3.ww * ROADW * W / 2 * (1 + .22 * pop), hop = calm ? 0 : Math.abs(Math.sin(tRace * 5)) * .05;
+          var hx = P.x + P.s * LANES[l] * ROADW * W / 2, hy = P.y - gh * ((560 - 104 - 160) / 560 + bob + .06 * pop + hop);
+          if (hy < clip && bw3 > 20) { var hal = g.createRadialGradient(hx, hy, bw3 * .2, hx, hy, bw3 * .8); hal.addColorStop(0, "rgba(255,226,90,.9)"); hal.addColorStop(1, "rgba(255,226,90,0)");
+            g.fillStyle = hal; g.beginPath(); g.arc(hx, hy, bw3 * .8, 0, 7); g.fill(); }
+          drawSprite(sp3, P, LANES[l], clip, gh * ((560 - 104 - 300) / 560 + bob + .06 * pop + hop), 1, bw3);
+        } else drawSprite(sp3, P, LANES[l], clip, gh * ((560 - 104 - 300) / 560 + bob));
       }
     }
 
@@ -886,7 +969,7 @@
       g.save();
       if (kickT > 0 && !calm) { var kz = 1 + Math.sin(kickT / .6 * Math.PI) * .06; g.translate(W / 2, H * .6); g.scale(kz, kz); g.translate(-W / 2, -H * .6); kickT -= dt; }
       if (shake > 0 && !calm) { g.translate((Math.random() - .5) * 8 * shake, (Math.random() - .5) * 8 * shake); shake = Math.max(0, shake - dt * 3); }
-      render(); drawParts(dt); g.restore();
+      render(); drawFlyers(dt); drawParts(dt); g.restore();
       if (TH.snow && !calm) {        // falling snow
         g.fillStyle = "rgba(255,255,255,.85)";
         for (var sf = 0; sf < 60; sf++) { var fx2 = ((sf * 73.1 + Math.sin(tRace + sf) * 20 - skyX * .6) % W + W) % W, fy2 = ((sf * 41.7 + tRace * (40 + sf % 5 * 12)) % H); g.beginPath(); g.arc(fx2, fy2, 1.5 + sf % 3, 0, 7); g.fill(); }
@@ -986,14 +1069,15 @@
     function sayGate() { if (curGate && !curGate.done) { spk.classList.remove("ping"); void spk.offsetWidth; spk.classList.add("ping"); snd.duck(true); A.sayNow(curGate.q.au).then(function () { snd.duck(false); }); } }
     // as an arch comes: "Listen!" + the sound, then the sound again ("ba … ba!")
     function popBalloon(G) {
-      okN++; boost = 3; slow = 0; setCam("yes"); snd.fx("box"); snd.fx("turbo"); J.buzz([20, 30, 40]);
-      for (var k = 0; k < 3; k++) puff(W / 2 + (k - 1) * 40, H * .5, 16, "box");
-      puff(W / 2, H * .55, 30, "star"); flashT = .45; kickT = .6; turboText(); A.sayNow(G.q.au);
+      okN++; boost = 3; slow = 0; setCam("yes"); bumpBalloon(G);
+      snd.fx("boing"); snd.fx("turbo"); A.sayNow(G.q.au); J.buzz([20, 30, 40]);          // the hit: the letter and the turbo together
+      var sc0 = G.scr ? Math.max(H * .3, Math.min(G.scr.y + G.scr.h * .4, H * .6)) : H * .5;
+      puff(W / 2, sc0, 22, "star"); shake = .35; kickT = .6; flashT = .25; turboText();
       setTimeout(function () { if (my === live) setCam("mo"); }, 1600);
     }
     function callGate(G) {
       callout.classList.remove("on"); listen.classList.add("on"); J.bump(listen); sayGate(); showPick(G);
-      setTimeout(function () { if (my === live && !G.done && curGate === G) { J.bump(listen); sayGate(); } }, 1700);
+      setTimeout(function () { if (my === live && !G.done && curGate === G) { J.bump(listen); sayGate(); G.hint = tRace; if (!G.baby) { pickBtns[G.good].classList.add("hint"); snd.fx("ping"); } } }, 1700);
       setTimeout(function () { listen.classList.remove("on"); }, 3600);
     }
     function power() {

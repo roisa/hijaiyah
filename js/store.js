@@ -117,7 +117,7 @@
     raceT: ["Balap Hijaiyah", "Hijaiyah Race"],
     raceListen: ["Dengar!", "Listen!"],
     racePick: ["Ketuk huruf yang kamu dengar!", "Tap the letter you heard!"],
-    raceNew: ["Baru!", "New!"], badgeNew: ["Lencana baru!", "New badge!"], badgeWall: ["Lencanaku", "My badges"], badgeMany: ["{n} lencana baru!", "{n} new badges!"], badgeSee: ["Lihat di buku stiker", "See them in the sticker book"],
+    raceNew: ["Baru!", "New!"], featured: ["Game Unggulan", "Featured game"], garageBody: ["Model mobil", "Car model"], badgeNew: ["Lencana baru!", "New badge!"], badgeWall: ["Lencanaku", "My badges"], badgeMany: ["{n} lencana baru!", "{n} new badges!"], badgeSee: ["Lihat di buku stiker", "See them in the sticker book"],
     lessonMusic: ["Musik belajar", "Lesson music"], lessonMusicSub: ["Musik lembut saat belajar, mengecil saat Mo bicara", "Soft music in lessons, quieter while Mo speaks"],
     holidayPreview: ["Hiasan hari raya", "Holiday decorations"], holidayPreviewSub: ["Lampion Ramadan & Idul Fitri muncul otomatis; nyalakan untuk melihatnya sekarang", "Ramadan & Eid lanterns appear by themselves; switch on to see them now"], raceShelf: ["Rak Piala Balap", "Racing trophies"],
     raceBabyTap: ["Ketuk balonnya!", "Tap the balloon!"],

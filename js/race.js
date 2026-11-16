@@ -96,7 +96,7 @@
 
   /* ---------- pictures ---------- */
   var IMG = {
-    mo: "assets/mo/mo-pose-23.webp", moYes: "assets/mo/mo-yes.webp", moOh: "assets/mo/mo-pose-33.webp", moFace: "assets/mo/mo-pose-41.webp",
+    mo: "assets/mo/mo-pose-41.webp", moYes: "assets/mo/mo-yes.webp", moOh: "assets/mo/mo-pose-33.webp", moFace: "assets/mo/mo-pose-41.webp",
     ais: "assets/family/ais-cheer.webp", adam: "assets/family/adam-drive.webp",
     moWin: "assets/mo/mo-yeyy.webp", aisWin: "assets/family/ais-joy.webp", adamWin: "assets/family/adam-win.webp"
   };
@@ -193,8 +193,8 @@
   function clock(sec) { var m = Math.floor(sec / 60), s2 = Math.round(sec % 60); return m + ":" + (s2 < 10 ? "0" : "") + s2; }
 
   /* ---------- the Garage: coins buy paint and wheels ---------- */
-  var SHOP = { paint: [["red", 0], ["orange", 30], ["yellow", 30], ["green", 40], ["blue", 40], ["purple", 50], ["pink", 50], ["gold", 120]], rim: [["classic", 0], ["star", 60], ["rainbow", 90]], horn: [["beep", 0], ["trumpet", 40], ["duck", 60]] };
-  function gst() { var s = S.get(); s.garage = s.garage || { paint: "red", rim: "classic", owned: ["paint:red", "rim:classic"] }; if (!s.garage.horn) { s.garage.horn = "beep"; s.garage.owned.push("horn:beep"); } return s.garage; }
+  var SHOP = { paint: [["red", 0], ["orange", 30], ["yellow", 30], ["green", 40], ["blue", 40], ["purple", 50], ["pink", 50], ["gold", 120]], rim: [["classic", 0], ["star", 60], ["rainbow", 90]], horn: [["beep", 0], ["trumpet", 40], ["duck", 60]], body: [["kart", 0], ["racer", 80], ["bubble", 100], ["monster", 150]] };
+  function gst() { var s = S.get(); s.garage = s.garage || { paint: "red", rim: "classic", owned: ["paint:red", "rim:classic"] }; if (!s.garage.horn) { s.garage.horn = "beep"; s.garage.owned.push("horn:beep"); } if (!s.garage.body) { s.garage.body = "kart"; s.garage.owned.push("body:kart"); } return s.garage; }
   function garage() {
     HJ.modal(function (p, close) {
       p.classList.add("garage");
@@ -206,16 +206,16 @@
         var g = cv.getContext("2d"); g.clearRect(0, 0, cv.width, cv.height);
         var q = g.createLinearGradient(0, 0, 0, cv.height); q.addColorStop(0, "#BDE5FF"); q.addColorStop(1, "#EAF6FF"); g.fillStyle = q; g.fillRect(0, 0, cv.width, cv.height);
         g.fillStyle = "#6B7488"; g.beginPath(); g.moveTo(140, 200); g.lineTo(380, 200); g.lineTo(520, 360); g.lineTo(0, 360); g.closePath(); g.fill();
-        HJ.race3d.drawKart(g, 260, 340, 250, { paint: HJ.race3d.PAINT[G.paint], rim: HJ.race3d.RIMS[G.rim], helmet: HJ.race3d.PAINT[G.paint], shirt: ["#43B85C", "#FF8A3D"], num: "1", hair: "#22252E", star: true }, {});
+        HJ.race3d.drawKart(g, 260, G.body === "monster" ? 352 : 340, G.body === "bubble" ? 220 : 250, { body: G.body, paint: HJ.race3d.PAINT[G.paint], rim: HJ.race3d.RIMS[G.rim], helmet: HJ.race3d.PAINT[G.paint], shirt: ["#43B85C", "#FF8A3D"], num: "1", hair: "#22252E", star: true }, {});
       }
       draw();
-      [["paint", "garagePaint"], ["rim", "garageRims"], ["horn", "garageHorn"]].forEach(function (sec) {
+      [["body", "garageBody"], ["paint", "garagePaint"], ["rim", "garageRims"], ["horn", "garageHorn"]].forEach(function (sec) {
         p.appendChild(el("div", "gar-h", esc(t(sec[1]))));
         var row = el("div", "gar-row");
         SHOP[sec[0]].forEach(function (it) {
           var key = sec[0] + ":" + it[0], own = G.owned.indexOf(key) >= 0, on = G[sec[0]] === it[0];
           var col = sec[0] === "paint" ? HJ.race3d.PAINT[it[0]] : sec[0] === "rim" ? HJ.race3d.RIMS[it[0]] : ["#7CC8FF", "#3D7BFF"];
-          var face2 = sec[0] === "horn" ? '<i class="gar-horn" style="background:linear-gradient(160deg,' + col[0] + "," + col[1] + ')">' + esc(t("horn" + it[0])) + "</i>" : '<i style="background:linear-gradient(160deg,' + col[0] + "," + col[1] + ')"></i>';
+          var face2 = sec[0] === "body" ? '<i class="gar-body">' + bodyIcon(it[0]) + "</i>" : sec[0] === "horn" ? '<i class="gar-horn" style="background:linear-gradient(160deg,' + col[0] + "," + col[1] + ')">' + esc(t("horn" + it[0])) + "</i>" : '<i style="background:linear-gradient(160deg,' + col[0] + "," + col[1] + ')"></i>';
           var b = el("button", "gar-it" + (on ? " on" : "") + (own ? "" : " shop"), face2 +
             (on ? '<small>' + HJ.ic("check") + "</small>" : own ? "" : '<small><i class="rt-coin"></i>' + it[1] + "</small>"));
           b.setAttribute("aria-label", it[0] + (own ? "" : " · " + it[1]));
@@ -234,6 +234,11 @@
       var ok = el("button", "btn", t("next") + " " + HJ.ic("next")); ok.onclick = function () { close(); open(); }; p.appendChild(ok);
     });
   }
+  function bodyIcon(k) {
+    var c = document.createElement("canvas"); c.width = c.height = 120; var g = c.getContext("2d");
+    HJ.race3d.drawKart(g, 60, k === "monster" ? 116 : 108, k === "bubble" ? 74 : 84, { body: k, paint: HJ.race3d.PAINT[gst().paint], rim: HJ.race3d.RIMS[gst().rim], helmet: HJ.race3d.PAINT[gst().paint], shirt: ["#43B85C", "#FF8A3D"], num: "1", hair: "#22252E", star: true }, {});
+    return '<img src="' + c.toDataURL() + '" alt="">';
+  }
   function cup(place, size) {
     var c = ["#FFC21A", "#C9D3E3", "#E0915A"][place - 1], d = ["#D98A00", "#8E9BB0", "#A65A2A"][place - 1], s = size || 30;
     return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 40 40" aria-hidden="true"><path d="M11 6h18v6c0 7-4 12-9 12s-9-5-9-12z" fill="' + c + '" stroke="' + d + '" stroke-width="2"/>' +
@@ -243,15 +248,17 @@
   // a small kart drawing for the menu and the home card (Mo's face from the picture)
   function heroSvg() {
     return '<svg viewBox="0 0 360 120" aria-hidden="true"><defs><linearGradient id="rhr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5A6275"/><stop offset="1" stop-color="#3A4256"/></linearGradient></defs>' +
-      '<rect x="0" y="78" width="360" height="34" rx="10" fill="url(#rhr)"/><path d="M0 95 H360" stroke="#fff" stroke-width="3" stroke-dasharray="18 14" opacity=".6"/>' +
+      '<rect x="0" y="78" width="360" height="34" rx="10" fill="url(#rhr)"/><path class="hk-dash" d="M0 95 H400" stroke="#fff" stroke-width="3" stroke-dasharray="18 14" opacity=".6"/>' +
       '<g transform="translate(300 52)">' + [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (i) { return '<rect x="' + (i % 2) * 8 + '" y="' + (i >> 1) * 8 + '" width="8" height="8" fill="' + ((i + (i >> 1)) % 2 ? "#222" : "#fff") + '"/>'; }).join("") + "</g>" +
-      kartSvg(40, 50, KART.adam, "adam", .8) + kartSvg(122, 52, KART.ais, "ais", .9) + kartSvg(204, 50, KART.mo, "mo", 1) + "</svg>";
+      '<g class="hk hk1">' + kartSvg(34, 50, KART.adam, "adam", .92) + '</g><g class="hk hk2">' + kartSvg(122, 52, KART.ais, "ais", .9) + '</g><g class="hk hk3">' + kartSvg(210, 52, KART.mo, "mo", .9) + "</g></svg>";
   }
   function kartSvg(x, y, col, k, s) {
     // the driver: the top half of the picture's painted part (a nested svg crops it), sitting in the seat
     var im = pics[k], drv = "";
-    if (im && im.ok) { var b = im.box, h = b.h * .5, dw = 46, dh = dw * h / b.w;
-      drv = '<svg x="2" y="' + ((k === "mo" ? 2 : 8) - dh) + '" width="' + dw + '" height="' + dh + '" viewBox="' + b.x + " " + b.y + " " + b.w + " " + h + '"><image href="' + IMG[k] + '" width="' + im.naturalWidth + '" height="' + im.naturalHeight + '"/></svg>'; }
+    if (im && im.ok) {
+      // head + shoulders, the same size for everyone (the picture's arms never change the scale)
+      var b = im.box, ch = b.h * (k === "ais" ? .46 : .4), cw = ch * 1.04, cx = b.x + b.w * (k === "ais" ? .56 : .5), dh = k === "adam" ? 46 : 42, dw = dh * 1.04;
+      drv = '<svg x="' + (30 - dw / 2) + '" y="' + (9 - dh) + '" width="' + dw + '" height="' + dh + '" viewBox="' + (cx - cw / 2) + " " + b.y + " " + cw + " " + ch + '" preserveAspectRatio="xMidYMin slice"><image href="' + IMG[k] + '" width="' + im.naturalWidth + '" height="' + im.naturalHeight + '"/></svg>'; }
     return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')">' + drv +
       '<path d="M-6 20 Q-6 6 10 4 L46 2 Q66 2 72 16 L74 26 L-6 26Z" fill="' + col[0] + '" stroke="' + col[1] + '" stroke-width="2.5"/>' +
       '<circle cx="8" cy="28" r="9" fill="#2A2F3D"/><circle cx="8" cy="28" r="3.5" fill="#C9D3E3"/><circle cx="60" cy="28" r="9" fill="#2A2F3D"/><circle cx="60" cy="28" r="3.5" fill="#C9D3E3"/></g>';
@@ -259,10 +266,10 @@
 
   /* ---------- the home card ---------- */
   function card() {
-    var c = el("button", "race-card");
+    var c = el("button", "race-card featured");
     load(function () { var a = c.querySelector(".rc-art"); if (a) a.innerHTML = heroSvg(); });
     var cups = cupCount();
-    c.innerHTML = '<span class="rc-art">' + heroSvg() + '</span><span class="rc-tx"><b>' + esc(t("raceT")) + "</b><small>" + esc(t("raceSub")) + "</small>" +
+    c.innerHTML = '<span class="rc-flag">' + HJ.art("star", 16) + " " + esc(t("featured")) + '</span><span class="rc-art">' + heroSvg() + '</span><span class="rc-tx"><b>' + esc(t("raceT")) + "</b><small>" + esc(t("raceSub")) + "</small>" +
       (cups.all ? '<span class="rc-cups"><span>' + cup(1, 20) + "<b>" + cups.all + '</b></span><span><i class="rt-coin"></i><b>' + (S.get().coins || 0) + "</b></span></span>" : "") +
       '</span><span class="rc-go">' + HJ.ic("play") + "</span>";
     c.onclick = function () { A.unlock(); A.fx.tap(); open(); };

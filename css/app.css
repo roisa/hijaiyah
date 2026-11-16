@@ -1608,3 +1608,35 @@ button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
 .hd-ban b { font-weight: 400; }
 @media (prefers-reduced-motion: reduce) { .hd-swing, .hd-glow, .hd-tw { animation: none; } }
 .bd-pop { width: max-content; min-width: 270px; } .bd-tx b { white-space: nowrap; }
+/* letter buttons: chunky 3D blocks; the right one pops up, ready to hit */
+.rp-b { border-width: 0; border-radius: 24px; background: linear-gradient(180deg, #fff 0%, #F1F6FF 100%);
+  box-shadow: inset 0 0 0 5px var(--c1), inset 0 6px 0 5px rgba(255,255,255,.9), 0 10px 0 var(--c2), 0 11px 0 2px rgba(0,0,0,.12), 0 18px 22px -8px rgba(0,0,0,.45);
+  transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .15s; }
+.rp-b .ar { text-shadow: 0 3px 0 color-mix(in srgb, var(--c3) 60%, #000); }
+.rp-b::before { content: ""; position: absolute; left: 12px; right: 40%; top: 8px; height: 8px; border-radius: 6px; background: rgba(255,255,255,.9); }
+.rp-b:active, .rp-b.me:active { transform: translateY(8px) !important; box-shadow: inset 0 0 0 5px var(--c1), 0 2px 0 var(--c2), 0 6px 10px -6px rgba(0,0,0,.4) !important; }
+.rp-b.me { transform: translateY(-4px); box-shadow: inset 0 0 0 5px var(--c1), 0 0 0 4px #fff, 0 14px 0 var(--c2), 0 22px 24px -8px rgba(0,0,0,.5); }
+.rp-b.hint { z-index: 2; transform: translateY(-16px) scale(1.16); animation: hintHop .9s ease-in-out infinite !important;
+  box-shadow: inset 0 0 0 5px var(--c1), 0 0 0 5px #fff, 0 0 0 9px #FFD43B, 0 16px 0 var(--c2), 0 0 34px 12px rgba(255,212,59,.75), 0 26px 26px -8px rgba(0,0,0,.5); }
+.rp-b.hint .rp-bolt { transform: scale(1.35); box-shadow: 0 0 12px 4px rgba(255,180,0,.8); }
+.rp-b.hint::after { content: "" !important; position: absolute; left: 50%; bottom: -38px; width: 0; height: 0; margin-left: -12px; border: 12px solid transparent; border-top-color: #FFD43B; animation: hintArrow .6s ease-in-out infinite; }
+@keyframes hintHop { 0%, 100% { transform: translateY(-16px) scale(1.16); } 50% { transform: translateY(-24px) scale(1.2); } }
+@keyframes hintArrow { 50% { transform: translateY(6px); } }
+.rp-b.hitme { animation: hitMe .55s cubic-bezier(.3,1.6,.5,1) !important; }
+@keyframes hitMe { 0% { transform: translateY(8px) scale(.94); } 50% { transform: translateY(-14px) scale(1.24); } 100% { transform: translateY(-6px) scale(1.12); } }
+@media (prefers-reduced-motion: reduce) { .rp-b.hint, .rp-b.hint::after, .rp-b.hitme { animation: none !important; } }
+/* karts on the menu / home banner gently bounce and the road rolls */
+.hk { animation: hkBob .5s ease-in-out infinite alternate; transform-box: fill-box; }
+.hk2 { animation-delay: -.2s; } .hk3 { animation-delay: -.35s; }
+@keyframes hkBob { to { transform: translateY(-1.6px); } }
+.hk-dash { animation: hkRoad .7s linear infinite; }
+@keyframes hkRoad { to { transform: translateX(-32px); } }
+/* the featured race banner on the home page */
+.race-card.featured { margin-top: 16px; min-height: 132px; overflow: visible; }
+.race-card.featured .rc-art { border-radius: 26px 0 0 26px; overflow: hidden; }
+.rc-flag { position: absolute; left: 14px; top: -11px; z-index: 2; display: inline-flex; align-items: center; gap: 4px; padding: 3px 12px 3px 8px; border-radius: 99px;
+  background: linear-gradient(#FFE266, #FFB300); color: #6A3A00; font-weight: 900; font-size: 12.5px; box-shadow: 0 3px 0 #D98200, 0 6px 10px -4px rgba(0,0,0,.3); animation: playPulse 2.4s ease-in-out infinite; }
+.race-card.featured .rc-go { animation: playPulse 1.8s ease-in-out infinite; }
+.gar-body { width: 64px !important; height: 64px !important; background: linear-gradient(#DDEEFF, #F4F9FF) !important; display: grid; place-items: center; }
+.gar-body img { width: 60px; height: 60px; }
+@media (prefers-reduced-motion: reduce) { .hk, .hk-dash, .rc-flag, .race-card.featured .rc-go { animation: none; } }
