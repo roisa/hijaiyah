@@ -7,6 +7,13 @@
     "start": "python3 -m http.server 8811",
     "check": "node tools/check-curriculum.js",
     "sw": "node tools/build-sw.js",
-    "build:app": "node tools/build-app.js"
+    "build:app": "node tools/build-app.js",
+    "ios": "node tools/build-app.js && npx cap sync ios"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0",
+    "@capacitor/cli": "^8.6.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/ios": "^8.6.2"
   }
 }
