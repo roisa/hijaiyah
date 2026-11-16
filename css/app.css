@@ -1654,3 +1654,9 @@ button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
 .rm-lbl .rm-g { font-size: 11px; opacity: .75; font-weight: 800; max-width: 140px; text-align: center; white-space: normal; line-height: 1.15; }
 .pod-learn { margin: 2px 0 10px; text-align: center; } .pod-learn b { font-size: 14px; } .pod-learn .rg-chips { justify-content: center; } .pod-learn small { display: block; margin-top: 6px; font-weight: 800; font-size: 12.5px; opacity: .75; }
 .ans-v { font-style: normal; font-weight: 900; font-size: 15px; color: #0B6B3A; font-family: var(--font); } [data-theme="dark"] .ans-v { color: #A8F0C6; }
+
+/* race: SUPER TURBO combo, pause sheet, practice button */
+.r3-turbo.super b { color: #fff; -webkit-text-stroke: 8px #8A2BE2; text-shadow: 0 6px 0 #4B1290, 0 10px 28px rgba(160,80,255,.7); font-size: 46px; color: #FFF3A6; }
+.r3-turbo.super::after { content: attr(data-combo); position: absolute; right: -6px; top: -18px; font: 900 22px 'Fredoka One', var(--font); color: #fff; background: #8A2BE2; border-radius: 99px; padding: 2px 10px; box-shadow: 0 3px 0 #4B1290; }
+.race-pause { text-align: center; } .race-pause .col { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.pod-prac { margin-top: 8px; }

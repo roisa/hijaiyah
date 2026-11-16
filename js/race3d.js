@@ -343,7 +343,7 @@
     var BODY = who.body || "kart";
     if (BODY === "monster") { g.translate(0, -58); }                       // sits high on big wheels
     // turbo flames from the two exhausts
-    if (o.turbo) for (var i = -1; i <= 1; i += 2) { var fl = (40 + Math.random() * 30) * (o.big ? 2 : 1); var q = g.createLinearGradient(0, -40, 0, -40 + fl); q.addColorStop(0, "#FFF3A6"); q.addColorStop(.4, "#FFB000"); q.addColorStop(1, "rgba(255,80,40,0)"); g.fillStyle = q; g.beginPath(); g.ellipse(i * 40, -30 + fl / 2, 16, fl / 2, 0, 0, 7); g.fill(); }
+    if (o.turbo) for (var i = -1; i <= 1; i += 2) { var fl = (40 + Math.random() * 30) * (o.big ? 2 : 1); var q = g.createLinearGradient(0, -40, 0, -40 + fl); q.addColorStop(0, "#FFF3A6"); q.addColorStop(.4, o.rainbow ? ["#FF5FA2", "#3D9BFF", "#22C06E"][Math.floor(Math.random() * 3)] : "#FFB000"); q.addColorStop(1, "rgba(255,80,40,0)"); g.fillStyle = q; g.beginPath(); g.ellipse(i * 40, -30 + fl / 2, 16, fl / 2, 0, 0, 7); g.fill(); }
     // rear tyres
     var TW = BODY === "monster" ? 1.75 : BODY === "racer" ? 1.1 : 1, TX = BODY === "bubble" ? 128 : 150;
     if (BODY === "monster") { g.strokeStyle = "#5A6275"; g.lineWidth = 10; [-1, 1].forEach(function (sd) { g.beginPath(); g.moveTo(sd * 60, -60); g.lineTo(sd * 120, 10); g.stroke(); }); }
@@ -428,7 +428,7 @@
   /* ---------- sound: a soft engine hum and a cheerful loop ---------- */
   function sound() {
     var c = A.ac && A.ac(), set = S.get().settings || {};
-    var none = { speed: function () {}, music: function () {}, duck: function () {}, stop: function () {}, fx: function () {}, fast: function () {} };
+    var none = { speed: function () {}, music: function () {}, duck: function () {}, stop: function () {}, fx: function () {}, fast: function () {}, quiet: function () {} };
     if (!c || set.sfx === false) return none;
     var out = c.createGain(); out.gain.value = 1; out.connect(c.destination);
     var eo = c.createOscillator(), eo2 = c.createOscillator(), lp = c.createBiquadFilter(), eg = c.createGain();
@@ -484,6 +484,7 @@
     return {
       fx: function (n3) { try { if (FX[n3]) FX[n3](c.currentTime + .01); } catch (e) {} },
       fast: function (on) { fast = on; },
+      quiet: function (on) { out.gain.setTargetAtTime(on ? 0 : 1, c.currentTime, .05); },
       speed: function (v) { var t0 = c.currentTime; eo.frequency.setTargetAtTime(55 + v * 75, t0, .12); eo2.frequency.setTargetAtTime(27 + v * 37, t0, .12); eg.gain.setTargetAtTime(ducked ? .008 : .028 + v * .018, t0, .2); },
       music: function (on) { musicOn = on; mg.gain.setTargetAtTime(on && !ducked ? .085 : 0, c.currentTime, .2); },
       duck: function (on) { ducked = on; mg.gain.setTargetAtTime(musicOn ? (on ? .02 : .085) : 0, c.currentTime, .15); },
@@ -521,7 +522,7 @@
     /* screen */
     var sc = el("div", "screen race r3"); app.appendChild(sc);
     var stage = el("div", "race-stage"), cv = el("canvas", "race-cv"); stage.appendChild(cv); sc.appendChild(stage);
-    var top = el("div", "lv-top race-top"), x = el("button", "nav-btn", HJ.ic("close")); x.setAttribute("aria-label", t("close"));
+    var top = el("div", "lv-top race-top"), x = el("button", "nav-btn", '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.5" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.5" fill="currentColor"/></svg>'); x.setAttribute("aria-label", t("racePause"));
     var mini = el("div", "rt-track", '<i class="rt-line"></i><span class="rt-flag"></span>');
     var spk = el("button", "nav-btn rt-spk", HJ.ic("speaker")); spk.setAttribute("aria-label", t("listen"));
     var coinEl = el("span", "rt-coins", '<i class="rt-coin"></i><b>0</b>');
@@ -551,7 +552,7 @@
         babyBtn.querySelector(".ar").textContent = G.q.ar; babyBtn.style.setProperty("--bc", G.col);
         babyBtn.className = "r3-baby on " + ["l", "c", "r"][G.good]; return;
       }
-      pickBtns.forEach(function (b, l) { b.className = "rp-b l" + l; b.classList.remove("hint"); b.querySelector(".ar").textContent = G.signs[l].ar; b.classList.toggle("w", G.signs[l].ar.replace(/[\u064B-\u0652]/g, "").length > 2); });
+      pickBtns.forEach(function (b, l) { b.className = "rp-b l" + l; b.classList.remove("hint"); b.setAttribute("aria-label", G.signs[l].tr ? HJ.latinFor(G.signs[l].tr, lang()) : G.signs[l].ar); b.querySelector(".ar").textContent = G.signs[l].ar; b.classList.toggle("w", G.signs[l].ar.replace(/[\u064B-\u0652]/g, "").length > 2); });
       markPick(); pick.classList.add("on"); tip.classList.add("gone");
       // on the harakat races, the label tells the ear what to listen for
       pick.querySelector(".rp-say").lastChild.textContent = " " + (R.vmix ? t(R.vmix[0] === "an" ? "racePickT" : "racePickV") : t("racePick"));
@@ -582,7 +583,7 @@
 
     /* ---- build the track ---- */
     var BABY = !!R.baby;
-    var laps = BABY ? 1 : R.gp ? 3 : 2, perLap = BABY ? (R.gp ? 7 : 5) : R.gp ? 4 : 5, gap = BABY ? 440 : 520;   // a gate every 520 segments (~12 s)
+    var laps = BABY || R.practice ? 1 : R.gp ? 3 : 2, perLap = BABY ? (R.gp ? 7 : 5) : R.gp ? 4 : 5, gap = BABY ? 440 : 520;   // a gate every 520 segments (~12 s)
     var N = 120 + perLap * gap, segs = [];
     function lastY() { return segs.length ? segs[segs.length - 1].p2.y : 0; }
     function addSeg(curve, y) { var n = segs.length; segs.push({ i: n, curve: curve, p1: { y: lastY(), z: n * SEG }, p2: { y: y, z: (n + 1) * SEG }, sp: [], dark: Math.floor(n / 3) % 2 }); }
@@ -657,7 +658,8 @@
     HJ._race = { gates: gates, setLane: function (l) { laneI = l; }, phase: function () { return phase; }, pos: function () { return pos; }, total: TOTAL, coins: coins,
       // for tests: put Mo (and the rivals beside him) just before a spot on the track
       warp: function (seg, near) { pos = Math.max(0, seg * SEG - PLAYERZ); riv.forEach(function (rv, i) { rv.z = pos + PLAYERZ + (near ? 3 + i * 3 : 6 + i * 9) * SEG; if (near) { rv.lane = rv.x = 0; rv.lane = i ? 2 : 0; rv.x = LANES[rv.lane]; } }); },
-      ev: ev, ramps: ramps, pads: pads, lane: function () { return laneI; }, seg: function () { return Math.floor((pos + PLAYERZ) / SEG); } };
+      ev: ev, ramps: ramps, pads: pads, fps: function () { var m = FT.reduce(function (x, y) { return x + y; }, 0) / Math.max(1, FT.length); return Math.round(1 / Math.max(.001, m)); },
+      place: function () { return +hud.querySelector(".r3-pos b").textContent; }, lane: function () { return laneI; }, seg: function () { return Math.floor((pos + PLAYERZ) / SEG); } };
 
     /* ---- drawing ---- */
     function project(p, camX, camY, camZ) {
@@ -729,7 +731,7 @@
       var pY = bs.p1.y + (bs.p2.y - bs.p1.y) * perc, camY = pY + CAMH, lapOf = Math.floor(pos / LAPLEN);
       var dx = -(bs.curve * perc), xx = 0, maxy = H, list = [];
       g.clearRect(0, 0, W, H); background();
-      for (var n = 0; n < DRAW; n++) {
+      for (var n = 0; n < DRAWN; n++) {
         var seg = segs[(base + n) % N], looped = seg.i < base, zoff = looped ? LAPLEN : 0, posInLap = pos - lapOf * LAPLEN;
         var a = project({ x: 0, y: seg.p1.y, z: seg.p1.z }, camX - xx, camY, posInLap - zoff);
         var b = project({ x: 0, y: seg.p2.y, z: seg.p2.z }, camX - xx - dx, camY, posInLap - zoff);
@@ -743,7 +745,7 @@
         poly(a.x - a.w - r1, a.y, a.x - a.w, a.y, b.x - b.w, b.y, b.x - b.w - r2, b.y, rc);
         poly(a.x + a.w + r1, a.y, a.x + a.w, a.y, b.x + b.w, b.y, b.x + b.w + r2, b.y, rc);
         poly(a.x - a.w, a.y, a.x + a.w, a.y, b.x + b.w, b.y, b.x - b.w, b.y, rd);
-        var fogA = Math.pow(n / DRAW, 2.2) * .85;
+        var fogA = Math.pow(n / DRAWN, 2.2) * .85;
         if (!seg.dark) { var l1 = a.w / 40, l2 = b.w / 40; [-1 / 3, 1 / 3].forEach(function (f) { var la = a.x + a.w * 2 * f, lb = b.x + b.w * 2 * f; poly(la - l1, a.y, la + l1, a.y, lb + l2, b.y, lb - l2, b.y, TH.name === "sea" ? "rgba(255,255,255,.6)" : "rgba(255,255,255,.85)"); }); }
         if (fogA > .02) poly(0, b.y, W, b.y, W, a.y, 0, a.y, fogCol(fogA));
         maxy = a.y;
@@ -799,7 +801,7 @@
       var kw = Math.min(W * .38, 230);
       if (shield > 0) { var bq = g.createRadialGradient(W / 2, H - kw * .55, kw * .2, W / 2, H - kw * .55, kw * .78); bq.addColorStop(0, "rgba(124,200,255,0)"); bq.addColorStop(.8, "rgba(124,200,255,.25)"); bq.addColorStop(1, "rgba(255,255,255,.7)"); g.fillStyle = bq; g.beginPath(); g.arc(W / 2, H - kw * .55, kw * .78 + Math.sin(tRace * 6) * 3, 0, 7); g.fill(); }
       if (magnet > 0) { g.strokeStyle = "rgba(255,212,59," + (.4 + Math.sin(tRace * 10) * .2) + ")"; g.lineWidth = 4; for (var mr = 0; mr < 2; mr++) { g.beginPath(); g.arc(W / 2, H - kw * .5, kw * (.62 + mr * .14 + (tRace * .3 % .14)), Math.PI * 1.1, Math.PI * 1.9); g.stroke(); } }
-      drawKart(g, W / 2, H - 14, kw, ME, { t: tRace * (.6 + speed / BASE * .6), flap: Math.sin(tRace * 3) * .4 + speed / BASE * .6, tilt: tilt, turbo: boost > 0 || padT > 0, big: boost > 0, air: air * 120, night: night, roll: roll, wob: calm ? 0 : Math.sin(tRace * 22) * 1.2 });
+      drawKart(g, W / 2, H - 14, kw, ME, { t: tRace * (.6 + speed / BASE * .6), flap: Math.sin(tRace * 3) * .4 + speed / BASE * .6, tilt: tilt, turbo: boost > 0 || padT > 0, big: boost > 0, rainbow: superT > 0, air: air * 120, night: night, roll: roll, wob: calm ? 0 : Math.sin(tRace * 22) * 1.2 });
     }
     function drawSprite(sp, P, offX, clip, lift, scaleX, forceW) {
       var w = forceW || (P.s * sp.ww * ROADW * W / 2), h = w * sp.h / sp.w, x = P.x + P.s * offX * ROADW * W / 2 - w / 2 * (scaleX || 1), y = P.y - h - (lift || 0);
@@ -963,11 +965,14 @@
     var shake = 0;
 
     /* ---- the loop ---- */
-    var last = 0;
+    var last = 0, FT = [], lowQ = false, DRAWN = DRAW;
     function frame(now) {
       if (my !== live || !document.body.contains(cv)) return;
       var dt = Math.min(.05, last ? (now - last) / 1000 : 0); last = now;
-      if (phase === "race" || phase === "end") update(dt);
+      FT.push(dt); if (FT.length > 120) FT.shift();
+      if (!lowQ && FT.length >= 90 && tRace > 2) { var avg = FT.reduce(function (x2, y2) { return x2 + y2; }, 0) / FT.length; if (avg > 1 / 40) { lowQ = true; dpr = 1; DRAWN = 110; size(); } }
+      var TS = window.__raceTS || 1;                                   // tests only: run the race faster
+      if (!paused && (phase === "race" || phase === "end")) for (var ts = 0; ts < TS; ts++) update(dt);
       g.save();
       if (kickT > 0 && !calm) { var kz = 1 + Math.sin(kickT / .6 * Math.PI) * .06; g.translate(W / 2, H * .6); g.scale(kz, kz); g.translate(-W / 2, -H * .6); kickT -= dt; }
       if (shake > 0 && !calm) { g.translate((Math.random() - .5) * 8 * shake, (Math.random() - .5) * 8 * shake); shake = Math.max(0, shake - dt * 3); }
@@ -988,9 +993,9 @@
     }
     function update(dt) {
       tRace += dt;
-      var target = phase === "end" ? BASE * .5 : BASE * (boost > 0 ? 1.6 : slow > 0 ? .55 : padT > 0 ? 1.3 : 1) * (tutOn ? .32 : 1);
+      var target = phase === "end" ? BASE * .5 : BASE * (boost > 0 ? (superT > 0 ? 1.8 : 1.6) : slow > 0 ? .55 : padT > 0 ? 1.3 : 1) * (tutOn ? .32 : 1);
       speed += (target - speed) * Math.min(1, dt * (target > speed ? 2.2 : 3));
-      if (boost > 0) boost -= dt; if (slow > 0) slow -= dt; if (padT > 0) padT -= dt; if (shield > 0) shield -= dt; if (magnet > 0) magnet -= dt;
+      if (boost > 0) boost -= dt; if (superT > 0) superT -= dt; if (slow > 0) slow -= dt; if (padT > 0) padT -= dt; if (shield > 0) shield -= dt; if (magnet > 0) magnet -= dt;
       snd.speed(speed / BASE);
       pos += speed * dt; roll += speed * dt * .02;
       var seg = segs[Math.floor(pos / SEG) % N];
@@ -1023,16 +1028,28 @@
           G.done = true; G.picked = lane;
           if (tutOn) { tutOn = false; tut = false; hand.className = "r3-hand"; S.get().raceTut = 1; S.save(); }
           pickResult(G);
-          if (lane === G.good) { okN++; boost = 3; slow = 0; setCam("yes"); puff(W / 2, H * .6, 40, "star"); puff(W / 2, H * .4, 24, "box"); snd.fx("turbo"); J.buzz([20, 30, 40]);
-            flashT = .45; kickT = .6; turboText(); }
-          else { if (shield > 0) { shield = 0; callText(t("pwSaved"), "blue"); } else { slow = 1.2; boost = 0; } setCam("oh"); snd.fx("wrong"); J.buzz([20, 30, 20]); if (G.q.k && S.addMiss) S.addMiss(G.q);
+          if (lane === G.good) { okN++; combo++; boost = combo >= 3 ? 4.5 : 3; if (combo >= 3) superT = 4.5; slow = 0; setCam("yes"); puff(W / 2, H * .6, 40, "star"); puff(W / 2, H * .4, 24, "box"); snd.fx("turbo"); J.buzz([20, 30, 40]);
+            flashT = .45; kickT = .6; turboText(combo >= 3 ? combo : 0); }
+          else { combo = 0; superT = 0; if (shield > 0) { shield = 0; callText(t("pwSaved"), "blue"); } else { slow = 1.2; boost = 0; } setCam("oh"); snd.fx("wrong"); J.buzz([20, 30, 20]); if (G.q.k && S.addMiss) S.addMiss(G.q);
             callText('<small>' + HJ.ic("speaker") + " " + esc(t("raceThis")) + '</small>' + (vname(G.q) ? '<em class="ans-v">' + esc(vname(G.q)) + "</em>" : "") + '<span class="ans-box' + (G.q.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? " w" : "") + '"><span class="ar">' + esc(G.q.ar) + "</span></span>", "ans"); shake = .4; setTimeout(function () { if (my === live) A.sayNow(G.q.au); }, 250); }
           setTimeout(function () { if (my === live) setCam("mo"); }, 1600);
         }
       });
       // rivals
       riv.forEach(function (rv) {
-        if (!rv.fin) { rv.z += BASE * rv.pace * (1 + .07 * Math.sin(tRace * .6 + rv.ph)) * (tutOn ? .32 : 1) * dt; if (rv.z >= TOTAL) rv.fin = tRace; }
+        if (!rv.fin) {
+          // each rival keeps a target gap to Mo that depends on how many letters he has got right so far:
+          // know them well → the friends end up just behind; guess → they stay just ahead. They pull close, so
+          // there is always someone to catch or to hold off, and every turbo really moves Mo up.
+          var doneG = gates.filter(function (G) { return G.done; }).length, acc = doneG ? okN / doneG : .7;
+          if (BABY) acc = 1;
+          var want = ((rv.k === "ais" ? .5 : .62) - acc) * 46 * SEG + Math.sin(tRace * .35 + rv.ph) * 5 * SEG;
+          var gap = rv.z - pAbs, pull = (pAbs + want - rv.z) / (16 * SEG);
+          var sp = BASE * Math.max(.72, Math.min(1.34, rv.pace + pull * .35)) * (tutOn ? .32 : 1);
+          if (boost > 0 && gap > -6 * SEG && gap < 30 * SEG) sp = Math.min(sp, BASE * .95);   // a turbo always gains ground
+          if (phase === "end") sp = BASE * rv.pace;
+          rv.z += sp * dt; if (rv.z >= TOTAL) rv.fin = tRace;
+        }
         if (Math.random() < dt * .2) {
           var near = Math.abs(rv.z - pAbs) < 30 * SEG;
           var ch = [0, 1, 2].filter(function (l) { return (!near || l !== laneI) && riv.every(function (o) { return o === rv || o.lane !== l || Math.abs(o.z - rv.z) > 25 * SEG; }); });
@@ -1093,9 +1110,14 @@
       else if (k === "magnet") { magnet = 9; callText(esc(t("pwMagnet")), "gold"); }
       else { padT = 2.4; callText("Turbo!", "green"); }
     }
-    var callT = null, flashT = 0, kickT = 0, bumpT = 0, skidT = 0;
+    var callT = null, flashT = 0, kickT = 0, bumpT = 0, skidT = 0, combo = 0, superT = 0, paused = false;
     var tbig = el("div", "r3-turbo", '<span class="tb-bolt"></span><b>TURBO!</b>'); sc.appendChild(tbig);
-    function turboText() { tbig.classList.remove("on"); void tbig.offsetWidth; tbig.classList.add("on"); setTimeout(function () { tbig.classList.remove("on"); }, 1400); }
+    function turboText(cb) {
+      tbig.querySelector("b").textContent = cb ? "SUPER TURBO!" : "TURBO!"; tbig.classList.toggle("super", !!cb);
+      tbig.setAttribute("data-combo", cb ? "×" + cb : "");
+      tbig.classList.remove("on"); void tbig.offsetWidth; tbig.classList.add("on"); setTimeout(function () { tbig.classList.remove("on"); }, 1400);
+      if (cb) snd.fx("lap");
+    }
     function callText(html, kind) { callout.className = "r3-call on " + (kind || ""); callout.innerHTML = html; clearTimeout(callT); callT = setTimeout(function () { callout.classList.remove("on"); }, kind === "ans" ? 2000 : 1300); }
 
     /* ---- controls: tap the left or right half, swipe, arrow keys ---- */
@@ -1117,14 +1139,24 @@
       if (nb) setTimeout(function () { if (my === live) HORNS.beep(nb.k === "ais" ? 1.3 : .8); }, 450); };
     horn.addEventListener("pointerdown", function (e) { e.stopPropagation(); }); horn.addEventListener("pointerup", function (e) { e.stopPropagation(); });
     mus.onclick = function () { var set = S.get().settings; set.raceMusic = set.raceMusic === false; S.save(); mus.classList.toggle("off", set.raceMusic === false); snd.music(set.raceMusic !== false); A.fx.tap(); };
-    x.onclick = function () {
+    function pause() {
+      if (paused || phase === "end" || my !== live) return;
+      paused = true; snd.quiet(true); A.stop();
       HJ.modal(function (p, close) {
-        p.appendChild(HJ._app.moImg("pose-23", "120px")); p.appendChild(el("h2", "", esc(t("quit"))));
-        var r = el("div", "row"), y = el("button", "btn ghost", t("yesQuit")), n = el("button", "btn", t("keepPlaying"));
-        y.onclick = function () { close(); stop(); hooks.onQuit(); }; n.onclick = close; r.appendChild(y); r.appendChild(n); p.appendChild(r);
-      });
-    };
-    function stop() { live++; snd.stop(); document.removeEventListener("keydown", key); window.removeEventListener("resize", size); A.stop(); }
+        p.classList.add("race-pause");
+        p.appendChild(HJ._app.moImg("pose-12", "110px")); p.appendChild(el("h2", "", esc(t("racePaused"))));
+        var r = el("div", "col"), go = el("button", "btn big", HJ.ic("play") + " " + t("raceResume")), again = el("button", "btn ghost", HJ.ic("replay") + " " + t("raceRestart")), out = el("button", "btn ghost", HJ.ic("close") + " " + t("yesQuit"));
+        go.onclick = function () { close(); resume(); };
+        again.onclick = function () { close(); stop(); hooks.onRestart ? hooks.onRestart() : hooks.onQuit(); };
+        out.onclick = function () { close(); stop(); hooks.onQuit(); };
+        r.appendChild(go); r.appendChild(again); r.appendChild(out); p.appendChild(r);
+      }, { sticky: true });
+    }
+    function resume() { if (!paused) return; paused = false; last = 0; snd.quiet(false); if (curGate && !curGate.done) sayGate(); }
+    x.onclick = function () { A.fx.tap(); pause(); };
+    function vis() { if (document.visibilityState === "hidden") pause(); }
+    document.addEventListener("visibilitychange", vis); window.addEventListener("pagehide", pause);
+    function stop() { live++; snd.stop(); document.removeEventListener("keydown", key); document.removeEventListener("visibilitychange", vis); window.removeEventListener("pagehide", pause); window.removeEventListener("resize", size); A.stop(); }
 
     /* ---- countdown ---- */
     var cd = el("div", "race-count", '<div class="rc-lights"><i></i><i></i><i></i></div><b class="rc-say"></b>'); stage.appendChild(cd);
@@ -1133,6 +1165,7 @@
     A.talk(t("raceReady"), lang());
     function light() {
       if (my !== live) return;
+      if (paused) { setTimeout(light, 400); return; }
       if (ci2 < 3) { cd.querySelectorAll("i")[ci2].classList.add("on"); var it = sounds[ci2 % sounds.length]; cd.querySelector(".rc-say").innerHTML = '<span class="ar">' + esc(it.ar) + "</span>"; snd.fx("beep");
         A.sayNow(it.au).then(function () { setTimeout(light, 380); }); ci2++; return; }
       cd.querySelectorAll("i").forEach(function (i) { i.classList.add("go"); }); cd.querySelector(".rc-say").textContent = t("raceGo"); snd.fx("go"); J.buzz(30); flashT = .25;

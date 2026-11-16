@@ -226,7 +226,9 @@
     goal: ["Target", "Goal"], hearts: ["hati", "hearts"], tapSlow: ["Baca pelan-pelan, jangan dieja", "Read slowly, don't spell it out"],
     worldLocked: ["Selesaikan Ujian jilid sebelumnya dulu", "Pass the previous book's test first"],
     hint: ["Bantuan", "Hint"], back: ["Kembali", "Back"], quit: ["Keluar dari level?", "Leave this level?"],
-    yesQuit: ["Ya, keluar", "Yes, leave"], keepPlaying: ["Lanjut main", "Keep playing"]
+    yesQuit: ["Ya, keluar", "Yes, leave"], racePause: ["Jeda", "Pause"], racePaused: ["Istirahat dulu", "Taking a break"],
+    raceResume: ["Lanjut balapan", "Keep racing"], raceRestart: ["Ulangi dari awal", "Start again"],
+    racePractice: ["Latihan bunyi ini", "Practise these sounds"], racePracticeT: ["Latihan", "Practice"], keepPlaying: ["Lanjut main", "Keep playing"]
   };
   function t(k, vars) {
     var e = W[k]; if (!e) return k;

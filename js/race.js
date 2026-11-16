@@ -400,11 +400,17 @@
         face: face,
         faceOf: function (k) { return face({ mo: "moFace", yes: "moYes", oh: "moOh", win: "moWin" }[k] || "moFace"); },
         onQuit: function () { open(r.w); },
+        onRestart: function () { play(r); },
         onFinish: function (res) { reward(r, res); }
       });
     });
   }
   function reward(R, res) {
+    if (R.practice) {                                                   // a practice lap: coins and learned sounds, no cup
+      var st0 = S.get(); st0.coins = (st0.coins || 0) + res.coins;
+      var M0 = mstore(); (res.items || []).forEach(function (it) { if (it.ok) M0[it.q.ar] = (M0[it.q.ar] || 0) + 1; });
+      S.save(); podium(R, res, 0, false); return;
+    }
     var st = S.get(), old = best(R.id), nb = old ? Math.min(old, res.place) : res.place;
     rst()[R.id] = nb;
     var gain = (4 - nb) - (old ? 4 - old : 0);                         // stars: 3/2/1 for the place (once, can improve)
@@ -421,7 +427,7 @@
     var IMGS = { mo: [IMG.moWin, "assets/mo/mo-ok.webp"], ais: [IMG.aisWin, IMG.ais], adam: [IMG.adamWin, IMG.adam] };
     HJ.modal(function (p, close) {
       p.classList.add("race-pod");
-      p.appendChild(el("div", "kicker", esc(t("raceT")) + " · " + esc(R.gp ? t("raceGP") : t("raceN", { n: R.i + 1 }))));
+      p.appendChild(el("div", "kicker", esc(t("raceT")) + " · " + esc(R.practice ? t("racePracticeT") : R.gp ? t("raceGP") : t("raceN", { n: R.i + 1 }))));
       p.appendChild(el("h2", "", esc(t("place" + res.place))));
       var pod = el("div", "pod");
       [1, 0, 2].forEach(function (i) {
@@ -442,9 +448,18 @@
         var lw = el("div", "pod-learn", "<b>" + esc(t("raceLearned")) + "</b>"), lc = el("div", "rg-chips");
         its.forEach(function (it) { var cc = el("button", "rg-c ar " + (it.ok ? "ok" : "again"), esc(it.q.ar)); cc.onclick = function () { A.unlock(); A.say(it.q.au); }; lc.appendChild(cc); });
         lw.appendChild(lc); var miss = its.filter(function (it) { return !it.ok; }).length;
-        lw.appendChild(el("small", "", esc(miss ? t("raceAgainN", { n: miss }) : t("raceAllRight")))); p.appendChild(lw);
+        lw.appendChild(el("small", "", esc(miss ? t("raceAgainN", { n: miss }) : t("raceAllRight"))));
+        if (miss && !R.baby) {                                          // one short lap with just the sounds that were missed
+          var prc = el("button", "btn small pod-prac", HJ.ic("replay") + " " + esc(t("racePractice")));
+          prc.onclick = function () {
+            close(); var ms = its.filter(function (it) { return !it.ok; }).map(function (it) { return it.q; });
+            play({ id: R.id + "-p", w: R.w, th: R.th, flag: ms[0].ar, hint: true, i: R.i, gp: false, targets: ms, pool: R.pool, easy: R.easy, practice: 1, vmix: R.vmix });
+          };
+          lw.appendChild(prc);
+        }
+        p.appendChild(lw);
       }
-      var r = el("div", "row"), again = el("button", "btn ghost", HJ.ic("replay") + " " + t("again")), list = races(R.w), nx = list[R.i + 1];
+      var r = el("div", "row"), again = el("button", "btn ghost", HJ.ic("replay") + " " + t("again")), list = races(R.w), nx = R.practice ? list[R.i] : list[R.i + 1];
       var go = el("button", "btn", (nx ? t("next") : t("raceMenu")) + " " + HJ.ic("next"));
       again.onclick = function () { close(); play(R); };
       go.onclick = function () { close(); if (nx) play(nx); else open(R.w); };
