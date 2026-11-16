@@ -555,7 +555,7 @@
       pickBtns.forEach(function (b, l) { b.className = "rp-b l" + l; b.classList.remove("hint"); b.setAttribute("aria-label", G.signs[l].tr ? HJ.latinFor(G.signs[l].tr, lang()) : G.signs[l].ar); b.querySelector(".ar").textContent = G.signs[l].ar; b.classList.toggle("w", G.signs[l].ar.replace(/[\u064B-\u0652]/g, "").length > 2); });
       markPick(); pick.classList.add("on"); tip.classList.add("gone");
       // on the harakat races, the label tells the ear what to listen for
-      pick.querySelector(".rp-say").lastChild.textContent = " " + (R.vmix ? t(R.vmix[0] === "an" ? "racePickT" : "racePickV") : t("racePick"));
+      pick.querySelector(".rp-say").lastChild.textContent = " " + (R.mad ? t("racePickM") : R.alike ? t("racePickA") : R.vmix ? t(R.vmix[0] === "an" ? "racePickT" : "racePickV") : t("racePick"));
     }
     function markPick() { pickBtns.forEach(function (b, l) { b.classList.toggle("me", l === laneI); }); }
     function pickResult(G) {
@@ -637,6 +637,14 @@
     at(14, { k: "arch", o: { kind: "start" } });
     for (L = 1; L <= laps; L++) at(L * N, { k: "arch", o: { kind: L === laps ? "fin" : "start" } });
     function distract(q) {
+      if (R.mad && q.k && R.vmix) {           // a long vowel: the short one of the same letter is always a choice
+        var sh = HJ.syl(q.k, { aa: "a", ii: "i", uu: "u" }[q.v] || "a"), lo = U.shuffle(["aa", "ii", "uu"].filter(function (v) { return v !== q.v; }).map(function (v) { return HJ.syl(q.k, v); }).filter(function (x) { return A.hasClip(x.ar); }));
+        if (A.hasClip(sh.ar)) return [sh, lo[0] || U.shuffle(R.pool.filter(function (x) { return x.ar !== q.ar; }))[0]];
+      }
+      if (R.alike && q.k) {                   // look-alikes: the wrong signs are its cousins (ب ت ث…)
+        var cs = HJ.cousins(q.k) || [], al = U.shuffle(R.pool.filter(function (x) { return x.ar !== q.ar && cs.indexOf(x.k) >= 0; }));
+        if (al.length) { var rest = U.shuffle(R.pool.filter(function (x) { return x.ar !== q.ar && al.indexOf(x) < 0; })); return [al[0], al[1] || rest[0]]; }
+      }
       if (R.vmix && q.k) {
         var alts = U.shuffle(R.vmix.filter(function (v) { return v !== q.v; }).map(function (v) { return HJ.syl(q.k, v); }).filter(function (x) { return x.ar !== q.ar && A.hasClip(x.ar); }));
         if (alts.length >= 2) return [alts[0], alts[1]];

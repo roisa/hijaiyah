@@ -16,14 +16,52 @@
 
   /* ---------- content: the races follow Books 1–4 ---------- */
   // the learning path, easiest first: letters → fathah → kasrah → dhammah → tanwin → joined words → … → mixes
-  var WORLDS = ["baby", 1, "kasrah", "dhammah", "tanwin", 2, 3, 4, "hill", "snow", "desert", "candy"], PER = 5, GATES = 8, GP_GATES = 10;
+  // four stages, like the books: letters → vowel marks (each on its own track) → reading words → the champion mix
+  var STAGES = [
+    { n: ["Huruf", "Letters"], w: ["baby", 1, "snow"] },
+    { n: ["Harakat", "Vowel marks"], w: ["kasrah", "dhammah", "desert", "tanwin", "hill"] },
+    { n: ["Kata", "Words"], w: [2, 3, 4] },
+    { n: ["Juara", "Champion"], w: ["candy"] }
+  ];
+  var WORLDS = [].concat.apply([], STAGES.map(function (g) { return g.w; })), PER = 5, GATES = 8, GP_GATES = 10;
+  // every track: the place (its look) · what it teaches, and the book it belongs to
+  var TRACK = {
+    baby: { p: ["Balap Balon", "Balloon Race"], t: ["Kenal huruf · 2+", "First letters · 2+"], j: "2+" },
+    1: { p: ["Pantai", "Beach"], t: ["Fathah", "Fathah"], j: "1" },
+    snow: { p: ["Negeri Salju", "Snowland"], t: ["Huruf mirip", "Look-alike letters"], j: "1" },
+    kasrah: { p: ["Taman Pelangi", "Rainbow Park"], t: ["Kasrah", "Kasrah"], j: "3" },
+    dhammah: { p: ["Luar Angkasa", "Outer Space"], t: ["Dhammah", "Dhammah"], j: "3" },
+    desert: { p: ["Gurun Pasir", "Desert Dunes"], t: ["Mad · bacaan panjang", "Mad · long vowels"], j: "2–3" },
+    tanwin: { p: ["Pulau Dino", "Dino Island"], t: ["Tanwin", "Tanwin"], j: "4" },
+    hill: { p: ["Bukit Hijau", "Green Hills"], t: ["Sukun", "Sukun"], j: "4" },
+    2: { p: ["Hutan", "Forest"], t: ["Kata bersambung", "Joined words"], j: "2" },
+    3: { p: ["Gunung", "Mountain"], t: ["Kata kasrah & dhammah", "Words with i & u"], j: "3" },
+    4: { p: ["Laut", "Sea"], t: ["Kata tanwin & sukun", "Tanwin & sukun words"], j: "4" },
+    candy: { p: ["Negeri Permen", "Candy Land"], t: ["Campuran juara", "Champion mix"], j: "1–4" }
+  };
+  function L01() { return S.get().lang === "en" ? 1 : 0; }
+  function tPlace(n) { return TRACK[n].p[L01()]; }
+  function tTopic(n) { return TRACK[n].t[L01()]; }
+  function stageOf(n) { for (var i = 0; i < STAGES.length; i++) if (STAGES[i].w.indexOf(n) >= 0) return i; return 0; }
+  function trackDone(n) { var L3 = races(n); return best(L3[L3.length - 1].id) > 0; }
+  function trackWon(n) { return races(n).filter(function (r) { return best(r.id) > 0; }).length; }
+  // the recommended next track: the first unfinished one in order. The Balloon Race is for the littlest, so once
+  // anything else has been raced it is skipped
+  function nextTrack() {
+    var any = WORLDS.some(function (n) { return n !== "baby" && trackWon(n); });
+    for (var i = 0; i < WORLDS.length; i++) { var n = WORLDS[i]; if (n === "baby") continue; if (!trackDone(n)) return n; }
+    return any ? "candy" : 1;
+  }
   // the bonus tracks: new places, letters from the books (snow = the look-alike letters, candy = a bit of everything)
   var EXTRA = {
     // for the littlest (about 2+): one big balloon with one letter, tap anywhere, always a turbo; 2 letters a race
     baby: { baby: 1, th: "rainbow", flag: "أ", bg: "stickers", name: ["Balap Balon · 2+", "Balloon Race · 2+"], icon: ["#FFD43B", "#FF5D73"] },
-    hill: { src: [1], flag: "ح", bg: "w2", name: ["Bukit Hijau", "Green Hills"], icon: ["#8FE38A", "#3DB86B"] },
-    snow: { src: [1], flag: "ث", bg: "w3", name: ["Negeri Salju", "Snowland"], icon: ["#BFE4FF", "#5BA8F0"], hard: 1 },
-    desert: { src: [3], flag: "ص", bg: "w1", name: ["Gurun Pasir", "Desert Dunes"], icon: ["#FFD08A", "#F0903A"] },
+    // sukun: the letter stops (أَبْ, مِنْ, خُبْز) — the hilly road
+    hill: { sukun: 1, flag: "أَبْ", bg: "w2", name: ["Bukit Hijau · Sukun", "Green Hills · Sukun"], icon: ["#8FE38A", "#3DB86B"] },
+    // the wrong signs are the look-alike letters (ب ت ث, ج ح خ, د ذ…), so the eye learns the dots
+    snow: { src: [1], flag: "ث", bg: "w3", name: ["Negeri Salju · Huruf Mirip", "Snowland · Look-alikes"], icon: ["#BFE4FF", "#5BA8F0"], hard: 1, alike: 1 },
+    // mad: short or long? بَ or بَا — the long desert road; from race 3 the short one of the same letter is a choice
+    desert: { mad: 1, flag: "بَا", bg: "w1", name: ["Gurun Pasir · Mad", "Desert Dunes · Mad"], icon: ["#FFD08A", "#F0903A"], vmix: ["a", "aa", "i", "ii", "u", "uu"] },
     candy: { src: [1, 2, 3, 4], flag: "ق", bg: "stickers", name: ["Negeri Permen", "Candy Land"], icon: ["#FFB3E1", "#FF5FA2"] },
     // the vowel tracks: every letter with kasrah / dhammah / tanwin; from race 3 the other choices are the same letter
     // with a different vowel (بِ or بَ or بُ?) so the ear learns the harakat
@@ -41,17 +79,17 @@
     2: ["Huruf bersambung jadi kata", "Joined letters make words"],
     3: ["Kasrah & dhammah di dalam kata", "Kasrah & dhammah inside words"],
     4: ["Tanwin & sukun di dalam kata", "Tanwin & sukun inside words"],
-    hill: ["Ulang 28 huruf", "Review all 28 letters"],
+    hill: ["Sukun: hurufnya berhenti — ab, min, qul", "Sukun: the letter stops — ab, min, qul"],
     snow: ["Huruf mirip: ب ت ث · ج ح خ · د ذ", "Look-alike letters: ب ت ث · ج ح خ · د ذ"],
-    desert: ["Kasrah & dhammah (Jilid 3)", "Kasrah & dhammah (Book 3)"],
-    candy: ["Campuran semua bunyi", "A mix of every sound"]
+    desert: ["Mad: pendek atau panjang? ba · baa", "Mad: short or long? ba · baa"],
+    candy: ["Campuran semua bunyi Jilid 1–4", "A mix of every sound from Books 1–4"]
   };
   function goal(n) { var g = GOAL[n]; return g ? g[S.get().lang === "en" ? 1 : 0] : ""; }
   // a sound counts as mastered once it has been driven through correctly twice
   function mstore() { var s = S.get(); s.raceM = s.raceM || {}; return s.raceM; }
   function mastered(x) { return (mstore()[x.ar] || 0) >= 2; }
   function trackPool(n) { var L2 = races(n); return L2[L2.length - 1].pool; }
-  function wName(n) { return EXTRA[n] ? EXTRA[n].name[S.get().lang === "en" ? 1 : 0] : tr(HJ.worlds[n - 1].name); }
+  function wName(n) { return TRACK[n] ? tPlace(n) + " · " + tTopic(n) : tr(HJ.worlds[n - 1].name); }
   function wIcon(n) {
     if (!EXTRA[n]) return HJ.wi(n, true).outerHTML;
     var c = EXTRA[n].icon, art = {
@@ -88,7 +126,13 @@
       L2.push({ id: n + "-gp", w: n, th: X.th, flag: "ب", baby: 1, i: PER, gp: true, targets: pool.slice(0, 10), pool: pool.slice(0, 10), easy: true });
       return (cache[n] = L2);
     }
-    if (X && (X.vow || X.tanwin)) {
+    if (X && X.sukun) {                       // letter + sukun: أَبْ … then short words with sukun from the books
+      var seenS = {}; pool = [];
+      HJ.L.forEach(function (l) { if (l.k === "alif") return; var x = { ar: "أَ" + l.c + "\u0652", tr: "a" + l.cons, k: l.k, au: "أَ" + l.c + "\u0652" }; if (HJ.audio.hasClip(x.ar)) { seenS[x.ar] = 1; pool.push(x); } });
+      [2, 3, 4].forEach(function (b) { worldPool(b).forEach(function (x) { if (/\u0652/.test(x.ar) && !/[\u064B-\u064D]/.test(x.ar) && !seenS[x.ar] && HJ.audio.hasClip(x.ar)) { seenS[x.ar] = 1; pool.push(x); } }); });
+    } else if (X && X.mad) {                 // بَا بِي بُو, letter by letter in hijaiyah order
+      pool = []; HJ.L.forEach(function (l) { ["aa", "ii", "uu"].forEach(function (v) { var x = HJ.syl(l.k, v); if (HJ.audio.hasClip(x.ar)) pool.push(x); }); });
+    } else if (X && (X.vow || X.tanwin)) {
       var hasC = function (x) { return x && HJ.audio.hasClip(x.ar); };
       if (X.vow) pool = HJ.L.map(function (l) { return HJ.syl(l.k, X.vow); }).filter(hasC);            // in hijaiyah order
       else {
@@ -105,12 +149,16 @@
     for (var i = 0; i < PER; i++) {
       var chunk = pool.slice(i * k, (i + 1) * k);
       if (!chunk.length) chunk = pool.slice(-k);
-      list.push({ hint: n === 1 || i < 2, id: n + "-" + (i + 1), w: n, th: X ? X.th || n : null, vmix: X && X.vmix && i >= 2 ? X.vmix : null, flag: X ? X.flag : null, i: i, gp: false, targets: chunk, pool: X && X.hard ? pool : pool.slice(0, Math.max((i + 1) * k, 6)), easy: n === 1 && i < 3 });
+      list.push({ hint: n === 1 || i < 2, alike: X && X.alike, mad: X && X.mad, id: n + "-" + (i + 1), w: n, th: X ? X.th || n : null, vmix: X && X.vmix && i >= 2 ? X.vmix : null, flag: X ? X.flag : null, i: i, gp: false, targets: chunk, pool: X && X.hard ? pool : pool.slice(0, Math.max((i + 1) * k, 6)), easy: n === 1 && i < 3 });
     }
-    list.push({ id: n + "-gp", w: n, th: X ? X.th || n : null, vmix: X && X.vmix ? X.vmix : null, flag: X ? X.flag : null, i: PER, gp: true, targets: pool, pool: pool, easy: false });
+    list.push({ alike: X && X.alike, mad: X && X.mad, id: n + "-gp", w: n, th: X ? X.th || n : null, vmix: X && X.vmix ? X.vmix : null, flag: X ? X.flag : null, i: PER, gp: true, targets: pool, pool: pool, easy: false });
     return (cache[n] = list);
   }
-  function rst() { var s = S.get(); s.race = s.race || {}; return s.race; }
+  function rst() {
+    var s = S.get(); s.race = s.race || {};
+    if (!s.raceV2) { s.raceV2 = 1; Object.keys(s.race).forEach(function (k) { if (/^(hill|desert)-/.test(k)) { delete s.race[k]; if (s.raceT) delete s.raceT[k]; } }); }
+    return s.race;
+  }
   function best(id) { return rst()[id] || 0; }
   function allOpen() { var s = S.get().settings || {}; return !!(s.arcadeAll || s.unlockAll); }
   function isOpen(r) { if (r.i === 0 || allOpen()) return true; var prev = races(r.w)[r.i - 1]; return best(prev.id) > 0; }
@@ -161,9 +209,9 @@
   var KART = { mo: ["#FF6B5B", "#E2412F"], ais: ["#FF8FC8", "#E05A9E"], adam: ["#5B9BFF", "#2F6BE0"] };
 
   /* ---------- menu ---------- */
-  var curW = 1;
+  var curW = null;
   function open(w) {
-    if (w) curW = w;
+    if (w) curW = w; if (curW == null || WORLDS.indexOf(curW) < 0) curW = nextTrack();
     var app = document.getElementById("app"); app.innerHTML = "";
     var sc = el("div", "screen race-menu"); app.appendChild(sc);
     if (HJ.bg) HJ.bg(EXTRA[curW] ? EXTRA[curW].bg : "w" + curW);
@@ -178,14 +226,32 @@
     var gbar = el("div", "rm-gbar", '<span class="rm-coins"><i class="rt-coin"></i><b>' + (S.get().coins || 0) + '</b></span>');
     var gb = el("button", "btn small rm-garage", HJ.ic("gear") + " " + esc(t("garage"))); gb.onclick = function () { A.fx.tap(); garage(); }; gbar.appendChild(gb);
     body.appendChild(gbar);
-    var tabs = el("div", "rm-tabs");
-    WORLDS.forEach(function (n) {
-      var pool2 = trackPool(n), mm2 = pool2.filter(mastered).length, full = pool2.length && mm2 >= pool2.length;
-      var b = el("button", "rm-tab" + (n === curW ? " on" : "") + (EXTRA[n] ? " x" : "") + (full ? " full" : ""), '<i class="rm-step">' + (WORLDS.indexOf(n) + 1) + "</i>" + wIcon(n) + "<span>" + esc(EXTRA[n] ? wName(n) : t("book") + " " + n) + "</span>" + (full ? '<i class="rm-ok">' + HJ.ic("check") + "</i>" : ""));
-      b.onclick = function () { A.fx.tap(); open(n); }; tabs.appendChild(b);
+    // the learning path: 4 stages; the tracks of the open stage as cards; the recommended next one is marked
+    var nx = nextTrack(), stI = stageOf(curW), path = el("section", "rpath");
+    var stg = el("div", "rp-stages"); stg.setAttribute("role", "tablist");
+    STAGES.forEach(function (g, gi) {
+      var done = g.w.filter(trackDone).length, b = el("button", "rp-st" + (gi === stI ? " on" : "") + (done === g.w.length ? " full" : ""),
+        '<i>' + (done === g.w.length ? HJ.ic("check") : gi + 1) + "</i><b>" + esc(g.n[L01()]) + "</b><small>" + done + "/" + g.w.length + "</small>");
+      b.setAttribute("role", "tab"); b.setAttribute("aria-selected", gi === stI ? "true" : "false");
+      b.onclick = function () { A.fx.tap(); var pick = g.w.filter(function (n) { return n !== "baby" && !trackDone(n); })[0]; open(g.w.indexOf(nx) >= 0 ? nx : pick != null ? pick : g.w[0]); };
+      stg.appendChild(b);
     });
-    body.appendChild(tabs);
-    body.appendChild(el("div", "rm-wname", "<b>" + esc(wName(curW)) + "</b>"));
+    path.appendChild(stg);
+    var row = el("div", "rp-tracks");
+    STAGES[stI].w.forEach(function (n) {
+      var won = trackWon(n), tot = races(n).length, dn = trackDone(n);
+      var c = el("button", "rp-card" + (n === curW ? " on" : "") + (dn ? " done" : "") + (n === nx ? " next" : ""),
+        (n === nx ? '<em class="rp-next">' + esc(t("raceNext")) + "</em>" : "") +
+        '<span class="rp-top"><i class="rp-n">' + (WORLDS.indexOf(n) + 1) + "</i>" + wIcon(n) + (dn ? '<i class="rp-ok">' + HJ.ic("check") + "</i>" : "") + "</span>" +
+        "<b>" + esc(tTopic(n)) + "</b><small>" + esc(tPlace(n)) + "</small>" +
+        '<span class="rp-meta"><span class="rp-j">' + esc(n === "baby" ? "2+" : t("book") + " " + TRACK[n].j) + '</span><span class="rp-cups">' + cup(1, 14) + " " + won + "/" + tot + "</span></span>");
+      c.setAttribute("aria-label", tTopic(n) + " · " + tPlace(n) + " · " + won + "/" + tot + (n === nx ? " · " + t("raceNext") : ""));
+      c.onclick = function () { A.fx.tap(); open(n); };
+      row.appendChild(c);
+    });
+    path.appendChild(row); body.appendChild(path);
+    setTimeout(function () { var on = row.querySelector(".rp-card.on"); if (on && on.offsetLeft + on.offsetWidth > row.clientWidth) row.scrollLeft = on.offsetLeft - 16; }, 0);
+    body.appendChild(el("div", "rm-wname", "<b>" + esc(tTopic(curW)) + "</b><small>" + esc(tPlace(curW)) + "</small>"));
     // the track's goal and how many of its sounds are mastered (tap a sound to hear it)
     var tp = trackPool(curW), mN = tp.filter(mastered).length;
     var gcard = el("div", "rm-goal glass", '<div class="rg-h">' + HJ.art("sparkle", 20) + "<b>" + esc(t("raceGoal")) + "</b><span>" + esc(goal(curW)) + "</span></div>" +
@@ -206,7 +272,7 @@
       c.style.left = P.x + "%"; c.style.top = P.y + "px";
       c.innerHTML = '<span class="rm-dot">' + (op ? (r.gp ? HJ.art("trophy", 34) : '<b>' + (i + 1) + "</b>") : HJ.ic("lock")) + (bp ? '<span class="rm-medal">' + cup(bp, 30) + "</span>" : "") + "</span>" +
         '<span class="rm-lbl"><b>' + esc(r.gp ? t("raceGP") : t("raceN", { n: i + 1 })) + "</b>" +
-        '<small class="rm-g">' + esc(r.gp ? t("raceGoalGP") : r.vmix ? t(r.vmix[0] === "an" ? "raceGoalT" : "raceGoalV") : r.baby ? t("raceGoalB") : t("raceGoalL")) + "</small>" +
+        '<small class="rm-g">' + esc(r.gp ? t("raceGoalGP") : r.mad ? t("raceGoalM") : r.alike ? t("raceGoalA") : r.vmix ? t(r.vmix[0] === "an" ? "raceGoalT" : "raceGoalV") : r.baby ? t("raceGoalB") : t("raceGoalL")) + "</small>" +
         '<small class="ar">' + r.targets.slice(0, r.gp ? 4 : 5).map(function (x) { return esc(x.ar); }).join(" ") + "</small>" + (tm ? "<small>⏱ " + clock(tm) + "</small>" : "") + "</span>";
       c.setAttribute("aria-label", (r.gp ? t("raceGP") : t("raceN", { n: i + 1 })) + (bp ? " · " + t("place" + bp) : "") + (op ? "" : " · " + t("locked")));
       c.onclick = function () {
@@ -380,7 +446,7 @@
     var grid = el("div", "rs-grid");
     WORLDS.forEach(function (n) {
       var list = races(n), got = list.filter(function (x) { return r[x.id]; }).length, gp = list[list.length - 1];
-      var row = el("button", "rs-row" + (got ? "" : " none"), wIcon(n) + '<span class="rs-name"><b>' + esc(EXTRA[n] ? wName(n) : t("book") + " " + n) + '</b><span class="rs-cups">' +
+      var row = el("button", "rs-row" + (got ? "" : " none"), wIcon(n) + '<span class="rs-name"><b>' + esc(wName(n)) + '</b><span class="rs-cups">' +
         list.map(function (x) { return r[x.id] ? cup(r[x.id], x.gp ? 26 : 20) : '<i class="rs-empty' + (x.gp ? " gp" : "") + '"></i>'; }).join("") + "</span></span>" +
         (bt[gp.id] ? '<small class="rs-t">⏱ ' + clock(bt[gp.id]) + "</small>" : ""));
       row.onclick = function () { A.unlock(); A.fx.tap(); open(n); };
