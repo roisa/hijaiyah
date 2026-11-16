@@ -317,7 +317,8 @@
     if (hfaces[k]) return hfaces[k];
     var im = pics[k]; if (!im || !im.ok) return "";
     var b = im.box, c = document.createElement("canvas"); c.width = c.height = 128; var g = c.getContext("2d");
-    var side = b.w * (k === "mo" ? .44 : k === "ais" ? .46 : .5), cx = b.x + b.w * (k === "ais" ? .57 : .5), cy = b.y + b.h * (k === "mo" ? .2 : k === "ais" ? .24 : .17);
+    var F = window.__hf || { mo: [.52, .5, .24], ais: [.66, .6, .31], adam: [.54, .48, .21] }, fz = F[k] || [.5, .5, .25];
+    var side = b.w * fz[0], cx = b.x + b.w * fz[1], cy = b.y + b.h * fz[2];
     g.beginPath(); g.arc(64, 64, 64, 0, 7); g.clip(); g.drawImage(im, cx - side / 2, cy - side / 2, side, side, 0, 0, 128, 128);
     return (hfaces[k] = c.toDataURL());
   }
@@ -327,12 +328,12 @@
   function kartSvg(x, y, col, k, s) {
     var sh = SHIRT[k], hc = { mo: ["#FF6B5B", "#C9372A"], ais: ["#FF8FC8", "#D9579A"], adam: ["#5B9BFF", "#2F6BE0"] }[k], u = "kf" + k + (++heroN), f = hface(k);
     return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')">' +
-      '<defs><clipPath id="' + u + '"><circle cx="40" cy="-28" r="13"/></clipPath></defs>' +
+      '<defs><clipPath id="' + u + '"><circle cx="41" cy="-17" r="8.6"/></clipPath></defs>' +
       '<ellipse cx="38" cy="38" rx="46" ry="4.5" fill="rgba(0,0,0,.22)"/>' +
       // seat back and the driver's body: torso leaning forward, an arm reaching to the wheel
-      '<path d="M18 22 L22 -4 Q24 -10 30 -9 L32 18Z" fill="#2A2F3D"/>' +
-      '<path d="M26 18 Q24 0 32 -8 Q40 -14 48 -8 Q52 -2 50 8 L50 20Z" fill="' + sh[0] + '"/>' +
-      '<path d="M44 -4 Q54 2 62 0" stroke="' + sh[1] + '" stroke-width="7" stroke-linecap="round" fill="none"/>' +
+      '<path d="M18 22 L21 0 Q23 -5 28 -4 L32 18Z" fill="#2A2F3D"/>' +
+      '<path d="M27 18 Q25 2 31 -3 Q38 -8 46 -4 Q51 0 50 8 L50 20Z" fill="' + sh[0] + '"/>' +
+      '<path d="M44 0 Q54 4 62 1" stroke="' + sh[1] + '" stroke-width="6" stroke-linecap="round" fill="none"/>' +
       '<circle cx="63" cy="0" r="4.2" fill="#fff" stroke="#D7DEE8" stroke-width="1"/>' +
       // steering column and wheel
       '<path d="M58 14 L64 2" stroke="#3A3F4C" stroke-width="3" stroke-linecap="round"/><ellipse cx="65" cy="0" rx="2.4" ry="7" fill="none" stroke="#2A2F3D" stroke-width="2.6" transform="rotate(-20 65 0)"/>' +
@@ -346,12 +347,14 @@
       '<g class="hk-wheel"><circle cx="8" cy="27" r="12" fill="#23262F"/><circle cx="8" cy="27" r="5.5" fill="#C9D3E3"/><path d="M8 21.5 V32.5 M2.5 27 H13.5" stroke="#8E9BB0" stroke-width="1.6"/></g>' +
       '<g class="hk-wheel"><circle cx="74" cy="29" r="9.5" fill="#23262F"/><circle cx="74" cy="29" r="4.2" fill="#C9D3E3"/><path d="M74 24.8 V33.2 M69.8 29 H78.2" stroke="#8E9BB0" stroke-width="1.4"/></g>' +
       // the head: their face in an open-face racing helmet
-      (f ? '<image href="' + f + '" x="27" y="-41" width="26" height="26" clip-path="url(#' + u + ')"/>' : '<circle cx="40" cy="-28" r="13" fill="#F2C9A0"/>') +
+      (f ? '<image href="' + f + '" x="32.4" y="-25.6" width="17.2" height="17.2" clip-path="url(#' + u + ')"/>' : '<circle cx="41" cy="-17" r="8.6" fill="#F2C9A0"/>') +
       // an open-face helmet: the shell round the face, thicker on top, a chin strap
-      '<path fill-rule="evenodd" d="M40 -46 a18 18 0 1 1 0 36 a18 18 0 1 1 0 -36 Z M40 -41 a13 13 0 1 0 0 26 a13 13 0 1 0 0 -26 Z" fill="' + hc[0] + '"/>' +
-      '<path d="M23 -33 Q40 -50 57 -33 L53 -36 Q40 -46 27 -36Z" fill="' + hc[1] + '"/>' +
-      '<path d="M40 -46 a18 18 0 0 1 16 9" stroke="#fff" stroke-width="3.4" fill="none" opacity=".6" stroke-linecap="round"/>' +
-      (k === "mo" ? '<path d="M26 -44 l1.5 3 3.3 .5 -2.4 2.3 .6 3.3 -3 -1.6 -3 1.6 .6 -3.3 -2.4 -2.3 3.3 -.5z" fill="#FFD43B"/>' : "") +
+      // helmet: a shell round the face, thicker at the back and top, a short visor peak, a chin strap
+      '<path fill-rule="evenodd" d="M40 -29.5 a12 12 0 1 1 0 24 a12 12 0 1 1 0 -24 Z M41 -25.6 a8.6 8.6 0 1 0 0 17.2 a8.6 8.6 0 1 0 0 -17.2 Z" fill="' + hc[0] + '"/>' +
+      '<path d="M29 -23 Q38 -32 51 -25 L53 -22 Q42 -27 31 -20Z" fill="' + hc[1] + '"/>' +
+      '<path d="M40 -29.5 a12 12 0 0 1 10 5" stroke="#fff" stroke-width="2.2" fill="none" opacity=".65" stroke-linecap="round"/>' +
+      '<path d="M35 -9.5 Q41 -6 47 -9.5" stroke="' + hc[1] + '" stroke-width="1.6" fill="none"/>' +
+      (k === "mo" ? '<path d="M30.5 -26 l1 2 2.2 .3 -1.6 1.5 .4 2.2 -2 -1.1 -2 1.1 .4 -2.2 -1.6 -1.5 2.2 -.3z" fill="#FFD43B"/>' : "") +
       "</g>";
   }
 
