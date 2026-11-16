@@ -152,7 +152,7 @@
     gBubbles: ["Gelembung", "Bubbles"], gPaint: ["Warnai huruf", "Paint a letter"], gFeed: ["Suapi Mo", "Feed Mo"], gShadow: ["Cari bayangan", "Find the shadow"],
     arcadeAsk: ["Minta Abi/Umi membuka semua game di menu Orang Tua", "Ask a grown-up to open all games in Parents"],
     arcadeAll: ["Buka semua game Main Bebas", "Open all Free Play games"], arcadeAllSub: ["Untuk anak prasekolah yang ingin langsung bermain", "For preschoolers who just want to play"],
-    tdBubbles: ["Pecahkan gelembungnya!", "Pop the bubbles!"], tdPaint: ["Warnai hurufnya dengan jarimu!", "Colour the letter with your finger!"],
+    tdBubbles: ["Pecahkan gelembungnya!", "Pop the bubbles!"], paintDots: ["Warnai juga titiknya!", "Colour the dots too!"], tdPaint: ["Warnai hurufnya dengan jarimu!", "Colour the letter with your finger!"],
     feedAsk: ["Mo lapar! Berikan buah yang ini ke Mo", "Mo is hungry! Give Mo this fruit"], tdShadow: ["Geser hurufnya ke bayangannya!", "Drag the letter to its shadow!"],
     gPop: ["Balon", "Balloons"], gTrain: ["Kereta", "Train"], gBridge: ["Jembatan", "Bridge"], gMatch: ["Kartu kembar", "Memory"], gTrace: ["Menulis", "Tracing"], gPick: ["Tebak bunyi", "Sound quiz"], gBuild: ["Susun kata", "Word builder"], gSort: ["Monster tajwid", "Tajwid monsters"], gYesno: ["Benar atau salah", "Right or wrong"],
     week: ["Minggu ini", "This week"], wkMin: ["menit belajar", "minutes learning"], wkLv: ["level selesai", "levels done"], wkNew: ["stiker baru", "new stickers"], wkTs: ["tashih", "reading checks"],

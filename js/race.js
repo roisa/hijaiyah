@@ -429,11 +429,13 @@
   /* ---------- the home card ---------- */
   function card() {
     var c = el("button", "race-card featured");
-    load(function () { var a = c.querySelector(".rc-art"); if (a) a.innerHTML = heroSvg(); });
+    function fill(a) { if (!a) return; a.innerHTML = heroSvg(); var sv = a.querySelector("svg"); if (sv) sv.setAttribute("preserveAspectRatio", "xMidYMax slice"); }
+    load(function () { fill(c.querySelector(".rc-art")); });
     var cups = cupCount();
     c.innerHTML = '<span class="rc-flag">' + HJ.art("star", 16) + " " + esc(t("featured")) + '</span><span class="rc-art">' + heroSvg() + '</span><span class="rc-tx"><b>' + esc(t("raceT")) + "</b><small>" + esc(t("raceSub")) + "</small>" +
       (cups.all ? '<span class="rc-cups"><span>' + cup(1, 20) + "<b>" + cups.all + '</b></span><span><i class="rt-coin"></i><b>' + (S.get().coins || 0) + "</b></span></span>" : "") +
       '</span><span class="rc-go">' + HJ.ic("play") + "</span>";
+    fill(c.querySelector(".rc-art"));
     c.onclick = function () { A.unlock(); A.fx.tap(); open(); };
     return c;
   }

@@ -1063,7 +1063,7 @@ html.big .tabbar { max-width: 600px; }
 .hw-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .hw-svg .hw-toy, .hw-svg .hw-balloon, .hw-svg .hw-mo { cursor: pointer; }
 .hw-toy, .hw-balloon, .hw-mo, .hw-blink, .hw-tw { transform-box: fill-box; }
-.hw-title { position: absolute; top: calc(66px + env(safe-area-inset-top)); left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 0; pointer-events: none; line-height: 1; }
+.hw-title { position: absolute; top: 66px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 0; pointer-events: none; line-height: 1; }
 .hw-rib { position: relative; z-index: 1; padding: 5px 18px 6px; font-family: 'Fredoka', var(--font); font-weight: 700; font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: #fff;
   background: linear-gradient(#FF8FA3, #F0517A); border-radius: 6px; box-shadow: 0 3px 0 #C23A5A, 0 6px 10px -4px rgba(150,30,70,.5); transform: rotate(-3deg); text-shadow: 0 1px 0 rgba(150,20,60,.4); }
 .hw-rib::before, .hw-rib::after { content: ""; position: absolute; z-index: -1; top: 7px; width: 16px; height: 100%; background: #D9406A; }
@@ -1224,7 +1224,7 @@ img.mo-pad { background-image: radial-gradient(closest-side, rgba(40,30,90,.32),
 .rc-go { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #FF4F7B; font-size: 22px; box-shadow: 0 4px 10px rgba(120,20,60,.3); }
 [data-theme="dark"] .rc-art { background: linear-gradient(#1B2C55, #2B3F6E); }
 
-.race-menu .rm-top { display: flex; align-items: center; gap: 10px; padding: calc(10px + env(safe-area-inset-top)) 14px 6px; position: relative; z-index: 5; }
+.race-menu .rm-top { display: flex; align-items: center; gap: 10px; padding: 10px 14px 6px; position: relative; z-index: 5; }
 .rm-title { display: flex; flex-direction: column; line-height: 1.15; }
 .rm-title b { font-family: 'Fredoka One', var(--font); font-size: 24px; color: #FF4F7B; } .rm-title small { font-size: 12.5px; font-weight: 700; opacity: .7; }
 [data-theme="dark"] .rm-title b { color: #FF8FB1; }
@@ -1709,3 +1709,28 @@ html.hj-app .navbar { height: calc(60px + env(safe-area-inset-top)); padding-top
   margin-top: calc(-1 * env(safe-area-inset-top)); }
 html.hj-app .nav-btn { width: 44px; height: 44px; } /* Apple HIG minimum touch target */
 html.hj-app .lang-pill { width: auto; }
+
+/* pop-the-bubbles at night: clear glowing bubbles with a bright letter (the day style turned murky grey on navy) */
+[data-theme="dark"] .bub {
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.9) 0 8%, rgba(255,255,255,.18) 9% 24%, transparent 46%),
+    radial-gradient(circle, color-mix(in srgb, var(--c) 30%, transparent) 40%, color-mix(in srgb, var(--c) 78%, transparent) 100%);
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--c) 45%, #fff), inset -8px -10px 18px color-mix(in srgb, var(--c) 60%, transparent), 0 0 22px -4px color-mix(in srgb, var(--c) 70%, transparent); }
+[data-theme="dark"] .bub .ar { color: #fff; text-shadow: 0 0 2px color-mix(in srgb, var(--c) 80%, #000), 0 0 12px var(--c), 0 2px 0 color-mix(in srgb, var(--c) 55%, #000); }
+
+/* the featured race card: the race picture full width on top (it is a wide picture), title + cups + play below */
+.race-card.featured { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "art art" "tx go"; align-items: center; gap: 0 10px; padding: 0; min-height: 0; }
+.race-card.featured .rc-art { grid-area: art; border-radius: 26px 26px 0 0; display: block; aspect-ratio: 360 / 150; overflow: hidden; }
+.race-card.featured .rc-art svg { width: 100%; height: 100%; }
+.race-card.featured .rc-tx { grid-area: tx; padding: 10px 0 12px 16px; }
+.race-card.featured .rc-tx b { font-size: 21px; }
+.race-card.featured .rc-go { grid-area: go; margin-right: 16px; }
+.race-card.featured .rc-cups { margin-top: 4px; }
+@media (min-width: 700px) { .race-card.featured .rc-art { aspect-ratio: 360 / 128; } }   /* wide screens: trim the sky, keep the karts */
+
+/* #app is already padded by the top safe area, so nothing inside it adds the inset again. The race is the
+   exception: it runs full-bleed under the status bar (like a game), so its screen reaches up by the inset and its
+   top bar / HUD keep their own inset padding */
+.screen.race { margin-top: calc(-1 * env(safe-area-inset-top)); }
+/* Mo's home greeting fades away after a few seconds (tap Mo to see it again) */
+.hw-bub { transition: opacity .6s ease; }
+.hw-bub.gone { opacity: 0; pointer-events: none; }

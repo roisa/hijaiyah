@@ -65,7 +65,7 @@
       pal.appendChild(b);
     });
     st.appendChild(pal);
-    var dpr = Math.min(2, window.devicePixelRatio || 1), W, mask, paint, g, done = false, hue = 0;
+    var dpr = Math.min(2, window.devicePixelRatio || 1), W, mask, ghost, paint, g, done = false, hue = 0, parts = [], CELL = 6, nudged = false, pulseT = 0;
     function setup() {
       W = Math.round(wrap.clientWidth * dpr); cv.width = cv.height = W;
       mask = document.createElement("canvas"); mask.width = mask.height = W;
@@ -77,11 +77,31 @@
       m.fillStyle = "#000"; m.fillText(ch, W / 2 - (R - L) / 2, W / 2 + (As - De) / 2);
       // a fat outline so little fingers that go slightly outside still count
       m.strokeStyle = "#000"; m.lineWidth = W * .018; m.lineJoin = "round"; m.strokeText(ch, W / 2 - (R - L) / 2, W / 2 + (As - De) / 2);
+      // the waiting letter in a colour that shows on the card (dark ink by day, light ink at night)
+      ghost = document.createElement("canvas"); ghost.width = ghost.height = W; var gg = ghost.getContext("2d");
+      gg.drawImage(mask, 0, 0); gg.globalCompositeOperation = "source-in"; gg.fillStyle = dark() ? "#fff" : "#152230"; gg.fillRect(0, 0, W, W);
+      // the separate parts of the letter (its body and each dot), so every dot has to be coloured too
+      var md = mask.getContext("2d").getImageData(0, 0, W, W).data, gw = Math.ceil(W / CELL), lab = new Int32Array(gw * gw).fill(-1), on = function (cx, cy) { return md[((cy * CELL) * W + cx * CELL) * 4 + 3] > 128; };
+      parts = [];
+      for (var cy = 0; cy < gw; cy++) for (var cx = 0; cx < gw; cx++) {
+        if (lab[cy * gw + cx] >= 0 || cy * CELL >= W || cx * CELL >= W || !on(cx, cy)) continue;
+        var q = [[cx, cy]], cells = [], id = parts.length; lab[cy * gw + cx] = id;
+        while (q.length) {
+          var c0 = q.pop(); cells.push(c0);
+          [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) { var nx = c0[0] + d[0], ny = c0[1] + d[1]; if (nx >= 0 && ny >= 0 && nx < gw && ny < gw && nx * CELL < W && ny * CELL < W && lab[ny * gw + nx] < 0 && on(nx, ny)) { lab[ny * gw + nx] = id; q.push([nx, ny]); } });
+        }
+        parts.push(cells);
+      }
+      parts = parts.filter(function (cs) { return cs.length >= 4; });
       g = cv.getContext("2d"); draw();
     }
     function draw(shine) {
       g.clearRect(0, 0, W, W);
-      g.save(); g.globalAlpha = dark() ? .22 : .13; g.drawImage(mask, 0, 0); g.restore();       // the letter waiting to be coloured
+      g.save(); g.globalAlpha = dark() ? .2 : .13; g.drawImage(ghost, 0, 0); g.restore();       // the letter waiting to be coloured
+      if (pulseT && !shine) {                                                                         // a part still to colour glows softly
+        var k = .5 + .5 * Math.sin(performance.now() / 160);
+        g.save(); g.globalAlpha = .25 + .35 * k; g.shadowColor = "#FFD43B"; g.shadowBlur = 18 * dpr; g.drawImage(ghost, 0, 0); g.restore();
+      }
       var tmp = document.createElement("canvas"); tmp.width = tmp.height = W; var tg = tmp.getContext("2d");
       tg.drawImage(paint, 0, 0); tg.globalCompositeOperation = "destination-in"; tg.drawImage(mask, 0, 0);
       if (shine) { g.save(); g.shadowColor = "rgba(255,200,60,.95)"; g.shadowBlur = 30 * dpr; g.drawImage(tmp, 0, 0); g.restore(); }
@@ -102,10 +122,17 @@
     function check() {
       var md = mask.getContext("2d").getImageData(0, 0, W, W).data, pd = paint.getContext("2d").getImageData(0, 0, W, W).data, tot = 0, hit = 0, step = 4 * 6;
       for (var i = 3; i < md.length; i += step) if (md[i] > 128) { tot++; if (pd[i] > 60) hit++; }
-      if (tot && hit / tot > .72) finish();
+      if (!tot || hit / tot <= .72) return;
+      // every part must be coloured too (a dot is small, so it would never stop the 72% on its own)
+      var pd2 = pd, left = parts.filter(function (cs) {
+        var h = 0; cs.forEach(function (c) { if (pd2[((c[1] * CELL) * W + c[0] * CELL) * 4 + 3] > 60) h++; }); return h / cs.length < .5;
+      });
+      if (!left.length) return finish();
+      if (!nudged) { nudged = true; ctx.mo("pose-08", t("paintDots")); A.fx.ping ? A.fx.ping() : A.fx.tap(); }
+      if (!pulseT) { pulseT = 1; (function loop() { if (done || !ctx.alive()) { pulseT = 0; return; } draw(); requestAnimationFrame(loop); })(); }
     }
     function finish() {
-      done = true; draw(true); wrap.classList.add("shine"); A.fx.sparkle(); A.say(it.au); burstAt(wrap, 24); ctx.good();
+      done = true; pulseT = 0; draw(true); wrap.classList.add("shine"); A.fx.sparkle(); A.say(it.au); burstAt(wrap, 24); ctx.good();
       after(ctx, 1800, ctx.next);
     }
     var hint = el("button", "btn small ghost", HJ.ic("speaker") + " " + HJ.esc(HJ.letterName(letter.k, HJ.store.get().lang) || letter.id)); hint.onclick = function () { A.say(it.au); };

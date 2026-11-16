@@ -218,13 +218,24 @@
       tgt.classList.remove("boing"); void tgt.getBoundingClientRect(); tgt.classList.add("boing");
       if (tgt.classList.contains("hw-mo")) {
         A.fx.pop(); tgt.querySelector("image").setAttribute("href", MO(HJ.util.pick(CHEER)));
-        A.talk(st.name ? t("hello", { n: st.name }) : "Assalamu'alaikum!", st.lang); return;
+        A.talk(st.name ? t("hello", { n: st.name }) : "Assalamu'alaikum!", st.lang); showBub(); return;
       }
       var c = tgt.getAttribute("data-say"), L = HJ.BY[c]; A.fx.note(c.charCodeAt(0) % 8);
       var r = tgt.getBoundingClientRect(); J.burst(r.left + r.width / 2, r.top + r.height / 3, 10, true);
       A.say(c === "ا" ? "أَلِف" : (L && L.n) || c);
     });
     sc.appendChild(hero);
+    // Mo's greeting: never on the title (it moves below it when the screen is short), and only for a moment —
+    // it fades after a few seconds and comes back when Mo is tapped
+    var bubT = 0;
+    function fitBub() {
+      bub.style.top = ""; var hr2 = hero.getBoundingClientRect(), tb = ttl.getBoundingClientRect(), bb = bub.getBoundingClientRect();
+      if (!hr2.height || bb.top >= tb.bottom + 6 || bb.left >= tb.right || bb.right <= tb.left) return;
+      bub.style.top = Math.round(tb.bottom - hr2.top + 8) + "px";
+    }
+    function showBub() { clearTimeout(bubT); bub.classList.remove("gone"); fitBub(); bubT = setTimeout(function () { bub.classList.add("gone"); }, 7000); }
+    requestAnimationFrame(showBub);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitBub);
     if (HJ.holiday) HJ.holiday.decorate(hero);
     if (HJ.race) sc.appendChild(HJ.race.card());
     // Mo greets once a day, on the first touch of the home screen (phones only allow sound after a tap)
