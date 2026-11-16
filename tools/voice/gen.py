@@ -213,8 +213,8 @@ def say_as(t, lang):
     if lang == "ar":
         m = re.fullmatch("([\u0621-\u064A])([\u064B-\u064D])[\u0627\u0649]?", unicodedata.normalize("NFC", t.strip()))
         if m:
-            return m.group(1) + TANWIN[m.group(2)] + "\u0646\u0652"
-    return t.strip() + "."
+            return [m.group(1) + TANWIN[m.group(2)] + "\u0646\u0652"] * 2
+    return [t.strip() + ".", t.strip() + "!", t.strip() + "\u060C"]          # full stop, exclamation, Arabic comma
 
 def loud_enough(mp3):
     """True unless ffmpeg says the clip is near-silent (the voice sometimes returns ~0.5 s of hiss for a lone
@@ -233,7 +233,7 @@ def loud_enough(mp3):
 
 def synth_ok(t, lang, voice):
     """synth, retrying when the voice returns near-silence; None if it never gives a real sound"""
-    for i, text in enumerate([t, t, t, say_as(t, lang), say_as(t, lang)]):
+    for i, text in enumerate([t, t, t] + say_as(t, lang)):
         mp3 = synth(text, lang, voice)
         if len(mp3) >= MIN_BYTES and loud_enough(mp3):
             if i: print(f"   (retry {i} gave sound{' as ' + speakable(text) if text != t else ''})", flush=True)
