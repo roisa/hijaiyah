@@ -553,6 +553,8 @@
       }
       pickBtns.forEach(function (b, l) { b.className = "rp-b l" + l; b.classList.remove("hint"); b.querySelector(".ar").textContent = G.signs[l].ar; b.classList.toggle("w", G.signs[l].ar.replace(/[\u064B-\u0652]/g, "").length > 2); });
       markPick(); pick.classList.add("on"); tip.classList.add("gone");
+      // on the harakat races, the label tells the ear what to listen for
+      pick.querySelector(".rp-say").lastChild.textContent = " " + (R.vmix ? t(R.vmix[0] === "an" ? "racePickT" : "racePickV") : t("racePick"));
     }
     function markPick() { pickBtns.forEach(function (b, l) { b.classList.toggle("me", l === laneI); }); }
     function pickResult(G) {
@@ -1024,7 +1026,7 @@
           if (lane === G.good) { okN++; boost = 3; slow = 0; setCam("yes"); puff(W / 2, H * .6, 40, "star"); puff(W / 2, H * .4, 24, "box"); snd.fx("turbo"); J.buzz([20, 30, 40]);
             flashT = .45; kickT = .6; turboText(); }
           else { if (shield > 0) { shield = 0; callText(t("pwSaved"), "blue"); } else { slow = 1.2; boost = 0; } setCam("oh"); snd.fx("wrong"); J.buzz([20, 30, 20]); if (G.q.k && S.addMiss) S.addMiss(G.q);
-            callText('<small>' + HJ.ic("speaker") + " " + esc(t("raceThis")) + '</small><span class="ans-box' + (G.q.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? " w" : "") + '"><span class="ar">' + esc(G.q.ar) + "</span></span>", "ans"); shake = .4; setTimeout(function () { if (my === live) A.sayNow(G.q.au); }, 250); }
+            callText('<small>' + HJ.ic("speaker") + " " + esc(t("raceThis")) + '</small>' + (vname(G.q) ? '<em class="ans-v">' + esc(vname(G.q)) + "</em>" : "") + '<span class="ans-box' + (G.q.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? " w" : "") + '"><span class="ar">' + esc(G.q.ar) + "</span></span>", "ans"); shake = .4; setTimeout(function () { if (my === live) A.sayNow(G.q.au); }, 250); }
           setTimeout(function () { if (my === live) setCam("mo"); }, 1600);
         }
       });
@@ -1068,6 +1070,11 @@
     }
     function sayGate() { if (curGate && !curGate.done) { spk.classList.remove("ping"); void spk.offsetWidth; spk.classList.add("ping"); snd.duck(true); A.sayNow(curGate.q.au).then(function () { snd.duck(false); }); } }
     // as an arch comes: "Listen!" + the sound, then the sound again ("ba … ba!")
+    // the name of a syllable's harakat (for the "this is the sound" card): ba · fathah, bi · kasrah, bun · tanwin
+    function vname(x) {
+      var V = { a: "fathah", i: "kasrah", u: "dhammah", an: "tanwin fathah", "in": "tanwin kasrah", un: "tanwin dhammah" }[x.v];
+      return V && x.tr ? HJ.latinFor(x.tr, lang()) + " · " + V : "";
+    }
     function popBalloon(G) {
       okN++; boost = 3; slow = 0; setCam("yes"); bumpBalloon(G);
       snd.fx("boing"); snd.fx("turbo"); A.sayNow(G.q.au); J.buzz([20, 30, 40]);          // the hit: the letter and the turbo together
@@ -1142,7 +1149,8 @@
       riv.forEach(function (rv) { if (!rv.fin) rv.fin = tRace + (TOTAL - rv.z) / (BASE * rv.pace); });
       var place = 1 + riv.filter(function (rv) { return rv.fin < finT; }).length;
       var order = [{ k: "mo", t: finT }].concat(riv.map(function (rv) { return { k: rv.k, t: rv.fin }; })).sort(function (a, b) { return a.t - b.t; });
-      setTimeout(function () { if (my !== live) return; stop(); hooks.onFinish({ place: place, ok: okN, total: gates.length, coins: coinsN, time: finT, order: order }); }, 1800);
+      setTimeout(function () { if (my !== live) return; stop(); hooks.onFinish({ place: place, ok: okN, total: gates.length, coins: coinsN, time: finT, order: order,
+        items: gates.map(function (G) { return { q: G.q, ok: G.picked === G.good }; }) }); }, 1800);
     }
   }
 

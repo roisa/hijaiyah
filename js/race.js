@@ -15,7 +15,8 @@
   function dark() { return document.documentElement.getAttribute("data-theme") === "dark"; }
 
   /* ---------- content: the races follow Books 1–4 ---------- */
-  var WORLDS = ["baby", 1, 2, 3, 4, "kasrah", "dhammah", "tanwin", "hill", "snow", "desert", "candy"], PER = 5, GATES = 8, GP_GATES = 10;
+  // the learning path, easiest first: letters → fathah → kasrah → dhammah → tanwin → joined words → … → mixes
+  var WORLDS = ["baby", 1, "kasrah", "dhammah", "tanwin", 2, 3, 4, "hill", "snow", "desert", "candy"], PER = 5, GATES = 8, GP_GATES = 10;
   // the bonus tracks: new places, letters from the books (snow = the look-alike letters, candy = a bit of everything)
   var EXTRA = {
     // for the littlest (about 2+): one big balloon with one letter, tap anywhere, always a turbo; 2 letters a race
@@ -30,6 +31,26 @@
     dhammah: { vow: "u", th: "space", flag: "بُ", bg: "w3", name: ["Luar Angkasa · Dhammah", "Outer Space · Dhammah"], icon: ["#5A3EA0", "#140C3A"], vmix: ["a", "i", "u"], order: 1 },
     tanwin: { tanwin: 1, th: "dino", flag: "بٌ", bg: "w4", name: ["Pulau Dino · Tanwin", "Dino Island · Tanwin"], icon: ["#8FE38A", "#FF8A3D"], vmix: ["an", "in", "un"] }
   };
+  // what each track teaches (shown on the track and in the result)
+  var GOAL = {
+    baby: ["Kenal huruf: satu balon, satu huruf", "Meet the letters: one balloon, one letter"],
+    1: ["28 huruf hijaiyah berharakat fathah (a)", "All 28 letters with fathah (a)"],
+    kasrah: ["Harakat kasrah (i), lalu bedakan a · i · u", "Kasrah (i), then hear a · i · u apart"],
+    dhammah: ["Harakat dhammah (u), lalu bedakan a · i · u", "Dhammah (u), then hear a · i · u apart"],
+    tanwin: ["Tanwin: an · in · un", "Tanwin: an · in · un"],
+    2: ["Huruf bersambung jadi kata", "Joined letters make words"],
+    3: ["Kasrah & dhammah di dalam kata", "Kasrah & dhammah inside words"],
+    4: ["Tanwin & sukun di dalam kata", "Tanwin & sukun inside words"],
+    hill: ["Ulang 28 huruf", "Review all 28 letters"],
+    snow: ["Huruf mirip: ب ت ث · ج ح خ · د ذ", "Look-alike letters: ب ت ث · ج ح خ · د ذ"],
+    desert: ["Kasrah & dhammah (Jilid 3)", "Kasrah & dhammah (Book 3)"],
+    candy: ["Campuran semua bunyi", "A mix of every sound"]
+  };
+  function goal(n) { var g = GOAL[n]; return g ? g[S.get().lang === "en" ? 1 : 0] : ""; }
+  // a sound counts as mastered once it has been driven through correctly twice
+  function mstore() { var s = S.get(); s.raceM = s.raceM || {}; return s.raceM; }
+  function mastered(x) { return (mstore()[x.ar] || 0) >= 2; }
+  function trackPool(n) { var L2 = races(n); return L2[L2.length - 1].pool; }
   function wName(n) { return EXTRA[n] ? EXTRA[n].name[S.get().lang === "en" ? 1 : 0] : tr(HJ.worlds[n - 1].name); }
   function wIcon(n) {
     if (!EXTRA[n]) return HJ.wi(n, true).outerHTML;
@@ -159,11 +180,19 @@
     body.appendChild(gbar);
     var tabs = el("div", "rm-tabs");
     WORLDS.forEach(function (n) {
-      var b = el("button", "rm-tab" + (n === curW ? " on" : "") + (EXTRA[n] ? " x" : ""), wIcon(n) + "<span>" + esc(EXTRA[n] ? wName(n) : t("book") + " " + n) + "</span>");
+      var pool2 = trackPool(n), mm2 = pool2.filter(mastered).length, full = pool2.length && mm2 >= pool2.length;
+      var b = el("button", "rm-tab" + (n === curW ? " on" : "") + (EXTRA[n] ? " x" : "") + (full ? " full" : ""), '<i class="rm-step">' + (WORLDS.indexOf(n) + 1) + "</i>" + wIcon(n) + "<span>" + esc(EXTRA[n] ? wName(n) : t("book") + " " + n) + "</span>" + (full ? '<i class="rm-ok">' + HJ.ic("check") + "</i>" : ""));
       b.onclick = function () { A.fx.tap(); open(n); }; tabs.appendChild(b);
     });
     body.appendChild(tabs);
-    body.appendChild(el("div", "rm-wname", "<b>" + esc(wName(curW)) + "</b>" + (EXTRA[curW] ? ' <span class="rm-new">' + esc(t("raceNew")) + "</span>" : "")));
+    body.appendChild(el("div", "rm-wname", "<b>" + esc(wName(curW)) + "</b>"));
+    // the track's goal and how many of its sounds are mastered (tap a sound to hear it)
+    var tp = trackPool(curW), mN = tp.filter(mastered).length;
+    var gcard = el("div", "rm-goal glass", '<div class="rg-h">' + HJ.art("sparkle", 20) + "<b>" + esc(t("raceGoal")) + "</b><span>" + esc(goal(curW)) + "</span></div>" +
+      '<div class="rg-bar"><i style="width:' + Math.round(mN / Math.max(1, tp.length) * 100) + '%"></i></div><small>' + esc(t("raceMastered", { n: mN, m: tp.length })) + "</small>");
+    var chips = el("div", "rg-chips");
+    tp.slice(0, 40).forEach(function (x) { var cc = el("button", "rg-c ar" + (mastered(x) ? " ok" : (mstore()[x.ar] ? " half" : "")), esc(x.ar)); cc.onclick = function () { A.unlock(); A.say(x.au); }; chips.appendChild(cc); });
+    gcard.appendChild(chips); body.appendChild(gcard);
     // the tracks as a winding road: each race a stop, the Grand Prix a trophy at the end
     var list = el("div", "rm-map"), RS = races(curW), stepY = 112, mapH = RS.length * stepY + 30;
     list.style.height = mapH + "px";
@@ -176,7 +205,9 @@
       var c = el("button", "rm-stop" + (r.gp ? " gp" : "") + (op ? "" : " locked") + (bp ? " done" : "") + (i === curI ? " cur" : ""));
       c.style.left = P.x + "%"; c.style.top = P.y + "px";
       c.innerHTML = '<span class="rm-dot">' + (op ? (r.gp ? HJ.art("trophy", 34) : '<b>' + (i + 1) + "</b>") : HJ.ic("lock")) + (bp ? '<span class="rm-medal">' + cup(bp, 30) + "</span>" : "") + "</span>" +
-        '<span class="rm-lbl"><b>' + esc(r.gp ? t("raceGP") : t("raceN", { n: i + 1 })) + "</b>" + (tm ? "<small>⏱ " + clock(tm) + "</small>" : '<small class="ar">' + r.targets.slice(0, 3).map(function (x) { return esc(x.ar); }).join(" ") + "</small>") + "</span>";
+        '<span class="rm-lbl"><b>' + esc(r.gp ? t("raceGP") : t("raceN", { n: i + 1 })) + "</b>" +
+        '<small class="rm-g">' + esc(r.gp ? t("raceGoalGP") : r.vmix ? t(r.vmix[0] === "an" ? "raceGoalT" : "raceGoalV") : r.baby ? t("raceGoalB") : t("raceGoalL")) + "</small>" +
+        '<small class="ar">' + r.targets.slice(0, r.gp ? 4 : 5).map(function (x) { return esc(x.ar); }).join(" ") + "</small>" + (tm ? "<small>⏱ " + clock(tm) + "</small>" : "") + "</span>";
       c.setAttribute("aria-label", (r.gp ? t("raceGP") : t("raceN", { n: i + 1 })) + (bp ? " · " + t("place" + bp) : "") + (op ? "" : " · " + t("locked")));
       c.onclick = function () {
         A.unlock();
@@ -274,26 +305,54 @@
       '<rect x="282" y="34" width="48" height="16" rx="4" fill="#FF5D73"/><text x="306" y="45.5" text-anchor="middle" font-size="8.5" font-weight="900" fill="#fff" font-family="Fredoka One, Nunito">FINISH</text>' +
       chk(282, 50, 48, 6, 8, 1) +
       // the karts: far lane (Kak Adam, Ais), near lane (Mo, in front)
-      '<g class="hk hk1">' + kartSvg(150, 92, KART.adam, "adam", .62) + '</g>' +
-      '<g class="hk hk2">' + kartSvg(58, 92, KART.ais, "ais", .6) + '</g>' +
-      speed(186, 128) + '<g class="hk hk3">' + kartSvg(200, 118, KART.mo, "mo", .64) + "</g></svg>";
+      '<g class="hk hk2">' + kartSvg(48, 96, KART.ais, "ais", .58) + '</g>' +
+      '<g class="hk hk1">' + kartSvg(142, 95, KART.adam, "adam", .62) + '</g>' +
+      speed(196, 124) + '<g class="hk hk3">' + kartSvg(196, 120, KART.mo, "mo", .62) + "</g></svg>";
   }
   var heroN = 0;
   function speed(x, y) { return '<g stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".75"><path d="M' + (x - 34) + " " + (y - 6) + " h22" + '"/><path d="M' + (x - 44) + " " + (y + 2) + " h28" + '"/><path d="M' + (x - 30) + " " + (y + 10) + " h18" + '"/></g>'; }
+  // a face, cut round from the original picture (transparent around it), for the drivers' open-face helmets
+  var hfaces = {};
+  function hface(k) {
+    if (hfaces[k]) return hfaces[k];
+    var im = pics[k]; if (!im || !im.ok) return "";
+    var b = im.box, c = document.createElement("canvas"); c.width = c.height = 128; var g = c.getContext("2d");
+    var side = b.w * (k === "mo" ? .44 : k === "ais" ? .46 : .5), cx = b.x + b.w * (k === "ais" ? .57 : .5), cy = b.y + b.h * (k === "mo" ? .2 : k === "ais" ? .24 : .17);
+    g.beginPath(); g.arc(64, 64, 64, 0, 7); g.clip(); g.drawImage(im, cx - side / 2, cy - side / 2, side, side, 0, 0, 128, 128);
+    return (hfaces[k] = c.toDataURL());
+  }
+  // a go-kart seen from the side, driving right: big rear wheel, smaller front wheel, a low chassis, the driver in a
+  // racing pose (leaning forward, both hands on the wheel) wearing an open-face helmet with their own face in it
+  var SHIRT = { mo: ["#43B85C", "#2F9A47"], ais: ["#C9A7FF", "#9B6DFF"], adam: ["#3D7BFF", "#2A5FD0"] };
   function kartSvg(x, y, col, k, s) {
-    // the driver: the top half of the picture's painted part (a nested svg crops it), sitting in the seat
-    var im = pics[k], drv = "";
-    if (im && im.ok) {
-      // head + shoulders, the same size for everyone (the picture's arms never change the scale)
-      var b = im.box, fr = k === "ais" ? .46 : k === "mo" ? .5 : .4, ch = b.h * fr, cw = b.h * .4 * 1.04, cx = b.x + b.w * (k === "ais" ? .56 : .5), dw = (k === "adam" ? 46 : 42) * 1.04, dh = dw * ch / cw;
-      drv = '<svg x="' + (36 - dw / 2) + '" y="' + (k === "mo" ? -49 : 1 - dh) + '" width="' + dw + '" height="' + dh + '" viewBox="' + (cx - cw / 2) + " " + b.y + " " + cw + " " + ch + '" preserveAspectRatio="none"><image href="' + IMG[k] + '" width="' + im.naturalWidth + '" height="' + im.naturalHeight + '"/></svg>'; }
+    var sh = SHIRT[k], hc = { mo: ["#FF6B5B", "#C9372A"], ais: ["#FF8FC8", "#D9579A"], adam: ["#5B9BFF", "#2F6BE0"] }[k], u = "kf" + k + (++heroN), f = hface(k);
     return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')">' +
-      '<ellipse cx="34" cy="37" rx="42" ry="4" fill="rgba(0,0,0,.22)"/>' + drv +
-      '<path d="M-8 24 Q-10 10 6 8 L18 6 Q24 -2 34 -2 L44 -2 Q52 -2 56 6 L66 8 Q78 10 78 22 L78 28 L-8 28Z" fill="' + col[0] + '" stroke="' + col[1] + '" stroke-width="2.4" stroke-linejoin="round"/>' +
-      '<path d="M2 14 Q4 10 12 10 L60 10" stroke="#fff" stroke-width="2.4" opacity=".45" fill="none" stroke-linecap="round"/>' +
-      '<rect x="62" y="12" width="12" height="8" rx="3" fill="#fff"/><text x="68" y="18.5" text-anchor="middle" font-size="7" font-weight="900" fill="' + col[1] + '" font-family="Nunito">' + ({ mo: 1, ais: 2, adam: 3 }[k]) + "</text>" +
-      '<rect x="-12" y="4" width="6" height="14" rx="2" fill="' + col[1] + '"/>' +
-      '<circle cx="10" cy="29" r="10" fill="#23262F"/><circle cx="10" cy="29" r="4" fill="#C9D3E3"/><circle cx="62" cy="29" r="10" fill="#23262F"/><circle cx="62" cy="29" r="4" fill="#C9D3E3"/></g>';
+      '<defs><clipPath id="' + u + '"><circle cx="40" cy="-28" r="13"/></clipPath></defs>' +
+      '<ellipse cx="38" cy="38" rx="46" ry="4.5" fill="rgba(0,0,0,.22)"/>' +
+      // seat back and the driver's body: torso leaning forward, an arm reaching to the wheel
+      '<path d="M18 22 L22 -4 Q24 -10 30 -9 L32 18Z" fill="#2A2F3D"/>' +
+      '<path d="M26 18 Q24 0 32 -8 Q40 -14 48 -8 Q52 -2 50 8 L50 20Z" fill="' + sh[0] + '"/>' +
+      '<path d="M44 -4 Q54 2 62 0" stroke="' + sh[1] + '" stroke-width="7" stroke-linecap="round" fill="none"/>' +
+      '<circle cx="63" cy="0" r="4.2" fill="#fff" stroke="#D7DEE8" stroke-width="1"/>' +
+      // steering column and wheel
+      '<path d="M58 14 L64 2" stroke="#3A3F4C" stroke-width="3" stroke-linecap="round"/><ellipse cx="65" cy="0" rx="2.4" ry="7" fill="none" stroke="#2A2F3D" stroke-width="2.6" transform="rotate(-20 65 0)"/>' +
+      // the chassis: low, with a raised nose, a side pod with the number, a bumper and a rear spoiler
+      '<path d="M-6 26 L-4 14 Q0 10 10 10 L26 12 L52 12 Q60 8 70 10 L84 14 Q90 16 90 22 L90 26Z" fill="' + col[0] + '" stroke="' + col[1] + '" stroke-width="2.2" stroke-linejoin="round"/>' +
+      '<path d="M4 15 L46 16" stroke="#fff" stroke-width="2.2" opacity=".45" stroke-linecap="round"/>' +
+      '<circle cx="34" cy="19" r="5.2" fill="#fff"/><text x="34" y="21.8" text-anchor="middle" font-size="7" font-weight="900" fill="' + col[1] + '" font-family="Nunito">' + ({ mo: 1, ais: 2, adam: 3 }[k]) + "</text>" +
+      '<rect x="86" y="18" width="7" height="8" rx="2" fill="#3A3F4C"/>' +
+      '<path d="M-10 4 L2 4 L2 8 L-8 8Z" fill="' + col[1] + '"/><path d="M-3 8 L-2 14" stroke="#3A3F4C" stroke-width="2"/>' +
+      // wheels: big at the back, small at the front, with hubs that look like they turn
+      '<g class="hk-wheel"><circle cx="8" cy="27" r="12" fill="#23262F"/><circle cx="8" cy="27" r="5.5" fill="#C9D3E3"/><path d="M8 21.5 V32.5 M2.5 27 H13.5" stroke="#8E9BB0" stroke-width="1.6"/></g>' +
+      '<g class="hk-wheel"><circle cx="74" cy="29" r="9.5" fill="#23262F"/><circle cx="74" cy="29" r="4.2" fill="#C9D3E3"/><path d="M74 24.8 V33.2 M69.8 29 H78.2" stroke="#8E9BB0" stroke-width="1.4"/></g>' +
+      // the head: their face in an open-face racing helmet
+      (f ? '<image href="' + f + '" x="27" y="-41" width="26" height="26" clip-path="url(#' + u + ')"/>' : '<circle cx="40" cy="-28" r="13" fill="#F2C9A0"/>') +
+      // an open-face helmet: the shell round the face, thicker on top, a chin strap
+      '<path fill-rule="evenodd" d="M40 -46 a18 18 0 1 1 0 36 a18 18 0 1 1 0 -36 Z M40 -41 a13 13 0 1 0 0 26 a13 13 0 1 0 0 -26 Z" fill="' + hc[0] + '"/>' +
+      '<path d="M23 -33 Q40 -50 57 -33 L53 -36 Q40 -46 27 -36Z" fill="' + hc[1] + '"/>' +
+      '<path d="M40 -46 a18 18 0 0 1 16 9" stroke="#fff" stroke-width="3.4" fill="none" opacity=".6" stroke-linecap="round"/>' +
+      (k === "mo" ? '<path d="M26 -44 l1.5 3 3.3 .5 -2.4 2.3 .6 3.3 -3 -1.6 -3 1.6 .6 -3.3 -2.4 -2.3 3.3 -.5z" fill="#FFD43B"/>' : "") +
+      "</g>";
   }
 
   /* ---------- the home card ---------- */
@@ -348,6 +407,7 @@
     var gain = (4 - nb) - (old ? 4 - old : 0);                         // stars: 3/2/1 for the place (once, can improve)
     if (gain > 0) st.bonus = (st.bonus || 0) + gain;
     st.coins = (st.coins || 0) + res.coins;                             // coins go to the Garage
+    var M = mstore(); (res.items || []).forEach(function (it) { if (it.ok) M[it.q.ar] = (M[it.q.ar] || 0) + 1; });
     var bt = st.raceT = st.raceT || {}, rec = !bt[R.id] || res.time < bt[R.id]; if (rec) bt[R.id] = Math.round(res.time * 10) / 10;
     S.save();
     podium(R, res, gain, rec && old);
@@ -373,6 +433,14 @@
         '<span class="chip glass"><i class="rt-coin"></i> <b>+' + res.coins + "</b></span>" +
         (gain > 0 ? '<span class="chip glass">' + HJ.art("star", 20) + " <b>+" + gain + "</b></span>" : "") +
         '<span class="chip glass' + (record ? " lit" : "") + '">⏱ ' + mm + ":" + (ss < 10 ? "0" : "") + ss + (record ? " · " + esc(t("raceRecord")) : "") + "</span>"));
+      // the sounds of this race: green = right, orange = practise again; tap one to hear it
+      var seen = {}, its = (res.items || []).filter(function (it) { if (seen[it.q.ar]) { if (!it.ok) seen[it.q.ar].ok = false; return false; } seen[it.q.ar] = it = { q: it.q, ok: it.ok }; return true; }).map(function (it) { return seen[it.q.ar]; });
+      if (its.length) {
+        var lw = el("div", "pod-learn", "<b>" + esc(t("raceLearned")) + "</b>"), lc = el("div", "rg-chips");
+        its.forEach(function (it) { var cc = el("button", "rg-c ar " + (it.ok ? "ok" : "again"), esc(it.q.ar)); cc.onclick = function () { A.unlock(); A.say(it.q.au); }; lc.appendChild(cc); });
+        lw.appendChild(lc); var miss = its.filter(function (it) { return !it.ok; }).length;
+        lw.appendChild(el("small", "", esc(miss ? t("raceAgainN", { n: miss }) : t("raceAllRight")))); p.appendChild(lw);
+      }
       var r = el("div", "row"), again = el("button", "btn ghost", HJ.ic("replay") + " " + t("again")), list = races(R.w), nx = list[R.i + 1];
       var go = el("button", "btn", (nx ? t("next") : t("raceMenu")) + " " + HJ.ic("next"));
       again.onclick = function () { close(); play(R); };
