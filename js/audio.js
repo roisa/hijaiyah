@@ -152,6 +152,21 @@
   A.lineKey = function (text, lang) { return (lang || "id") + "|" + lnorm(spoken(text)); };
   function lineFor(text, lang) { var m = window.HJ_LINES, f = m && m[A.lineKey(text, lang)]; return f ? "audio/lines/" + f : null; }
   var lineEnd = null;
+  /* A line with no clip of its own (it has the child's name in it, or it is two lines joined) is spoken sentence by
+     sentence with the clips that exist: "Assalamu'alaikum, Azka! Sebelum tidur…" = the "Assalamu'alaikum!" clip, then
+     the "Sebelum tidur…" clip (the name stays in the speech bubble). Only when every part has a clip; otherwise null
+     and the phone's voice reads the whole line as before. */
+  function partClips(text, lang) {
+    var ps = String(text).match(/[^.!?…]+[.!?…]+|[^.!?…]+$/g); if (!ps) return null;
+    var out = [];
+    for (var i = 0; i < ps.length; i++) {
+      var x = ps[i].trim(); if (!x) continue;
+      var f = lineFor(x, lang) || lineFor(x.replace(/,\s*[^,.!?…]+([.!?…]+)$/, "$1"), lang);   // "Salam, <name>!" → "Salam!"
+      if (!f) return null;
+      out.push({ f: f, t: spoken(x) });
+    }
+    return out.length > 1 || (out.length === 1 && out[0].t !== spoken(text)) ? out : null;
+  }
   function playLine(url, t) {          // resolves when the clip ends or A.stop() cuts it (like a cancelled TTS)
     return new Promise(function (res, rej) {
       var done = false, end = function (e) { if (done) return; done = true; if (lineEnd === fin) lineEnd = null; e ? rej(e) : res(); }, fin = function () { end(); };
@@ -164,8 +179,11 @@
     if (!text) return Promise.resolve();
     A.stop();
     lang = lang || "id";
-    var t = spoken(text), c = lineFor(text, lang), my = seqToken;
-    var p = c ? playLine(c, t).catch(function () { if (my === seqToken) return tts(t, lang, 1.02); }) : tts(t, lang, 1.02);
+    // a line with the child's name ("Assalamu'alaikum, Azka! …") plays the clip made without the name
+    var t = spoken(text), c = lineFor(text, lang) || lineFor(String(text).replace(/,\s*[^,.!?…]+([.!?…])/, "$1"), lang), my = seqToken, parts = c ? null : partClips(text, lang);
+    var p = c ? playLine(c, t).catch(function () { if (my === seqToken) return tts(t, lang, 1.02); })
+      : parts ? parts.reduce(function (q, pc) { return q.then(function () { if (my === seqToken) return playLine(pc.f, pc.t); }); }, Promise.resolve()).catch(function () { if (my === seqToken) return tts(t, lang, 1.02); })
+      : tts(t, lang, 1.02);
     talkP = p; p.then(function () { if (talkP === p) talkP = null; });
     return p;
   };

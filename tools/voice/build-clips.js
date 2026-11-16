@@ -117,6 +117,9 @@ async function lines() {
       // lines outside the lessons (races, the train game, presents) that playing the levels never reaches
       ['raceReady', 'raceHow', 'raceLocked', 'place1', 'place2', 'place3', 'trainHint', 'bonusT', 'giftT', 'gift_dance', 'gift_fireworks', 'gift_balloons', 'paintDots']
         .forEach(k => add(HJ.t(k), 'balapan & hadiah / races & presents', 'W.' + k));
+      // a new badge: "New badge!" then its name — two clips played one after the other (js/audio.js partClips)
+      add(HJ.t('badgeNew'), 'lencana / badges', 'W.badgeNew');
+      if (HJ.badges) HJ.badges.list.forEach(b => add(b.n[M === 'en' ? 1 : 0], 'lencana / badges', 'badge ' + b.id));
       appIntros.forEach(s => add(HJ.tr((0, eval)('(' + s + ')')), 'pembuka / intro', 'app.js intro'));
       for (let r = 0; r < 25; r++) HJ.allLevels().forEach(lv => HJ.buildSteps(lv).forEach(st => {
         if (st.type === 'intro' && st.say) add(HJ.tr(st.say), 'pembuka level / level intro', 'level ' + lv.id);
