@@ -346,10 +346,12 @@
   // the race menu / home banner: a sunny track seen from the side — hills, a grandstand with bunting, a two-lane road
   // with kerbs, the three karts racing (Kak Adam and Ais on the far lane, Mo leading on the near lane) and a proper
   // checkered finish arch over the road
-  function heroSvg() {
+  // compact: the home card's version — a near-square window on the finish straight, the karts over two lanes
+  function heroSvg(compact) {
     var u = "rh" + (++heroN), chk = function (x, y, w, h, n2, m2) { var o = ""; for (var r = 0; r < m2; r++) for (var c = 0; c < n2; c++) o += '<rect x="' + (x + c * w / n2) + '" y="' + (y + r * h / m2) + '" width="' + (w / n2 + .2) + '" height="' + (h / m2 + .2) + '" fill="' + ((r + c) % 2 ? "#232733" : "#fff") + '"/>'; return o; };
     var flags = ""; for (var f = 0; f < 18; f++) flags += '<path d="M' + (8 + f * 15) + " " + (30 + Math.sin(f * .9) * 1.5) + " l7 0 l-3.5 8z" + '" fill="' + ["#FF5D73", "#FFD43B", "#3D9BFF", "#22C06E", "#9B6DFF"][f % 5] + '"/>';
-    return '<svg viewBox="0 0 360 150" aria-hidden="true"><defs>' +
+    var CV = window.__hc || { vb: "186 22 148 128", ais: [194, 85, .4], adam: [246, 87, .42], mo: [208, 112, .5] };
+    return '<svg viewBox="' + (compact ? CV.vb : "0 0 360 150") + '"' + (compact ? ' preserveAspectRatio="xMidYMax slice"' : "") + ' aria-hidden="true"><defs>' +
       '<linearGradient id="' + u + 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FD3FF"/><stop offset="1" stop-color="#E4F5FF"/></linearGradient>' +
       '<linearGradient id="' + u + 'r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6B7488"/><stop offset="1" stop-color="#4E566A"/></linearGradient></defs>' +
       '<rect width="360" height="150" fill="url(#' + u + 's)"/>' +
@@ -372,9 +374,13 @@
       chk(282, 50, 48, 6, 8, 1) +
       // the karts: far lane (Kak Adam, Ais), near lane (Mo, in front)
       // all three in one row on the far lane, Mo leading toward the finish, Ais a little behind
-      '<g class="hk hk2">' + kartSvg(44, 92, KART.ais, "ais", .58) + '</g>' +
-      '<g class="hk hk1">' + kartSvg(136, 95, KART.adam, "adam", .62) + '</g>' +
-      speed(226, 99) + '<g class="hk hk3">' + kartSvg(226, 95, KART.mo, "mo", .62) + "</g></svg>";
+      (compact ?
+        '<g class="hk hk2">' + kartSvg(CV.ais[0], CV.ais[1], KART.ais, "ais", CV.ais[2]) + '</g>' +
+        '<g class="hk hk1">' + kartSvg(CV.adam[0], CV.adam[1], KART.adam, "adam", CV.adam[2]) + '</g>' +
+        speed(CV.mo[0], CV.mo[1] + 4) + '<g class="hk hk3">' + kartSvg(CV.mo[0], CV.mo[1], KART.mo, "mo", CV.mo[2]) + "</g>" :
+        '<g class="hk hk2">' + kartSvg(44, 92, KART.ais, "ais", .58) + '</g>' +
+        '<g class="hk hk1">' + kartSvg(136, 95, KART.adam, "adam", .62) + '</g>' +
+        speed(226, 99) + '<g class="hk hk3">' + kartSvg(226, 95, KART.mo, "mo", .62) + "</g>") + "</svg>";
   }
   var heroN = 0;
   function speed(x, y) { return '<g stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".75"><path d="M' + (x - 34) + " " + (y - 6) + " h22" + '"/><path d="M' + (x - 44) + " " + (y + 2) + " h28" + '"/><path d="M' + (x - 30) + " " + (y + 10) + " h18" + '"/></g>'; }
@@ -429,7 +435,11 @@
   /* ---------- the home card ---------- */
   function card() {
     var c = el("button", "race-card featured");
-    function fill(a) { if (!a) return; a.innerHTML = heroSvg(); var sv = a.querySelector("svg"); if (sv) sv.setAttribute("preserveAspectRatio", "xMidYMax slice"); }
+    // phones: the compact near-square scene; wide screens (iPad): the wide scene, trimmed to fill the box
+    function fill(a) {
+      if (!a) return; var wide = window.innerWidth >= 700; a.innerHTML = heroSvg(!wide);
+      var sv = a.querySelector("svg"); if (wide && sv) sv.setAttribute("preserveAspectRatio", "xMidYMax slice");
+    }
     load(function () { fill(c.querySelector(".rc-art")); });
     var cups = cupCount();
     c.innerHTML = '<span class="rc-flag">' + HJ.art("star", 16) + " " + esc(t("featured")) + '</span><span class="rc-art">' + heroSvg() + '</span><span class="rc-tx"><b>' + esc(t("raceT")) + "</b><small>" + esc(t("raceSub")) + "</small>" +
