@@ -1695,3 +1695,12 @@ button.bigcard.tapme { animation: tapMe 3.2s ease-in-out 1.2s infinite; }
 @keyframes rpNext { 50% { transform: translateY(-2px); } }
 @media (prefers-reduced-motion: reduce) { .rp-next { animation: none; } }
 .rm-wname small { display: block; font-size: 13px; font-weight: 700; opacity: .6; }
+
+/* ===================== APP BUILD (iOS) ONLY =====================
+   html.hj-app is added by tools/build-app.js, never on the web version. Put every iOS-only
+   navbar / top-menu difference here (scoped under html.hj-app) and it survives web updates:
+   edit the web freely, then `npm run ios` re-syncs without clashing. Structural differences
+   (adding/removing buttons) go in js/app.js behind `if (window.HJ_APP_BUILD)`. */
+html.hj-app .navbar { height: 60px; padding-top: 10px; }
+html.hj-app .nav-btn { width: 44px; height: 44px; } /* Apple HIG minimum touch target */
+html.hj-app .lang-pill { width: auto; }
