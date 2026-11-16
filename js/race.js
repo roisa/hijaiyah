@@ -319,7 +319,7 @@
           b.onclick = function () {
             A.unlock(); var st = S.get(); if (sec[0] === "horn") HJ.race3d.HORNS[it[0]](1);
             if (!own) {
-              if ((st.coins || 0) < it[1]) { A.fx.bad(); HJ.toast('<i class="rt-coin"></i> ' + esc(t("garageNeed", { n: it[1] - (st.coins || 0) }))); A.talk(t("garageNeed", { n: it[1] - (st.coins || 0) }), lang()); return; }
+              if ((st.coins || 0) < it[1]) { A.fx.bad(); HJ.toast('<i class="rt-coin"></i> ' + esc(t("garageNeed", { n: it[1] - (st.coins || 0) }))); A.talk(t("garageNeedV"), lang()); return; }
               st.coins -= it[1]; G.owned.push(key); A.fx.unlock(); APP().confetti(30);
             } else A.fx.tap();
             G[sec[0]] = it[0]; S.save(); close(); garage();

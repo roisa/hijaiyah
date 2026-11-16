@@ -115,7 +115,7 @@ async function lines() {
       // the home greeting + the time of day (app.js: hello + " " + greetLine(hr))
       if (hello) ['gMorning', 'gDay', 'gAfternoon', 'gNight'].forEach(k => add((0, eval)(hello) + ' ' + HJ.t(k), 'sapaan / greeting', 'home ' + k));
       // lines outside the lessons (races, the train game, presents) that playing the levels never reaches
-      ['raceReady', 'raceHow', 'raceLocked', 'place1', 'place2', 'place3', 'trainHint', 'bonusT', 'giftT', 'gift_dance', 'gift_fireworks', 'gift_balloons', 'paintDots']
+      ['raceReady', 'raceHow', 'raceLocked', 'place1', 'place2', 'place3', 'trainHint', 'bonusT', 'giftT', 'gift_dance', 'gift_fireworks', 'gift_balloons', 'paintDots', 'garageNeedV', 'bonusDoneV']
         .forEach(k => add(HJ.t(k), 'balapan & hadiah / races & presents', 'W.' + k));
       // a new badge: "New badge!" then its name — two clips played one after the other (js/audio.js partClips)
       add(HJ.t('badgeNew'), 'lencana / badges', 'W.badgeNew');

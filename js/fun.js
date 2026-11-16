@@ -99,7 +99,7 @@
       if (over) return; over = true; timers.forEach(clearTimeout);
       layer.classList.add("end");
       head.innerHTML = "<b>" + esc(got ? t("bonusDone", { n: got }) : t("great")) + "</b>";
-      mo.src = MO + "yeyy.webp"; A.fx.win(); A.talk(got ? t("bonusDone", { n: got }) : t("great"), lang());
+      mo.src = MO + "yeyy.webp"; A.fx.win(); A.talk(got ? t("bonusDoneV") : t("great"), lang());
       setTimeout(function () { layer.classList.add("out"); }, 1500);
       setTimeout(function () { layer.remove(); done && done(got); }, 1900);
     }

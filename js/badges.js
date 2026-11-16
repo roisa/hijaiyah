@@ -51,7 +51,7 @@
     var v = el("button", "bd-pop", '<span class="bd-shine"></span>' + medal(b, 72) + '<span class="bd-tx"><small>' + esc(t("badgeNew")) + "</small><b>" + esc(many ? t("badgeMany", { n: nAll }) : b.n[L()]) + "</b><em>" + esc(many ? t("badgeSee") : b.d[L()]) + "</em></span>");
     document.body.appendChild(v); A.fx.unlock(); J.buzz([20, 40, 20]);
     var r = v.getBoundingClientRect(); setTimeout(function () { J.burst(r.left + 50, r.top + 40, 18, true); }, 350);
-    A.talk(t("badgeNew") + " " + (many ? t("badgeMany", { n: nAll }) : b.n[L()]), S.get().lang);
+    A.talk(many ? t("badgeNew") : t("badgeNew") + " " + b.n[L()], S.get().lang);
     var gone = false; function out() { if (gone) return; gone = true; v.classList.add("out"); setTimeout(function () { v.remove(); showing = false; pop(); }, 400); }
     v.onclick = function () { out(); if (HJ.go && HJ.go.stickers) HJ.go.stickers(); };
     setTimeout(out, 3800);
