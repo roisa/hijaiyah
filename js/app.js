@@ -139,11 +139,13 @@
   HJ.confetti = confetti;
 
   /* ---------- shell ---------- */
+  var lastTab = -1;
   function bare() { A.stop(); app.innerHTML = ""; var s = el("div", "screen"); app.appendChild(s); return s; }
   var curScreen = null;
   function shell(tab, title) {
     curScreen = { home: home, map: map, stickers: stickers, parents: parents }[tab];
-    var s = bare();
+    var TABS = ["home", "map", "stickers", "parents"], ti = TABS.indexOf(tab), dir = lastTab < 0 || ti === lastTab ? "" : ti > lastTab ? " from-r" : " from-l"; lastTab = ti;
+    var s = bare(); if (dir) s.className += dir;
     if (HJ.bg) HJ.bg({ map: "map", stickers: "stickers", parents: "parents" }[tab] || null);
     var nb = el("header", "navbar");
     var jar = el("button", "star-jar", HJ.art("star", 30) + '<span>' + S.totalStars() + "</span>");
@@ -677,6 +679,7 @@
     sc.appendChild(el("div", "large-title", esc(t("stickerTitle1")) + " <em>" + esc(t("stickerTitle2")) + "</em>"));
     sc.appendChild(el("div", "large-sub", got + " / " + HJ.allLevels().length + " " + esc(t("stickers").toLowerCase())));
     if (HJ.extras) HJ.extras.treasures(sc);
+    if (HJ.race && HJ.race.shelf) sc.appendChild(HJ.race.shelf());
     HJ.worlds.forEach(function (w) {
       var have = w.levels.filter(function (l) { return st.stickers.indexOf(l.id) >= 0; }).length;
       sc.appendChild(el("div", "group-t", esc(tr(w.name)) + " · " + have + "/" + w.levels.length));
@@ -845,6 +848,22 @@
   var q = location.hash.replace("#", "");
   if (q === "map") map(); else if (q === "stickers") stickers(); else if (q === "parents") parents();
   else if (q.indexOf("level=") === 0 && HJ.level(q.slice(6))) runLevel(HJ.level(q.slice(6))); else home();
+  if (S.get().langChosen && !navigator.webdriver && !q && !/reel=/.test(location.search)) splash();
+  function splash() {
+    var calm2 = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var v = el("div", "splash", '<div class="sp-rays"></div><img class="sp-mo" src="' + MO("yeyy") + '" alt="">' +
+      '<div class="sp-t">' + "Hijaiyah".split("").map(function (ch, i) { return '<span style="--i:' + i + ";--c:" + ["#FF5D73", "#FF9F1C", "#FFD23F", "#3DDC84", "#2EC4B6", "#4D96FF", "#9B6DFF", "#FF6FB5"][i] + '">' + ch + "</span>"; }).join("") + "</div>" +
+      '<div class="sp-sub">Baby Mo</div>' + ["ا", "ب", "ت", "ث", "ج", "ح"].map(function (l, i) { return '<span class="sp-l ar" style="--i:' + i + '">' + l + "</span>"; }).join(""));
+    document.body.appendChild(v);
+    var gone = false; function out() { if (gone) return; gone = true; v.classList.add("out"); setTimeout(function () { v.remove(); }, 450); }
+    v.addEventListener("pointerdown", function () { A.unlock(); out(); });
+    setTimeout(out, calm2 ? 900 : 2100);
+  }
+  // a soft ring where a finger presses a button (tells little ones "I felt that")
+  document.addEventListener("pointerdown", function (e) {
+    var b = e.target.closest && e.target.closest("button, .tile, .fruit, .bub"); if (!b || b.closest(".race-stage") || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
+    var r = el("div", "tap-ring"); r.style.left = e.clientX + "px"; r.style.top = e.clientY + "px"; document.body.appendChild(r); setTimeout(function () { r.remove(); }, 500);
+  }, true);
   if (!S.get().langChosen) langPicker(function () { home(); if (!S.get().name) setTimeout(function () { nameSheet(home); }, 250); });
 
   if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(function () {});

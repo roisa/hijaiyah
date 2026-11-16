@@ -261,9 +261,30 @@
   function card() {
     var c = el("button", "race-card");
     load(function () { var a = c.querySelector(".rc-art"); if (a) a.innerHTML = heroSvg(); });
-    c.innerHTML = '<span class="rc-art">' + heroSvg() + '</span><span class="rc-tx"><b>' + esc(t("raceT")) + "</b><small>" + esc(t("raceSub")) + '</small></span><span class="rc-go">' + HJ.ic("play") + "</span>";
+    var cups = cupCount();
+    c.innerHTML = '<span class="rc-art">' + heroSvg() + '</span><span class="rc-tx"><b>' + esc(t("raceT")) + "</b><small>" + esc(t("raceSub")) + "</small>" +
+      (cups.all ? '<span class="rc-cups"><span>' + cup(1, 20) + "<b>" + cups.all + '</b></span><span><i class="rt-coin"></i><b>' + (S.get().coins || 0) + "</b></span></span>" : "") +
+      '</span><span class="rc-go">' + HJ.ic("play") + "</span>";
     c.onclick = function () { A.unlock(); A.fx.tap(); open(); };
     return c;
+  }
+
+  function cupCount() { var r = rst(), o = { 1: 0, 2: 0, 3: 0, all: 0 }; Object.keys(r).forEach(function (k) { if (r[k]) { o[r[k]]++; o.all++; } }); return o; }
+  // the trophy shelf (sticker book): every track, a cup per race won, the best Grand Prix time
+  function shelf() {
+    var box = el("section", "tz-card glass rshelf"), cups = cupCount(), r = rst(), bt = S.get().raceT || {};
+    box.appendChild(el("div", "rs-h", "<b>" + esc(t("raceShelf")) + "</b><small>" + cup(1, 18) + " " + cups[1] + " · " + cup(2, 18) + " " + cups[2] + " · " + cup(3, 18) + " " + cups[3] + "</small>"));
+    var grid = el("div", "rs-grid");
+    WORLDS.forEach(function (n) {
+      var list = races(n), got = list.filter(function (x) { return r[x.id]; }).length, gp = list[list.length - 1];
+      var row = el("button", "rs-row" + (got ? "" : " none"), wIcon(n) + '<span class="rs-name"><b>' + esc(EXTRA[n] ? wName(n) : t("book") + " " + n) + '</b><span class="rs-cups">' +
+        list.map(function (x) { return r[x.id] ? cup(r[x.id], x.gp ? 26 : 20) : '<i class="rs-empty' + (x.gp ? " gp" : "") + '"></i>'; }).join("") + "</span></span>" +
+        (bt[gp.id] ? '<small class="rs-t">⏱ ' + clock(bt[gp.id]) + "</small>" : ""));
+      row.onclick = function () { A.unlock(); A.fx.tap(); open(n); };
+      grid.appendChild(row);
+    });
+    box.appendChild(grid);
+    return box;
   }
 
   /* ---------- the race (engine in js/race3d.js) ---------- */
@@ -322,5 +343,5 @@
   }
   function flagSvg() { return '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2v17" stroke="#3A4256" stroke-width="2"/>' + [0, 1, 2, 3, 4, 5].map(function (i) { return '<rect x="' + (4 + (i % 3) * 4) + '" y="' + (2 + (i / 3 | 0) * 4) + '" width="4" height="4" fill="' + ((i + (i / 3 | 0)) % 2 ? "#222" : "#fff") + '"/>'; }).join("") + "</svg>"; }
 
-  HJ.race = { open: open, card: card, races: races, play: function (id) { var w0 = String(id).split("-")[0], w = EXTRA[w0] ? w0 : +w0; races(w).forEach(function (r) { if (r.id === id) play(r); }); } };
+  HJ.race = { open: open, card: card, races: races, shelf: shelf, play: function (id) { var w0 = String(id).split("-")[0], w = EXTRA[w0] ? w0 : +w0; races(w).forEach(function (r) { if (r.id === id) play(r); }); } };
 })();

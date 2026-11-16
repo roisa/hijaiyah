@@ -117,7 +117,7 @@
     raceT: ["Balap Hijaiyah", "Hijaiyah Race"],
     raceListen: ["Dengar!", "Listen!"],
     racePick: ["Ketuk huruf yang kamu dengar!", "Tap the letter you heard!"],
-    raceNew: ["Baru!", "New!"],
+    raceNew: ["Baru!", "New!"], raceShelf: ["Rak Piala Balap", "Racing trophies"],
     raceBabyTap: ["Ketuk balonnya!", "Tap the balloon!"],
     raceThis: ["Ini bunyinya:", "This is the sound:"], raceFinishT: ["Finis!", "Finish!"],
     raceHorn: ["Klakson", "Horn"], raceMusic: ["Musik", "Music"], pwShield: ["Gelembung pelindung!", "Bubble shield!"], pwMagnet: ["Magnet koin!", "Coin magnet!"], pwSaved: ["Gelembung menjagamu!", "The bubble kept you safe!"],
