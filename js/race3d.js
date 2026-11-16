@@ -526,7 +526,7 @@
     var mini = el("div", "rt-track", '<i class="rt-line"></i><span class="rt-flag"></span>');
     var spk = el("button", "nav-btn rt-spk", HJ.ic("speaker")); spk.setAttribute("aria-label", t("listen"));
     var coinEl = el("span", "rt-coins", '<i class="rt-coin"></i><b>0</b>');
-    top.appendChild(x); top.appendChild(mini); top.appendChild(spk); top.appendChild(coinEl); sc.appendChild(top);
+    top.appendChild(x); top.appendChild(mini); top.appendChild(coinEl); sc.appendChild(top);   // "hear it again" = the pill over the letters
     var hud = el("div", "r3-hud", '<div class="r3-pos"><b>1</b><small>/3</small></div><div class="r3-lap"></div><div class="r3-time">0:00</div><div class="r3-spd"><b>0</b><small>km/h</small></div>'); sc.appendChild(hud);
     // the letter chooser: when a letter is called, three big letter buttons (same order and colours as the boards) —
     // tap the letter you heard and Mo steers into that lane
@@ -566,10 +566,10 @@
     var cam = el("div", "r3-cam"), camImg = el("img"); camImg.alt = "Baby Mo"; cam.appendChild(camImg); sc.appendChild(cam);
     var callout = el("div", "r3-call"); sc.appendChild(callout);
     var listen = el("div", "r3-listen", '<span class="rl-ear">' + HJ.ic("speaker") + "</span><b>" + esc(t("raceListen")) + "</b>"); sc.appendChild(listen);
-    var horn = el("button", "r3-horn", '<svg viewBox="0 0 48 48" width="34" height="34" aria-hidden="true"><path d="M8 20h8l16-10v28L16 28H8z" fill="#fff"/><path d="M36 17c3 2 4 5 4 7s-1 5-4 7" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/></svg>');
+    var horn = el("button", "r3-horn", '<svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true"><circle cx="12" cy="24" r="8.5" fill="#FF5D73" stroke="#fff" stroke-width="2.5"/><path d="M20 21.5h9l11-8v21l-11-8h-9z" fill="#FFE27A" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><path d="M43 18.5q2.5 5.5 0 11" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>');
     horn.setAttribute("aria-label", t("raceHorn")); sc.appendChild(horn);
     var mus = el("button", "nav-btn rt-mus" + ((S.get().settings || {}).raceMusic === false ? " off" : ""), '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 18V6l11-2v12" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.8" fill="currentColor"/><circle cx="17.5" cy="16" r="2.8" fill="currentColor"/></svg>');
-    mus.setAttribute("aria-label", t("raceMusic")); top.insertBefore(mus, spk);
+    mus.setAttribute("aria-label", t("raceMusic")); top.insertBefore(mus, coinEl);
     var hand = el("div", "r3-hand", '<span class="r3-arrow"></span><img src="assets/icons/tap-hand.svg" alt="">'); sc.appendChild(hand);
     var tip = el("div", "race-tip glass", esc(t("raceHow3"))); sc.appendChild(tip);
     var heads = { ais: el("span", "rt-head ais"), adam: el("span", "rt-head adam"), mo: el("span", "rt-head moFace") };
@@ -665,7 +665,7 @@
     ];
     HJ._race = { gates: gates, setLane: function (l) { laneI = l; },
       // for the store screenshots: where the rivals are (segments from Mo, ais then adam) and how many he got right
-      placeRiv: function (d) { riv.forEach(function (rv, i) { rv.z = pos + PLAYERZ + d[i] * SEG; rv.lane = i ? 2 : 0; rv.x = LANES[rv.lane]; }); }, setOk: function (n) { okN = n; }, phase: function () { return phase; }, pos: function () { return pos; }, total: TOTAL, coins: coins,
+      placeRiv: function (d) { riv.forEach(function (rv, i) { rv.z = pos + PLAYERZ + d[i] * SEG; rv.lane = i ? 2 : 0; rv.x = LANES[rv.lane]; }); }, setOk: function (n) { okN = n; }, gaps: function () { return riv.map(function (rv) { return Math.round((rv.z - pos - PLAYERZ) / SEG); }); }, phase: function () { return phase; }, pos: function () { return pos; }, total: TOTAL, coins: coins,
       // for tests: put Mo (and the rivals beside him) just before a spot on the track
       warp: function (seg, near) { pos = Math.max(0, seg * SEG - PLAYERZ); riv.forEach(function (rv, i) { rv.z = pos + PLAYERZ + (near ? 3 + i * 3 : 6 + i * 9) * SEG; if (near) { rv.lane = rv.x = 0; rv.lane = i ? 2 : 0; rv.x = LANES[rv.lane]; } }); },
       ev: ev, ramps: ramps, pads: pads, fps: function () { var m = FT.reduce(function (x, y) { return x + y; }, 0) / Math.max(1, FT.length); return Math.round(1 / Math.max(.001, m)); },
@@ -772,6 +772,38 @@
           var ca = L1.a.x + L1.a.w * gl, cb = L1.b.x + L1.b.w * gl, wa = L1.a.w * .28, wb = L1.b.w * .28; poly(ca - wa, L1.a.y, ca + wa, L1.a.y, cb + wb, L1.b.y, cb - wb, L1.b.y, "#5BE38A"); }
         g.restore();
       }
+      // turbo pads lie FLAT on the road: a glowing lane strip with arrows that flow forward (an upright board looked
+      // like a wall to avoid). Drawn on the road, under every sprite, before the karts.
+      if (pads.length) {
+        var byAbs = {}; list.forEach(function (L2) { byAbs[L2.abs] = L2; });
+        var PADL = 28, flow = tRace * 26;
+        pads.forEach(function (P) {
+          var ln = LANES[P.lane], alpha = P.used ? .35 : 1;
+          for (var k = PADL - 1; k >= 0; k--) {
+            var L2 = byAbs[P.seg + k]; if (!L2 || L2.a.cz <= DEPTH || L2.b.y >= L2.a.y || L2.b.y >= L2.clip) continue;
+            var ca = L2.a.x + L2.a.w * ln, cb = L2.b.x + L2.b.w * ln, wa = L2.a.w * .27, wb = L2.b.w * .27;
+            var wave = .5 + .5 * Math.sin((k - flow) * .55), edge = k === 0 || k === PADL - 1;
+            g.globalAlpha = alpha * (edge ? .55 : 1);
+            poly(ca - wa, L2.a.y, ca + wa, L2.a.y, cb + wb, L2.b.y, cb - wb, L2.b.y, "rgb(" + Math.round(40 + 90 * wave) + "," + Math.round(170 + 60 * wave) + ",255)");
+            // a bright rim on both sides of the strip
+            var ra = wa * .14, rb = wb * .14;
+            poly(ca - wa, L2.a.y, ca - wa + ra, L2.a.y, cb - wb + rb, L2.b.y, cb - wb, L2.b.y, "#E9FDFF");
+            poly(ca + wa - ra, L2.a.y, ca + wa, L2.a.y, cb + wb, L2.b.y, cb + wb - rb, L2.b.y, "#E9FDFF");
+          }
+          // white chevrons pointing down the road, moving forward
+          var ph = Math.floor(flow / 2) % 7;
+          g.lineJoin = "round"; g.lineCap = "round"; g.strokeStyle = "#fff";
+          for (k = 1; k < PADL - 4; k++) {
+            if (((k - ph) % 7 + 7) % 7) continue;
+            var Ln = byAbs[P.seg + k], Lf = byAbs[P.seg + k + 3];
+            if (!Ln || !Lf || Ln.a.cz <= DEPTH || Lf.a.cz <= DEPTH || Lf.a.y >= Ln.clip) continue;
+            var nc = Ln.a.x + Ln.a.w * ln, fc = Lf.a.x + Lf.a.w * ln, nw = Ln.a.w * .27 * .62;
+            g.globalAlpha = alpha * .95; g.lineWidth = Math.max(1.5, Ln.a.w * .05);
+            g.beginPath(); g.moveTo(nc - nw, Ln.a.y); g.lineTo(fc, Lf.a.y); g.lineTo(nc + nw, Ln.a.y); g.stroke();
+          }
+          g.globalAlpha = 1;
+        });
+      }
       // sprites, far to near; nothing that is already behind Mo (it would cover his kart)
       var pSegAbs = Math.floor((pos + PLAYERZ) / SEG);
       for (n = list.length - 1; n > 0; n--) {
@@ -786,7 +818,6 @@
         (ev[it.abs] || []).forEach(function (e) {
           if (e.k === "gate") { if (e.o.baby) drawBalloon(e.o, A1, it.clip); else drawGate(e.o, A1, it.clip); }
           else if (e.k === "coin" && !e.o.got) drawSprite(coinSpr(), A1, LANES[e.o.lane], it.clip, 0, Math.abs(Math.cos(tRace * 4 + e.o.seg)) * .8 + .2, A1.s * ROADW * .1 * W / 2);
-          else if (e.k === "pad") { g.globalAlpha = .75 + Math.sin(tRace * 10) * .25; drawSprite(padSpr(), A1, LANES[e.o.lane], it.clip, 0); g.globalAlpha = 1; }
           else if (e.k === "box" && !e.o.got) { var bxw = A1.s * ROADW * W / 2, bx = A1.x + A1.s * LANES[e.o.lane] * ROADW * W / 2, by2 = A1.y - bxw * (.22 + Math.sin(tRace * 3 + e.o.seg) * .03);
             if (bxw > 20 && by2 < it.clip) { var gw = g.createRadialGradient(bx, by2, 2, bx, by2, bxw * .3); gw.addColorStop(0, "rgba(255,255,255,.7)"); gw.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gw; g.beginPath(); g.arc(bx, by2, bxw * .3, 0, 7); g.fill(); }
             drawSprite(boxSpr(), A1, LANES[e.o.lane], it.clip, bxw * (.08 + Math.sin(tRace * 3 + e.o.seg) * .03)); }
@@ -1052,11 +1083,14 @@
           // know them well → the friends end up just behind; guess → they stay just ahead. They pull close, so
           // there is always someone to catch or to hold off, and every turbo really moves Mo up.
           var doneG = gates.filter(function (G) { return G.done; }).length, acc = doneG ? okN / doneG : .7;
-          if (BABY) acc = 1;
           var want = ((rv.k === "ais" ? .5 : .62) - acc) * 46 * SEG + Math.sin(tRace * .35 + rv.ph) * 5 * SEG;
+          // the Balloon Race (2+): the friends stay just ahead where the little one can SEE them, every balloon turbo
+          // zooms Mo past them, and on the last stretch they fall back so Mo always wins
+          if (BABY) want = (pAbs / TOTAL < .82 ? (rv.k === "ais" ? 9 : 15) + Math.sin(tRace * .5 + rv.ph) * 3 : -30) * SEG;
           var gap = rv.z - pAbs, pull = (pAbs + want - rv.z) / (16 * SEG);
-          var sp = BASE * Math.max(.72, Math.min(1.34, rv.pace + pull * .35)) * (tutOn ? .32 : 1);
+          var sp = BASE * Math.max(.72, Math.min(BABY ? 1.6 : 1.34, rv.pace + pull * (BABY ? .6 : .35))) * (tutOn ? .32 : 1);
           if (boost > 0 && gap > -6 * SEG && gap < 30 * SEG) sp = Math.min(sp, BASE * .95);   // a turbo always gains ground
+          if (BABY && pAbs / TOTAL >= .82 && rv.z > pAbs - 30 * SEG) sp = Math.min(sp, BASE * .55);
           if (phase === "end") sp = BASE * rv.pace;
           rv.z += sp * dt; if (rv.z >= TOTAL) rv.fin = tRace;
         }
@@ -1095,7 +1129,7 @@
       heads.mo.style.left = pc(pAbs); heads.ais.style.left = pc(riv[0].z); heads.adam.style.left = pc(riv[1].z);
       if (phase === "race" && pos + PLAYERZ >= TOTAL) finish();
     }
-    function sayGate() { if (curGate && !curGate.done) { spk.classList.remove("ping"); void spk.offsetWidth; spk.classList.add("ping"); snd.duck(true); A.sayNow(curGate.q.au).then(function () { snd.duck(false); }); } }
+    function sayGate() { if (curGate && !curGate.done) { var sy = pick.querySelector(".rp-say"); sy.classList.remove("ping"); void sy.offsetWidth; sy.classList.add("ping"); snd.duck(true); A.sayNow(curGate.q.au).then(function () { snd.duck(false); }); } }
     // as an arch comes: "Listen!" + the sound, then the sound again ("ba … ba!")
     // the name of a syllable's harakat (for the "this is the sound" card): ba · fathah, bi · kasrah, bun · tanwin
     function vname(x) {

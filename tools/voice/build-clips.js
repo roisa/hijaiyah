@@ -115,7 +115,7 @@ async function lines() {
       // the home greeting + the time of day (app.js: hello + " " + greetLine(hr))
       if (hello) ['gMorning', 'gDay', 'gAfternoon', 'gNight'].forEach(k => add((0, eval)(hello) + ' ' + HJ.t(k), 'sapaan / greeting', 'home ' + k));
       // lines outside the lessons (races, the train game, presents) that playing the levels never reaches
-      ['raceReady', 'raceHow', 'raceLocked', 'place1', 'place2', 'place3', 'trainHint', 'bonusT', 'giftT', 'gift_dance', 'gift_fireworks', 'gift_balloons']
+      ['raceReady', 'raceHow', 'raceLocked', 'place1', 'place2', 'place3', 'trainHint', 'bonusT', 'giftT', 'gift_dance', 'gift_fireworks', 'gift_balloons', 'paintDots']
         .forEach(k => add(HJ.t(k), 'balapan & hadiah / races & presents', 'W.' + k));
       appIntros.forEach(s => add(HJ.tr((0, eval)('(' + s + ')')), 'pembuka / intro', 'app.js intro'));
       for (let r = 0; r < 25; r++) HJ.allLevels().forEach(lv => HJ.buildSteps(lv).forEach(st => {

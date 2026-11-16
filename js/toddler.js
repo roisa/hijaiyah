@@ -128,7 +128,7 @@
         var h = 0; cs.forEach(function (c) { if (pd2[((c[1] * CELL) * W + c[0] * CELL) * 4 + 3] > 60) h++; }); return h / cs.length < .5;
       });
       if (!left.length) return finish();
-      if (!nudged) { nudged = true; ctx.mo("pose-08", t("paintDots")); A.fx.ping ? A.fx.ping() : A.fx.tap(); }
+      if (!nudged) { nudged = true; ctx.mo("pose-08", t("paintDots")); A.talk(t("paintDots"), HJ.store.get().lang); }
       if (!pulseT) { pulseT = 1; (function loop() { if (done || !ctx.alive()) { pulseT = 0; return; } draw(); requestAnimationFrame(loop); })(); }
     }
     function finish() {

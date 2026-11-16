@@ -1743,3 +1743,12 @@ button.bigcard.speaking { border-color: #FFD24D; box-shadow: 0 7px 0 #F0B400, 0 
 :root[data-theme="dark"] .dots i { background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 2px rgba(255,255,255,.3); }
 .dots i.on, :root[data-theme="dark"] .dots i.on { background: linear-gradient(180deg,#FFD66B,#F5A300); box-shadow: 0 0 0 2px rgba(255,214,107,.35), 0 4px 10px -4px rgba(245,163,0,.8); }
 @media (prefers-reduced-motion: reduce) { .bigcard .tap::after { animation: none; } }
+
+/* race result: clear space between the button groups (they touched), and one main button only —
+   "practise these sounds" is a soft secondary button, "Tracks" a quiet link-style button */
+.race-pod .pod-learn { margin-bottom: 14px; }
+.race-pod .pod-prac { margin-top: 12px; background: rgba(34,192,110,.12); color: #128A4C; box-shadow: inset 0 0 0 2px rgba(34,192,110,.45); }
+:root[data-theme="dark"] .race-pod .pod-prac { background: rgba(34,192,110,.16); color: #7FE3AE; box-shadow: inset 0 0 0 2px rgba(127,227,174,.45); }
+.race-pod > .row { margin-top: 4px; }
+.race-pod > .btn.small.ghost { display: inline-flex; margin-top: 14px; background: transparent; box-shadow: none; opacity: .85; }
+.rp-say.ping { animation: jbump .5s cubic-bezier(.3,1.8,.5,1); }
