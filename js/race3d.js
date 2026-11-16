@@ -821,11 +821,15 @@
       q.fillStyle = gr; q.beginPath(); q.ellipse(w / 2, 170, 140, 160, 0, 0, 7); q.fill();
       q.fillStyle = "rgba(0,0,0,.12)"; q.beginPath(); q.ellipse(w / 2 + 30, 200, 100, 120, 0, 0, 7); q.globalCompositeOperation = "source-atop"; q.fill(); q.globalCompositeOperation = "source-over";
       q.fillStyle = "rgba(255,255,255,.7)"; q.beginPath(); q.ellipse(w * .32, 90, 26, 40, -.5, 0, 7); q.fill();
-      q.fillStyle = "#fff"; q.beginPath(); q.arc(w / 2, 180, 92, 0, 7); q.fill();
-      var fs = G.q.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? 80 : 128;
+      var fs = G.q.ar.replace(/[\u064B-\u0652]/g, "").length > 2 ? 90 : 150;
       q.font = fs + "px 'Scheherazade New', serif"; q.textAlign = "center"; q.direction = "rtl";
       var m = q.measureText(G.q.ar), mid = m.actualBoundingBoxAscent != null ? (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2 : fs * .3;
-      q.lineJoin = "round"; q.strokeStyle = G.col; q.lineWidth = 6; q.strokeText(G.q.ar, w / 2, 180 + mid); q.fillStyle = G.col; q.fillText(G.q.ar, w / 2, 180 + mid); q.direction = "ltr";
+      // the letter printed on the balloon: white with a deep outline in the balloon's own colour and a soft shadow
+      q.lineJoin = "round"; q.save(); q.shadowColor = "rgba(0,0,0,.25)"; q.shadowOffsetY = 5; q.shadowBlur = 6;
+      q.strokeStyle = "rgba(0,0,0,.28)"; q.lineWidth = 16; q.strokeText(G.q.ar, w / 2, 180 + mid); q.restore();
+      var dk = "#" + G.col.slice(1).match(/../g).map(function (h2) { var v = Math.round(parseInt(h2, 16) * .62); return (v < 16 ? "0" : "") + v.toString(16); }).join("");
+      q.strokeStyle = dk; q.lineWidth = 16; q.strokeText(G.q.ar, w / 2, 180 + mid);
+      q.fillStyle = "#fff"; q.fillText(G.q.ar, w / 2, 180 + mid); q.direction = "ltr";
       return (G.bal = { c: c, w: w, h: h, ww: .9 });
     }
     function drawBalloon(G, P, clip) {
