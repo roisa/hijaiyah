@@ -200,8 +200,30 @@ def read_manifest(sec):
     except Exception:
         return {}
 
+MIN_BYTES = 1700   # a real syllable is ≥ ~1.8 KB; the voice sometimes returns ~0.3 s of near-silence (≤ 1.4 KB) for a lone syllable
+
 def file_ok(fp):
-    return os.path.exists(fp) and os.path.getsize(fp) > 500
+    return os.path.exists(fp) and os.path.getsize(fp) >= MIN_BYTES
+
+TANWIN = {"\u064B": "\u064E", "\u064D": "\u0650", "\u064C": "\u064F"}   # an / in / un -> fathah / kasrah / dhammah
+def say_as(t, lang):
+    """another way to ask the voice for the same sound, used only when it returned silence: a lone tanwin syllable
+    (بًا بٍ بٌ) is spoken as its sound, letter + vowel + nun sukun (بَنْ بِنْ بُنْ); anything else gets a full stop.
+    Only what is sent to the voice changes; the app shows and matches the original text."""
+    if lang == "ar":
+        m = re.fullmatch("([\u0621-\u064A])([\u064B-\u064D])[\u0627\u0649]?", unicodedata.normalize("NFC", t.strip()))
+        if m:
+            return m.group(1) + TANWIN[m.group(2)] + "\u0646\u0652"
+    return t.strip() + "."
+
+def synth_ok(t, lang, voice):
+    """synth, retrying when the voice returns near-silence; None if it never gives a real sound"""
+    for i, text in enumerate([t, t, t, say_as(t, lang), say_as(t, lang)]):
+        mp3 = synth(text, lang, voice)
+        if len(mp3) >= MIN_BYTES:
+            if i: print(f"   (retry {i} gave sound{' as ' + speakable(text) if text != t else ''})", flush=True)
+            return mp3
+    return None
 
 def write_manifest(sec, items, voices, new_tags=None):
     """<folder>/voice.js: every clip of the list that is on disk -> "<id>.mp3?v=<tag>". The tag is the one just
@@ -313,7 +335,11 @@ def main():
             if x["id"] not in want:
                 continue
             fp = os.path.join(d, x["id"] + ".mp3")
-            mp3 = synth(x["t"], x["lang"], voices[x["lang"]])
+            mp3 = synth_ok(x["t"], x["lang"], voices[x["lang"]])
+            if mp3 is None:
+                print(f"[{sec} {i}/{len(items)}] {x['lang']} {speakable(x['t'])[:70]}  SILENT — skipped (the app uses the phone's voice)", flush=True)
+                report.append({"id": x["id"], "text": x["t"], "lang": x["lang"], "sec": sec, "heard": [], "ok": False, "silent": True, "file": f"{folder}/{x['id']}.mp3"})
+                continue
             open(fp, "wb").write(mp3); made += 1; new_tags[x["id"]] = tag(voices[x["lang"]])
             line = f"[{sec} {i}/{len(items)}] {x['lang']} {speakable(x['t'])[:70]}  {len(mp3)}B"
             if a.check:
