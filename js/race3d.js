@@ -1011,7 +1011,8 @@
     /* ---- the loop ---- */
     var last = 0, FT = [], lowQ = false, DRAWN = DRAW;
     function frame(now) {
-      if (my !== live || !document.body.contains(cv)) return;
+      if (my !== live) return;
+      if (!document.body.contains(cv)) { stop(); return; }        // the screen was replaced (not via quit): stop sound, music, listeners
       var dt = Math.min(.05, last ? (now - last) / 1000 : 0); last = now;
       FT.push(dt); if (FT.length > 120) FT.shift();
       if (!lowQ && FT.length >= 90 && tRace > 2) { var avg = FT.reduce(function (x2, y2) { return x2 + y2; }, 0) / FT.length; if (avg > 1 / 40) { lowQ = true; dpr = 1; DRAWN = 110; size(); } }
@@ -1148,7 +1149,7 @@
     }
     function callGate(G) {
       callout.classList.remove("on"); listen.classList.add("on"); J.bump(listen); sayGate(); showPick(G);
-      setTimeout(function () { if (my === live && !G.done && curGate === G) { J.bump(listen); sayGate(); if (R.hint || G.baby) G.hint = tRace; if (!G.baby && R.hint) { pickBtns[G.good].classList.add("hint"); snd.fx("ping"); } } }, 1700);
+      setTimeout(function () { if (my === live && !paused && !G.done && curGate === G) { J.bump(listen); sayGate(); if (R.hint || G.baby) G.hint = tRace; if (!G.baby && R.hint) { pickBtns[G.good].classList.add("hint"); snd.fx("ping"); } } }, 1700);
       setTimeout(function () { listen.classList.remove("on"); }, 3600);
     }
     function power() {

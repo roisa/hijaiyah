@@ -1804,3 +1804,6 @@ button.bigcard.speaking { border-color: #FFD24D; box-shadow: 0 7px 0 #F0B400, 0 
 .mj.lock { opacity: .55; }
 .node-row { height: 86px; }
 .world { scroll-margin-top: 92px; }
+
+/* home: the "what's your little one's name?" chip sits below Mo's greeting, never on it */
+.hw-name { top: auto; bottom: 30%; }

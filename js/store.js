@@ -213,7 +213,7 @@
     great: ["Masya Allah, hebat!", "Masha Allah, great!"], good: ["Bagus!", "Good!"], tryAgain: ["Coba lagi ya!", "Try again!"],
     oops: ["Hampir! Dengarkan lagi", "Almost! Listen again"], levelDone: ["Level selesai!", "Level complete!"],
     newSticker: ["Stiker baru!", "New sticker!"], fail: ["Hatinya habis… Ayo coba lagi!", "Out of hearts… let's try again!"],
-    locked: ["Selesaikan level sebelumnya dulu ya", "Finish the level before first"],
+    locked: ["Selesaikan level sebelumnya dulu ya", "Finish the level before this one first"], del: ["Hapus", "Delete"], gearCost: ["{n} koin", "{n} coins"], cardN: ["Kartu {n}", "Card {n}"],
     gateQ: ["Untuk Abi & Umi: berapa {a} × {b}?", "For parents: what is {a} × {b}?"],
     settings: ["Pengaturan", "Settings"], childName: ["Nama anak", "Child's name"], language: ["Bahasa", "Language"],
     moVoice: ["Mo berbicara", "Mo talks"], sfx: ["Efek suara", "Sound effects"], latin: ["Bantuan huruf latin", "Latin hints"],

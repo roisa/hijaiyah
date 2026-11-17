@@ -154,7 +154,7 @@
           stage.classList.add("gift-sky"); var popped = 0, total = 7;
           var cols = (HJ.prize && HJ.prize.balloons()) || ["#FF6B6B", "#FFB800", "#3FBF86", "#3B7DD8", "#9A7AF0"];
           for (var b = 0; b < total; b++) (function (b) {
-            var bl = el("button", "gift-balloon"); bl.setAttribute("aria-label", "balloon");
+            var bl = el("button", "gift-balloon"); bl.setAttribute("aria-label", t("gPop"));
             bl.style.left = (6 + b * 13) + "%"; bl.style.animationDelay = (b * .18) + "s"; bl.style.setProperty("--c", cols[b % cols.length]);
             bl.onpointerdown = function (e) {
               e.preventDefault(); if (bl.classList.contains("pop")) return;
