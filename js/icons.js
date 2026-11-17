@@ -9,6 +9,8 @@
   /* ---------- control icons (24×24, currentColor) ---------- */
   var F = 'fill="currentColor"', R = 'stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"';
   var IC = {
+    race: '<rect ' + F + ' x="4" y="2.5" width="2.4" height="19" rx="1.2"/><path ' + F + ' opacity=".3" d="M6.4 4h13.1l-2.3 4.5 2.3 4.5H6.4z"/>' +
+      '<path ' + F + ' d="M6.4 4h4.4v3H6.4zM15.2 4h4.3l-1.5 3h-2.8zM10.8 7h4.4v3h-4.4zM6.4 10h4.4v3H6.4zM15.2 10h2.8l1.5 3h-4.3z"/>',
     play: '<path ' + F + ' stroke="currentColor" stroke-width="2.6" stroke-linejoin="round" d="M8 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 8 5.2z"/>',
     next: '<path ' + R + ' stroke-width="3.2" d="M4.5 12h14M13 5.5l6.5 6.5-6.5 6.5"/>',
     back: '<path ' + R + ' stroke-width="3.4" d="M15 4.5 7.5 12l7.5 7.5"/>',

@@ -13,6 +13,7 @@
     if (ctx && ctx.state === "suspended") ctx.resume();
     return ctx;
   }
+  try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
   A.unlock = function () { ac(); };
   A.ac = function () { return ac(); };          // the race music / engine use the same audio context
 
@@ -70,7 +71,33 @@
       } catch (e) { res(); }
     });
   }
+  /* Every clip plays through Web Audio once the first tap has unlocked it. iOS blocks an <audio> element that
+     starts from a timer (a level intro, "Great!", the race start), and the old fallback then read the line with the
+     phone's own voice — on iPhone a woman's voice (Damayanti / Samantha). Web Audio has no such limit. */
+  var ubufs = {};
+  function ubuf(url) {
+    if (!ubufs[url]) {
+      ubufs[url] = fetch(url).then(function (r) { if (!r.ok) throw new Error("audio"); return r.arrayBuffer(); })
+        .then(function (ab) { return new Promise(function (res, rej) { ctx.decodeAudioData(ab, res, rej); }); });
+      ubufs[url].catch(function () { delete ubufs[url]; });
+    }
+    return ubufs[url];
+  }
   function playUrl(url, rate) {
+    var c = ctx;
+    if (c && c.state === "running" && window.fetch) {
+      return ubuf(url).then(function (b) {
+        return new Promise(function (res) {
+          var src = c.createBufferSource(), done = false, fin = function () { if (!done) { done = true; res(); } };
+          src.buffer = b; src.playbackRate.value = rate || 1; src.connect(c.destination); src.onended = fin;
+          cur = { pause: function () { try { src.stop(); } catch (e) {} fin(); } };
+          src.start(); setTimeout(fin, b.duration / (rate || 1) * 1000 + 600);
+        });
+      }, function () { return htmlPlay(url, rate); });
+    }
+    return htmlPlay(url, rate);
+  }
+  function htmlPlay(url, rate) {
     return new Promise(function (res, rej) {
       var a = new Audio(url); cur = a;
       a.addEventListener("loadedmetadata", function () { if (isFinite(a.duration)) setTimeout(res, (a.duration / (rate || 1)) * 1000 + 800); });   // never hang on a lost "ended"
@@ -94,7 +121,7 @@
     var c = clipFor(t);
     // Qur'an words are never read by the phone's computer voice: no recorded clip → silence (and the one-time "no audio" note)
     var isQ = HJ.QTEXT && HJ.QTEXT[norm(t)];
-    if (c) return playUrl(c).catch(function () { return isQ ? noQ() : tts(t, "ar"); });
+    if (c) return playUrl(c).catch(function () { return isQ ? noQ() : false; });      // never the phone voice when Mo's clip exists
     return isQ ? noQ() : tts(t, "ar");
   }
 
@@ -181,8 +208,8 @@
     lang = lang || "id";
     // a line with the child's name ("Assalamu'alaikum, Azka! …") plays the clip made without the name
     var t = spoken(text), c = lineFor(text, lang) || lineFor(String(text).replace(/,\s*[^,.!?…]+([.!?…])/, "$1"), lang), my = seqToken, parts = c ? null : partClips(text, lang);
-    var p = c ? playLine(c, t).catch(function () { if (my === seqToken) return tts(t, lang, 1.02); })
-      : parts ? parts.reduce(function (q, pc) { return q.then(function () { if (my === seqToken) return playLine(pc.f, pc.t); }); }, Promise.resolve()).catch(function () { if (my === seqToken) return tts(t, lang, 1.02); })
+    var p = c ? playLine(c, t).catch(function () {})
+      : parts ? parts.reduce(function (q, pc) { return q.then(function () { if (my === seqToken) return playLine(pc.f, pc.t); }); }, Promise.resolve()).catch(function () {})
       : tts(t, lang, 1.02);
     talkP = p; p.then(function () { if (talkP === p) talkP = null; });
     return p;

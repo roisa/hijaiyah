@@ -135,6 +135,14 @@
       var wob = good ? 0 : 1.6;
       gI.lineTo((b.x + (Math.random() - .5) * wob) * sc, (b.y + (Math.random() - .5) * wob) * sc); gI.stroke(); inkCol++;
     }
+  /* iPad/iPhone: WebKit can decide a touch is a page scroll before the finger moves and then CANCELS the pointer
+       (tracing stops at once, a dragged piece flies back — "it needs two tries"). Holding the touch here keeps it ours;
+       no text selection or long-press magnifier either. */
+      function holdTouch(el) {
+      ["touchstart", "touchmove"].forEach(function (k) { el.addEventListener(k, function (e) { if (e.cancelable) e.preventDefault(); }, { passive: false }); });
+      el.style.webkitUserSelect = "none"; el.style.userSelect = "none"; el.style.webkitTouchCallout = "none";
+    }
+    holdTouch(ink); holdTouch(wrap);
     ink.onpointerdown = function (e) {
       if (finished) return; e.preventDefault(); A.unlock();
       try { ink.setPointerCapture(e.pointerId); } catch (x) {}

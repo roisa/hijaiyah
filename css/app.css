@@ -1752,3 +1752,55 @@ button.bigcard.speaking { border-color: #FFD24D; box-shadow: 0 7px 0 #F0B400, 0 
 .race-pod > .row { margin-top: 4px; }
 .race-pod > .btn.small.ghost { display: inline-flex; margin-top: 14px; background: transparent; box-shadow: none; opacity: .85; }
 .rp-say.ping { animation: jbump .5s cubic-bezier(.3,1.8,.5,1); }
+
+/* race letter buttons: bright solid colours like the balloons, a big white letter (white cards were hard to see) */
+.rp-b.l0 { --c1: #FF7A8C; --c2: #E0445F; --c3: #8A1A2E; } .rp-b.l1 { --c1: #5AAEFF; --c2: #2F7FE8; --c3: #0F3E8A; } .rp-b.l2 { --c1: #B08CFF; --c2: #7C52EC; --c3: #3E1F96; }
+.rp-b { background: linear-gradient(180deg, var(--c1) 0%, var(--c2) 100%); box-shadow: inset 0 0 0 3px rgba(255,255,255,.55), 0 7px 0 var(--c3), 0 14px 20px -8px rgba(0,0,0,.45); }
+.rp-b .ar { color: #fff; text-shadow: 0 3px 0 var(--c3), 0 0 10px rgba(0,0,0,.15); }
+.rp-b::before { background: rgba(255,255,255,.55); }
+.rp-b.me { box-shadow: inset 0 0 0 3px rgba(255,255,255,.7), 0 0 0 4px #fff, 0 12px 0 var(--c3), 0 22px 24px -8px rgba(0,0,0,.5); }
+
+/* sound chips: the letter (not the chip) is centred, so every chip sits on one line; a clear gap before the note */
+.rg-c { display: inline-grid; place-items: center; height: 44px; line-height: 1; }
+.rg-c .ar { display: inline-block; font-size: 24px; line-height: 1.5; }
+.pod-learn .rg-chips { align-items: center; }
+.pod-learn small { margin-top: 12px; }
+
+/* parents: the race section */
+.par-stage { padding: 10px 16px 4px; font-size: 12px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; color: var(--ink2, #8A93A6); }
+.par-cups { font-weight: 800; font-size: 13px; white-space: nowrap; }
+.rt-coin-v { display: inline-flex; align-items: center; gap: 4px; font-weight: 800; white-space: nowrap; }
+.list-group .lrow-icon .wi { width: 100%; height: 100%; border-radius: inherit; }
+
+/* the bottom menu: five tabs, each lights up in its own colour (Play green, Map blue, Race red-orange,
+   Stickers gold, Parents purple) */
+.tab { margin: 5px 1px; min-width: 0; }
+.tab span { font-size: 10.5px; white-space: nowrap; }
+.tab.t-home { --t1: #34D07A; --t2: #12A05A; } .tab.t-map { --t1: #5AB0FF; --t2: #2F78E8; } .tab.t-race { --t1: #FF8A5B; --t2: #F0446A; }
+.tab.t-stickers { --t1: #FFC93D; --t2: #F09400; } .tab.t-parents { --t1: #B48CFF; --t2: #7C52EC; }
+.tab.on, :root[data-theme="dark"] .tab.on { color: #fff; background: linear-gradient(160deg, var(--t1), var(--t2)); box-shadow: 0 6px 14px -6px var(--t2), inset 0 1px 0 rgba(255,255,255,.35); }
+.tab.on svg.ic { transform: scale(1.08) translateY(-1px); filter: drop-shadow(0 1px 0 rgba(0,0,0,.15)); }
+.tab:not(.on):active { transform: scale(.94); }
+.race-menu.has-tabs .rm-body { padding-bottom: calc(var(--tab-h) + 40px + env(safe-area-inset-bottom)); }
+
+/* the map: a tighter level path, one open book at a time, book shortcuts on top */
+.node-row { height: 80px; }
+.world.folded .path, .world.folded .goal { display: none; }
+.world .w-more { display: none; }
+.world.folded .w-more { display: inline-flex; align-items: center; gap: 4px; margin: 2px 16px 14px; padding: 7px 14px; border-radius: 99px; font: inherit; font-weight: 800; font-size: 13px;
+  color: var(--ink); background: rgba(255,255,255,.6); box-shadow: inset 0 0 0 1.5px rgba(30,42,58,.1); position: relative; z-index: 1; }
+:root[data-theme="dark"] .world.folded .w-more { background: rgba(255,255,255,.08); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.12); }
+.world .w-more .ic { width: 14px; height: 14px; }
+.world.folded { padding-bottom: 0; }
+.map-jump { position: sticky; top: 0; z-index: 6; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 8px 16px 10px; margin: 4px 0 2px;
+  background: linear-gradient(var(--bg-fade, rgba(230,244,255,.92)) 70%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+:root[data-theme="dark"] .map-jump { --bg-fade: rgba(20,24,52,.9); }
+.map-jump::-webkit-scrollbar { display: none; }
+.mj { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 5px 6px 4px; border-radius: 16px; font: inherit; background: rgba(255,255,255,.55); color: var(--ink); box-shadow: inset 0 0 0 1.5px rgba(30,42,58,.08); }
+:root[data-theme="dark"] .mj { background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.1); }
+.mj .wi { width: 36px; height: 36px; border-radius: 12px; }
+.mj small { font-size: 10.5px; font-weight: 800; opacity: .7; }
+.mj.on { box-shadow: inset 0 0 0 2.5px #2F78E8, 0 4px 10px -6px #2F78E8; }
+.mj.lock { opacity: .55; }
+.node-row { height: 86px; }
+.world { scroll-margin-top: 92px; }

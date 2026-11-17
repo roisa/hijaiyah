@@ -145,7 +145,7 @@
   function shell(tab, title) {
     curScreen = { home: home, map: map, stickers: stickers, parents: parents }[tab];
     if (HJ.music) HJ.music.stop();
-    var TABS = ["home", "map", "stickers", "parents"], ti = TABS.indexOf(tab), dir = lastTab < 0 || ti === lastTab ? "" : ti > lastTab ? " from-r" : " from-l"; lastTab = ti;
+    var TABS = ["home", "map", "race", "stickers", "parents"], ti = TABS.indexOf(tab), dir = lastTab < 0 || ti === lastTab ? "" : ti > lastTab ? " from-r" : " from-l"; lastTab = ti;
     var s = bare(); if (dir) s.className += dir;
     if (HJ.bg) HJ.bg({ map: "map", stickers: "stickers", parents: "parents" }[tab] || null);
     var nb = el("header", "navbar");
@@ -161,15 +161,20 @@
     nb.appendChild(gear);
     s.appendChild(nb);
     var sc = el("main", "scroller"); s.appendChild(sc);
+    s.appendChild(tabbar(tab));
+    return sc;
+  }
+  // the bottom menu (also on the race menu): each tab lights up in its own colour
+  function tabbar(tab) {
     var tb = el("nav", "tabbar");
-    [["home", "gamepad", t("tabHome"), home], ["map", "map", t("map"), map], ["stickers", "sticker", t("stickers"), stickers],
-      ["parents", "family", t("tabParents"), function () { HJ.gate(parents); }]].forEach(function (x) {
-      var b = el("button", "tab" + (x[0] === tab ? " on" : ""), ic(x[1]) + "<span>" + esc(x[2]) + "</span>");
+    [["home", "gamepad", t("tabHome"), home], ["map", "map", t("map"), map], ["race", "race", t("tabRace"), function () { if (HJ.race) HJ.race.open(); }],
+      ["stickers", "sticker", t("stickers"), stickers], ["parents", "family", t("tabParents"), function () { HJ.gate(parents); }]].forEach(function (x) {
+      var b = el("button", "tab t-" + x[0] + (x[0] === tab ? " on" : ""), ic(x[1]) + "<span>" + esc(x[2]) + "</span>");
+      if (x[0] === tab) b.setAttribute("aria-current", "page");
       b.onclick = function () { A.unlock(); A.fx.tap(); if (x[0] !== tab || x[0] === "parents") x[3](); };
       tb.appendChild(b);
     });
-    s.appendChild(tb);
-    return sc;
+    return tb;
   }
 
   function kindArt(lv) { return { review: "repeat", boss: "trophy", khatam: "cap", surah: "book" }[lv.kind] || "sparkle"; }
@@ -297,10 +302,26 @@
     var sc = shell("map", t("map")), st = S.get();
     sc.appendChild(el("div", "large-title", esc(t("mapTitle1")) + " <em>" + esc(t("mapTitle2")) + "</em>"));
     sc.appendChild(el("div", "large-sub", esc(t("mapSub"))));
-    var cur = S.current(), curNode = null, focusEl = null;
+    var cur = S.current(), curNode = null, focusEl = null, openW = focusWorld || cur.w, boxes = {};
+    // the map is short: only one book shows its level path (the one the child is on, or the one tapped);
+    // the others are compact cards. A row of book shortcuts on top jumps to any book.
+    var jump = el("div", "map-jump");
+    HJ.worlds.forEach(function (w) {
+      var dn = w.levels.filter(function (l) { return st.stars[l.id]; }).length;
+      var jb = el("button", "mj" + (w.n === openW ? " on" : "") + (!S.unlocked(w.levels[0]) ? " lock" : ""), wi(w.n, true).outerHTML + "<small>" + dn + "/" + w.levels.length + "</small>");
+      jb.setAttribute("aria-label", tr(w.name)); jb.onclick = function () { A.fx.tap(); openWorld(w.n, true); };
+      jump.appendChild(jb);
+    });
+    sc.appendChild(jump);
+    function openWorld(n, scroll) {
+      openW = n;
+      Object.keys(boxes).forEach(function (k) { boxes[k].classList.toggle("folded", +k !== n); });
+      [].forEach.call(jump.children, function (b, i) { b.classList.toggle("on", i + 1 === n); });
+      if (scroll && boxes[n]) setTimeout(function () { boxes[n].scrollIntoView({ block: "start", behavior: "smooth" }); }, 30);
+    }
     HJ.worlds.forEach(function (w) {
       var wLocked = !S.unlocked(w.levels[0]);
-      var box = el("section", "world glass" + (wLocked ? " locked" : ""));
+      var box = el("section", "world glass" + (wLocked ? " locked" : "") + (w.n === openW ? "" : " folded")); boxes[w.n] = box;
       var tint = el("div", "tint"); tint.style.background = "radial-gradient(120% 60% at 100% 0%," + WI[w.n].g[0] + "66, transparent 60%), radial-gradient(90% 50% at 0% 100%," + WI[w.n].g[0] + "44, transparent 70%)";
       box.appendChild(tint);
       var done = w.levels.filter(function (l) { return st.stars[l.id]; }).length, pct = done / w.levels.length;
@@ -312,9 +333,12 @@
         '<text x="23" y="27.5" text-anchor="middle" font-size="12" font-weight="900" fill="currentColor" font-family="Nunito">' + done + "</text></svg>"));
       box.appendChild(wh);
       box.appendChild(el("div", "goal", esc(tr(w.goal))));
+      var more = el("button", "w-more", esc(t("mapShow")) + " " + ic("chevR")); more.onclick = function (e) { e.stopPropagation(); A.fx.tap(); openWorld(w.n, true); };
+      box.appendChild(more);
+      wh.style.cursor = "pointer"; wh.onclick = function () { if (box.classList.contains("folded")) { A.fx.tap(); openWorld(w.n, true); } };
       var path = el("div", "path");
       w.levels.forEach(function (lv, i) {
-        var row = el("div", "node-row"), x = 50 + Math.sin(i * 0.9) * 26;
+        var row = el("div", "node-row"), x = 50 + Math.sin(i * 0.9) * 28;
         var unl = S.unlocked(lv), stars = st.stars[lv.id] || 0, isBoss = lv.kind === "boss" || lv.kind === "khatam";
         var n = el("button", "node" + (stars ? " done" : "") + (!unl ? " lock" : "") + (lv === cur ? " cur" : "") + (isBoss ? " boss" : ""));
         n.setAttribute("aria-label", "Level " + lv.id + " · " + levelName(lv) + (stars ? " · " + stars + "/3" : "") + (!unl ? " · " + t("locked") : ""));
@@ -341,7 +365,7 @@
         if (lv === cur) { var mo = el("img", "map-mo mo-g"); mo.src = MO("pose-20"); mo.alt = ""; mo.style.left = "calc(" + x + "% + 36px)"; row.appendChild(mo); curNode = row; }
         path.appendChild(row);
       });
-      var H = w.levels.length * 96, pts = w.levels.map(function (l, i) { return [50 + Math.sin(i * 0.9) * 26, i * 96 + 46 + 8]; });
+      var STEP = 86, H = w.levels.length * STEP, pts = w.levels.map(function (l, i) { return [50 + Math.sin(i * 0.9) * 28, i * STEP + 38 + 8]; });
       var lastDone = -1; w.levels.forEach(function (l, i) { if (st.stars[l.id]) lastDone = i; });
       var line = function (a, b, cls) { return '<polyline class="' + cls + '" points="' + pts.slice(a, b + 1).map(function (q) { return q[0] + "," + q[1]; }).join(" ") + '" vector-effect="non-scaling-stroke"/>'; };
       path.insertAdjacentHTML("afterbegin", '<svg class="map-path" viewBox="0 0 100 ' + (H + 16) + '" preserveAspectRatio="none" style="height:' + (H + 16) + 'px">' +
@@ -362,7 +386,7 @@
       sc.appendChild(box);
       if (focusWorld === w.n) focusEl = box;
     });
-    setTimeout(function () { (focusEl || curNode) && (focusEl || curNode).scrollIntoView({ block: focusEl ? "start" : "center" }); }, 60);
+    setTimeout(function () { var tg = focusEl || (curNode && boxes[cur.w] && !boxes[cur.w].classList.contains("folded") ? curNode : null); tg && tg.scrollIntoView({ block: focusEl ? "start" : "center" }); }, 60);
   }
 
   function levelSheet(lv) {
@@ -749,6 +773,21 @@
         '<div class="pbar"><i style="width:' + (done / w.levels.length * 100) + '%"></i></div>', null, function () { map(w.n); }));
     });
     sc.appendChild(g1);
+    // the race game: what each track teaches and how far your child got (tap a track to open it)
+    if (HJ.race && HJ.race.report) {
+      var RR = HJ.race.report();
+      sc.appendChild(el("div", "group-t", esc(t("raceT"))));
+      var gR = el("div", "list-group");
+      gR.appendChild(row(HJ.art("trophy", 22), "gold", esc(t("parRaceSum", { c: RR.cups, m: RR.mastered, s: RR.sounds })) + "<small>" + esc(t("parRaceSub")) + "</small>", '<span class="rt-coin-v"><i class="rt-coin"></i> ' + RR.coins + "</span>"));
+      RR.stages.forEach(function (g, gi) {
+        gR.appendChild(el("div", "par-stage", (gi + 1) + " · " + esc(g.name)));
+        g.tracks.forEach(function (tk) {
+          gR.appendChild(row(tk.icon, "", esc(tk.topic) + "<small>" + esc(tk.place) + " · " + esc(tk.book) + " · " + tk.mastered + "/" + tk.sounds + " " + esc(t("parRaceSounds")) + "</small>" +
+            '<div class="pbar"><i style="width:' + Math.round(tk.won / tk.tot * 100) + '%"></i></div>', '<span class="par-cups">🏆 ' + tk.won + "/" + tk.tot + "</span>", function () { HJ.race.open(tk.n); }));
+        });
+      });
+      sc.appendChild(gR);
+    }
     var cur = S.current();
     sc.appendChild(el("div", "cur-text", (EN() ? "Now: " : "Sekarang: ") + "<b>" + esc(tr(HJ.worlds[cur.w - 1].name)) + " · " + esc(levelName(cur)) + "</b>"));
 
@@ -780,6 +819,8 @@
     tog('<img src="assets/icons/sound.svg" alt="">', "", t("sfx"), "sfx");
     tog(HJ.art("sun", 22), "green", t("nature"), "nature", t("natureSub"));
     tog(HJ.art("sparkle", 22), "purple", t("lessonMusic"), "lessonMusic", t("lessonMusicSub"));
+    if (st.settings.raceMusic === undefined) st.settings.raceMusic = true;
+    tog(HJ.art("trophy", 22), "pink", t("parRaceMusic"), "raceMusic", t("parRaceMusicSub"));
     tog(HJ.art("moon", 22), "gold", t("holidayPreview"), "holidayPreview", t("holidayPreviewSub"));
     tog(ic("textA"), "purple", t("latin"), "latin", t("latinSub"));
     if (!window.HJ_APP_BUILD) tog(ic("book"), "teal", t("cdn"), "cdn", t("cdnSub"));
@@ -875,7 +916,7 @@
   HJ.nameSheet = nameSheet;
 
   HJ.go = { home: home, map: map, stickers: stickers, parents: parents };
-  HJ._app = { home: home, stickers: stickers, parents: parents, moImg: moImg, confetti: confetti, levelSheet: levelSheet };
+  HJ._app = { home: home, stickers: stickers, parents: parents, moImg: moImg, confetti: confetti, levelSheet: levelSheet, tabbar: tabbar };
   var q = location.hash.replace("#", "");
   if (q === "map") map(); else if (q === "stickers") stickers(); else if (q === "parents") parents();
   else if (q.indexOf("level=") === 0 && HJ.level(q.slice(6))) runLevel(HJ.level(q.slice(6))); else home();
