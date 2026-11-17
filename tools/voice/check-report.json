@@ -2523,5 +2523,17 @@
   "heard": [],
   "ok": false,
   "file": "audio/huruf/sd51eedf0.mp3"
+ },
+ {
+  "id": "lines-52f88b47",
+  "text": "Finish the level before this one first",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "finish the level before this 1 first",
+   "Finnish the level before this 1 first"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-52f88b47.mp3"
  }
 ]
