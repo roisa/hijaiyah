@@ -139,7 +139,7 @@
 {"id":"lines-68fa744f","t":"Mo is hungry! Give Mo this fruit","lang":"en","sec":"lines","k":"line","key":"en|mo is hungry! give mo this fruit","h":"petunjuk / instructions","g":"Mo — English","p":["INSTR.feed"]},
 {"id":"lines-add35d48","t":"Drag the letter to its shadow!","lang":"en","sec":"lines","k":"line","key":"en|drag the letter to its shadow","h":"petunjuk / instructions","g":"Mo — English","p":["INSTR.shadow"]},
 {"id":"lines-7fd60ea7","t":"One more try","lang":"en","sec":"lines","k":"line","key":"en|one more try","h":"petunjuk / instructions","g":"Mo — English","p":["W.again2"]},
-{"id":"lines-707e6fb9","t":"Finish the level before first","lang":"en","sec":"lines","k":"line","key":"en|finish the level before first","h":"umpan balik / feedback","g":"Mo — English","p":["W.locked"]},
+{"id":"lines-52f88b47","t":"Finish the level before this one first","lang":"en","sec":"lines","k":"line","key":"en|finish the level before this one first","h":"umpan balik / feedback","g":"Mo — English","p":["W.locked"]},
 {"id":"lines-bf3d9c17","t":"Out of hearts… let's try again!","lang":"en","sec":"lines","k":"line","key":"en|out of hearts… let's try again","h":"umpan balik / feedback","g":"Mo — English","p":["W.fail"]},
 {"id":"lines-384ad306","t":"Masha Allah, great!","lang":"en","sec":"lines","k":"line","key":"en|masha allah, great","h":"umpan balik / feedback","g":"Mo — English","p":["W.great"]},
 {"id":"lines-fbd3e21e","t":"Assalamu'alaikum!","lang":"en","sec":"lines","k":"line","key":"en|assalamu'alaikum","h":"sapaan / greeting","g":"Mo — English","p":["home"]},
