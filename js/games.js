@@ -156,7 +156,8 @@
       if (pct >= 1 && !done) { done = true; A.fx.win(); ctx.cheer(t("great")); A.say(s.glyph === "ا" ? "أَلِف" : (HJ.BY[s.glyph] || {}).n || s.glyph); after(ctx, 1300, ctx.next); }
     }
     function down(e) { e.preventDefault(); last = null; paint(pt(e)); cv.onpointermove = function (ev) { paint(pt(ev)); }; }
-    cv.onpointerdown = down;
+    cv.onpointerdown = down; cv.style.touchAction = "none";
+    ["touchstart", "touchmove"].forEach(function (k) { cv.addEventListener(k, function (e) { if (e.cancelable) e.preventDefault(); }, { passive: false }); });   // iPad: keep the touch (see toddler.js holdTouch)
     cv.onpointerup = cv.onpointerleave = function () { cv.onpointermove = null; last = null; };
     (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () { setTimeout(setup, 30); });
   };

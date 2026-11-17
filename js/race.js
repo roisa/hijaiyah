@@ -257,7 +257,7 @@
     var gcard = el("div", "rm-goal glass", '<div class="rg-h">' + HJ.art("sparkle", 20) + "<b>" + esc(t("raceGoal")) + "</b><span>" + esc(goal(curW)) + "</span></div>" +
       '<div class="rg-bar"><i style="width:' + Math.round(mN / Math.max(1, tp.length) * 100) + '%"></i></div><small>' + esc(t("raceMastered", { n: mN, m: tp.length })) + "</small>");
     var chips = el("div", "rg-chips");
-    tp.slice(0, 40).forEach(function (x) { var cc = el("button", "rg-c ar" + (mastered(x) ? " ok" : (mstore()[x.ar] ? " half" : "")), esc(x.ar)); cc.onclick = function () { A.unlock(); A.say(x.au); }; chips.appendChild(cc); });
+    tp.slice(0, 40).forEach(function (x) { var cc = el("button", "rg-c" + (mastered(x) ? " ok" : (mstore()[x.ar] ? " half" : "")), '<span class="ar">' + esc(x.ar) + "</span>"); cc.onclick = function () { A.unlock(); A.say(x.au); }; chips.appendChild(cc); });
     gcard.appendChild(chips); body.appendChild(gcard);
     // the tracks as a winding road: each race a stop, the Grand Prix a trophy at the end
     var list = el("div", "rm-map"), RS = races(curW), stepY = 112, mapH = RS.length * stepY + 30;
@@ -285,6 +285,7 @@
     });
     body.appendChild(list);
     body.appendChild(el("p", "rm-note", esc(t("raceNote"))));
+    if (APP() && APP().tabbar) { sc.appendChild(APP().tabbar("race")); sc.classList.add("has-tabs"); }
     A.talk(t("raceHow"), lang());
   }
   function clock(sec) { var m = Math.floor(sec / 60), s2 = Math.round(sec % 60); return m + ":" + (s2 < 10 ? "0" : "") + s2; }
@@ -526,7 +527,7 @@
       var seen = {}, its = (res.items || []).filter(function (it) { if (seen[it.q.ar]) { if (!it.ok) seen[it.q.ar].ok = false; return false; } seen[it.q.ar] = it = { q: it.q, ok: it.ok }; return true; }).map(function (it) { return seen[it.q.ar]; });
       if (its.length) {
         var lw = el("div", "pod-learn", "<b>" + esc(t("raceLearned")) + "</b>"), lc = el("div", "rg-chips");
-        its.forEach(function (it) { var cc = el("button", "rg-c ar " + (it.ok ? "ok" : "again"), esc(it.q.ar)); cc.onclick = function () { A.unlock(); A.say(it.q.au); }; lc.appendChild(cc); });
+        its.forEach(function (it) { var cc = el("button", "rg-c " + (it.ok ? "ok" : "again"), '<span class="ar">' + esc(it.q.ar) + "</span>"); cc.onclick = function () { A.unlock(); A.say(it.q.au); }; lc.appendChild(cc); });
         lw.appendChild(lc); var miss = its.filter(function (it) { return !it.ok; }).length;
         lw.appendChild(el("small", "", esc(miss ? t("raceAgainN", { n: miss }) : t("raceAllRight"))));
         if (miss && !R.baby) {                                          // one short lap with just the sounds that were missed
@@ -550,5 +551,16 @@
   }
   function flagSvg() { return '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2v17" stroke="#3A4256" stroke-width="2"/>' + [0, 1, 2, 3, 4, 5].map(function (i) { return '<rect x="' + (4 + (i % 3) * 4) + '" y="' + (2 + (i / 3 | 0) * 4) + '" width="4" height="4" fill="' + ((i + (i / 3 | 0)) % 2 ? "#222" : "#fff") + '"/>'; }).join("") + "</svg>"; }
 
-  HJ.race = { open: open, card: card, races: races, shelf: shelf, play: function (id) { var w0 = String(id).split("-")[0], w = EXTRA[w0] ? w0 : +w0; races(w).forEach(function (r) { if (r.id === id) play(r); }); } };
+  // for the parents' page: every track by stage, with cups won and sounds mastered
+  function report() {
+    var cups = cupCount(), M = mstore(), seen = {}, mast = 0;
+    WORLDS.forEach(function (n) { trackPool(n).forEach(function (x) { if (!seen[x.ar]) { seen[x.ar] = 1; if (mastered(x)) mast++; } }); });
+    return { cups: cups.all, coins: S.get().coins || 0, mastered: mast, sounds: Object.keys(seen).length,
+      stages: STAGES.map(function (g) { return { name: g.n[L01()], tracks: g.w.map(function (n) {
+        var tp = trackPool(n);
+        return { n: n, step: WORLDS.indexOf(n) + 1, topic: tTopic(n), place: tPlace(n), book: n === "baby" ? "2+" : t("book") + " " + TRACK[n].j, icon: wIcon(n),
+          won: trackWon(n), tot: races(n).length, done: trackDone(n), mastered: tp.filter(mastered).length, sounds: tp.length };
+      }) }; }) };
+  }
+  HJ.race = { open: open, card: card, races: races, shelf: shelf, report: report, play: function (id) { var w0 = String(id).split("-")[0], w = EXTRA[w0] ? w0 : +w0; races(w).forEach(function (r) { if (r.id === id) play(r); }); } };
 })();

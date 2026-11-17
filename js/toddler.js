@@ -12,11 +12,18 @@
   var COLS = ["#FF6B6B", "#FFB800", "#34C759", "#3B82F6", "#A855F7", "#FF7AB6", "#14B8A6", "#FB923C"];
   function burstAt(e, n) { var r = e.getBoundingClientRect(); HJ.juice.burst(r.left + r.width / 2, r.top + r.height / 2, n || 12); }
 
+  /* iPad/iPhone: WebKit can decide a touch is a page scroll before the finger moves and then CANCELS the pointer
+     (tracing stops at once, a dragged piece flies back — "it needs two tries"). Holding the touch here keeps it ours;
+     no text selection or long-press magnifier either. */
+  function holdTouch(el) {
+    ["touchstart", "touchmove"].forEach(function (k) { el.addEventListener(k, function (e) { if (e.cancelable) e.preventDefault(); }, { passive: false }); });
+    el.style.webkitUserSelect = "none"; el.style.userSelect = "none"; el.style.webkitTouchCallout = "none";
+  }
   /* drag helper: the element follows the finger; onDrop(x, y) returns true to keep it, false to fly back */
   function draggable(e, onDrop, onTap) {
     var sx = 0, sy = 0, dx = 0, dy = 0, down = false, moved = false;
-    e.style.touchAction = "none";
-    e.addEventListener("pointerdown", function (ev) { down = true; moved = false; sx = ev.clientX; sy = ev.clientY; dx = dy = 0; e.classList.add("drag"); try { e.setPointerCapture(ev.pointerId); } catch (x) {} A.fx.tap(); });
+    e.style.touchAction = "none"; holdTouch(e);
+    e.addEventListener("pointerdown", function (ev) { ev.preventDefault(); down = true; moved = false; sx = ev.clientX; sy = ev.clientY; dx = dy = 0; e.classList.add("drag"); try { e.setPointerCapture(ev.pointerId); } catch (x) {} A.fx.tap(); });
     e.addEventListener("pointermove", function (ev) { if (!down) return; dx = ev.clientX - sx; dy = ev.clientY - sy; if (Math.abs(dx) + Math.abs(dy) > 8) moved = true; e.style.transform = "translate(" + dx + "px," + dy + "px) scale(1.12)"; });
     function end(ev) {
       if (!down) return; down = false; e.classList.remove("drag");
@@ -114,7 +121,7 @@
       p.strokeStyle = col === "rainbow" ? "hsl(" + (hue = (hue + 4) % 360) + ",90%,58%)" : col;
       p.beginPath(); p.moveTo(a.x, a.y); p.lineTo(b.x + .01, b.y); p.stroke();
     }
-    cv.style.touchAction = "none";
+    cv.style.touchAction = "none"; holdTouch(cv);
     cv.addEventListener("pointerdown", function (e) { if (done) return; down = true; try { cv.setPointerCapture(e.pointerId); } catch (x) {} last = pos(e); stroke(last, last); draw(); });
     cv.addEventListener("pointermove", function (e) { if (!down || done) return; var p = pos(e); stroke(last, p); last = p; draw(); if (Math.random() < .25) A.fx.tap(); });
     function up() { if (!down) return; down = false; check(); }

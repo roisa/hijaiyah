@@ -610,6 +610,8 @@
     // festive bunting across the road now and then, grandstands of cheering fans at the start / finish straight
     for (k = 70; k < N - 60; k += 150) segs[k].sp.push({ s: function (n) { return buntSpr(n); }, x: 0, over: 1 });
     [6, 26, 46, N - 34, N - 14].forEach(function (kk, j) { if (segs[kk]) segs[kk].sp.push({ s: function (n) { return standSpr(n, j % 2); }, x: j % 2 ? 1.75 : -1.75, fans: 1 }); });
+    // party balloons along the road on every track (they made the Balloon Race so cheerful); not under the sea or in space
+    if (TH.name !== "sea" && !TH.space && TH.deco.indexOf("balloons") < 0) for (k = 40; k < N - 20; k += 90) segs[k].sp.push({ s: DECO.balloons, x: (k / 90) % 2 < 1 ? 1.35 : -1.35 });
     for (k = 12; k < N; k += 5) {
       var dk = TH.deco[Math.floor(rand() * TH.deco.length)], side = rand() < .5 ? -1 : 1;
       segs[k].sp.push({ s: DECO[dk], x: side * (1.3 + rand() * 1.1) });
@@ -837,7 +839,7 @@
         });
       }
       // speed lines in turbo
-      if ((boost > 0 || padT > 0) && !calm) { g.lineWidth = 3; for (var s = 0; s < 26; s++) { g.strokeStyle = s % 4 ? "rgba(255,255,255,.6)" : ["rgba(255,212,59,.8)", "rgba(124,200,255,.8)", "rgba(255,143,177,.8)"][s % 3]; var ang = s * 0.45 + tRace * 3, r0 = W * (.3 + Math.random() * .2), r1 = r0 + 40 + Math.random() * 40, cx2 = W / 2, cy2 = H * .55; g.beginPath(); g.moveTo(cx2 + Math.cos(ang) * r0, cy2 + Math.sin(ang) * r0 * .6); g.lineTo(cx2 + Math.cos(ang) * r1, cy2 + Math.sin(ang) * r1 * .6); g.stroke(); } }
+      if ((boost > 0 || padT > 0) && !calm) { g.lineWidth = 3; for (var s = 0; s < 26; s++) { g.strokeStyle = "rgba(255,255,255," + (night ? .45 : .55) + ")"; var ang = s * 0.45 + tRace * 3, r0 = W * (.3 + Math.random() * .2), r1 = r0 + 40 + Math.random() * 40, cx2 = W / 2, cy2 = H * .55; g.beginPath(); g.moveTo(cx2 + Math.cos(ang) * r0, cy2 + Math.sin(ang) * r0 * .6); g.lineTo(cx2 + Math.cos(ang) * r1, cy2 + Math.sin(ang) * r1 * .6); g.stroke(); } }
       // Mo's kart
       var kw = Math.min(W * .38, 230);
       if (shield > 0) { var bq = g.createRadialGradient(W / 2, H - kw * .55, kw * .2, W / 2, H - kw * .55, kw * .78); bq.addColorStop(0, "rgba(124,200,255,0)"); bq.addColorStop(.8, "rgba(124,200,255,.25)"); bq.addColorStop(1, "rgba(255,255,255,.7)"); g.fillStyle = bq; g.beginPath(); g.arc(W / 2, H - kw * .55, kw * .78 + Math.sin(tRace * 6) * 3, 0, 7); g.fill(); }
@@ -868,7 +870,8 @@
       return G.spr;
     }
     // one letter board: a chunky toy sign with a coloured rim and lip, the letter big and bold in a deep colour
-    var BOARD = [["#FFD43B", "#E0A800", "#B8410E"], ["#7CC8FF", "#3D8FE0", "#173F8C"], ["#C9A7FF", "#8B63F0", "#4B2A9E"]];
+    // the letter boards: bright and solid like the balloons (coral, blue, purple), a white letter on top
+    var BOARD = [["#FF7A8C", "#E0445F", "#8A1A2E"], ["#5AAEFF", "#2F7FE8", "#0F3E8A"], ["#B08CFF", "#7C52EC", "#3E1F96"]];
     // one letter block: a chunky 3D toy block (a top bevel, a deep side, a glossy face, an embossed letter)
     function shade(hex, k) { return "#" + hex.slice(1).match(/../g).map(function (h2) { var v = Math.max(0, Math.min(255, Math.round(parseInt(h2, 16) * k))); return (v < 16 ? "0" : "") + v.toString(16); }).join(""); }
     function boardSprite(G, l) {
@@ -889,7 +892,7 @@
       q.strokeStyle = "rgba(255,255,255,.7)"; q.lineWidth = 4; rr(q, x0 + 3, y0 + 3, bw - 6, bh - 6, 45); q.stroke();
       // the face, sunk a little into the block
       var fx = x0 + 20, fy = y0 + 20, fw = bw - 40, fh = bh - 40;
-      var fg = q.createLinearGradient(0, fy, 0, fy + fh); fg.addColorStop(0, "#FFFFFF"); fg.addColorStop(1, "#EEF4FF");
+      var fg = q.createLinearGradient(0, fy, 0, fy + fh); fg.addColorStop(0, shade(C[0], 1.08)); fg.addColorStop(1, C[1]);
       q.fillStyle = shade(C[1], .85); rr(q, fx - 2, fy - 3, fw + 4, fh + 4, 32); q.fill();
       q.fillStyle = fg; rr(q, fx, fy, fw, fh, 30); q.fill();
       q.fillStyle = "rgba(255,255,255,.9)"; rr(q, fx + 14, fy + 8, fw * .45, 12, 6); q.fill();             // gloss
@@ -899,8 +902,8 @@
       var mid = m.actualBoundingBoxAscent != null ? (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2 : fs * .3, cy = fy + fh / 2 + mid;
       // the letter is embossed: a darker drop, then the letter, then a fine light edge
       q.lineJoin = "round";
-      q.fillStyle = shade(C[2], .6); q.strokeStyle = shade(C[2], .6); q.lineWidth = 8; q.strokeText(item.ar, w / 2, cy + 5); q.fillText(item.ar, w / 2, cy + 5);
-      q.strokeStyle = C[2]; q.lineWidth = 8; q.strokeText(item.ar, w / 2, cy); q.fillStyle = C[2]; q.fillText(item.ar, w / 2, cy);
+      q.fillStyle = C[2]; q.strokeStyle = C[2]; q.lineWidth = 12; q.strokeText(item.ar, w / 2, cy + 6); q.fillText(item.ar, w / 2, cy + 6);
+      q.strokeStyle = shade(C[2], 1.1); q.lineWidth = 7; q.strokeText(item.ar, w / 2, cy); q.fillStyle = "#fff"; q.fillText(item.ar, w / 2, cy);
       q.direction = "ltr";
       if (!st) {            // the lightning badge: driving through the right letter gives a turbo
         q.fillStyle = "#C25A00"; q.beginPath(); q.arc(46, 44, 30, 0, 7); q.fill();
