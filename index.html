@@ -12,11 +12,22 @@
 <link rel="icon" href="assets/brand/icon-buddy-192.png">
 <link rel="apple-touch-icon" href="assets/brand/icon-buddy-180.png">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="css/app.css?v=82">
+<link rel="stylesheet" href="css/app.css?v=83">
 <script>/* theme before first paint (no flash) */try{var m=(JSON.parse(localStorage.getItem("bmh_v1")||"{}").theme)||"auto";document.documentElement.setAttribute("data-theme",m==="dark"||(m==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light")}catch(e){}</script>
-<script>/* big screens (iPad, desktop): scale the whole phone layout up, like the Baby Mo app does on iPad */
-(function(){function fit(){var w=innerWidth,h=innerHeight,z=1;if(Math.min(w,h)>=700)z=Math.max(1,Math.min(w/430,h/900));
-document.documentElement.style.zoom=z>1.02?z.toFixed(3):"";document.documentElement.classList.toggle("big",z>1.02);document.documentElement.style.setProperty("--vz",z>1.02?z:1);}fit();addEventListener("resize",fit);})();</script>
+<script>/* big screens: scale the whole phone layout up, like the Baby Mo app does on iPad.
+   Touch devices (iPad): through the viewport (a layout ~430–620 px wide shown bigger). The browser scales everything, so
+   finger and element positions always agree. (CSS zoom did the same job, but on iPad Safari it made touch positions and
+   element positions disagree: tracing missed the start dot and dragged pieces lagged behind the finger.)
+   Desktop browsers ignore the viewport tag, so they keep CSS zoom (mouse positions are consistent there). */
+(function(){var mv=document.querySelector('meta[name="viewport"]'),base=mv.getAttribute("content"),de=document.documentElement;
+var touch=(window.matchMedia&&matchMedia("(pointer: coarse)").matches)||navigator.maxTouchPoints>1;
+function fit(){var z=1;
+if(touch){var sw=screen.width,sh=screen.height,o=screen.orientation&&screen.orientation.type,land=o?o.indexOf("landscape")===0:(window.orientation===90||window.orientation===-90);
+var w=land?Math.max(sw,sh):Math.min(sw,sh),h=land?Math.min(sw,sh):Math.max(sw,sh);if(Math.min(w,h)>=700)z=Math.max(1,Math.min(w/430,h/900));
+if(z>1.02){var zs=z.toFixed(3);mv.setAttribute("content","width="+Math.round(w/z)+", initial-scale="+zs+", minimum-scale="+zs+", maximum-scale="+zs+", user-scalable=no, viewport-fit=cover");}else mv.setAttribute("content",base);de.style.zoom="";}
+else{var iw=innerWidth,ih=innerHeight;if(Math.min(iw,ih)>=700)z=Math.max(1,Math.min(iw/430,ih/900));de.style.zoom=z>1.02?z.toFixed(3):"";}
+de.classList.toggle("big",z>1.02);de.style.setProperty("--vz",z>1.02?z:1);}
+fit();addEventListener("resize",fit);addEventListener("orientationchange",function(){setTimeout(fit,120);});})();</script>
 </head>
 <body>
 <div id="app"></div>
@@ -25,13 +36,13 @@ document.documentElement.style.zoom=z>1.02?z.toFixed(3):"";document.documentElem
 <script src="audio/lines/voice.js?v=45"></script>
 <script src="js/letters.js?v=15"></script>
 <script src="js/quran.js?v=15"></script>
-<script src="js/store.js?v=76"></script>
+<script src="js/store.js?v=77"></script>
 <script src="js/icons.js?v=16"></script>
 <script src="js/curriculum.js?v=17"></script>
-<script src="js/audio.js?v=42"></script>
+<script src="js/audio.js?v=43"></script>
 <script src="js/music.js?v=56"></script>
 <script src="js/juice.js?v=15"></script>
-<script src="js/games.js?v=64"></script>
+<script src="js/games.js?v=65"></script>
 <script src="js/ink.js?v=34"></script>
 <script src="js/voice.js?v=15"></script>
 <script src="js/tajwid.js?v=15"></script>
@@ -40,13 +51,13 @@ document.documentElement.style.zoom=z>1.02?z.toFixed(3):"";document.documentElem
 <script src="js/toddler.js?v=39"></script>
 <script src="js/bg.js?v=16"></script>
 <script src="js/world.js?v=22"></script>
-<script src="js/fun.js?v=38"></script>
-<script src="js/race3d.js?v=76"></script>
-<script src="js/race.js?v=78"></script>
+<script src="js/fun.js?v=39"></script>
+<script src="js/race3d.js?v=77"></script>
+<script src="js/race.js?v=79"></script>
 <script src="js/extras.js?v=56"></script>
 <script src="js/ambience.js?v=15"></script>
-<script src="js/badges.js?v=58"></script>
+<script src="js/badges.js?v=59"></script>
 <script src="js/holiday.js?v=56"></script>
-<script src="js/app.js?v=63"></script>
+<script src="js/app.js?v=64"></script>
 </body>
 </html>

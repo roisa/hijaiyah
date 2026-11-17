@@ -359,8 +359,8 @@
     s.pairs.forEach(function (p, i) { cards.push({ it: p[0], k: i }); cards.push({ it: p[1], k: i }); });
     cards = U.shuffle(cards);
     var grid = el("div", "grid" + (cards.length <= 6 ? " c3" : ""));
-    cards.forEach(function (c) {
-      var m = el("button", "mcard " + (isWordy(c.it) || c.it.quran ? "w" : "")), inn = el("div", "in");
+    cards.forEach(function (c, ci) {
+      var m = el("button", "mcard " + (isWordy(c.it) || c.it.quran ? "w" : "")), inn = el("div", "in"); m.setAttribute("aria-label", HJ.t("cardN", { n: ci + 1 }));
       inn.appendChild(el("div", "f", HJ.art("star", 40))); var b = el("div", "b");
       if (c.it.soundOnly) { b.classList.add("snd"); b.innerHTML = HJ.ic("speaker"); } else b.appendChild(arEl(c.it));
       inn.appendChild(b); m.appendChild(inn);

@@ -53,7 +53,8 @@
     var r = v.getBoundingClientRect(); setTimeout(function () { J.burst(r.left + 50, r.top + 40, 18, true); }, 350);
     A.talk(many ? t("badgeNew") : t("badgeNew") + " " + b.n[L()], S.get().lang);
     var gone = false; function out() { if (gone) return; gone = true; v.classList.add("out"); setTimeout(function () { v.remove(); showing = false; pop(); }, 400); }
-    v.onclick = function () { out(); if (HJ.go && HJ.go.stickers) HJ.go.stickers(); };
+    // to the sticker book — but never from the middle of a race or over an open sheet (it would leave them running / stuck)
+    v.onclick = function () { out(); if (document.querySelector(".screen.race.r3")) return; document.querySelectorAll(".veil").forEach(function (x) { x.remove(); }); if (HJ.go && HJ.go.stickers) HJ.go.stickers(); };
     setTimeout(out, 3800);
   }
   function shelf() {

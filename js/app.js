@@ -19,9 +19,16 @@
     st.seen[type] = 1; S.save();
     setTimeout(function () {
       var target = document.querySelector(".stage " + HAND[type]); if (!target) return;
-      var r = target.getBoundingClientRect(), h = el("img", "tap-hand"); h.src = "assets/icons/tap-hand.svg"; h.alt = "";
-      h.style.left = (r.left + r.width * .62) + "px"; h.style.top = (r.top + r.height * .55) + "px";
-      document.body.appendChild(h); setTimeout(function () { h.remove(); }, 3200);
+      var h = el("img", "tap-hand"); h.src = "assets/icons/tap-hand.svg"; h.alt = "";
+      // the hand follows its target (bubbles and balloons float away; it used to point at empty sky)
+      var until = performance.now() + 3200;
+      (function place() {
+        if (!h.isConnected && h.parentNode) return;
+        if (performance.now() > until || !target.isConnected) { h.remove(); return; }
+        var r = target.getBoundingClientRect(); h.style.left = (r.left + r.width * .62) + "px"; h.style.top = (r.top + r.height * .55) + "px";
+        requestAnimationFrame(place);
+      })();
+      document.body.appendChild(h);
     }, 600);
   }
   var CHEER = ["yeyy", "pose-02", "wow", "ok", "pose-37", "alright", "pose-26"];
@@ -95,7 +102,7 @@
       var g = el("div", "gate-keys");
       ["1", "2", "3", "4", "5", "6", "7", "8", "9", "del", "0", "ok"].forEach(function (k) {
         var bt = el("button", "gk" + (k === "ok" ? " ok" : k === "del" ? " del" : ""), k === "ok" ? ic("check") : k === "del" ? ic("back") : k);
-        bt.setAttribute("aria-label", k === "ok" ? "OK" : k === "del" ? "Delete" : k);
+        bt.setAttribute("aria-label", k === "ok" ? t("done") : k === "del" ? t("del") : k);
         bt.onclick = function () {
           A.fx.tap();
           if (k === "del") typed = typed.slice(0, -1);
@@ -121,7 +128,7 @@
       p.appendChild(el("h2", "", esc(S.get().name ? t("restH") : t("restH0"))));
       p.appendChild(el("p", "", esc(t("restP", { m: Math.max(1, Math.round(S.playMs() / 60000)) }))));
       var r = el("div", "row"), ok = el("button", "btn big", ic("check") + " " + esc(t("restOk"))), more = el("button", "btn ghost small", ic("lock") + " " + esc(t("restMore")));
-      ok.onclick = function () { close(); home(); };
+      ok.onclick = function () { close(); document.querySelectorAll(".veil").forEach(function (x) { x.remove(); }); home(); };
       more.onclick = function () { close(); HJ.gate(function () { S.get().playDay.ms = Math.max(0, S.get().playDay.ms - 600000); S.save(); after && after(); }); };
       r.appendChild(ok); p.appendChild(r); p.appendChild(more);
     });

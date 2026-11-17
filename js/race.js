@@ -274,7 +274,7 @@
         '<span class="rm-lbl"><b>' + esc(r.gp ? t("raceGP") : t("raceN", { n: i + 1 })) + "</b>" +
         '<small class="rm-g">' + esc(r.gp ? t("raceGoalGP") : r.mad ? t("raceGoalM") : r.alike ? t("raceGoalA") : r.vmix ? t(r.vmix[0] === "an" ? "raceGoalT" : "raceGoalV") : r.baby ? t("raceGoalB") : t("raceGoalL")) + "</small>" +
         '<small class="ar">' + r.targets.slice(0, r.gp ? 4 : 5).map(function (x) { return esc(x.ar); }).join(" ") + "</small>" + (tm ? "<small>⏱ " + clock(tm) + "</small>" : "") + "</span>";
-      c.setAttribute("aria-label", (r.gp ? t("raceGP") : t("raceN", { n: i + 1 })) + (bp ? " · " + t("place" + bp) : "") + (op ? "" : " · " + t("locked")));
+      c.setAttribute("aria-label", (r.gp ? t("raceGP") : t("raceN", { n: i + 1 })) + (bp ? " · " + t("place" + bp) : "") + (op ? "" : " · " + t("raceLocked")));
       c.onclick = function () {
         A.unlock();
         if (!op) { A.fx.bad(); HJ.toast(HJ.ic("lock") + " " + esc(t("raceLocked"))); A.talk(t("raceLocked"), lang()); return; }
@@ -310,13 +310,13 @@
       [["body", "garageBody"], ["paint", "garagePaint"], ["rim", "garageRims"], ["horn", "garageHorn"]].forEach(function (sec) {
         p.appendChild(el("div", "gar-h", esc(t(sec[1]))));
         var row = el("div", "gar-row");
-        SHOP[sec[0]].forEach(function (it) {
+        SHOP[sec[0]].forEach(function (it, j) {
           var key = sec[0] + ":" + it[0], own = G.owned.indexOf(key) >= 0, on = G[sec[0]] === it[0];
           var col = sec[0] === "paint" ? HJ.race3d.PAINT[it[0]] : sec[0] === "rim" ? HJ.race3d.RIMS[it[0]] : ["#7CC8FF", "#3D7BFF"];
           var face2 = sec[0] === "body" ? '<i class="gar-body">' + bodyIcon(it[0]) + "</i>" : sec[0] === "horn" ? '<i class="gar-horn" style="background:linear-gradient(160deg,' + col[0] + "," + col[1] + ')">' + esc(t("horn" + it[0])) + "</i>" : '<i style="background:linear-gradient(160deg,' + col[0] + "," + col[1] + ')"></i>';
           var b = el("button", "gar-it" + (on ? " on" : "") + (own ? "" : " shop"), face2 +
             (on ? '<small>' + HJ.ic("check") + "</small>" : own ? "" : '<small><i class="rt-coin"></i>' + it[1] + "</small>"));
-          b.setAttribute("aria-label", it[0] + (own ? "" : " · " + it[1]));
+          b.setAttribute("aria-label", (sec[0] === "horn" ? t("horn" + it[0]) : t(sec[1]) + " " + (j + 1)) + (on ? " ✓" : own ? "" : " · " + t("gearCost", { n: it[1] })));
           b.onclick = function () {
             A.unlock(); var st = S.get(); if (sec[0] === "horn") HJ.race3d.HORNS[it[0]](1);
             if (!own) {

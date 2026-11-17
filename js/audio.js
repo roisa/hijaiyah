@@ -86,7 +86,9 @@
   function playUrl(url, rate) {
     var c = ctx;
     if (c && c.state === "running" && window.fetch) {
+      var tok = seqToken;                     // A.stop() bumps seqToken: a clip stopped while loading must not start later
       return ubuf(url).then(function (b) {
+        if (tok !== seqToken) return;
         return new Promise(function (res) {
           var src = c.createBufferSource(), done = false, fin = function () { if (!done) { done = true; res(); } };
           src.buffer = b; src.playbackRate.value = rate || 1; src.connect(c.destination); src.onended = fin;
@@ -99,11 +101,13 @@
   }
   function htmlPlay(url, rate) {
     return new Promise(function (res, rej) {
-      var a = new Audio(url); cur = a;
+      var a = new Audio(url), done = false, fin = function () { if (!done) { done = true; res(); } };
+      cur = { pause: function () { try { a.pause(); } catch (e) {} fin(); } };
+      setTimeout(fin, 12000);                 // never hang (a stalled or paused clip)
       a.addEventListener("loadedmetadata", function () { if (isFinite(a.duration)) setTimeout(res, (a.duration / (rate || 1)) * 1000 + 800); });   // never hang on a lost "ended"
       a.playbackRate = rate || 1;
-      a.onended = function () { res(); };
-      a.onerror = function () { rej(new Error("audio")); };
+      a.onended = fin;
+      a.onerror = function () { if (!done) { done = true; rej(new Error("audio")); } };
       var p = a.play(); if (p && p.catch) p.catch(rej);
     });
   }
@@ -112,6 +116,7 @@
     if (lineEnd) { var le = lineEnd; lineEnd = null; le(); }
     seqToken++;
     if (cur) { try { cur.pause(); } catch (e) {} cur = null; }
+    if (nowSrc) { try { nowSrc.stop(); } catch (e) {} nowSrc = null; }
     try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) {}
   };
 
