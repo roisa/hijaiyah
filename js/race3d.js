@@ -1067,7 +1067,7 @@
         var dist = G.seg - pSeg;
         if (!G.said && dist < 400 && phase === "race") { G.said = true; curGate = G; callGate(G); if (tut && G === gates[0] && !BABY) { tutOn = true; tip.classList.add("gone"); } if (BABY) tip.classList.add("gone"); }
         if (tutOn && G === gates[0]) { var dir = G.good - laneI; hand.className = "r3-hand on " + (dir < 0 ? "l" : dir > 0 ? "r" : "c"); hand.setAttribute("data-say", dir === 0 ? t("tutStay") : t("tutTap")); }
-        if (G.baby && dist < 70 && laneI !== G.good) laneI = G.good;
+        if (G.baby && dist < 35 && laneI !== G.good) laneI = G.good;      // only just before the balloon: steering stays free
         if (dist <= 0) {
           if (G.baby) { G.done = true; G.picked = G.good; pickResult(G); popBalloon(G); return; }
           G.done = true; G.picked = lane;
@@ -1173,8 +1173,10 @@
     stage.addEventListener("pointerdown", function (e) { A.unlock(); sx0 = e.clientX; });
     stage.addEventListener("pointerup", function (e) {
       if (phase !== "race" || sx0 == null) return;
-      if (BABY) { sx0 = null; babyGo(); return; }
       var d = e.clientX - sx0, b = stage.getBoundingClientRect();
+      // Balloon Race (2+): a plain tap pops the balloon (it can never be missed); a swipe steers left / right
+      if (BABY && Math.abs(d) <= 30) { sx0 = null; babyGo(); return; }
+      if (BABY) { var nb = Math.max(0, Math.min(2, laneI + (d > 0 ? 1 : -1))); if (nb !== laneI) { laneI = nb; A.fx.step(); } tip.classList.add("gone"); sx0 = null; return; }
       var dir = Math.abs(d) > 30 ? (d > 0 ? 1 : -1) : (e.clientX - b.left < b.width / 2 ? -1 : 1);
       var nl = Math.max(0, Math.min(2, laneI + dir)); if (nl !== laneI) { laneI = nl; A.fx.step(); markPick(); } tip.classList.add("gone"); sx0 = null;
     });
