@@ -861,7 +861,7 @@
       drawKart(g, W / 2, H - 14, kw, ME, { t: tRace * (.6 + speed / BASE * .6), flap: Math.sin(tRace * 3) * .4 + speed / BASE * .6, tilt: tilt, turbo: boost > 0 || padT > 0, big: boost > 0, rainbow: superT > 0, air: air * 120, night: night, roll: roll, wob: calm ? 0 : Math.sin(tRace * 22) * 1.2 });
     }
     function cockpit() {
-      var sh = calm ? 0 : Math.sin(tRace * 22) * 1.1 + (air > 0 ? -air * 40 : 0), steer = tilt * 6, P = ME.paint;
+      var sh = calm ? 0 : Math.sin(tRace * 22) * 1.1 + (air > 0 ? -air * 40 : 0), steer = Math.max(-.75, Math.min(.75, (LANES[laneI] - px) * 1.4)), P = ME.paint;   // the wheel turns while the kart changes lane
       if (boost > 0 || padT > 0) {                        // turbo: a warm glow rising from the bottom corners
         var tg = g.createLinearGradient(0, H, 0, H * .7); tg.addColorStop(0, superT > 0 ? "rgba(155,109,255,.45)" : "rgba(255,150,0,.42)"); tg.addColorStop(1, "rgba(255,150,0,0)");
         g.fillStyle = tg; g.fillRect(0, H * .7, W, H * .3);
@@ -881,25 +881,66 @@
         g.fillStyle = ME.flag; g.beginPath(); g.moveTo(fx, fy); g.quadraticCurveTo(fx + fw / 2, fy - wv, fx + fw, fy); g.lineTo(fx + fw, fy + fh); g.quadraticCurveTo(fx + fw / 2, fy + fh - wv, fx, fy + fh); g.closePath(); g.fill();
         g.fillStyle = "#fff"; g.font = "28px 'Scheherazade New', serif"; g.textAlign = "center"; g.direction = "rtl"; g.fillText(ME.flagTxt, fx + fw / 2, fy + fh * .78); g.direction = "ltr";
       } else {
-        // Mo's seat: a dashboard, and his hands on a steering wheel that turns as he steers
-        var dt2 = H * .8, dg = g.createLinearGradient(0, dt2, 0, H); dg.addColorStop(0, "#3A4256"); dg.addColorStop(1, "#22273A");
-        g.fillStyle = dg; g.beginPath(); g.moveTo(0, H + 10); g.lineTo(0, dt2 + 14); g.quadraticCurveTo(W / 2, dt2 - 16, W, dt2 + 14); g.lineTo(W, H + 10); g.closePath(); g.fill();
-        g.fillStyle = P[0]; g.fillRect(0, dt2 + 10, W * .12, 6); g.fillRect(W * .88, dt2 + 10, W * .12, 6);
-        var r = Math.min(W * .25, 150), cx = W / 2, cy = H - r * .95;
-        g.save(); g.translate(cx, cy); g.rotate(steer);
-        g.strokeStyle = "#1E2230"; g.lineWidth = r * .2; g.beginPath(); g.arc(0, 0, r, 0, 7); g.stroke();
-        g.strokeStyle = P[0]; g.lineWidth = r * .1; g.beginPath(); g.arc(0, 0, r, Math.PI * 1.15, Math.PI * 1.85); g.stroke();
-        g.strokeStyle = "#2A2F3D"; g.lineWidth = r * .12; [Math.PI * .5, Math.PI * 1.05, Math.PI * 1.95].forEach(function (a) { g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.cos(a) * r, Math.sin(a) * r); g.stroke(); });
-        g.fillStyle = "#2A2F3D"; g.beginPath(); g.arc(0, 0, r * .3, 0, 7); g.fill();
-        g.fillStyle = "#FFD43B"; g.font = "900 " + Math.round(r * .3) + "px 'Fredoka One', Nunito"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("★", 0, 2); g.textBaseline = "alphabetic";
-        // the hands, with green sleeves, holding the wheel at ten-to-two
-        [Math.PI * 1.17, Math.PI * 1.83].forEach(function (a, i) {
-          var hx = Math.cos(a) * r, hy = Math.sin(a) * r;
-          g.strokeStyle = ME.shirt[0]; g.lineWidth = r * .3; g.lineCap = "round"; g.beginPath(); g.moveTo(hx * 1.25, hy + r * 1.6); g.lineTo(hx, hy + r * .12); g.stroke();
-          g.fillStyle = "#F2C9A0"; g.beginPath(); g.ellipse(hx, hy, r * .17, r * .2, i ? .5 : -.5, 0, 7); g.fill();
-          g.fillStyle = "rgba(0,0,0,.08)"; g.beginPath(); g.ellipse(hx + (i ? -4 : 4), hy + 4, r * .1, r * .12, 0, 0, 7); g.fill();
+        // Mo's seat in the go-kart: the kart's nose and front tyres ahead, a flat-bottomed racing wheel that turns as he
+        // steers, and his arms reaching to it, hands wrapped round the grips
+        var r = Math.min(W * .21, 128), cx = W / 2, cy = H - r * 1.12, ca = Math.cos(steer), sa = Math.sin(steer), YS = .86;
+        var roll2 = (tRace * speed / SEG * .9) % 1;
+        // front tyres at the edges: they turn with the wheel, their tread rolls with the speed
+        [-1, 1].forEach(function (sd) {
+          var tx2 = sd < 0 ? W * .06 : W * .94, ty2 = H * .84, tw = W * .2, th = H * .2;
+          g.save(); g.translate(tx2, ty2); g.rotate(steer * .5);
+          g.fillStyle = "#1A1D27"; rr(g, -tw / 2, -th / 2, tw, th, tw * .28); g.fill();
+          g.save(); rr(g, -tw / 2, -th / 2, tw, th, tw * .28); g.clip(); g.strokeStyle = "rgba(255,255,255,.1)"; g.lineWidth = 5;
+          for (var tr2 = -1; tr2 < 6; tr2++) { var yy = -th / 2 + ((tr2 + roll2) / 5) * th; g.beginPath(); g.moveTo(-tw / 2, yy); g.lineTo(tw / 2, yy + 8); g.stroke(); }
+          g.restore();
+          g.fillStyle = "rgba(255,255,255,.12)"; rr(g, -tw / 2 + (sd < 0 ? tw * .55 : 4), -th / 2 + 6, tw * .18, th - 12, 6); g.fill();
+          g.restore();
         });
+        // the kart's nose: the paint, a white number disc, a dark seam where it meets the cockpit
+        var nt = H * .76, ng = g.createLinearGradient(0, nt, 0, H); ng.addColorStop(0, P[0]); ng.addColorStop(1, P[1]);
+        g.fillStyle = ng; g.beginPath(); g.moveTo(W * .08, H + 10); g.lineTo(W * .3, nt + 8); g.quadraticCurveTo(W / 2, nt - 10, W * .7, nt + 8); g.lineTo(W * .92, H + 10); g.closePath(); g.fill();
+        g.fillStyle = "rgba(255,255,255,.25)"; g.beginPath(); g.ellipse(W * .4, nt + 16, W * .08, 5, -.1, 0, 7); g.fill();
+        g.fillStyle = "#fff"; g.beginPath(); g.arc(W / 2, nt + 26, 15, 0, 7); g.fill(); g.fillStyle = P[1]; g.font = "900 17px Nunito"; g.textAlign = "center"; g.fillText(ME.num, W / 2, nt + 32);
+        // steering column
+        g.strokeStyle = "#2A2F3D"; g.lineWidth = r * .2; g.lineCap = "round"; g.beginPath(); g.moveTo(cx, H + 20); g.lineTo(cx, cy + r * .2); g.stroke();
+        // the wheel, a little tilted towards Mo (squashed vertically) and turned by the steering
+        function wp(x, y) { return [cx + (x * ca - y * sa), cy + (x * sa + y * ca) * YS]; }
+        g.save(); g.translate(cx, cy); g.scale(1, YS); g.rotate(steer);
+        g.strokeStyle = "rgba(0,0,0,.18)"; g.lineWidth = r * .2; g.beginPath(); g.arc(4, 8, r, Math.asin(.7), Math.PI - Math.asin(.7), true); g.closePath(); g.stroke();   // a soft drop shadow under the rim
+        var a0 = Math.asin(.7);
+        function rim() { g.beginPath(); g.arc(0, 0, r, a0, Math.PI - a0, true); g.closePath(); }
+        g.lineJoin = "round"; g.strokeStyle = "#1C2030"; g.lineWidth = r * .2; rim(); g.stroke();
+        g.strokeStyle = "rgba(255,255,255,.14)"; g.lineWidth = r * .05; g.beginPath(); g.arc(0, -2, r - r * .05, Math.PI * 1.2, Math.PI * 1.8); g.stroke();
+        // padded grips at nine and three, in the kart's colour
+        g.strokeStyle = P[0]; g.lineWidth = r * .23; g.lineCap = "butt";
+        g.beginPath(); g.arc(0, 0, r, Math.PI * .92, Math.PI * 1.22); g.stroke(); g.beginPath(); g.arc(0, 0, r, -Math.PI * .22, Math.PI * .08); g.stroke();
+        // spokes and the hub with Mo's star and two buttons
+        g.strokeStyle = "#2A2F3D"; g.lineWidth = r * .13; g.lineCap = "round";
+        g.beginPath(); g.moveTo(-r * .9, 0); g.lineTo(r * .9, 0); g.moveTo(0, 0); g.lineTo(0, r * .68); g.stroke();
+        g.fillStyle = "#2A2F3D"; rr(g, -r * .34, -r * .2, r * .68, r * .44, r * .14); g.fill();
+        g.fillStyle = "#3A4256"; rr(g, -r * .28, -r * .15, r * .56, r * .32, r * .1); g.fill();
+        g.fillStyle = "#FFD43B"; g.font = "900 " + Math.round(r * .3) + "px 'Fredoka One', Nunito"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("★", 0, r * .02); g.textBaseline = "alphabetic";
+        g.fillStyle = "#22C06E"; g.beginPath(); g.arc(-r * .22, r * .12, r * .045, 0, 7); g.fill(); g.fillStyle = "#3D9BFF"; g.beginPath(); g.arc(r * .22, r * .12, r * .045, 0, 7); g.fill();
         g.restore();
+        // Mo's arms from the bottom corners to the grips, then his hands wrapped round them
+        var SK = "#F2C9A0", SK2 = "#DDA77C";
+        [[-1, Math.PI * 1.07], [1, -Math.PI * .07]].forEach(function (hh) {
+          var sd = hh[0], ga = hh[1], gp = wp(Math.cos(ga) * r, Math.sin(ga) * r), sx2 = cx + sd * W * .34, sy2 = H + 60;
+          var wx = gp[0] + sd * r * .1, wy = gp[1] + r * .32;
+          g.lineCap = "round";
+          g.strokeStyle = shade(ME.shirt[0], .82); g.lineWidth = r * .46; g.beginPath(); g.moveTo(sx2, sy2); g.lineTo(wx, wy); g.stroke();
+          g.strokeStyle = ME.shirt[0]; g.lineWidth = r * .38; g.beginPath(); g.moveTo(sx2, sy2); g.lineTo(wx, wy); g.stroke();
+          g.strokeStyle = "rgba(255,255,255,.22)"; g.lineWidth = r * .08; g.beginPath(); g.moveTo(sx2 - sd * r * .1, sy2); g.lineTo(wx - sd * r * .08, wy); g.stroke();
+          var ux = (wx - sx2), uy = (wy - sy2), ul = Math.hypot(ux, uy); ux /= ul; uy /= ul;      // the orange cuff near the wrist
+          g.strokeStyle = ME.shirt[1]; g.lineWidth = r * .4; g.lineCap = "butt"; g.beginPath(); g.moveTo(wx - ux * r * .3, wy - uy * r * .3); g.lineTo(wx - ux * r * .12, wy - uy * r * .12); g.stroke();
+          // the fist round the grip: palm, three finger bumps over the rim, a thumb on top
+          g.save(); g.translate(gp[0], gp[1]); g.rotate(steer + (sd < 0 ? -.35 : .35));
+          g.fillStyle = SK2; g.beginPath(); g.ellipse(0, r * .12, r * .2, r * .17, 0, 0, 7); g.fill();
+          g.fillStyle = SK; g.beginPath(); g.ellipse(0, r * .08, r * .19, r * .16, 0, 0, 7); g.fill();
+          for (var fi = 0; fi < 3; fi++) { g.fillStyle = SK; g.beginPath(); g.ellipse((fi - 1) * r * .12, -r * .06, r * .07, r * .065, 0, 0, 7); g.fill(); g.strokeStyle = SK2; g.lineWidth = 1.5; g.stroke(); }
+          g.fillStyle = SK; g.beginPath(); g.ellipse(-sd * r * .14, -r * .02, r * .09, r * .06, sd * .6, 0, 7); g.fill(); g.strokeStyle = SK2; g.lineWidth = 1.5; g.stroke();
+          g.restore();
+        });
       }
       g.restore();
     }
