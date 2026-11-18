@@ -922,23 +922,35 @@
         g.fillStyle = "#FFD43B"; g.font = "900 " + Math.round(r * .3) + "px 'Fredoka One', Nunito"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("★", 0, r * .02); g.textBaseline = "alphabetic";
         g.fillStyle = "#22C06E"; g.beginPath(); g.arc(-r * .22, r * .12, r * .045, 0, 7); g.fill(); g.fillStyle = "#3D9BFF"; g.beginPath(); g.arc(r * .22, r * .12, r * .045, 0, 7); g.fill();
         g.restore();
-        // Mo's arms from the bottom corners to the grips, then his hands wrapped round them
-        var SK = "#F2C9A0", SK2 = "#DDA77C";
-        [[-1, Math.PI * 1.07], [1, -Math.PI * .07]].forEach(function (hh) {
-          var sd = hh[0], ga = hh[1], gp = wp(Math.cos(ga) * r, Math.sin(ga) * r), sx2 = cx + sd * W * .34, sy2 = H + 60;
-          var wx = gp[0] + sd * r * .1, wy = gp[1] + r * .32;
+        // Mo's arms from the bottom corners to the grips, then his hands wrapped round the rim
+        var SK = "#F4CDA6", SK2 = "#D9A27A", SK3 = "#FFE3C8";
+        function hp(u, v, th) { var c2 = Math.cos(th), s2 = Math.sin(th); return [u * c2 - v * s2, u * s2 + v * c2]; }
+        [[-1, Math.PI * 1.06], [1, -Math.PI * .06]].forEach(function (hh) {
+          var sd = hh[0], ga = hh[1], gp = wp(Math.cos(ga) * r, Math.sin(ga) * r), sx2 = cx + sd * W * .3, sy2 = H + 70;
+          var th = ga + steer;                                   // local u = out from the wheel's centre, v = along the rim
+          var wx = gp[0] + sd * r * .03, wy = gp[1] + r * .14;   // the wrist, just below the grip
+          // sleeve (green, a darker edge, a soft light), orange cuff, then the wrist
           g.lineCap = "round";
-          g.strokeStyle = shade(ME.shirt[0], .82); g.lineWidth = r * .46; g.beginPath(); g.moveTo(sx2, sy2); g.lineTo(wx, wy); g.stroke();
-          g.strokeStyle = ME.shirt[0]; g.lineWidth = r * .38; g.beginPath(); g.moveTo(sx2, sy2); g.lineTo(wx, wy); g.stroke();
-          g.strokeStyle = "rgba(255,255,255,.22)"; g.lineWidth = r * .08; g.beginPath(); g.moveTo(sx2 - sd * r * .1, sy2); g.lineTo(wx - sd * r * .08, wy); g.stroke();
-          var ux = (wx - sx2), uy = (wy - sy2), ul = Math.hypot(ux, uy); ux /= ul; uy /= ul;      // the orange cuff near the wrist
-          g.strokeStyle = ME.shirt[1]; g.lineWidth = r * .4; g.lineCap = "butt"; g.beginPath(); g.moveTo(wx - ux * r * .3, wy - uy * r * .3); g.lineTo(wx - ux * r * .12, wy - uy * r * .12); g.stroke();
-          // the fist round the grip: palm, three finger bumps over the rim, a thumb on top
-          g.save(); g.translate(gp[0], gp[1]); g.rotate(steer + (sd < 0 ? -.35 : .35));
-          g.fillStyle = SK2; g.beginPath(); g.ellipse(0, r * .12, r * .2, r * .17, 0, 0, 7); g.fill();
-          g.fillStyle = SK; g.beginPath(); g.ellipse(0, r * .08, r * .19, r * .16, 0, 0, 7); g.fill();
-          for (var fi = 0; fi < 3; fi++) { g.fillStyle = SK; g.beginPath(); g.ellipse((fi - 1) * r * .12, -r * .06, r * .07, r * .065, 0, 0, 7); g.fill(); g.strokeStyle = SK2; g.lineWidth = 1.5; g.stroke(); }
-          g.fillStyle = SK; g.beginPath(); g.ellipse(-sd * r * .14, -r * .02, r * .09, r * .06, sd * .6, 0, 7); g.fill(); g.strokeStyle = SK2; g.lineWidth = 1.5; g.stroke();
+          g.strokeStyle = shade(ME.shirt[0], .8); g.lineWidth = r * .36; g.beginPath(); g.moveTo(sx2, sy2); g.lineTo(wx, wy + r * .1); g.stroke();
+          g.strokeStyle = ME.shirt[0]; g.lineWidth = r * .3; g.beginPath(); g.moveTo(sx2, sy2); g.lineTo(wx, wy + r * .1); g.stroke();
+          g.strokeStyle = "rgba(255,255,255,.2)"; g.lineWidth = r * .06; g.beginPath(); g.moveTo(sx2 - sd * r * .08, sy2); g.lineTo(wx - sd * r * .07, wy + r * .12); g.stroke();
+          var ux = wx - sx2, uy = wy + r * .1 - sy2, ul = Math.hypot(ux, uy); ux /= ul; uy /= ul;
+          g.strokeStyle = ME.shirt[1]; g.lineWidth = r * .34; g.lineCap = "round"; g.beginPath(); g.moveTo(wx - ux * r * .03, wy + r * .1 - uy * r * .03); g.lineTo(wx + ux * r * .03, wy + r * .1 + uy * r * .03); g.stroke();
+          g.strokeStyle = SK2; g.lineWidth = r * .24; g.beginPath(); g.moveTo(wx, wy + r * .06); g.lineTo(gp[0], gp[1] + r * .04); g.stroke();
+          g.strokeStyle = SK; g.lineWidth = r * .2; g.beginPath(); g.moveTo(wx, wy + r * .06); g.lineTo(gp[0], gp[1] + r * .04); g.stroke();
+          // the hand round the grip, drawn in the rim's own frame so it turns with the wheel
+          g.save(); g.translate(gp[0], gp[1]); g.rotate(th);
+          // thumb: on the inner side of the rim, curling towards the hub
+          g.fillStyle = SK2; g.beginPath(); g.ellipse(-r * .18, -sd * r * .08, r * .11, r * .07, -sd * .6, 0, 7); g.fill();
+          g.fillStyle = SK; g.beginPath(); g.ellipse(-r * .175, -sd * r * .085, r * .097, r * .058, -sd * .6, 0, 7); g.fill();
+          // the back of the hand: a soft rounded fist across the rim (an outline, a shade on the lower side, a light on top)
+          g.fillStyle = SK2; g.beginPath(); g.ellipse(r * .03, 0, r * .23, r * .22, 0, 0, 7); g.fill();
+          g.fillStyle = SK; g.beginPath(); g.ellipse(r * .025, 0, r * .21, r * .2, 0, 0, 7); g.fill();
+          g.fillStyle = SK3; g.globalAlpha = .7; g.beginPath(); g.ellipse(r * .02, -sd * r * .06, r * .09, r * .045, 0, 0, 7); g.fill(); g.globalAlpha = 1;
+          // fingers curling over the rim: three soft creases on the outer side, little knuckle dimples
+          g.strokeStyle = SK2; g.lineWidth = Math.max(1.5, r * .018); g.lineCap = "round";
+          [-.09, 0, .09].forEach(function (v) { g.beginPath(); g.moveTo(r * .1, v * r); g.quadraticCurveTo(r * .17, v * r + r * .01, r * .215, v * r * .9); g.stroke(); });
+          g.fillStyle = SK2; [-.135, -.045, .045, .135].forEach(function (v) { g.beginPath(); g.arc(r * .06, v * r, r * .014, 0, 7); g.fill(); });
           g.restore();
         });
       }
