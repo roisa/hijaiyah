@@ -123,7 +123,7 @@
     raceGoalT: ["Dengar tanwinnya: an, in, atau un?", "Hear the tanwin: an, in or un?"], raceGoalB: ["Satu huruf, satu balon", "One letter, one balloon"],
     raceGoalGP: ["Ujian semua bunyi di jalur ini", "All the sounds of this track"],
     raceGoalM: ["Pendek atau panjang? ba · baa", "Short or long? ba · baa"], raceGoalA: ["Awas huruf mirip! Lihat titiknya", "Look-alike letters! Watch the dots"],
-    raceNext: ["Lanjut", "Next"],
+    raceNext: ["Lanjut", "Next"], raceCam: ["Kamera", "Camera"], cam_chase: ["Kejar", "Chase"], cam_hood: ["Kap mobil", "Hood"], cam_wheel: ["Setir", "Steering wheel"], cam_road: ["Jalan", "Road"],
     parRaceSum: ["{c} piala · {m} dari {s} bunyi dikuasai", "{c} cups · {m} of {s} sounds mastered"],
     parRaceSub: ["Balapan melatih telinga: dengar bunyinya, pilih huruf yang benar. Bunyi dikuasai = 2× benar.", "Races train the ear: hear the sound, pick the right letter. Mastered = right twice."],
     parRaceSounds: ["bunyi dikuasai", "sounds mastered"], parRaceMusic: ["Musik balapan", "Race music"], parRaceMusicSub: ["Musik ceria saat balapan", "Upbeat music while racing"],

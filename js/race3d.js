@@ -17,6 +17,9 @@
   /* ---------- road constants ---------- */
   var SEG = 200, ROADW = 2000, CAMH = 1000, FOV = 100, DEPTH = 1 / Math.tan((FOV / 2) * Math.PI / 180), DRAW = 170, LANES = [-0.64, 0, 0.64];
   var PLAYERZ = CAMH * DEPTH, BASE = 44 * SEG;   // cruising speed: 44 segments a second
+  // camera views: chase (behind the kart, as before) · hood (over the kart's bonnet) · wheel (Mo's seat, hands on the
+  // steering wheel) · road (bumper height, no kart). Only the drawing camera moves; positions, gates and hits don't.
+  var CAMS = { chase: { f: 0, h: CAMH }, hood: { f: .74, h: 560 }, wheel: { f: .84, h: 470 }, road: { f: .96, h: 280 } }, CAMORDER = ["chase", "hood", "wheel", "road"];
 
   /* ---------- seeded random (a race always has the same track) ---------- */
   function rng(seed) { var s = 0; for (var i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) >>> 0; return function () { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
@@ -513,6 +516,7 @@
     if (HJ.bg) HJ.bg(null);
     var night = dark() ? 1 : 0, TH = THEME[R.th || R.w], rand = rng(R.id + "-track");
     var st = S.get(), gar = st.garage || {}, myPaint = PAINT[gar.paint] || PAINT.red, myRim = RIMS[gar.rim] || RIMS.classic;
+    var camK = CAMS[(st.settings || {}).raceCam] ? st.settings.raceCam : "chase";
     var ME = { body: gar.body || "kart", paint: myPaint, rim: myRim, helmet: [myPaint[0], myPaint[1]], shirt: ["#43B85C", "#FF8A3D"], num: "1", hair: "#22252E", star: true, flag: "#22C06E", flagTxt: R.flag || ["ب", "ج", "ق", "ن"][R.w - 1] || "ب" };
     var RIV = {
       ais: { paint: PAINT.pink, rim: RIMS.classic, helmet: ["#FFB3D6", "#E86AA6"], shirt: ["#FF8FC8", "#9B6DFF"], hijab: "#FFC4E1", num: "2", ears: true },
@@ -568,8 +572,16 @@
     var listen = el("div", "r3-listen", '<span class="rl-ear">' + HJ.ic("speaker") + "</span><b>" + esc(t("raceListen")) + "</b>"); sc.appendChild(listen);
     var horn = el("button", "r3-horn", '<svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true"><circle cx="12" cy="24" r="8.5" fill="#FF5D73" stroke="#fff" stroke-width="2.5"/><path d="M20 21.5h9l11-8v21l-11-8h-9z" fill="#FFE27A" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><path d="M43 18.5q2.5 5.5 0 11" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>');
     horn.setAttribute("aria-label", t("raceHorn")); sc.appendChild(horn);
+    var camB = el("button", "nav-btn rt-cam", '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M4 7.5A2.5 2.5 0 0 1 6.5 5h1.6l1.2-1.6A1 1 0 0 1 10.1 3h3.8a1 1 0 0 1 .8.4L15.9 5h1.6A2.5 2.5 0 0 1 20 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12" r="3.6" fill="#fff" opacity=".9"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>');
+    camB.setAttribute("aria-label", t("raceCam"));
+    function setCam2(k, say) {
+      camK = k; var set = S.get().settings; set.raceCam = k; S.save(); camB.setAttribute("aria-label", t("raceCam") + " · " + t("cam_" + k));
+      if (say) { callText(t("raceCam") + ": <b>" + esc(t("cam_" + k)) + "</b>", "blue"); A.fx.tap(); }
+    }
+    camB.onclick = function (e) { e.stopPropagation(); A.unlock(); setCam2(CAMORDER[(CAMORDER.indexOf(camK) + 1) % CAMORDER.length], true); };
+    camB.addEventListener("pointerdown", function (e) { e.stopPropagation(); }); camB.addEventListener("pointerup", function (e) { e.stopPropagation(); });
     var mus = el("button", "nav-btn rt-mus" + ((S.get().settings || {}).raceMusic === false ? " off" : ""), '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 18V6l11-2v12" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.8" fill="currentColor"/><circle cx="17.5" cy="16" r="2.8" fill="currentColor"/></svg>');
-    mus.setAttribute("aria-label", t("raceMusic")); top.insertBefore(mus, coinEl);
+    mus.setAttribute("aria-label", t("raceMusic")); top.insertBefore(mus, coinEl); top.insertBefore(camB, mus); setCam2(camK, false);
     var hand = el("div", "r3-hand", '<span class="r3-arrow"></span><img src="assets/icons/tap-hand.svg" alt="">'); sc.appendChild(hand);
     var tip = el("div", "race-tip glass", esc(t("raceHow3"))); sc.appendChild(tip);
     var heads = { ais: el("span", "rt-head ais"), adam: el("span", "rt-head adam"), mo: el("span", "rt-head moFace") };
@@ -739,12 +751,13 @@
       g.lineTo(W, hz + 2); g.closePath(); g.fill();
     }
     function render() {
-      var base = Math.floor(pos / SEG) % N, perc = (pos % SEG) / SEG, bs = segs[base], camX = px * ROADW;
-      var pY = bs.p1.y + (bs.p2.y - bs.p1.y) * perc, camY = pY + CAMH, lapOf = Math.floor(pos / LAPLEN);
+      var cpos = pos + PLAYERZ * CAMS[camK].f;                         // the drawing camera for this view
+      var base = Math.floor(cpos / SEG) % N, perc = (cpos % SEG) / SEG, bs = segs[base], camX = px * ROADW;
+      var pY = bs.p1.y + (bs.p2.y - bs.p1.y) * perc, camY = pY + CAMS[camK].h, lapOf = Math.floor(cpos / LAPLEN);
       var dx = -(bs.curve * perc), xx = 0, maxy = H, list = [];
       g.clearRect(0, 0, W, H); background();
       for (var n = 0; n < DRAWN; n++) {
-        var seg = segs[(base + n) % N], looped = seg.i < base, zoff = looped ? LAPLEN : 0, posInLap = pos - lapOf * LAPLEN;
+        var seg = segs[(base + n) % N], looped = seg.i < base, zoff = looped ? LAPLEN : 0, posInLap = cpos - lapOf * LAPLEN;
         var a = project({ x: 0, y: seg.p1.y, z: seg.p1.z }, camX - xx, camY, posInLap - zoff);
         var b = project({ x: 0, y: seg.p2.y, z: seg.p2.z }, camX - xx - dx, camY, posInLap - zoff);
         xx += dx; dx += seg.curve;
@@ -840,11 +853,55 @@
       }
       // speed lines in turbo
       if ((boost > 0 || padT > 0) && !calm) { g.lineWidth = 3; for (var s = 0; s < 26; s++) { g.strokeStyle = "rgba(255,255,255," + (night ? .45 : .55) + ")"; var ang = s * 0.45 + tRace * 3, r0 = W * (.3 + Math.random() * .2), r1 = r0 + 40 + Math.random() * 40, cx2 = W / 2, cy2 = H * .55; g.beginPath(); g.moveTo(cx2 + Math.cos(ang) * r0, cy2 + Math.sin(ang) * r0 * .6); g.lineTo(cx2 + Math.cos(ang) * r1, cy2 + Math.sin(ang) * r1 * .6); g.stroke(); } }
-      // Mo's kart
+      // Mo's kart (chase view) — or what Mo sees from the hood / his seat / the bumper
+      if (camK !== "chase") { cockpit(); return; }
       var kw = Math.min(W * .38, 230);
       if (shield > 0) { var bq = g.createRadialGradient(W / 2, H - kw * .55, kw * .2, W / 2, H - kw * .55, kw * .78); bq.addColorStop(0, "rgba(124,200,255,0)"); bq.addColorStop(.8, "rgba(124,200,255,.25)"); bq.addColorStop(1, "rgba(255,255,255,.7)"); g.fillStyle = bq; g.beginPath(); g.arc(W / 2, H - kw * .55, kw * .78 + Math.sin(tRace * 6) * 3, 0, 7); g.fill(); }
       if (magnet > 0) { g.strokeStyle = "rgba(255,212,59," + (.4 + Math.sin(tRace * 10) * .2) + ")"; g.lineWidth = 4; for (var mr = 0; mr < 2; mr++) { g.beginPath(); g.arc(W / 2, H - kw * .5, kw * (.62 + mr * .14 + (tRace * .3 % .14)), Math.PI * 1.1, Math.PI * 1.9); g.stroke(); } }
       drawKart(g, W / 2, H - 14, kw, ME, { t: tRace * (.6 + speed / BASE * .6), flap: Math.sin(tRace * 3) * .4 + speed / BASE * .6, tilt: tilt, turbo: boost > 0 || padT > 0, big: boost > 0, rainbow: superT > 0, air: air * 120, night: night, roll: roll, wob: calm ? 0 : Math.sin(tRace * 22) * 1.2 });
+    }
+    function cockpit() {
+      var sh = calm ? 0 : Math.sin(tRace * 22) * 1.1 + (air > 0 ? -air * 40 : 0), steer = tilt * 6, P = ME.paint;
+      if (boost > 0 || padT > 0) {                        // turbo: a warm glow rising from the bottom corners
+        var tg = g.createLinearGradient(0, H, 0, H * .7); tg.addColorStop(0, superT > 0 ? "rgba(155,109,255,.45)" : "rgba(255,150,0,.42)"); tg.addColorStop(1, "rgba(255,150,0,0)");
+        g.fillStyle = tg; g.fillRect(0, H * .7, W, H * .3);
+      }
+      if (shield > 0) { g.strokeStyle = "rgba(124,200,255," + (.45 + Math.sin(tRace * 6) * .15) + ")"; g.lineWidth = 10; g.strokeRect(5, 5, W - 10, H - 10); }
+      if (camK === "road") return;
+      g.save(); g.translate(0, sh);
+      if (camK === "hood") {
+        // the bonnet: the kart's paint, a white racing stripe, a shine, and the letter flag on the right
+        var top = H * .83, hg = g.createLinearGradient(0, top, 0, H); hg.addColorStop(0, P[0]); hg.addColorStop(1, P[1]);
+        g.fillStyle = hg; g.beginPath(); g.moveTo(-20, H + 10); g.lineTo(W * .1, top + 18); g.quadraticCurveTo(W / 2, top - 22, W * .9, top + 18); g.lineTo(W + 20, H + 10); g.closePath(); g.fill();
+        g.fillStyle = "rgba(255,255,255,.85)"; g.beginPath(); g.moveTo(W * .46, top - 2); g.lineTo(W * .54, top - 2); g.lineTo(W * .58, H + 10); g.lineTo(W * .42, H + 10); g.closePath(); g.fill();
+        g.fillStyle = "rgba(255,255,255,.28)"; g.beginPath(); g.ellipse(W * .3, top + 30, W * .16, 10, -.12, 0, 7); g.fill();
+        g.fillStyle = "rgba(0,0,0,.18)"; [.22, .78].forEach(function (k) { g.beginPath(); g.ellipse(W * k, top + 46, 26, 7, 0, 0, 7); g.fill(); });
+        var fx = W * .12, fy = top - 70, fw = 64, fh = 40, wv = Math.sin(tRace * 6) * 4;
+        g.strokeStyle = "#5A6275"; g.lineWidth = 4; g.beginPath(); g.moveTo(fx, top + 24); g.lineTo(fx, fy); g.stroke();
+        g.fillStyle = ME.flag; g.beginPath(); g.moveTo(fx, fy); g.quadraticCurveTo(fx + fw / 2, fy - wv, fx + fw, fy); g.lineTo(fx + fw, fy + fh); g.quadraticCurveTo(fx + fw / 2, fy + fh - wv, fx, fy + fh); g.closePath(); g.fill();
+        g.fillStyle = "#fff"; g.font = "28px 'Scheherazade New', serif"; g.textAlign = "center"; g.direction = "rtl"; g.fillText(ME.flagTxt, fx + fw / 2, fy + fh * .78); g.direction = "ltr";
+      } else {
+        // Mo's seat: a dashboard, and his hands on a steering wheel that turns as he steers
+        var dt2 = H * .8, dg = g.createLinearGradient(0, dt2, 0, H); dg.addColorStop(0, "#3A4256"); dg.addColorStop(1, "#22273A");
+        g.fillStyle = dg; g.beginPath(); g.moveTo(0, H + 10); g.lineTo(0, dt2 + 14); g.quadraticCurveTo(W / 2, dt2 - 16, W, dt2 + 14); g.lineTo(W, H + 10); g.closePath(); g.fill();
+        g.fillStyle = P[0]; g.fillRect(0, dt2 + 10, W * .12, 6); g.fillRect(W * .88, dt2 + 10, W * .12, 6);
+        var r = Math.min(W * .25, 150), cx = W / 2, cy = H - r * .95;
+        g.save(); g.translate(cx, cy); g.rotate(steer);
+        g.strokeStyle = "#1E2230"; g.lineWidth = r * .2; g.beginPath(); g.arc(0, 0, r, 0, 7); g.stroke();
+        g.strokeStyle = P[0]; g.lineWidth = r * .1; g.beginPath(); g.arc(0, 0, r, Math.PI * 1.15, Math.PI * 1.85); g.stroke();
+        g.strokeStyle = "#2A2F3D"; g.lineWidth = r * .12; [Math.PI * .5, Math.PI * 1.05, Math.PI * 1.95].forEach(function (a) { g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.cos(a) * r, Math.sin(a) * r); g.stroke(); });
+        g.fillStyle = "#2A2F3D"; g.beginPath(); g.arc(0, 0, r * .3, 0, 7); g.fill();
+        g.fillStyle = "#FFD43B"; g.font = "900 " + Math.round(r * .3) + "px 'Fredoka One', Nunito"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("★", 0, 2); g.textBaseline = "alphabetic";
+        // the hands, with green sleeves, holding the wheel at ten-to-two
+        [Math.PI * 1.17, Math.PI * 1.83].forEach(function (a, i) {
+          var hx = Math.cos(a) * r, hy = Math.sin(a) * r;
+          g.strokeStyle = ME.shirt[0]; g.lineWidth = r * .3; g.lineCap = "round"; g.beginPath(); g.moveTo(hx * 1.25, hy + r * 1.6); g.lineTo(hx, hy + r * .12); g.stroke();
+          g.fillStyle = "#F2C9A0"; g.beginPath(); g.ellipse(hx, hy, r * .17, r * .2, i ? .5 : -.5, 0, 7); g.fill();
+          g.fillStyle = "rgba(0,0,0,.08)"; g.beginPath(); g.ellipse(hx + (i ? -4 : 4), hy + 4, r * .1, r * .12, 0, 0, 7); g.fill();
+        });
+        g.restore();
+      }
+      g.restore();
     }
     function drawSprite(sp, P, offX, clip, lift, scaleX, forceW) {
       var w = forceW || (P.s * sp.ww * ROADW * W / 2), h = w * sp.h / sp.w, x = P.x + P.s * offX * ROADW * W / 2 - w / 2 * (scaleX || 1), y = P.y - h - (lift || 0);
@@ -1180,7 +1237,7 @@
       var dir = Math.abs(d) > 30 ? (d > 0 ? 1 : -1) : (e.clientX - b.left < b.width / 2 ? -1 : 1);
       var nl = Math.max(0, Math.min(2, laneI + dir)); if (nl !== laneI) { laneI = nl; A.fx.step(); markPick(); } tip.classList.add("gone"); sx0 = null;
     });
-    function key(e) { if (phase !== "race") return; if (e.key === "ArrowLeft") laneI = Math.max(0, laneI - 1); if (e.key === "ArrowRight") laneI = Math.min(2, laneI + 1); markPick(); }
+    function key(e) { if ((e.key === "c" || e.key === "C") && phase !== "end") { setCam2(CAMORDER[(CAMORDER.indexOf(camK) + 1) % CAMORDER.length], true); return; } if (phase !== "race") return; if (e.key === "ArrowLeft") laneI = Math.max(0, laneI - 1); if (e.key === "ArrowRight") laneI = Math.min(2, laneI + 1); markPick(); }
     document.addEventListener("keydown", key);
     spk.onclick = function () { A.unlock(); A.fx.tap(); sayGate(); };
     horn.onclick = function (e) { e.stopPropagation(); A.unlock(); (HORNS[hornK] || HORNS.beep)(1); J.bump(horn);
