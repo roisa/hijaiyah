@@ -1,0 +1,77 @@
+/* Baby Mo Hijaiyah — reel stage (1080 × 1920, scaled to fit the window in the player and editor) */
+.stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: 'Nunito', sans-serif; color: #152230; --c1: #12A15A; --c2: #0A9488;
+  transform-origin: 0 0; -webkit-font-smoothing: antialiased; }
+.stage .ar { font-family: 'Scheherazade New', serif; direction: rtl; }
+.bg { position: absolute; inset: 0; }
+.deco span { position: absolute; font-size: 92px; color: var(--c1); opacity: .09; animation: drift 7s ease-in-out infinite alternate; }
+@keyframes drift { to { transform: translate(18px, -26px) rotate(8deg); } }
+.stage.dark { color: #fff; } .stage.dark .deco span { color: #FFE9A8; opacity: .12; }
+
+.title { position: absolute; left: 60px; right: 60px; top: 150px; text-align: center; font-family: 'Fredoka', 'Nunito', sans-serif; font-weight: 700;
+  font-size: 96px; line-height: 1.03; letter-spacing: -.01em; }
+.title span, .title em { display: block; }
+.title em { font-style: normal; background: linear-gradient(95deg, var(--c1), var(--c2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.title.off { opacity: 0; transform: translateY(-30px); transition: .35s; }
+.title.go span { animation: popIn .6s cubic-bezier(.3,1.7,.5,1) both; } .title.go em { animation: popIn .6s .14s cubic-bezier(.3,1.7,.5,1) both; }
+@keyframes popIn { from { opacity: 0; transform: scale(.4) translateY(40px); } }
+.sub { position: absolute; left: 80px; right: 80px; top: 390px; text-align: center; font-size: 40px; font-weight: 800; color: #4A5563; opacity: 0; }
+.stage.dark .sub { color: #C3CCE0; }
+.sub.go { animation: fadeUp .5s .25s both; } @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; } }
+
+.phone { position: absolute; left: 50%; top: 500px; width: 600px; height: 1298px; margin-left: -300px; border-radius: 76px; background: #141A26; padding: 16px;
+  box-shadow: 0 0 0 3px #2A3242 inset, 0 70px 90px -40px rgba(20,30,60,.55); }
+.phone iframe { width: 390px; height: 844px; border: 0; border-radius: 40px; transform: scale(1.4359); transform-origin: 0 0; background: #F2F6FC; display: block; }
+.phone .island { position: absolute; top: 34px; left: 50%; width: 150px; height: 44px; margin-left: -75px; border-radius: 22px; background: #0B0F18; }
+.phone.off { transform: translateY(1500px) rotate(8deg); transition: transform .5s cubic-bezier(.5,0,.75,0); }
+.phone.go { animation: phoneIn .8s cubic-bezier(.25,1.3,.5,1) both; }
+@keyframes phoneIn { from { transform: translateY(1400px) rotate(-10deg); } }
+
+.mo { position: absolute; bottom: -40px; width: 560px; height: 560px; z-index: 5; pointer-events: none; }
+.mo img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 30px 34px rgba(30,50,90,.35)); animation: breathe 2.6s ease-in-out infinite; transform-origin: 50% 100%; }
+.mo.left { left: -60px; } .mo.right { right: -60px; } .mo.right img { transform: scaleX(-1); }
+.mo.upper { height: 400px; overflow: hidden; bottom: 0; } .mo.upper img { height: 560px; object-position: top; }
+@keyframes breathe { 50% { scale: 1.025 .985; } }
+.mo.off { opacity: 0; transition: opacity .3s; }
+.mo.go.in-left { animation: inLeft .7s cubic-bezier(.3,1.5,.5,1) both; } .mo.go.in-right { animation: inRight .7s cubic-bezier(.3,1.5,.5,1) both; }
+@keyframes inLeft { from { transform: translateX(-700px) rotate(-14deg); } } @keyframes inRight { from { transform: translateX(700px) rotate(14deg); } }
+.mo.go.jump { animation: jump .75s cubic-bezier(.3,1.4,.5,1); } @keyframes jump { 0% { transform: translateY(0) scale(1.08,.9); } 35% { transform: translateY(-160px) scale(.95,1.06); } 70% { transform: translateY(0) scale(1.06,.94); } }
+.mo.go.wave { animation: wave .9s ease-in-out; transform-origin: 50% 100%; } @keyframes wave { 25% { transform: rotate(-6deg); } 50% { transform: rotate(5deg); } 75% { transform: rotate(-3deg); } }
+.mo.go.spin { animation: spin .9s cubic-bezier(.3,1.3,.5,1); } @keyframes spin { 0% { transform: rotateY(0) translateY(0); } 50% { transform: rotateY(180deg) translateY(-120px); } 100% { transform: rotateY(360deg); } }
+.mo.go.pop { animation: popIn .6s cubic-bezier(.3,1.7,.5,1); }
+
+.bubble { position: absolute; bottom: 560px; max-width: 560px; padding: 26px 36px; border-radius: 46px 46px 46px 14px; background: #fff; z-index: 6;
+  font-size: 46px; font-weight: 900; line-height: 1.15; box-shadow: 0 22px 44px -22px rgba(30,60,110,.55); }
+.bubble.left { left: 330px; } .bubble.right { right: 330px; border-radius: 46px 46px 14px 46px; }
+.stage.dark .bubble { background: #232B4A; color: #FFE9A8; }
+.bubble.off { opacity: 0; transform: scale(.6); transition: .25s; } .bubble.go { animation: popIn .5s cubic-bezier(.3,1.8,.5,1) both; }
+
+.finger { position: absolute; left: 0; top: 0; width: 120px; height: 120px; z-index: 9; filter: drop-shadow(0 10px 12px rgba(0,0,0,.3)); pointer-events: none; }
+.finger.off { opacity: 0; } .finger.press { animation: press .35s ease; } @keyframes press { 40% { scale: .82; } }
+
+.fx { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
+.fx .p { position: absolute; width: 22px; height: 22px; margin: -11px; border-radius: 50%; animation: burst 1s cubic-bezier(.2,.7,.3,1) forwards; }
+.fx .p.s { width: auto; height: auto; background: none; margin: -27px; }
+@keyframes burst { from { transform: translate(0,0) scale(.3); opacity: 1; } 70% { opacity: 1; } to { transform: translate(var(--dx), var(--dy)) scale(1) rotate(200deg); opacity: 0; } }
+.fx .cf { position: absolute; top: -40px; width: 20px; height: 34px; border-radius: 6px; animation: fall linear forwards; }
+@keyframes fall { to { transform: translateY(2050px) rotate(720deg); } }
+.fx .fl { position: absolute; bottom: -160px; font-size: 130px; animation: floatUp 4.6s ease-out forwards; text-shadow: 0 8px 0 rgba(0,0,0,.06); }
+@keyframes floatUp { to { transform: translateY(-2200px) rotate(-12deg); } }
+.fx .big { position: absolute; left: 50%; top: 42%; transform: translate(-50%,-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 40px 70px; border-radius: 70px;
+  background: linear-gradient(135deg,#FF9F45,#FF5E7E); color: #fff; box-shadow: inset 0 4px 0 rgba(255,255,255,.45), 0 40px 70px -30px rgba(255,94,126,.8); animation: bigIn .6s cubic-bezier(.3,1.7,.5,1); }
+.fx .big b { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 92px; white-space: nowrap; }
+.fx .big.out { opacity: 0; transform: translate(-50%,-62%) scale(.9); transition: .4s; }
+@keyframes bigIn { from { transform: translate(-50%,-50%) scale(.2) rotate(-10deg); opacity: 0; } }
+
+.cta { position: absolute; inset: 0; z-index: 7; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; text-align: center; padding: 0 80px 300px; }
+.cta.off { display: none; }
+.cta .logo { width: 260px; height: 260px; border-radius: 64px; box-shadow: 0 30px 60px -30px rgba(30,60,110,.6); }
+.cta h2 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 110px; line-height: 1; }
+.cta h2 em { font-style: normal; background: linear-gradient(95deg, var(--c1), var(--c2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cta p { font-size: 46px; font-weight: 800; color: #4A5563; } .stage.dark .cta p { color: #C3CCE0; }
+.cta .pills { display: flex; gap: 14px; } .cta .pills span { padding: 12px 26px; border-radius: 99px; background: #fff; font-weight: 900; font-size: 32px; color: #1E2A38; box-shadow: 0 12px 24px -18px rgba(30,60,110,.6); }
+.cta .pills span::before { content: "✓ "; color: #22C06E; }
+.cta .go-btn { margin-top: 18px; padding: 30px 70px; border-radius: 99px; font-weight: 900; font-size: 52px; color: #fff; background: linear-gradient(120deg,#10A765,#0A9488 52%,#0A7FB0);
+  box-shadow: inset 0 3px 0 rgba(255,255,255,.4), 0 30px 50px -24px rgba(10,143,160,.8); animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: scale(1.06); } }
+.cta.go > * { animation: popIn .6s cubic-bezier(.3,1.7,.5,1) both; } .cta.go > *:nth-child(2) { animation-delay: .1s; } .cta.go > *:nth-child(3) { animation-delay: .2s; } .cta.go > *:nth-child(4) { animation-delay: .3s; }
+.cta.go .go-btn { animation: popIn .6s .4s cubic-bezier(.3,1.7,.5,1) both, pulse 1.4s 1s ease-in-out infinite; }
