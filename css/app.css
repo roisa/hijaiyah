@@ -703,7 +703,7 @@ html.big .tabbar { max-width: 600px; }
 .cookie.q .ar { font-family: var(--quran); font-size: clamp(30px, 8vw, 42px); line-height: 2; }
 .cookie .hl { color: #E11D48; text-shadow: 0 0 14px rgba(255,201,61,.95); }
 .cookie .tap { position: absolute; top: 8px; right: 10px; color: #FF9500; }
-.cookie .lat { color: #8A6A30; }
+.cookie .lat { color: #8A6A30; margin-top: 10px; }   /* room for marks under the last letter (ٍ ِ) */
 .cookie.wobble { animation: shake .45s; }
 :root[data-theme="dark"] .cookie { background: radial-gradient(120% 90% at 30% 20%,#4A3A20,#3A2A14); color: #FFE9B8; }
 @keyframes cookieIn { from { transform: translateY(-80px) scale(.5) rotate(-12deg); opacity: 0; } }
@@ -1971,3 +1971,12 @@ button.bigcard.speaking { border-color: #FFD24D; box-shadow: 0 7px 0 #F0B400, 0 
 .map-prop svg { width: 42px; height: 42px; display: block; }
 .map-prop.big svg { width: 54px; height: 54px; }
 :root[data-theme="dark"] .map-prop { opacity: .85; filter: drop-shadow(0 4px 3px rgba(0,0,0,.35)) brightness(.92); }
+/* the sound bars only need room while the child is reading; idle, the "tap the mic" words get the space */
+.vw-bars { transition: flex-basis .25s ease; }
+.vw:not(.rec) .vw-bars { flex-basis: 10%; }
+/* four answer cards on a phone: a neat 2 × 2 instead of 3 + 1 */
+@media (max-width: 520px) { .opts:has(> .tile:nth-child(4):last-child) { max-width: 250px; margin-left: auto; margin-right: auto; } }
+/* Qur'an words on the big card: their marks under the last letter (ٍ ِ) need room above the Latin line */
+.bigcard.wordy .lat { margin-top: 6px; } .bigcard.qq .lat { margin-top: 16px; }
+/* six reading cards on a phone: two neat rows of three */
+@media (max-width: 520px) { .rs-cards:has(> :nth-child(6):last-child) { max-width: 236px; margin-left: auto; margin-right: auto; } }
