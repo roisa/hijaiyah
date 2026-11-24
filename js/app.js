@@ -564,6 +564,7 @@
       if (my !== runId) return;
       stage.innerHTML = ""; var tok = ++stepToken;
       bar.firstChild.style.width = (idx / steps.length * 100) + "%";
+      if (HJ.bg && HJ.bg.progress) HJ.bg.progress(idx / steps.length);
       if (road) road.set(idx, steps.length);
       if (idx >= steps.length) return finish();
       // half way: a short "catch the stars" break (once a level, never on a test)

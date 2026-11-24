@@ -1980,3 +1980,36 @@ button.bigcard.speaking { border-color: #FFD24D; box-shadow: 0 7px 0 #F0B400, 0 
 .bigcard.wordy .lat { margin-top: 6px; } .bigcard.qq .lat { margin-top: 16px; }
 /* six reading cards on a phone: two neat rows of three */
 @media (max-width: 520px) { .rs-cards:has(> :nth-child(6):last-child) { max-width: 236px; margin-left: auto; margin-right: auto; } }
+
+/* ---------- background life (bg.js): critters, blooming flowers, a little cheer on right answers ---------- */
+.bg-svg .bgwalk { animation: bgWalk 58s linear infinite; }
+.bg-svg .bgwalk.b { animation-duration: 64s; animation-delay: -30s; }
+.bg-svg .bgstep { animation: bgStep .5s ease-in-out infinite alternate; }
+.bg-svg .bghop { animation: bgHop 1.1s ease-in-out infinite; }
+.bg-svg .bgglide { animation: bgGlide 70s linear infinite; }
+.bg-svg .bgdrive { animation: bgDrive 36s linear infinite; }
+.bg-svg .bgshoot { opacity: 0; animation: bgShoot 17s ease-out infinite; animation-delay: 6s; }
+.bg-svg .bgleaf { animation: bgLeaf 16s linear infinite; }
+.bg-svg .bgleaf.b { animation-duration: 21s; animation-delay: -9s; }
+.bg-svg .bgdust { animation: bgDust 14s linear infinite; }
+@keyframes bgWalk { 0% { transform: translateX(-60px); } 42%, 58% { transform: translateX(230px); } 100% { transform: translateX(500px); } }
+@keyframes bgStep { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-1.5px) rotate(3deg); } }
+@keyframes bgHop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-8px); } }
+@keyframes bgGlide { from { transform: translateX(-60px) translateY(0); } 50% { transform: translateX(245px) translateY(-24px); } to { transform: translateX(520px) translateY(0); } }
+@keyframes bgDrive { 0% { transform: translateX(-70px); } 30% { transform: translateX(500px); } 100% { transform: translateX(500px); } }
+@keyframes bgShoot { 0%, 88% { opacity: 0; transform: translate(380px, 90px); } 89% { opacity: 1; } 96% { opacity: 0; transform: translate(220px, 150px); } 100% { opacity: 0; } }
+@keyframes bgLeaf { 0% { transform: translate(0, 0) rotate(0); opacity: 0; } 8% { opacity: .9; } 100% { transform: translate(-70px, 190px) rotate(320deg); opacity: 0; } }
+@keyframes bgDust { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: .7; } 100% { transform: translateY(-260px) translateX(18px); opacity: 0; } }
+/* the flowers along the bottom: a closed bud until the child gets there, then it opens */
+.bg-svg .bgbud .bgb-open { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform .5s cubic-bezier(.3,1.8,.5,1) var(--d, 0s); }
+.bg-svg .bgbud .bgb-closed { transition: opacity .3s; }
+.bg-svg .bgbud.on .bgb-open { transform: scale(1); }
+.bg-svg .bgbud.on .bgb-closed { opacity: 0; }
+.bg-svg .bgbud { transform-box: fill-box; }
+.bg-scene.cheer .bgbud.on .bgb-open { animation: bgBudJoy .7s ease-in-out 2; }
+@keyframes bgBudJoy { 50% { transform: scale(1.35) rotate(25deg); } }
+.bg-svg .bgspark { opacity: 0; transform-box: fill-box; transform-origin: center; }
+.bg-scene.cheer .bgspark { animation: bgSpark 1.1s ease-out var(--d, 0s); }
+@keyframes bgSpark { 0% { opacity: 0; transform: translateY(0) scale(.4); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-70px) scale(1.1) rotate(90deg); } }
+.bg-scene.cheer .bghop { animation-duration: .45s; }
+@media (prefers-reduced-motion: reduce) { .bg-svg .bgbud .bgb-open { transition: none; } .bg-scene.cheer .bgspark { animation: none; } }

@@ -200,6 +200,55 @@
       g("bgsway", '<g transform="translate(372 846)"><rect x="-4" y="-26" width="8" height="28" rx="3" fill="' + (n ? "#3A3A4A" : "#B08A60") + '"/><circle cy="-46" r="24" fill="' + (n ? "#1F4A44" : "#8ED49A") + '"/><circle cx="-14" cy="-34" r="15" fill="' + (n ? "#1F4A44" : "#8ED49A") + '"/><circle cx="14" cy="-36" r="16" fill="' + (n ? "#1A403B" : "#77C688") + '"/></g>', ' style="transform-origin:372px 846px"'));
   };
 
+
+  /* ---------- life: small things that make the scene breathe, and react to the child ----------
+     • critters cross the ground strip or the high sky slowly (40–90 s), never the middle of the screen
+     • flowers along the bottom bloom one by one as the level goes on (HJ.bg.progress)
+     • a right answer makes the ground celebrate for a moment: flowers bounce, sparkles rise (HJ.bg.cheer) */
+  var BUDS = [[132, 914], [186, 920], [240, 912], [294, 919], [346, 911], [398, 918]];
+  var BUDC = { w1: ["#FF8FA3", "#FFD54A", "#FF7A5C"], w2: ["#FFD54A", "#FF8FC8", "#FFFFFF"], w3: ["#B9A6FF", "#FFB3D9", "#FFFFFF"], w4: ["#FF8FA3", "#C59BFF", "#FFD54A"],
+    w5: ["#FF6B8B", "#FFB800", "#A855F7"], w6: ["#FF8FA3", "#FFD54A", "#7ACDE8"], w7: ["#FFD54A", "#FFFFFF", "#F2B53A"] };
+  function buds(name, n) {
+    var cs = BUDC[name]; if (!cs) return "";
+    return BUDS.map(function (b, i) {
+      var c = cs[i % cs.length], leaf = n ? "#2E6A5A" : "#4FB66A";
+      // a stem with a closed green bud, and the open flower drawn over it (hidden until its turn)
+      return '<g class="bgbud" data-i="' + i + '" transform="translate(' + b[0] + " " + b[1] + ')" style="--d:' + (i * .17).toFixed(2) + 's">' +
+        '<path d="M0 0 L0 -14" stroke="' + leaf + '" stroke-width="2.4" stroke-linecap="round"/><path d="M0 -6 C-6 -8 -8 -12 -7 -14 C-3 -12 -1 -10 0 -6Z" fill="' + leaf + '"/>' +
+        '<g class="bgb-closed"><ellipse cx="0" cy="-17" rx="3.4" ry="5" fill="' + leaf + '"/></g>' +
+        '<g transform="translate(0 -18)"><g class="bgb-open">' + [0, 72, 144, 216, 288].map(function (a) { return '<ellipse rx="3.6" ry="6" cy="-5" fill="' + c + '" opacity="' + (n ? .85 : 1) + '" transform="rotate(' + a + ')"/>'; }).join("") +
+        '<circle r="3" fill="' + (c === "#FFD54A" || c === "#FFB800" ? "#FF8A3D" : "#FFD54A") + '"/></g></g></g>';
+    }).join("") + '<g class="bgcheer">' + [150, 210, 270, 330, 390].map(function (x, i) {
+      return '<g transform="translate(' + x + ' 900)"><path class="bgspark" style="--d:' + (i * .08).toFixed(2) + 's" d="M0 -6 L1.6 -1.6 L6 0 L1.6 1.6 L0 6 L-1.6 1.6 L-6 0 L-1.6 -1.6Z" fill="' + (n ? "#FFF1B8" : "#FFD43B") + '"/></g>';
+    }).join("") + "</g>";
+  }
+  function shooting() { return g("bgshoot", '<path d="M0 0 L-46 -16" stroke="#FFF6D6" stroke-width="2.4" stroke-linecap="round" opacity=".9"/><circle r="2.6" fill="#fff"/>', ' transform="translate(380 90)"'); }
+  function crab(n) { return g("bgwalk", '<g transform="translate(0 884)"><g class="bgstep"><path d="M-14 -2 L-22 4 M-12 2 L-18 9 M14 -2 L22 4 M12 2 L18 9" stroke="' + (n ? "#8A4A5A" : "#E0563F") + '" stroke-width="2.6" stroke-linecap="round"/>' +
+    '<ellipse rx="14" ry="9" fill="' + (n ? "#9A5A6A" : "#FF6B52") + '"/><path d="M-12 -6 C-20 -12 -20 -20 -13 -20 C-14 -16 -12 -13 -9 -12Z M12 -6 C20 -12 20 -20 13 -20 C14 -16 12 -13 9 -12Z" fill="' + (n ? "#9A5A6A" : "#FF6B52") + '"/>' +
+    '<circle cx="-4" cy="-10" r="2.4" fill="#fff"/><circle cx="4" cy="-10" r="2.4" fill="#fff"/><circle cx="-4" cy="-10" r="1.2" fill="#2B2B3A"/><circle cx="4" cy="-10" r="1.2" fill="#2B2B3A"/></g></g>'); }
+  function rabbit(n) { var c = n ? "#B8B0C8" : "#FFFFFF", e = n ? "#8A7A9A" : "#FFC2D1";
+    return g("bgwalk b", '<g transform="translate(0 880)"><g class="bghop"><ellipse cx="0" cy="-8" rx="13" ry="9" fill="' + c + '"/><circle cx="12" cy="-16" r="7" fill="' + c + '"/>' +
+      '<ellipse cx="10" cy="-28" rx="2.6" ry="8" fill="' + c + '" transform="rotate(-10 10 -28)"/><ellipse cx="15" cy="-28" rx="2.6" ry="8" fill="' + c + '" transform="rotate(12 15 -28)"/><ellipse cx="15" cy="-28" rx="1.2" ry="5" fill="' + e + '" transform="rotate(12 15 -28)"/>' +
+      '<circle cx="-13" cy="-10" r="3.4" fill="' + c + '"/><circle cx="15" cy="-17" r="1.3" fill="#2B2B3A"/><circle cx="19" cy="-14" r="1.2" fill="' + e + '"/></g></g>'); }
+  function eagle(n) { return g("bgglide", '<g transform="translate(0 210)"><path d="M-26 0 C-16 -10 -6 -8 0 -2 C6 -8 16 -10 26 0 C16 -4 8 -2 0 4 C-8 -2 -16 -4 -26 0Z" fill="' + (n ? "#4A4A7A" : "#8A6A4A") + '"/><circle cx="0" cy="1" r="3" fill="' + (n ? "#C9C6EA" : "#FFFFFF") + '"/></g>'); }
+  function turtle(n) { return g("bgswim c", '<g transform="translate(-60 770)"><ellipse cx="28" cy="-2" rx="7" ry="5" fill="' + (n ? "#3A7A6A" : "#7BCB6A") + '"/><ellipse cx="-4" cy="8" rx="8" ry="3.4" fill="' + (n ? "#3A7A6A" : "#7BCB6A") + '" transform="rotate(25 -4 8)"/>' +
+    '<ellipse cx="14" cy="9" rx="8" ry="3.4" fill="' + (n ? "#3A7A6A" : "#7BCB6A") + '" transform="rotate(-25 14 9)"/><ellipse cx="6" cy="0" rx="20" ry="12" fill="' + (n ? "#2A5A4A" : "#2E9E57") + '"/><path d="M-6 -4 L6 -9 L18 -4 L16 5 L-4 5Z" fill="' + (n ? "#3A6A5A" : "#4FCB7A") + '"/><circle cx="31" cy="-3" r="1.3" fill="#1D2B4A"/></g>'); }
+  function car(n) { return g("bgdrive", '<g transform="translate(0 866)"><rect x="-22" y="-16" width="44" height="14" rx="6" fill="' + (n ? "#6A4A8A" : "#3D9BFF") + '"/><path d="M-12 -16 L-6 -26 L10 -26 L16 -16Z" fill="' + (n ? "#5A3E7A" : "#2A7AD6") + '"/>' +
+    '<path d="M-6 -17 L-3 -23 L4 -23 L4 -17Z M7 -17 L7 -23 L9 -23 L12 -17Z" fill="' + (n ? "#FFE58A" : "#CFEFFF") + '"/><circle cx="-12" cy="-2" r="5" fill="#2B2F3D"/><circle cx="12" cy="-2" r="5" fill="#2B2F3D"/><circle cx="-12" cy="-2" r="2" fill="#9AA6B5"/><circle cx="12" cy="-2" r="2" fill="#9AA6B5"/>' +
+    (n ? '<path d="M22 -10 L60 -16 L60 -2Z" fill="#FFE58A" opacity=".25"/>' : "") + "</g>"); }
+  function dust(n, c) { return [[60, 0], [150, 4], [250, 8], [330, 2], [400, 6]].map(function (d, i) { return '<circle cx="' + d[0] + '" cy="900" r="' + (1.6 + i % 2) + '" fill="' + c + '" class="bgdust" style="animation-delay:-' + d[1] + 's"/>'; }).join(""); }
+  var LIFE = {
+    w1: function (n) { return (n ? shooting() : "") + crab(n) + '<g opacity="' + (n ? .35 : .8) + '">' + [[60, 730], [170, 760], [260, 724], [370, 770]].map(function (p, i) { return '<path transform="translate(' + p[0] + " " + p[1] + ')" d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1Z" fill="#fff" class="bgtw' + (i % 2 ? " b" : "") + '"/>'; }).join("") + "</g>"; },
+    w2: function (n) { return rabbit(n) + (n ? "" : ('<g transform="translate(330 700)">' + g("bgleaf", '<path d="M0 0 C6 -6 14 -4 14 2 C8 6 2 6 0 0Z" fill="#7ED07A"/>') + "</g>") + ('<g transform="translate(96 720)">' + g("bgleaf b", '<path d="M0 0 C6 -6 14 -4 14 2 C8 6 2 6 0 0Z" fill="#F2C14E"/>') + "</g>")); },
+    w3: function (n) { return n ? shooting() : eagle(n); },
+    w4: function (n) { return turtle(n) + g("bgbob b", '<g transform="translate(352 806)"><path d="M0 -22 C8 -22 10 -12 4 -8 C10 -4 10 6 2 10 C-2 14 0 20 4 22 C-4 24 -8 16 -4 10 C-8 4 -6 -4 -2 -8 C-6 -12 -6 -22 0 -22Z" fill="' + (n ? "#8A6A3A" : "#FFB84D") + '"/><circle cx="3" cy="-17" r="1.4" fill="#1D2B4A"/></g>') + dust(n, n ? "#9EF0FF" : "#FFFFFF"); },
+    w5: function (n) { return car(n) + (n ? shooting() : ""); },
+    w6: function (n) { return n ? [[120, 820], [300, 800], [380, 860], [60, 870]].map(function (p, i) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="2.8" fill="#FFF07A" class="bgfly" style="animation-delay:-' + i * 1.4 + 's"/>'; }).join("")
+      : g("bgflut", '<g transform="translate(120 820)"><path d="M0 0 C-10 -12 -16 2 -4 4 C-14 7 -7 16 0 5 C7 16 14 7 4 4 C16 2 10 -12 0 0Z" fill="#FF8FC8"/></g>') + g("bgflut b", '<g transform="translate(330 830) scale(.85)"><path d="M0 0 C-10 -12 -16 2 -4 4 C-14 7 -7 16 0 5 C7 16 14 7 4 4 C16 2 10 -12 0 0Z" fill="#7B6CF6"/></g>'); },
+    w7: function (n) { return (n ? shooting() : "") + dust(n, n ? "#FFE58A" : "#F2B53A"); }
+  };
+  function life(name, n) { return (LIFE[name] ? LIFE[name](n) : "") + buds(name, n); }
+
   /* ---------- the layer ---------- */
   var layer = null, curName = null, curDark = null;
   function set(name) {
@@ -209,12 +258,32 @@
     var old = layer.firstChild;
     curName = name; curDark = d;
     if (!name || !S[name]) { if (old) { old.classList.add("out"); setTimeout(function () { old.remove(); }, 500); } return; }
-    var w = document.createElement("div"); w.className = "bg-scene in bg-" + name; w.innerHTML = S[name]("bg" + (++uid), d);
+    var w = document.createElement("div"); w.className = "bg-scene in bg-" + name;
+    var svg = S[name]("bg" + (++uid), d), extra = life(name, d), cut = svg.lastIndexOf('<rect y="300"');
+    w.innerHTML = cut > 0 ? svg.slice(0, cut) + extra + svg.slice(cut) : svg;
+    prog = 0;
     layer.appendChild(w);
     requestAnimationFrame(function () { w.classList.remove("in"); });
     if (old) { old.classList.add("out"); setTimeout(function () { old.remove(); }, 600); }
   }
   // re-draw when the theme changes (the light/dark scenes differ)
   try { new MutationObserver(function () { if (curName && dark() !== curDark) { var n = curName; curName = null; set(n); } }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] }); } catch (e) {}
+  // the level's progress (0–1): one more flower opens for each sixth of the way
+  var prog = 0;
+  set.progress = function (f) {
+    if (!layer) return; var sc = layer.lastChild; if (!sc) return;
+    var k = Math.round(Math.max(0, Math.min(1, f)) * BUDS.length);
+    [].forEach.call(sc.querySelectorAll(".bgbud"), function (b) { var on = +b.getAttribute("data-i") < k; if (on && !b.classList.contains("on")) b.classList.add("on", "pop"); if (!on) b.classList.remove("on"); });
+    setTimeout(function () { [].forEach.call(sc.querySelectorAll(".bgbud.pop"), function (b) { b.classList.remove("pop"); }); }, 900);
+    prog = f;
+  };
+  // a right answer: the ground celebrates for a moment
+  var cheerT = 0;
+  set.cheer = function () {
+    if (!layer) return; var sc = layer.lastChild; if (!sc || !sc.querySelector(".bgbud")) return;
+    sc.classList.remove("cheer"); void sc.offsetWidth; sc.classList.add("cheer");
+    clearTimeout(cheerT); cheerT = setTimeout(function () { sc.classList.remove("cheer"); }, 1400);
+  };
+  if (HJ.audio && HJ.audio.fx && HJ.audio.fx.good) { var good0 = HJ.audio.fx.good; HJ.audio.fx.good = function () { try { set.cheer(); } catch (e) {} return good0.apply(this, arguments); }; }
   HJ.bg = set; HJ.bgScenes = S;
 })();
