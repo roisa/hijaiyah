@@ -184,6 +184,24 @@
     return tb;
   }
 
+  // a few things to spot along each book's trail (no people)
+  var MAP_PROPS = { 1: ["🌴", "🐚", "🦀", "🌺", "⛵", "🐢"], 2: ["🌳", "🍄", "🦋", "🐿️", "🌼", "🐞"], 3: ["⛰️", "🌲", "☁️", "🐐", "🌸", "🦅"],
+    4: ["🐠", "🐚", "🐙", "🐳", "🪸", "🦀"], 5: ["🏠", "🌷", "🎈", "🚲", "🏡", "🌳"], 6: ["🏰", "🌻", "🦄", "🎪", "🌈", "🍭"], 7: ["🌙", "⭐", "🏮", "🌴", "✨", "🕌"] };
+  // a level's Arabic title, sized so it always fits inside the round button (two lines when it has a space)
+  var fitCtx = null;
+  function fitLabel(label, quran) {
+    if (!fitCtx) fitCtx = document.createElement("canvas").getContext("2d");
+    var fam = (getComputedStyle(document.documentElement).getPropertyValue(quran ? "--quran" : "--ar") || "serif").trim() || "serif";
+    function wd(x) { fitCtx.font = "700 28px " + fam; return fitCtx.measureText(x).width * 1.08; }
+    var lines = [label], AV = 58, wfull = wd(label);
+    if (wfull > AV && label.indexOf(" ") > 0) {
+      var ws = label.split(" "), best = null;
+      for (var k = 1; k < ws.length; k++) { var a = ws.slice(0, k).join(" "), b = ws.slice(k).join(" "), m = Math.max(wd(a), wd(b)); if (!best || m < best[0]) best = [m, a, b]; }
+      if (best[0] < wfull * .8) lines = [best[1], best[2]];
+    }
+    var mw = Math.max.apply(null, lines.map(wd)), fs = Math.max(11, Math.min(lines.length > 1 ? 20 : 28, 28 * AV / mw));
+    return '<span class="t ar' + (quran ? " qr" : "") + (lines.length > 1 ? " two" : "") + '" style="font-size:' + fs.toFixed(1) + 'px">' + lines.map(esc).join("<br>") + "</span>";
+  }
   function kindArt(lv) { return { review: "repeat", boss: "trophy", khatam: "cap", surah: "book" }[lv.kind] || "sparkle"; }
   function levelName(lv) {
     if (lv.kind === "surah") { var su = HJ.surah(lv.surah); return (EN() ? "Surah " : "Surat ") + tr(su.name); }
@@ -343,17 +361,23 @@
       var more = el("button", "w-more", esc(t("mapShow")) + " " + ic("chevR")); more.onclick = function (e) { e.stopPropagation(); A.fx.tap(); openWorld(w.n, true); };
       box.appendChild(more);
       wh.style.cursor = "pointer"; wh.onclick = function () { if (box.classList.contains("folded")) { A.fx.tap(); openWorld(w.n, true); } };
-      var path = el("div", "path");
+      var path = el("div", "path"); box.style.setProperty("--wc", w.color);
+      var PROPS = MAP_PROPS[w.n] || MAP_PROPS[1];
       w.levels.forEach(function (lv, i) {
         var row = el("div", "node-row"), x = 50 + Math.sin(i * 0.9) * 28;
+        // a bit of the book's scenery on the free side of the trail
+        var pr = el("span", "map-prop" + (i % 3 === 1 ? " big" : ""), PROPS[i % PROPS.length]);
+        pr.style.left = (x > 50 ? 8 + (i * 7 % 9) : 80 - (i * 5 % 9)) + "%"; pr.style.animationDelay = (-i * .7) + "s"; pr.setAttribute("aria-hidden", "true");
+        row.appendChild(pr);
         var unl = S.unlocked(lv), stars = st.stars[lv.id] || 0, isBoss = lv.kind === "boss" || lv.kind === "khatam";
         var n = el("button", "node" + (stars ? " done" : "") + (!unl ? " lock" : "") + (lv === cur ? " cur" : "") + (isBoss ? " boss" : ""));
         n.setAttribute("aria-label", "Level " + lv.id + " · " + levelName(lv) + (stars ? " · " + stars + "/3" : "") + (!unl ? " · " + t("locked") : ""));
         n.style.left = x + "%";
         var label = lv.kind === "surah" ? HJ.surah(lv.surah).arabicName : (typeof lv.title === "string" ? lv.title : null);
-        if (!unl) n.innerHTML = ic("lock");
-        else if (isBoss || !label) n.innerHTML = HJ.art(kindArt(lv), isBoss ? 50 : 40);
-        else n.innerHTML = '<span class="t ar">' + esc(label) + "</span>";
+        if (isBoss || !label) n.innerHTML = HJ.art(kindArt(lv), isBoss ? 46 : 38);
+        else n.innerHTML = fitLabel(label, lv.kind === "surah");
+        if (!unl) n.insertAdjacentHTML("beforeend", '<span class="nlock">' + ic("lock") + "</span>");
+        else if (!isBoss) n.insertAdjacentHTML("beforeend", '<span class="nnum">' + (i + 1) + "</span>");
         if (stars) n.appendChild(el("span", "st", [0, 1, 2].map(function (i) { return HJ.art(i < stars ? "star" : "starOff", 13); }).join("") + (st.tashih[lv.id] ? HJ.art("check", 13) : "")));
         n.onclick = function () {
           A.unlock();
@@ -369,14 +393,23 @@
           }, 900);
           delete st.justUnlocked; S.save();
         }
-        if (lv === cur) { var mo = el("img", "map-mo mo-g"); mo.src = MO("pose-20"); mo.alt = ""; mo.style.left = "calc(" + x + "% + 36px)"; row.appendChild(mo); curNode = row; }
+        if (lv === cur) {
+          var side = x > 60 ? -1 : 1, mo = el("img", "map-mo mo-g" + (side < 0 ? " flip" : "")); mo.src = MO("pose-20"); mo.alt = "";
+          mo.style.left = side > 0 ? "calc(" + x + "% + 38px)" : "calc(" + x + "% - 116px)"; row.appendChild(mo);
+          var bub = el("span", "map-bub" + (side < 0 ? " l" : ""), esc(t("mapGo"))); bub.style.left = side > 0 ? "calc(" + x + "% + 64px)" : "calc(" + x + "% - 104px)"; row.appendChild(bub);
+          curNode = row;
+        }
         path.appendChild(row);
       });
       var STEP = 86, H = w.levels.length * STEP, pts = w.levels.map(function (l, i) { return [50 + Math.sin(i * 0.9) * 28, i * STEP + 38 + 8]; });
       var lastDone = -1; w.levels.forEach(function (l, i) { if (st.stars[l.id]) lastDone = i; });
       var line = function (a, b, cls) { return '<polyline class="' + cls + '" points="' + pts.slice(a, b + 1).map(function (q) { return q[0] + "," + q[1]; }).join(" ") + '" vector-effect="non-scaling-stroke"/>'; };
+      var walked = Math.min(pts.length - 1, lastDone + 1);
       path.insertAdjacentHTML("afterbegin", '<svg class="map-path" viewBox="0 0 100 ' + (H + 16) + '" preserveAspectRatio="none" style="height:' + (H + 16) + 'px">' +
-        line(0, pts.length - 1, "todo") + (lastDone >= 0 ? line(0, Math.min(pts.length - 1, lastDone + 1), "done") : "") + "</svg>");
+        line(0, pts.length - 1, "edge") + line(0, pts.length - 1, "road") + (lastDone >= 0 ? line(0, walked, "road done") : "") + line(0, pts.length - 1, "mid") + "</svg>");
+      // the finish flag at the end of the book's trail
+      var fin = el("div", "map-fin" + (done === w.levels.length ? " won" : ""), '<span class="ff">' + (done === w.levels.length ? "🏆" : "🏁") + "</span><b>" + esc(done === w.levels.length ? t("mapDone") : t("mapFinish")) + "</b>");
+      path.appendChild(fin);
       box.appendChild(path);
       var jn = -1; w.levels.forEach(function (l, i) { if (path.querySelectorAll(".node")[i] && path.querySelectorAll(".node")[i].classList.contains("unlocking")) jn = i; });
       if (jn > 0) (function (a, b2) {
