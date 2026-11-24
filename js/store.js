@@ -65,7 +65,7 @@
     overLimit: function () { var m = +st.limit || 0; return m > 0 && this.playMs() >= m * 60000; },
     totalStars: function () { var n = st.bonus || 0; for (var k in st.stars) if (k.charAt(0) !== "_") n += st.stars[k]; return n; },
     unlocked: function (lv) {
-      if (st.settings.unlockAll) return true;
+      if (st.settings.unlockAll || (st.settings.openBooks || {})[lv.w]) return true;      // a parent opened everything, or this book
       var all = HJ.allLevels(), i = all.indexOf(lv);
       return i <= 0 || !!st.stars[all[i - 1].id];
     },
@@ -194,7 +194,9 @@
     mapTitle1: ["Peta", "Learning"], mapTitle2: ["Belajar", "Map"], mapSub: ["7 jilid · dari alif sampai Al-Qur'an", "7 books · from alif to the Qur'an"],
     stickerTitle1: ["Buku", "Sticker"], stickerTitle2: ["Stiker", "Book"],
     latinSub: ["Tampilkan bacaan latin kecil", "Show small Latin spelling"], cdnSub: ["Putar murottal dari internet bila belum diunduh", "Stream recitation when not downloaded"],
-    unlockSub: ["Untuk mencoba semua jilid", "To try every book"],
+    unlockSub: ["Semua jilid dan balapan langsung bisa dimainkan", "Every book and race can be played right away"],
+    parOpen: ["Pilih materi", "Choose what to learn"], parOpenSub: ["Buka jilid yang ingin dipelajari si kecil. Urutan dari awal tetap yang terbaik, tapi Abi/Umi bisa langsung ke materi yang dibutuhkan.", "Open the book your child needs now. Going in order is still best, but you can jump straight to what they need."],
+    parOpenBook: ["Buka", "Open"], parOpened: ["Jilid {b} dibuka", "Book {b} is open"], unlockAsk: ["Abi/Umi: buka level", "Parents: unlock"],
     method: ["Urutan Iqra (langsung bunyi, langkah kecil) dengan kebiasaan Ummi: talaqqi (dengar → tirukan), murajaah harian, dan tashih oleh Abi/Umi sebelum naik level. Jilid 7 membaca surat-surat pendek.",
       "Iqra order (sounds first, small steps) with Ummi habits: talaqqi (listen → copy), daily review, and a parent check before moving on. Book 7 is reading short surahs."],
     privacy: ["Tanpa iklan · progres hanya di perangkat ini", "No ads · progress stays on this device"],

@@ -357,7 +357,7 @@
         if (stars) n.appendChild(el("span", "st", [0, 1, 2].map(function (i) { return HJ.art(i < stars ? "star" : "starOff", 13); }).join("") + (st.tashih[lv.id] ? HJ.art("check", 13) : "")));
         n.onclick = function () {
           A.unlock();
-          if (!unl) { A.fx.bad(); n.classList.add("shake"); setTimeout(function () { n.classList.remove("shake"); }, 450); A.talk(t("locked"), st.lang); return; }
+          if (!unl) { A.fx.bad(); n.classList.add("shake"); setTimeout(function () { n.classList.remove("shake"); }, 450); A.talk(t("locked"), st.lang); unlockAsk(w); return; }
           A.fx.tap(); levelSheet(lv);
         };
         row.appendChild(n);
@@ -396,6 +396,15 @@
     setTimeout(function () { var tg = focusEl || (curNode && boxes[cur.w] && !boxes[cur.w].classList.contains("folded") ? curNode : null); tg && tg.scrollIntoView({ block: focusEl ? "start" : "center" }); }, 60);
   }
 
+  function unlockAsk(w) {
+    var old = document.querySelector(".unlock-ask"); if (old) old.remove();
+    var b = el("button", "unlock-ask", ic("lock") + " " + esc(t("unlockAsk")));
+    b.onclick = function () {
+      b.remove();
+      HJ.gate(function () { var st = S.get(), o = st.settings.openBooks = st.settings.openBooks || {}; o[w.n] = true; S.save(); A.fx.unlock(); HJ.toast(ic("check") + " " + esc(t("parOpened", { b: w.n < 7 ? w.n : tr(w.name) }))); map(w.n); });
+    };
+    document.body.appendChild(b); setTimeout(function () { b.remove(); }, 4500);
+  }
   function levelSheet(lv) {
     var w = HJ.worlds[lv.w - 1];
     HJ.modal(function (p, close) {
@@ -780,6 +789,22 @@
         '<div class="pbar"><i style="width:' + (done / w.levels.length * 100) + '%"></i></div>', null, function () { map(w.n); }));
     });
     sc.appendChild(g1);
+    // choose what to learn: a parent opens a whole book (or everything) so the child can go straight to what is needed
+    sc.appendChild(el("div", "group-t", esc(t("parOpen"))));
+    var gO = el("div", "list-group");
+    gO.appendChild(el("div", "cur-text", esc(t("parOpenSub"))));
+    var allSw = el("button", "switch" + (st.settings.unlockAll ? " on" : "")); allSw.setAttribute("role", "switch"); allSw.setAttribute("aria-label", t("unlockAll")); allSw.setAttribute("aria-checked", String(!!st.settings.unlockAll));
+    allSw.onclick = function () { S.setting("unlockAll", !st.settings.unlockAll); A.fx.tap(); parents(); };
+    gO.appendChild(row(ic("lock"), "gray", esc(t("unlockAll")) + "<small>" + esc(t("unlockSub")) + "</small>", allSw));
+    HJ.worlds.forEach(function (w) {
+      var ob = st.settings.openBooks || {}, isOn = !!(st.settings.unlockAll || ob[w.n]), sw = el("button", "switch" + (isOn ? " on" : ""));
+      sw.setAttribute("role", "switch"); sw.setAttribute("aria-label", t("parOpenBook") + " · " + tr(w.name)); sw.setAttribute("aria-checked", String(isOn));
+      if (st.settings.unlockAll) sw.disabled = true;
+      sw.onclick = function () { var o = st.settings.openBooks = st.settings.openBooks || {}; o[w.n] = !o[w.n]; S.save(); A.fx.tap(); sw.classList.toggle("on", !!o[w.n]); sw.setAttribute("aria-checked", String(!!o[w.n])); };
+      var ico = el("span", ""); ico.appendChild(wi(w.n, true));
+      gO.appendChild(row(ico.innerHTML, "", esc(tr(w.name)) + "<small>" + esc(tr(w.sub)) + "</small>", sw));
+    });
+    sc.appendChild(gO);
     // the race game: what each track teaches and how far your child got (tap a track to open it)
     if (HJ.race && HJ.race.report) {
       var RR = HJ.race.report();
@@ -831,7 +856,6 @@
     tog(HJ.art("moon", 22), "gold", t("holidayPreview"), "holidayPreview", t("holidayPreviewSub"));
     tog(ic("textA"), "purple", t("latin"), "latin", t("latinSub"));
     if (!window.HJ_APP_BUILD) tog(ic("book"), "teal", t("cdn"), "cdn", t("cdnSub"));
-    tog(ic("lock"), "gray", t("unlockAll"), "unlockAll", t("unlockSub"));
     tog(ic("gamepad"), "pink", t("arcadeAll"), "arcadeAll", t("arcadeAllSub"));
     sc.appendChild(g2);
 

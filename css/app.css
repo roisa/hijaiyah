@@ -1903,3 +1903,9 @@ button.bigcard.speaking { border-color: #FFD24D; box-shadow: 0 7px 0 #F0B400, 0 
 @keyframes tjFadeIn { 0%, 45% { opacity: 0; transform: scale(.8); } 60%, 100% { opacity: 1; transform: none; } }
 .tj-scene.sc-groups { height: auto; min-height: 210px; align-items: center; padding: 6px 0; }
 .sc-groups .tj-grp .ar { font-size: 20px; line-height: 1.6; }
+
+/* map: the parent's unlock button that appears after tapping a locked level */
+.unlock-ask { position: fixed; z-index: 70; left: 50%; bottom: calc(var(--tab-h) + 24px + env(safe-area-inset-bottom)); transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 18px; border: 0; border-radius: 99px; font: inherit; font-weight: 800; font-size: 14px; color: #fff; background: linear-gradient(160deg, #5AB0FF, #2F78E8); box-shadow: 0 8px 18px -8px rgba(47,120,232,.7); animation: unlockIn .35s cubic-bezier(.34,1.56,.64,1); }
+.unlock-ask .ic { width: 18px; height: 18px; }
+@keyframes unlockIn { from { transform: translateX(-50%) translateY(20px); opacity: 0; } }
