@@ -206,15 +206,16 @@
     W("يَسْمَعُ", "yasma'u", "dia mendengar", "he hears")
   ];
   var J4QAL = [
-    Q("لَمْ يَلِدْ وَلَمْ يُولَدْ", "al-ikhlas", 3, "lam yalid wa lam yuulad", "دْ"),
-    Q("أَلَمْ يَجْعَلْ", "al-fil", 2, "alam yaj'al", "جْ"),
-    Q("الْأَبْتَرُ", "al-kautsar", 3, "al-abtar", "بْ"),
-    Q("أَطْعَمَهُمْ", "quraisy", 4, "ath'amahum", "طْ"),
     Q("يَدْخُلُونَ", "an-nasr", 2, "yadkhuluuna", "دْ"),
+    Q("أَطْعَمَهُمْ", "quraisy", 4, "ath'amahum", "طْ"),
+    Q("أَلَمْ يَجْعَلْ", "al-fil", 2, "alam yaj'al", "جْ"),
+    Q("لَمْ يَلِدْ وَلَمْ يُولَدْ", "al-ikhlas", 3, "lam yalid wa lam yuulad", "دْ"),
+    Q("الْأَبْتَرُ", "al-kautsar", 3, "al-abtar", "بْ"),
     Q("الْفَلَقِ", "al-falaq", 1, "al-falaq (berhenti: al-falaq)", "قِ")
   ];
   var J4LIN = [
-    W("بَيْتٌ", "baitun", "rumah", "house"), Q("مِنْ خَوْفٍ", "quraisy", 4, "min khoufin", "وْ"), Q("قُرَيْشٍ", "quraisy", 1, "quroisyin", "يْ"),
+    W("بَيْتٌ", "baitun", "rumah", "house"), W("لَيْلٌ", "lailun", "malam", "night"), W("يَوْمٌ", "yaumun", "hari", "day"),
+    W("زَيْتٌ", "zaitun", "minyak", "oil"), W("مَوْزٌ", "mauzun", "pisang", "banana"), Q("مِنْ خَوْفٍ", "quraisy", 4, "min khoufin", "وْ"), Q("قُرَيْشٍ", "quraisy", 1, "quroisyin", "يْ"),
     Q("وَالصَّيْفِ", "quraisy", 2, "wash-shoifi", "يْ"), Q("سَوْفَ تَعْلَمُونَ", "at-takatsur", 3, "saufa ta'lamuun", "وْ"),
     Q("يَوْمِ الدِّينِ", "al-fatihah", 4, "yaumid-diin", "وْ"), Q("عَيْنَ الْيَقِينِ", "at-takatsur", 7, "'ainal-yaqiin", "يْ")
   ];
@@ -357,7 +358,13 @@
   /* ---------- the 7 worlds ---------- */
   var worlds = [];
   function world(o) { o.levels = []; worlds.push(o); return o; }
-  function lvl(w, o) { o.w = w.n; o.id = w.n + "-" + (w.levels.length + 1); w.levels.push(o); return o; }
+  // ids follow the order on the map; "ins" levels were added later, so the ids levels had before (oldId) can be mapped
+  // to the new ones and a child's stars stay on the right level (HJ.store.migrateIds)
+  function lvl(w, o) {
+    o.w = w.n; o.id = w.n + "-" + (w.levels.length + 1);
+    if (!o.ins) { w._o = (w._o || 0) + 1; if (!o.oldId) o.oldId = w.n + "-" + w._o; }
+    w.levels.push(o); return o;
+  }
 
   /* Jilid 1 — Pulau Fathah */
   var w1 = world({ n: 1, key: "fathah", emoji: "🏝️", color: "#1FA971", bg: "linear-gradient(180deg,#9BE7C4,#3FBF86)",
@@ -386,9 +393,15 @@
     };
   }
   var ALLK = HJ.L.map(function (l) { return l.k; });
-  lvl(w2, { kind: "words", title: "بَتَ", items: J2W.slice(0, 5), mo: "idea",
+  // two letters hold hands first, then three
+  var J2TWO = [["بَتَ","bata"],["تَبَ","taba"],["نَبَ","naba"],["كَتَ","kata"],["لَمَ","lama"],["سَلَ","sala"],["فَتَ","fata"],["مَعَ","ma'a"],["جَبَ","jaba"],["هَلَ","hala"]]
+    .map(function (x) { return J(x[0], x[1]); });
+  lvl(w2, { kind: "words", title: "بَتَ", items: J2TWO, mo: "idea", ins: 1,
     say: T("Huruf bisa bergandengan tangan! Bentuknya berubah sedikit, tapi bunyinya sama.", "Letters can hold hands! They change shape a little, but sound the same."),
-    learnFirst: [J("بَتَ", "bata"), J("كَتَبَ", "kataba", "menulis", "wrote")] });
+    learnFirst: [J("بَتَ", "bata"), J("تَبَ", "taba")] });
+  lvl(w2, { kind: "words", title: "كَتَبَ", items: J2W.slice(0, 5),
+    say: T("Sekarang tiga huruf bergandengan!", "Now three letters hold hands!"),
+    learnFirst: [J("كَتَبَ", "kataba", "menulis", "wrote")] });
   lvl(w2, { kind: "words", title: "جَلَسَ", items: J2W.slice(3, 9), say: T("Baca kata bersambung ini ya.", "Read these joined words.") });
   lvl(w2, { kind: "words", title: "صَدَقَ", items: J2W.slice(8, 14), say: T("Huruf tebal: kho, sho, dho, tho, zho, gho, qo, ro.", "Heavy letters: kho, sho, dho, tho, zho, gho, qo, ro.") });
   lvl(w2, { kind: "words", title: "صَبَرَ", items: J2W.slice(13, 20), say: T("Kata-kata yang baik: sabar, syukur, jujur!", "Good words: patient, thankful, truthful!") });
@@ -420,9 +433,11 @@
     learnFirst: [syl("ba","a"), syl("ba","i"), syl("ba","u")].map(function (x) { x.note = {}; return x; }),
     say: T("A, i, u! Dengarkan baik-baik, harakat mana yang dibaca?", "A, i, u! Listen carefully — which mark is it?") });
   lvl(w3, { kind: "words", title: "كُتِبَ", items: J3W, say: T("Kata dengan fathah, kasrah dan dhammah.", "Words with fathah, kasrah and dhammah.") });
-  lvl(w3, { kind: "mad", title: "بِي بُو",
-    items: ["ba","ta","nun","mim","lam","sin","qof","ro"].map(function (k) { return syl(k, "ii"); }).concat(["ba","ta","nun","mim","lam","sin","qof","ro"].map(function (k) { return syl(k, "uu"); })),
-    say: T("Kasrah lalu ya → panjang: bii. Dhammah lalu wau → panjang: buu.", "Kasrah then ya → long: bii. Dhammah then waw → long: buu.") });
+  var K3M = ["ba","ta","nun","mim","lam","sin","qof","ro"];
+  lvl(w3, { kind: "mad", title: "بِي", items: K3M.map(function (k) { return syl(k, "ii"); }).concat(fat(K3M, "i")),
+    say: T("Kasrah lalu ya: dibaca panjang 2 ketukan, bii!", "Kasrah then ya: read it long, 2 beats, bii!") });
+  lvl(w3, { kind: "mad", title: "بُو", ins: 1, items: K3M.map(function (k) { return syl(k, "uu"); }).concat(K3M.map(function (k) { return syl(k, "ii"); }).slice(0, 4)),
+    say: T("Dhammah lalu wau: dibaca panjang 2 ketukan, buu!", "Dhammah then waw: read it long, 2 beats, buu!") });
   lvl(w3, { kind: "words", title: "يَقُولُ", items: J3MAD, say: T("Kata dengan bacaan panjang.", "Words with long vowels.") });
   lvl(w3, { kind: "boss", title: T("Ujian Jilid 3", "Book 3 Test"), items: J3W.concat(J3MAD).concat(shuffle(MIX3).slice(0, 10)) });
 
@@ -442,10 +457,17 @@
   lvl(w4, { kind: "mad", title: "أَبْ", items: SUKS,
     say: T("Bulatan kecil di atas huruf namanya sukun. Hurufnya mati: dibaca menempel ke huruf sebelumnya — ab!", "The little circle is sukun: the letter has no vowel and joins the one before — ab!") });
   lvl(w4, { kind: "words", title: "مِنْ قُلْ", items: J4SUK, say: T("Kata pendek dengan huruf mati.", "Short words with sukun.") });
-  lvl(w4, { kind: "words", title: "قُطْبُ جَدْ", items: J4QAL,
-    say: T("Huruf ق ط ب ج د kalau mati dibaca memantul: qalqalah! Seperti bola memantul.", "ق ط ب ج د bounce when they have sukun: qalqalah! Like a ball."),
-    learnFirst: [W("أَقْ", "aq"), W("أَبْ", "ab"), W("أَدْ", "ad")] });
-  lvl(w4, { kind: "words", title: "بَيْ بَوْ", items: J4LIN, say: T("Fathah lalu wau atau ya mati: dibaca lembut, ai / au.", "Fathah then a still waw or ya: read softly, ai / au.") });
+  function sukAfter(base, k) { var b = BY[k]; return { ar: base.ar + b.c + M.SUKUN, tr: base.tr + b.cons, k: k, au: base.ar + b.c + M.SUKUN }; }
+  var QALS = ["qof","tho","ba","jim","dal"].map(function (k) { return sukAfter(syl("alif", "a"), k); })
+    .concat(["qof","tho","ba","jim","dal"].map(function (k) { return sukAfter(syl("alif", "i"), k); }));
+  lvl(w4, { kind: "mad", title: "أَقْ", items: QALS, ins: 1,
+    say: T("Huruf ق ط ب ج د kalau mati dibaca memantul: qalqalah! Seperti bola memantul.", "ق ط ب ج د bounce when they have sukun: qalqalah! Like a ball.") });
+  lvl(w4, { kind: "words", title: "قَدْ", items: J4QAL,
+    say: T("Sekarang cari pantulannya di ayat Al-Qur'an!", "Now find the bounce in real Qur'an verses!") });
+  var LINS = ["ba","ta","lam","kho","ain"].map(function (k) { var s = syl(k, "a"); return { ar: s.ar + "ي" + M.SUKUN, tr: s.tr.replace(/[ao]$/, "") + (BY[k].heavy ? "oi" : "ai"), k: k, au: s.ar + "ي" + M.SUKUN }; })
+    .concat(["ba","qof","ya","kho","lam"].map(function (k) { var s = syl(k, "a"); return { ar: s.ar + "و" + M.SUKUN, tr: s.tr.replace(/[ao]$/, "") + (BY[k].heavy ? "ou" : "au"), k: k, au: s.ar + "و" + M.SUKUN }; }));
+  lvl(w4, { kind: "mad", title: "بَيْ بَوْ", items: LINS, ins: 1, say: T("Fathah lalu wau atau ya mati: dibaca lembut, ai / au.", "Fathah then a still waw or ya: read softly, ai / au.") });
+  lvl(w4, { kind: "words", title: "خَوْفٍ", items: J4LIN, say: T("Bacaan lembut ai / au di dalam kata dan ayat.", "The soft ai / au inside words and verses.") });
   lvl(w4, { kind: "boss", title: T("Ujian Jilid 4", "Book 4 Test"), items: J4TAN.concat(J4SUK).concat(J4LIN) });
 
   /* Jilid 5 — Kota Tasydid */
@@ -453,7 +475,10 @@
     name: T("Kota Tasydid", "Tasydid Town"), sub: T("Jilid 5 · tasydid, ghunnah, alif lam, waqaf", "Book 5 · shaddah, ghunnah, al-, stopping"),
     goal: T("Membaca tasydid, dengung (ghunnah), alif lam qamariyah & syamsiyah, lafaz Allah, dan cara berhenti (waqaf).",
       "Read shaddah, the nasal ghunnah, the two kinds of al-, the word Allah, and how to stop (waqaf).") });
-  lvl(w5, { kind: "words", title: "رَبِّ", items: J5TAS, say: T("Tanda seperti huruf w kecil namanya tasydid: hurufnya dibaca dua kali, ditekan!", "The little w is shaddah: the letter is doubled, pressed!") });
+  var TASS = ["ba","ta","dal","ro","sin","lam","kaf","qof"].map(function (k) { var a = syl("alif", "a"), b = BY[k], ar = (a.ar + b.c + M.SHADDA + M.FATHAH).normalize("NFC");
+    return { ar: ar, tr: "a" + b.cons + b.cons + (b.heavy ? "o" : "a"), k: k, au: ar }; });
+  lvl(w5, { kind: "mad", title: "أَبَّ", items: TASS, ins: 1, say: T("Tanda seperti huruf w kecil namanya tasydid: hurufnya dibaca dua kali, ditekan!", "The little w is shaddah: the letter is doubled, pressed!") });
+  lvl(w5, { kind: "words", title: "رَبِّ", items: J5TAS, say: T("Tasydid di dalam ayat Al-Qur'an. Tekan hurufnya!", "Shaddah inside real verses. Press the letter!") });
   lvl(w5, { kind: "words", title: "إِنَّ", items: J5GHU, say: T("نّ dan مّ yang bertasydid dibaca berdengung (ghunnah) 2 ketukan. Nnnn!", "Doubled نّ and مّ hum for 2 beats (ghunnah). Nnnn!") });
   var AL_Q = J5AL.filter(function (x) { return x.b === QAM; }), AL_S = J5AL.filter(function (x) { return x.b === SYM; });
   function alLesson(items, rule, say, page2) {
@@ -577,13 +602,18 @@
     name: T("Gerbang Al-Qur'an", "Qur'an Gate"), sub: T("Al-Qur'an · Al-Fatihah & Juz 'Amma", "Al-Qur'an · Al-Fatihah & Juz 'Amma"),
     goal: T("Membaca surat-surat pendek langsung dari mushaf: dengar murottal, susun ayat, baca sendiri, lalu tashih oleh Abi/Umi.",
       "Read short surahs straight from the mushaf: hear the recitation, build the verses, read alone, then a check by Abi/Umi.") });
-  ["al-fatihah","al-ikhlas","an-nas","al-falaq","al-kautsar","al-asr","an-nasr","quraisy","al-lahab","al-fil","al-kafirun","al-maun","al-humazah","at-takatsur","al-qariah"]
-    .forEach(function (slug) { lvl(w7, { kind: "surah", surah: slug, title: null }); });
-  lvl(w7, { kind: "khatam", title: T("Wisuda!", "Graduation!") });
+  var OLD7 = ["al-fatihah","al-ikhlas","an-nas","al-falaq","al-kautsar","al-asr","an-nasr","quraisy","al-lahab","al-fil","al-kafirun","al-maun","al-humazah","at-takatsur","al-qariah"];
+  ["al-ikhlas","al-kautsar","al-asr","an-nasr","al-falaq","an-nas","al-fatihah","quraisy","al-lahab","al-fil","al-kafirun","al-maun","at-takatsur","al-humazah","al-qariah"]
+    .forEach(function (slug) { lvl(w7, { kind: "surah", surah: slug, title: null, oldId: "7-" + (OLD7.indexOf(slug) + 1) }); });
+  lvl(w7, { kind: "khatam", title: T("Wisuda!", "Graduation!"), oldId: "7-16" });
 
   // the level kinds that need a pool of items from letters
   HJ.surah = function (slug) { return (window.HJ_QURAN || []).filter(function (s) { return s.slug === slug; })[0]; };
   HJ.worlds = worlds;
+  // the map was smoothed (Nov 2026): move saved stars from the old level numbers to the new ones
+  var IDMAP = {}; worlds.forEach(function (w) { w.levels.forEach(function (l) { if (l.oldId && l.oldId !== l.id) IDMAP[l.oldId] = l.id; }); });
+  HJ.ID_MAP = IDMAP;
+  if (HJ.store && HJ.store.migrateIds) HJ.store.migrateIds(IDMAP, 2);
   HJ.allLevels = function () { return [].concat.apply([], worlds.map(function (w) { return w.levels; })); };
   HJ.level = function (id) { return HJ.allLevels().filter(function (l) { return l.id === id; })[0]; };
   HJ.splitSyl = splitSyl;

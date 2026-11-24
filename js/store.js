@@ -23,7 +23,7 @@
     save: save,
     set: function (k, v) { st[k] = v; save(); },
     setting: function (k, v) { st.settings[k] = v; save(); },
-    reset: function () { var keep = { name: st.name, lang: st.lang, langChosen: st.langChosen, settings: st.settings }; st = JSON.parse(JSON.stringify(DEF)); Object.assign(st, keep); save(); },
+    reset: function () { var keep = { name: st.name, lang: st.lang, langChosen: st.langChosen, settings: st.settings, idv: st.idv }; st = JSON.parse(JSON.stringify(DEF)); Object.assign(st, keep); save(); },
     finish: function (id, stars) {
       var first = !st.stars[id];
       st.stars[id] = Math.max(st.stars[id] || 0, stars);
@@ -68,6 +68,15 @@
       if (st.settings.unlockAll || (st.settings.openBooks || {})[lv.w]) return true;      // a parent opened everything, or this book
       var all = HJ.allLevels(), i = all.indexOf(lv);
       return i <= 0 || !!st.stars[all[i - 1].id];
+    },
+    // level ids changed (levels added or moved): carry stars, checks, stickers over, once per id version
+    migrateIds: function (map, ver) {
+      if ((st.idv || 1) >= ver) return;
+      function mv(k) { return map.hasOwnProperty(k) ? map[k] : k; }
+      ["stars", "tashih"].forEach(function (f) { var o = st[f] || {}, n = {}; for (var k in o) n[mv(k)] = o[k]; st[f] = n; });
+      st.stickers = (st.stickers || []).map(mv);
+      if (st.justUnlocked) st.justUnlocked = mv(st.justUnlocked);
+      st.idv = ver; save();
     },
     current: function () {
       var all = HJ.allLevels();
