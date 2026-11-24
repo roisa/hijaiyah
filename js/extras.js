@@ -188,6 +188,7 @@
     });
     return { steps: out, first: firstLv };
   }
+  var arcCache = null;
   function arcadeRow(sc) {
     sc.appendChild(el("div", "sec-h arc", "<h3>" + esc(t("arcade")) + "</h3><small>" + esc(t("arcadeSub")) + "</small>"));
     var strip = el("div", "arcade");
@@ -198,8 +199,11 @@
       b.onclick = function () { A().unlock(); A().fx.tap(); play(g[0]); };
       strip.appendChild(b);
     });
+    // which games are open only changes when a level gets its first stars (or a parent opens things): remember it
+    var st0 = S.get(), ck = Object.keys(st0.stars).length + "|" + allOpen();
+    if (!arcCache || arcCache.k !== ck) { arcCache = { k: ck, v: {} }; GAMES.forEach(function (g) { var x = stepsOf(g[0]); arcCache.v[g[0]] = { open: x.steps.length > 0, first: x.first }; }); }
     GAMES.forEach(function (g) {
-      var info = stepsOf(g[0]), open = info.steps.length > 0;
+      var info = arcCache.v[g[0]], open = info.open;
       if (!info.first) return;
       var b = el("button", "ar-tile" + (open ? "" : " locked"));
       b.style.background = "linear-gradient(160deg," + g[3] + "," + g[4] + ")";

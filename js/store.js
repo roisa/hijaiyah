@@ -242,7 +242,7 @@
     close: ["Tutup", "Close"], streak: ["hari berturut-turut", "days in a row"], stars: ["bintang", "stars"],
     surahRead: ["Baca satu surat utuh", "Read the whole surah"], listenAll: ["Dengar semua", "Hear it all"],
     fluent: ["Lancar", "Fluent"], practice: ["Perlu latihan", "Needs practice"],
-    certTitle: ["Sertifikat Khatam Jilid", "Graduation Certificate"],
+    certTitle: ["Sertifikat Wisuda", "Graduation Certificate"],
     certBody: ["telah menyelesaikan perjalanan Baby Mo Hijaiyah, dari huruf alif sampai membaca Al-Qur'an. Barakallahu fiik!",
       "has finished the Baby Mo Hijaiyah journey, from alif to reading the Qur'an. Barakallahu fiik!"],
     noAudio: ["Murottal belum diunduh — Abi/Umi bacakan ya, {k} menirukan (talaqqi).", "Recitation not downloaded — a parent reads, the child copies (talaqqi)."],
