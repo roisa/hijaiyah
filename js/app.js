@@ -194,7 +194,7 @@
     var fam = (getComputedStyle(document.documentElement).getPropertyValue(quran ? "--quran" : "--ar") || "serif").trim() || "serif";
     function wd(x) { fitCtx.font = "700 28px " + fam; return fitCtx.measureText(x).width * 1.08; }
     var lines = [label], AV = 58, wfull = wd(label);
-    if (wfull > AV && label.indexOf(" ") > 0) {
+    if (28 * AV / wfull < 19 && label.indexOf(" ") > 0) {      // only when one line would get too small
       var ws = label.split(" "), best = null;
       for (var k = 1; k < ws.length; k++) { var a = ws.slice(0, k).join(" "), b = ws.slice(k).join(" "), m = Math.max(wd(a), wd(b)); if (!best || m < best[0]) best = [m, a, b]; }
       if (best[0] < wfull * .8) lines = [best[1], best[2]];
@@ -362,7 +362,7 @@
       box.appendChild(more);
       wh.style.cursor = "pointer"; wh.onclick = function () { if (box.classList.contains("folded")) { A.fx.tap(); openWorld(w.n, true); } };
       var path = el("div", "path"); box.style.setProperty("--wc", w.color);
-      var PROPS = MAP_PROPS[w.n] || MAP_PROPS[1];
+      var PROPS = (HJ.mapArt && HJ.mapArt[w.n]) || MAP_PROPS[w.n] || MAP_PROPS[1];
       w.levels.forEach(function (lv, i) {
         var row = el("div", "node-row"), x = 50 + Math.sin(i * 0.9) * 28;
         // a bit of the book's scenery on the free side of the trail

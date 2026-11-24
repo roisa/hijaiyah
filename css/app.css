@@ -1968,3 +1968,6 @@ button.bigcard.speaking { border-color: #FFD24D; box-shadow: 0 7px 0 #F0B400, 0 
 :root[data-theme="dark"] .map-fin { background: rgba(255,255,255,.07); }
 :root[data-theme="dark"] .map-fin.won { background: linear-gradient(180deg,#FFD66B,#F5A300); color: #3D2600; }
 @media (prefers-reduced-motion: reduce) { .map-prop, .map-bub { animation: none; } }
+.map-prop svg { width: 42px; height: 42px; display: block; }
+.map-prop.big svg { width: 54px; height: 54px; }
+:root[data-theme="dark"] .map-prop { opacity: .85; filter: drop-shadow(0 4px 3px rgba(0,0,0,.35)) brightness(.92); }
