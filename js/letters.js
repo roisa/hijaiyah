@@ -61,6 +61,7 @@
   function syl(k, v) {
     var l = BY[k], base = l.seat || l.c;
     v = v || "a";
+    if (k === "alif" && (v === "i" || v === "ii" || v === "in")) base = "إ";   // the hamza sits under the alif for kasrah
     var ar;
     if (v === "aa") ar = base + FATHAH + "ا";
     else if (v === "ii") ar = base + KASRAH + "ي";
