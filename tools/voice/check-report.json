@@ -2535,5 +2535,759 @@
   ],
   "ok": false,
   "file": "audio/lines/lines-52f88b47.mp3"
+ },
+ {
+  "id": "lines-dd959511",
+  "text": "Alif lam qamariyah: lam-nya dibaca jelas, seperti bulan yang terang. Al-qomar!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "bulan yang terang",
+   "di bulan yang terang",
+   "arti bulan yang terang"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-dd959511.mp3"
+ },
+ {
+  "id": "lines-f3337e57",
+  "text": "Bertemu qof, lam tetap terdengar.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-f3337e57.mp3"
+ },
+ {
+  "id": "lines-fd2eadbe",
+  "text": "14 huruf qamariyah, 14 huruf syamsiyah. Yuk cari teman-temannya!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "14 huruf qamariyah 14 huruf Syamsiah",
+   "14 huruf Qomariyah 14 huruf Syamsiah",
+   "14 huruf qamariah 14 huruf Syamsiah"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-fd2eadbe.mp3"
+ },
+ {
+  "id": "lines-6dd39e3a",
+  "text": "Alif lam syamsiyah: lam-nya hilang, seperti bintang yang tertutup cahaya matahari. Asy-syams!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "hari",
+   "bintang yang tertutup hari"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-6dd39e3a.mp3"
+ },
+ {
+  "id": "lines-4d676f23",
+  "text": "Bertemu nun, lam masuk dan hurufnya ditasydid.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "bertemu Nun",
+   "bertemu Nun tasydid",
+   "bertemu Nun lama"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-4d676f23.mp3"
+ },
+ {
+  "id": "lines-f9801372",
+  "text": "Ujian Kota Tasydid! Bismillah!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "ujian",
+   "pujian"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-f9801372.mp3"
+ },
+ {
+  "id": "lines-3dee3e07",
+  "text": "Ini Nuni, nun mati: huruf nun dengan sukun di atasnya. Nuni tidak punya harakat, jadi bunyinya hanya n.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "nun mati huruf nun dengan sukun di atasnya tidak punya harokat jadi bunyinya hanya",
+   "nun mati huruf nun dengan sukun di atasnya tidak punya harokat jadi bunyinya hanya m",
+   "nun mati huruf nun dengan sukun di atasnya tidak punya harokat jadi bunyinya hanya n"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-3dee3e07.mp3"
+ },
+ {
+  "id": "lines-27c5f3c0",
+  "text": "Tanwin, dua harakat kecil di akhir kata, bunyinya juga n: bun sama dengan bu-n. Jadi tanwin juga Nuni!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "bunyinya juga",
+   "bunyinya",
+   "bunyi"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-27c5f3c0.mp3"
+ },
+ {
+  "id": "lines-6c355d10",
+  "text": "Nuni selalu bertemu huruf sesudahnya. Huruf itulah yang menentukan cara membaca Nuni!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "Nun itu lalu bertemu huruf sesudahnya huruf itulah yang menentukan cara membaca Nun",
+   "Nun itu lalu bertemu huruf sesudahnya huruf itulah yang menentukan cara membaca Nun i",
+   "Nun itu selalu bertemu huruf sesudahnya huruf itulah yang menentukan cara membaca Nun"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-6c355d10.mp3"
+ },
+ {
+  "id": "lines-54d56133",
+  "text": "Ada empat cara: Izhar jelas, Idgham masuk, Iqlab jadi m, dan Ikhfa samar. Kita pelajari satu per satu!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-54d56133.mp3"
+ },
+ {
+  "id": "lines-b089649c",
+  "text": "Nuni bertemu huruf tenggorokan: hamzah, ha, 'ain, ha, ghain, kha. Huruf-huruf ini jauh di dalam tenggorokan.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "huruf tenggorokan huruf-huruf ini",
+   "semua huruf tenggorokan huruf-huruf ini",
+   "huruf tenggorokan huruf-huruf ini Di dalam tenggorokan"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-b089649c.mp3"
+ },
+ {
+  "id": "lines-77236656",
+  "text": "Karena jauh, Nuni dibaca JELAS, tanpa dengung. Itu namanya Izhar.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-77236656.mp3"
+ },
+ {
+  "id": "lines-c3472e77",
+  "text": "Ingat enam teman Izhar: hamzah, ha, 'ain, ha, ghain, kha.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-c3472e77.mp3"
+ },
+ {
+  "id": "lines-5e3f8472",
+  "text": "Nuni bertemu ya, nun, mim, wau: Nuni MASUK ke huruf itu sambil berdengung 2 ketukan. Itu Idgham.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "Yuni bertemu ya Nun mim wawu huruf itu sambil berdengung dua ketukan",
+   "Yuni bertemu ya Nun mim wawu masuk ke huruf itu sambil berdengung dua ketukan",
+   "Yuni bertemu ya Nun mim wawu masuk ke huruf itu sambil berdengung dua ketukan itu"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-5e3f8472.mp3"
+ },
+ {
+  "id": "lines-db6fada8",
+  "text": "Bertemu lam atau ra, Nuni juga masuk, tapi TANPA dengung.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "bertemu lam atau ro",
+   "bertemu lam atau rok",
+   "bertemu lam atau ro lu juga"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-db6fada8.mp3"
+ },
+ {
+  "id": "lines-cade95ba",
+  "text": "Enam teman Idgham: ya, nun, mim, wau (berdengung), lam dan ra (tanpa dengung).",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-cade95ba.mp3"
+ },
+ {
+  "id": "lines-359bb64f",
+  "text": "Nuni bertemu ba: Nuni BERUBAH menjadi bunyi m, sambil berdengung. Itu Iqlab.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "nun mati bertemu ba berubah menjadi Bunyi m sambil berdengung itu",
+   "nun mati bertemu ba berubah menjadi Bunyi m sambil berdengung itu di",
+   "nun mati bertemu ba berubah menjadi Bunyi m sambil berdengung itu iqlab"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-359bb64f.mp3"
+ },
+ {
+  "id": "lines-ed5760b5",
+  "text": "Teman Iqlab cuma satu: ba. Di mushaf ada mim kecil di atas nun sebagai tanda.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-ed5760b5.mp3"
+ },
+ {
+  "id": "lines-44910e45",
+  "text": "Nuni bertemu 15 huruf lainnya: Nuni bersembunyi, dibaca SAMAR sambil berdengung. Itu Ikhfa.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "Nun bertemu 15 huruf lainnya Nuni bersembunyi dibaca samar sambil berdengung itu ikhfa",
+   "Nun bertemu 15 huruf lainnya Noni bersembunyi dibaca samar sambil berdengung itu ikhfa",
+   "Nun bertemu 15 huruf lainnya nuny bersembunyi dibaca samar sambil berdengung itu ikhfa"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-44910e45.mp3"
+ },
+ {
+  "id": "lines-4e57e2a3",
+  "text": "Sekarang semua lengkap: Izhar jelas, Idgham masuk, Iqlab jadi m, Ikhfa samar!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-4e57e2a3.mp3"
+ },
+ {
+  "id": "lines-f8c8e2f5",
+  "text": "Sekarang monster-monster tajwid lapar! Ingat teman-teman Nuni, lalu beri makan monster yang benar.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-f8c8e2f5.mp3"
+ },
+ {
+  "id": "lines-4b39f622",
+  "text": "Ini Mimi, mim mati. Mimi juga punya tiga cara dibaca, tergantung huruf sesudahnya.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "cara dibaca tergantung huruf sesudahnya",
+   "acara dibaca tergantung huruf sesudahnya",
+   "dibaca tergantung huruf sesudahnya"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-4b39f622.mp3"
+ },
+ {
+  "id": "lines-67f0676b",
+  "text": "Bertemu ba: Mimi samar sambil berdengung. Ikhfa syafawi.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "Mimi Syafawi",
+   "Mimi",
+   "mimik"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-67f0676b.mp3"
+ },
+ {
+  "id": "lines-c74266e4",
+  "text": "Bertemu mim: Mimi masuk, berdengung. Idgham mimi.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-c74266e4.mp3"
+ },
+ {
+  "id": "lines-0c0e80d5",
+  "text": "Bertemu huruf lainnya: Mimi dibaca jelas. Izhar syafawi.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "bertemu huruf lainnya",
+   "bertemu huruf selain ya",
+   "bertemu huruf lain ya"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-0c0e80d5.mp3"
+ },
+ {
+  "id": "lines-433b751b",
+  "text": "Huruf mad membuat bacaan panjang seperti karet ditarik: biasanya 2 ketukan. Qoola!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-433b751b.mp3"
+ },
+ {
+  "id": "lines-64cb89ec",
+  "text": "Kalau sesudah mad ada hamzah di KATA YANG SAMA, tarik lebih panjang: 4 sampai 5 ketukan. Itu mad wajib.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-64cb89ec.mp3"
+ },
+ {
+  "id": "lines-cf2d9112",
+  "text": "Kalau hamzahnya ada di KATA BERIKUTNYA, itu mad jaiz: boleh 2 sampai 5 ketukan, ikuti guru ngajimu.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "boleh 2 sampai 5 ketukan ikuti guru ngaji",
+   "boleh 2 sampai 5 ketukan ikuti guru ngaji mu",
+   "itu boleh 2 sampai 5 ketukan ikuti guru ngaji"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-cf2d9112.mp3"
+ },
+ {
+  "id": "lines-28d28005",
+  "text": "Hamzah di kata yang sama atau kata berikutnya?",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-28d28005.mp3"
+ },
+ {
+  "id": "lines-5549f1a0",
+  "text": "Ujian Istana Tajwid! Ingat Nuni, Mimi, dan mad. Bismillah!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "ujian tajwid Mimi dan",
+   "ujian tajwid mim dan",
+   "ujian tajwid Nun mim dan"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-5549f1a0.mp3"
+ },
+ {
+  "id": "lines-e6927946",
+  "text": "Moon letters: the lam is said clearly, bright like the moon. Al-qamar!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Moon letters the lamb is said clearly bright like the moon Alomar",
+   "Moon letters the lamb is said clearly bright like the moon Olimar",
+   "Moon letters the lamb is said clearly bright like the moon Alamar"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-e6927946.mp3"
+ },
+ {
+  "id": "lines-d0a9b7c8",
+  "text": "Before qaf the lam is heard.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "before cough the alarm is heard",
+   "before Cog the alarm is heard",
+   "before cough the lamb is heard"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-d0a9b7c8.mp3"
+ },
+ {
+  "id": "lines-7598e145",
+  "text": "14 moon letters, 14 sun letters. Let's find them!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "14 Moon letters 14 Sun letters let's find them",
+   "14 Moon letters 14 son letters let's find them",
+   "14 Moon letters 14 sunne letters let's find them"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-7598e145.mp3"
+ },
+ {
+  "id": "lines-c9ca2190",
+  "text": "Sun letters: the lam disappears, like a star in the sunlight. Ash-shams!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Sun letters the lamb disappears like a star in the sunlight Ash shams",
+   "son letters the lamb disappears like a star in the sunlight Ash shams",
+   "Sun letters the lamb disappears like a star in the sunlight as shams"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-c9ca2190.mp3"
+ },
+ {
+  "id": "lines-8ad3e142",
+  "text": "Before nun the lam merges and the letter doubles.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "before none the lamb merges and the letter doubles",
+   "before none the lamb merges and the letter Doublz",
+   "before none the lamb merges and the letter dubbels"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-8ad3e142.mp3"
+ },
+ {
+  "id": "lines-15488e6f",
+  "text": "Tasydid Town test! Bismillah!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Tassie did Town test Bismillah",
+   "tasi did Town test Bismillah",
+   "tasse did Town test Bismillah"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-15488e6f.mp3"
+ },
+ {
+  "id": "lines-a8549146",
+  "text": "This is Nuni, a resting nun: a nun with a sukun on top. Nuni has no vowel, so it just says n.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "this is Noni a resting none a nun with a sukun on top",
+   "this is Noni a resting nun a nun with a sukun on top",
+   "this is Noni a resting Nunn a nun with a sukun on top",
+   " nuni has no vowel so it just says",
+   " Noonie has no vowel so it just says",
+   " nooney has no vowel so it just says"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-a8549146.mp3"
+ },
+ {
+  "id": "lines-8d2f9885",
+  "text": "Tanwin, the double vowel at the end of a word, also says n: bun is bu-n. So tanwin is Nuni too!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "tanwen the double vowel at the end of a word also says N Bun is b u n so tanwen is Noni 2",
+   "tanwin the double vowel at the end of a word also says N Bun is b u n so tanwen is Noni 2",
+   "tanwen the double vowel at the end of a word also says N Bun is b u n so tanwen is nuni 2"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-8d2f9885.mp3"
+ },
+ {
+  "id": "lines-6cec0618",
+  "text": "Nuni always meets the letter after it. That letter decides how we read Nuni!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Noonie always meets the letter after it that letter decides how we read Nuni",
+   "Noonie always meets the letter after it that letter decides how we read Noonie",
+   "nuni always meets the letter after it that letter decides how we read Nuni"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-6cec0618.mp3"
+ },
+ {
+  "id": "lines-5b00e738",
+  "text": "There are four ways: Izhar clear, Idgham merge, Iqlab turns into m, and Ikhfa hidden. Let's learn them one by one!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "there are 4 ways isar clear GA merge iCloud turns into M and Ka hidden let's learn them 1 by 1",
+   "there are 4 ways isar clear GA merge iCloud turns into M and Ika hidden let's learn them 1 by 1",
+   "there are 4 ways isar clear GA merge iCloud turns into em and Ka hidden let's learn them 1 by 1"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-5b00e738.mp3"
+ },
+ {
+  "id": "lines-dff7c78d",
+  "text": "Nuni meets a throat letter: hamzah, ha, 'ayn, ḥa, ghayn, kha. These letters live deep in the throat.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "nooni meets a throat letter Hamza ha in ha gain K ha these letters live deep in the throat",
+   "nooni meets a throat letter hamzah ha in ha gain K ha these letters live deep in the throat",
+   "nooni meets a throat letter hamzy ha in ha gain K ha these letters live deep in the throat"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-dff7c78d.mp3"
+ },
+ {
+  "id": "lines-d517ea3c",
+  "text": "Because they're far away, Nuni is said CLEARLY, no hum. That is Izhar.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "because they're far away nuni has said clearly know whom that is is hard",
+   "because they're far away Noonie has said clearly know whom that is is hard",
+   "because they're far away nooney has said clearly know whom that is is hard"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-d517ea3c.mp3"
+ },
+ {
+  "id": "lines-13a26417",
+  "text": "Remember Izhar's six friends: hamzah, ha, 'ayn, ḥa, ghayn, kha.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "remember isar 6 friends Hamza ha in ha",
+   "remember isar 6 friends hamzah ha in ha",
+   "remember isar 6 friends hamzy ha in ha"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-13a26417.mp3"
+ },
+ {
+  "id": "lines-5f33597f",
+  "text": "Nuni meets ya, nun, mim, waw: Nuni MERGES into it, humming for 2 beats. That is Idgham.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "noney meets ya",
+   "Noonie meets ya",
+   "nuni meets ya",
+   " nun mwa nuni merges into it humming for 2 beats that is IGM",
+   " nun mwa Noonie merges into it humming for 2 beats that is IGM",
+   " nun mwa nooney merges into it humming for 2 beats that is IGM"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-5f33597f.mp3"
+ },
+ {
+  "id": "lines-697cb468",
+  "text": "Before lam or ra, Nuni merges too, but WITHOUT a hum.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "before lamb or raw non emerges too but without a hum",
+   "before lamb or raw noon emerges too but without a hum",
+   "before lamb or raw none emerges too but without a hum"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-697cb468.mp3"
+ },
+ {
+  "id": "lines-f1d00210",
+  "text": "Idgham's six friends: ya, nun, mim, waw (with a hum), lam and ra (no hum).",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "agents 6 friends ya none mwa with a hum lamb and raw know whom",
+   "agents 6 friends ya none mwah with a hum lamb and raw know whom",
+   "agents 6 friends ya nun mwa with a hum lamb and raw know whom"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-f1d00210.mp3"
+ },
+ {
+  "id": "lines-145f6697",
+  "text": "Nuni meets ba: Nuni TURNS INTO an m sound, with a hum. That is Iqlab.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Noonie meets ba nuni turns into an M sound with a hum that is klab",
+   "Noonie meets ba nuni turns into an M sound with a hum that is iLab",
+   "nuni meets ba nuni turns into an M sound with a hum that is klab"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-145f6697.mp3"
+ },
+ {
+  "id": "lines-47af84fd",
+  "text": "Iqlab has just one friend: ba. In the mushaf a small mim sits on the nun as a sign.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "a club has just 1 friend ba in the musaf a small MIM sits on the nun as a sign",
+   "a club has just 1 friend ba in the musaf a small MIM sits on the none as a sign",
+   "a club has just 1 friend ba in the musaf a small mihm sits on the nun as a sign"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-47af84fd.mp3"
+ },
+ {
+  "id": "lines-eeff2b25",
+  "text": "Nuni meets the other 15 letters: Nuni hides, said SOFTLY with a hum. That is Ikhfa.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Noonie meets the other 15 letters",
+   "nuni meets the other 15 letters",
+   "nooney meets the other 15 letters",
+   " nuni hides said softly with a hum",
+   " Noonie hides said softly with a hum",
+   " nooney hides said softly with a hum",
+   " that is VA",
+   " that is Ka",
+   " that is Kaa"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-eeff2b25.mp3"
+ },
+ {
+  "id": "lines-a212960b",
+  "text": "Now we have them all: Izhar clear, Idgham merge, Iqlab to m, Ikhfa hidden!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "now we have them all is hard clear it come merge iCloud to mha Hidden",
+   "now we have them all is hard clear it come merge iCloud to mka Hidden",
+   "now we have them all is hard clear it come merge iCloud to MFA hidden"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-a212960b.mp3"
+ },
+ {
+  "id": "lines-d235b0fa",
+  "text": "Now the tajwid monsters are hungry! Remember Nuni's friends, then feed the right monster.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "now the tajweed monsters are hungry remember noon's friends then feed the right monster",
+   "now the tajweed monsters are hungry remember nuns friends then feed the right monster",
+   "now the tajweed monsters are hungry remember nones friends then feed the right monster"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-d235b0fa.mp3"
+ },
+ {
+  "id": "lines-7b24d44e",
+  "text": "This is Mimi, a resting mim. Mimi also has three ways to be read, depending on the next letter.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "this is Mimi a resting Mim",
+   "this is Mimi a resting mihm",
+   "this is Mimi a resting mimm",
+   " Mimi also has 3 ways to be read depending on the next letter",
+   " Mimi also has 3 ways to be red depending on the next letter",
+   " mimie also has 3 ways to be read depending on the next letter"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-7b24d44e.mp3"
+ },
+ {
+  "id": "lines-3c101f91",
+  "text": "Before ba: Mimi is soft, with a hum. Ikhfa syafawi.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "before",
+   "before ba",
+   "before B",
+   " ba Mimi is soft with a hum",
+   " ba Mimi is soft with a whom",
+   " ba mimie is soft with a hum"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-3c101f91.mp3"
+ },
+ {
+  "id": "lines-a056df27",
+  "text": "Before mim: Mimi merges, humming. Idgham mimi.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "before MIM Mimi merges humming it Mimi",
+   "before MIM Mimi merges humming Mimi",
+   "before mihm Mimi merges humming it Mimi"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-a056df27.mp3"
+ },
+ {
+  "id": "lines-df392bb8",
+  "text": "Before any other letter: Mimi is clear. Izhar syafawi.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "before any other letter",
+   "before any other lettere",
+   "before any other letter'",
+   " Mimi is clear",
+   " mimie is clear",
+   " Mimi is clearer",
+   " is har safawi",
+   " is Harr safawi",
+   " is haar safawi"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-df392bb8.mp3"
+ },
+ {
+  "id": "lines-a434c6d7",
+  "text": "A mad letter stretches the sound like a rubber band: usually 2 beats. Qaala!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "a mad letter stretches the sound like a rubber band usually 2 beats Kala",
+   "a mad letter stretches the sound like a rubber band usually 2 beats Cala",
+   "a mad letter stretches the sound like a rubber band usually 2 beats Kalla"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-a434c6d7.mp3"
+ },
+ {
+  "id": "lines-7cc9e12b",
+  "text": "If a hamzah follows the mad in the SAME word, stretch longer: 4 to 5 beats. That is mad wajib.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "if a hamsa follows the Mad in the same word stretch longer 4 to 5 beats that is mad wajib",
+   "if a hamsa follows the Mad in the same word stretch longer 4 to 5 beats that is mad waajib",
+   "if a hamsa follows the Mad in the same word stretch longer 4 to 5 beats that is MADD wajib"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-7cc9e12b.mp3"
+ },
+ {
+  "id": "lines-1d790d8f",
+  "text": "If the hamzah is in the NEXT word, that is mad jaiz: 2 to 5 beats, follow your teacher.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "if the Hamza is in the next word that is mad Jays 2 to 5 beats follow your teacher",
+   "if the hamzah is in the next word that is mad Jays 2 to 5 beats follow your teacher",
+   "if the Hamza is in the next word that is mad JS 2 to 5 beats follow your teacher"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-1d790d8f.mp3"
+ },
+ {
+  "id": "lines-3d28ca6e",
+  "text": "Is the hamzah in the same word or the next one?",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "is the Hamza in the same word or the next 1",
+   "is the hamzah in the same word or the next 1",
+   "is the hamzy in the same word or the next 1"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-3d28ca6e.mp3"
+ },
+ {
+  "id": "lines-9991e06b",
+  "text": "Tajwid Palace test! Remember Nuni, Mimi and the mads. Bismillah!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "tajwid Palace test remember nuni Mimi and the mads Bismillah",
+   "tajwid Palace test remember Noonie Mimi and the mads Bismillah",
+   "tajwid Palace test remember nooney Mimi and the mads Bismillah"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-9991e06b.mp3"
  }
 ]
