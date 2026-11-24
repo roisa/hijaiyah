@@ -190,7 +190,7 @@
     book: ["Jilid", "Book"], combo: ["{n}x berturut-turut!", "{n} in a row!"], perfect: ["Sempurna!", "Perfect!"],
     bookDone: ["{b} selesai!", "{b} complete!"], bookOpen: ["{b} sekarang terbuka", "{b} is now open"],
     missionDone: ["Misi selesai · {n}/3", "Mission done · {n}/3"], again2: ["Coba sekali lagi", "One more try"],
-    tabHome: ["Main", "Play"], tabRace: ["Balap", "Race"], mapShow: ["Lihat level", "Show levels"], tabParents: ["Orang Tua", "Parents"], continue: ["Lanjut belajar", "Keep learning"],
+    tabHome: ["Main", "Play"], tabRace: ["Balap", "Race"], mapShow: ["Lihat level", "Show levels"], mapGo: ["Ayo!", "Let's go!"], mapFinish: ["Lulus ujian, jilid tamat!", "Pass the test to finish the book!"], mapDone: ["Jilid tamat!", "Book finished!"], tabParents: ["Orang Tua", "Parents"], continue: ["Lanjut belajar", "Keep learning"],
     mLevel: ["Main 1 level", "Play 1 level"], mTashih: ["Tashih bersama Abi/Umi", "Reading check with a parent"],
     mTashihSub: ["Baca sendiri, Abi/Umi mencentang", "Read alone, a parent ticks"],
     mission: ["Misi Hari Ini", "Today's Missions"], missionAll: ["Semua misi selesai! Masya Allah", "All missions done! Masha Allah"],
