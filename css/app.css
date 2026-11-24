@@ -1807,3 +1807,99 @@ button.bigcard.speaking { border-color: #FFD24D; box-shadow: 0 7px 0 #F0B400, 0 
 
 /* home: the "what's your little one's name?" chip sits below Mo's greeting, never on it */
 .hw-name { top: auto; bottom: 30%; }
+
+/* ===== tajwid lessons (js/tajwid2.js): Nuni & Mimi, the story scenes, friends, detective, hold ===== */
+.tj-stage { gap: 10px; }
+.tj-title { margin-bottom: 0; }
+.tj-scene { position: relative; width: min(92%, 380px); height: 210px; border-radius: 28px; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; gap: 22px; padding-bottom: 26px;
+  background: radial-gradient(120% 90% at 50% 110%, color-mix(in srgb, var(--tc1, #FFD43B) 40%, transparent), transparent 60%), var(--card); }
+.tj-nuni { width: 104px; height: 104px; position: relative; z-index: 2; animation: tjBob 1.6s ease-in-out infinite; }
+.tj-nuni.sm { width: 64px; height: 64px; animation: none; }
+.tj-nuni svg { width: 100%; height: 100%; overflow: visible; }
+.tj-friend { position: relative; z-index: 1; width: 92px; height: 92px; border-radius: 26px; display: grid; place-items: center; color: #fff; box-shadow: 0 6px 0 rgba(0,0,0,.15), inset 0 2px 0 rgba(255,255,255,.4); }
+.tj-friend .ar { font-size: 54px; line-height: 1; text-shadow: 0 3px 0 rgba(0,0,0,.18); margin-top: -10px; }
+.tj-eyes { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); display: flex; gap: 10px; font-style: normal; }
+.tj-eyes b { width: 10px; height: 10px; border-radius: 50%; background: #1D2433; box-shadow: 0 0 0 3px #fff; }
+.tj-scene { flex-direction: row-reverse; }                 /* right to left: Nuni first, the friend after it */
+.sc-meet .tj-nuni { animation: tjWalk 1.2s cubic-bezier(.3,1.4,.5,1) both, tjBob 1.6s ease-in-out 1.2s infinite; }
+.sc-clear .tj-nuni { animation: tjHop .8s ease-in-out infinite; }
+.tj-spark { position: absolute; top: 18px; right: 22%; z-index: 3; font: 900 30px 'Fredoka One', var(--font); color: #fff; background: linear-gradient(160deg, var(--tc1), var(--tc2)); padding: 4px 14px; border-radius: 99px; box-shadow: 0 4px 0 rgba(0,0,0,.15); animation: tjPop 1.6s ease-in-out infinite; }
+.sc-merge .tj-nuni { animation: tjMerge 2.6s ease-in-out infinite; }
+.tj-shadda { position: absolute; z-index: 3; left: calc(50% - 64px); top: 26px; font-size: 46px; color: var(--tc2); animation: tjShadda 2.6s ease-in-out infinite; }
+.sc-hide .tj-nuni { animation: tjHide 2.8s ease-in-out infinite; }
+.tj-cloud { position: absolute; z-index: 3; right: 16%; bottom: 20px; width: 130px; height: 80px; border-radius: 50px; background: rgba(255,255,255,.72); box-shadow: -30px 10px 0 -10px rgba(255,255,255,.72), 30px 6px 0 -12px rgba(255,255,255,.72); animation: tjCloud 2.8s ease-in-out infinite; }
+:root[data-theme="dark"] .tj-cloud { background: rgba(200,210,255,.35); box-shadow: -30px 10px 0 -10px rgba(200,210,255,.35), 30px 6px 0 -12px rgba(200,210,255,.35); }
+.tj-hum { position: absolute; z-index: 4; top: 22px; right: 18%; font: 900 22px 'Fredoka One', var(--font); color: var(--tc2); letter-spacing: 4px; animation: tjHum 1.4s ease-in-out infinite; }
+.sc-turn .tj-nuni { animation: tjTurn 2.8s ease-in-out infinite; }
+.tj-turn { position: absolute; z-index: 3; right: calc(50% - 110px); bottom: 34px; font-size: 76px; color: var(--tc2); opacity: 0; animation: tjTurnM 2.8s ease-in-out infinite; }
+.tj-tanwin { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; direction: rtl; }
+.tj-tanwin .ar { font-size: 64px; line-height: 1.2; }
+.tj-tanwin b { font: 900 30px 'Fredoka One', var(--font); color: var(--tc2, #F59F00); }
+.tj-n { color: #14B8A6; animation: tjPop 1.6s ease-in-out infinite; }
+.tj-stretch { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 8px; }
+.tj-stretch .ar { font-size: 58px; line-height: 1.4; }
+.tj-band { width: 70%; height: 10px; border-radius: 99px; background: linear-gradient(90deg, var(--tc1), var(--tc2)); transform-origin: right; animation: tjBand 2.4s ease-in-out infinite; }
+.tj-beats { display: flex; gap: 8px; } .tj-beats b { width: 16px; height: 16px; border-radius: 50%; background: var(--tc2); opacity: .25; animation: tjBeat 2.4s steps(1) infinite; }
+.tj-beats b:nth-child(2) { animation-delay: .4s; } .tj-beats b:nth-child(3) { animation-delay: .8s; } .tj-beats b:nth-child(4) { animation-delay: 1.2s; } .tj-beats b:nth-child(5) { animation-delay: 1.6s; }
+.tj-groups { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 12px; align-self: center; }
+.tj-grp { flex: 1 1 140px; border-radius: 18px; padding: 8px 10px; color: #fff; text-align: center; box-shadow: 0 4px 0 rgba(0,0,0,.12); }
+.tj-grp b { display: block; font-size: 14px; } .tj-grp .ar { font-size: 22px; line-height: 1.7; direction: rtl; word-spacing: 4px; }
+.tj-ex { position: absolute; z-index: 5; top: 10px; left: 10px; right: 10px; padding: 4px 10px; border-radius: 16px; background: var(--card); box-shadow: 0 6px 16px -8px rgba(0,0,0,.3); }
+.tj-ex .ar { font-family: var(--quran); font-size: 26px; line-height: 1.9; text-align: center; }
+.tj-ex .hl, .tj-verse .hl { color: #E0457A; background: rgba(255,214,107,.35); border-radius: 6px; }
+.tj-cap { max-width: 380px; text-align: center; font-weight: 700; font-size: 16px; line-height: 1.35; min-height: 66px; padding: 0 12px; }
+.tj-row { margin-top: 0; }
+.tj-dots { display: flex; gap: 6px; justify-content: center; } .tj-dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(120,120,128,.25); } .tj-dots i.on { background: #22C06E; } .tj-dots i.cur { background: #FFB000; }
+/* friends */
+.tj-who { display: flex; align-items: center; gap: 10px; }
+.tj-who-t b { display: block; font-size: 18px; } .tj-cnt { font-weight: 900; color: #12A05A; }
+.tj-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: min(92%, 360px); }
+.tj-letter { aspect-ratio: 1; border-radius: 20px; border: 0; font: inherit; background: var(--card); box-shadow: 0 5px 0 rgba(30,42,58,.12), inset 0 0 0 2px rgba(30,42,58,.06); cursor: pointer; display: grid; place-items: center; }
+:root[data-theme="dark"] .tj-letter { box-shadow: 0 5px 0 rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.08); }
+.tj-letter .ar { font-size: 40px; line-height: 1.2; }
+.tj-letter.yes { color: #fff; box-shadow: 0 5px 0 rgba(0,0,0,.18); transform: scale(1.04); }
+.tj-letter.no { animation: tjShake .4s; }
+.tj-letter.hint { box-shadow: 0 0 0 3px #FFB000, 0 5px 0 rgba(0,0,0,.12); animation: tjPop 1.2s ease-in-out infinite; }
+.tj-hint, .tj-why { min-height: 22px; text-align: center; font-weight: 800; font-size: 14px; opacity: 0; transition: opacity .25s; padding: 0 12px; }
+.tj-hint.on, .tj-why.on { opacity: 1; } .tj-why.on { color: #12A05A; } .tj-why.soft { color: #E07000; }
+/* detective */
+.tj-verse .ar { font-family: var(--quran); font-size: clamp(30px, 8vw, 44px); line-height: 2; }
+.tj-eq { display: flex; align-items: center; gap: 8px; direction: rtl; }
+.tj-tile { min-width: 58px; height: 58px; padding: 0 10px; border-radius: 16px; display: grid; place-items: center; background: var(--card); box-shadow: 0 4px 0 rgba(30,42,58,.12); font-size: 36px; }
+.tj-tile.a { color: #14B8A6; } .tj-tile.b { color: #E0457A; }
+.tj-tile.q { font: 900 22px 'Fredoka One', var(--font); color: #8A93A6; direction: ltr; }
+.tj-eq.done .tj-tile.q { color: #fff; font-size: 16px; }
+.tj-tile.b.pulse { animation: tjPop .6s ease-in-out 2; }
+.tj-eq b { font: 900 22px 'Fredoka One', var(--font); opacity: .6; }
+.tj-choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; width: min(92%, 360px); }
+.tj-choice { border: 0; border-radius: 18px; padding: 10px 8px; color: #fff; font: inherit; text-align: center; box-shadow: 0 5px 0 rgba(0,0,0,.16); cursor: pointer; }
+.tj-choice b { display: block; font-size: 16px; } .tj-choice small { font-size: 11.5px; font-weight: 700; opacity: .92; }
+.tj-choice.no { animation: tjShake .4s; } .tj-choice.hint { box-shadow: 0 0 0 3px #fff, 0 0 0 6px #FFB000; }
+/* hold */
+.tj-meter { display: flex; gap: 10px; } .tj-meter i { width: 24px; height: 24px; border-radius: 50%; background: rgba(120,120,128,.18); transition: background .15s, transform .15s; }
+.tj-meter i.goal { box-shadow: inset 0 0 0 3px #FFB000; } .tj-meter i.on { background: linear-gradient(160deg, #5EEAD4, #14B8A6); transform: scale(1.15); }
+.tj-hold { width: 168px; height: 168px; border-radius: 50%; border: 0; font: inherit; color: #fff; background: radial-gradient(circle at 35% 28%, #7CF3DF, #14B8A6 60%, #0E8F80); box-shadow: 0 8px 0 #0B7065, 0 18px 26px -12px rgba(0,0,0,.4); display: grid; place-items: center; align-content: center; gap: 4px; touch-action: none; -webkit-user-select: none; user-select: none; cursor: pointer; }
+.tj-hold-ic { font: 900 54px 'Fredoka One', var(--font); line-height: 1; } .tj-hold b { font-size: 15px; }
+.tj-hold.on { transform: translateY(6px) scale(1.04); box-shadow: 0 2px 0 #0B7065, 0 0 0 10px rgba(94,234,212,.3); }
+@keyframes tjBob { 50% { transform: translateY(-6px); } }
+@keyframes tjWalk { from { transform: translateX(120px); opacity: 0; } }
+@keyframes tjHop { 50% { transform: translateY(-14px) scale(1.04); } }
+@keyframes tjPop { 50% { transform: scale(1.1); } }
+@keyframes tjMerge { 0%, 15% { transform: none; opacity: 1; } 55% { transform: translateX(-96px) scale(.55); opacity: .1; } 85%, 100% { transform: translateX(-96px) scale(.4); opacity: 0; } }
+@keyframes tjShadda { 0%, 45% { opacity: 0; transform: translateY(10px); } 60%, 100% { opacity: 1; transform: none; } }
+@keyframes tjHide { 0%, 20% { transform: none; opacity: 1; } 55%, 100% { transform: translateX(-30px) scale(.9); opacity: .45; } }
+@keyframes tjCloud { 0%, 25% { opacity: 0; transform: translateX(30px); } 55%, 100% { opacity: 1; transform: none; } }
+@keyframes tjHum { 50% { transform: translateY(-6px); opacity: .55; } }
+@keyframes tjTurn { 0%, 20% { transform: none; opacity: 1; } 45% { transform: rotate(180deg) scale(.4); opacity: 0; } 100% { transform: rotate(180deg) scale(.4); opacity: 0; } }
+@keyframes tjTurnM { 0%, 40% { opacity: 0; transform: scale(.3); } 60%, 100% { opacity: 1; transform: none; } }
+@keyframes tjBand { 0%, 10% { transform: scaleX(.2); } 70%, 100% { transform: scaleX(1); } }
+@keyframes tjBeat { 0% { opacity: .25; } 10%, 100% { opacity: 1; } }
+@keyframes tjShake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+@media (prefers-reduced-motion: reduce) { .tj-scene *, .tj-letter.hint { animation: none !important; } }
+.tj-friend .tj-fs { position: absolute; inset: 0; display: grid; place-items: center; font-size: 54px; line-height: 1; margin-top: -10px; opacity: 0; }
+.tj-friend.merging > .ar:first-child { animation: tjFadeOut 2.6s ease-in-out infinite; }
+.tj-friend.merging .tj-fs { animation: tjFadeIn 2.6s ease-in-out infinite; text-shadow: 0 3px 0 rgba(0,0,0,.18); }
+@keyframes tjFadeOut { 0%, 45% { opacity: 1; } 60%, 100% { opacity: 0; } }
+@keyframes tjFadeIn { 0%, 45% { opacity: 0; transform: scale(.8); } 60%, 100% { opacity: 1; transform: none; } }
+.tj-scene.sc-groups { height: auto; min-height: 210px; align-items: center; padding: 6px 0; }
+.sc-groups .tj-grp .ar { font-size: 20px; line-height: 1.6; }
