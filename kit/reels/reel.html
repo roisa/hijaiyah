@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Reel — Baby Mo Hijaiyah</title>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css"><link rel="stylesheet" href="reel.css">
+<style>html,body{margin:0;height:100%;background:#1b1f27;overflow:hidden}#fit{position:absolute;left:50%;top:50%}
+body.rec{background:#fff}body.rec #fit{left:0;top:0}</style></head>
+<body>
+<div id="fit"><div id="root"></div></div>
+<!-- the game's icon set is reused for stars, hearts and other art -->
+<script>window.HJ = {};</script><script src="../../js/icons.js"></script>
+<script src="engine.js"></script><script src="reels.js"></script>
+<script>
+/* reel.html?reel=trace&lang=en — plays one reel, scaled to the window. ?rec=1 = exact 1080 × 1920 for recording. */
+(function () {
+  var q = new URLSearchParams(location.search), id = q.get("reel") || REELS[0].id, lang = q.get("lang") || "id", rec = q.get("rec");
+  var fit = document.getElementById("fit"), root = document.getElementById("root");
+  function size() { if (rec) { document.body.classList.add("rec"); fit.style.transform = ""; return; }
+    var k = Math.min(innerWidth / 1080, innerHeight / 1920); fit.style.transform = "translate(-50%,-50%) scale(" + k + ")"; fit.style.width = "1080px"; fit.style.height = "1920px"; }
+  size(); addEventListener("resize", size);
+  var reel = window.__EXTRA_REEL || REELS.filter(function (r) { return r.id === id; })[0] || REELS[0];
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () {
+    window.READY = REEL.play(root, reel, lang).then(function (log) { window.FINISHED = true; return log; });
+    if (!rec) document.addEventListener("click", function () { location.reload(); });
+  });
+})();
+</script>
+</body></html>

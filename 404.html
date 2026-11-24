@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#F2F6FC">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Baby Mo Hijaiyah — learn to read the Qur'an through play, from alif to short surahs, with Baby Mo. Belajar membaca Al-Qur'an sambil bermain bersama Baby Mo. English &amp; Bahasa Indonesia.">
+<title>Baby Mo Hijaiyah</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/brand/icon-buddy-192.png">
+<link rel="apple-touch-icon" href="assets/brand/icon-buddy-180.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="css/app.css?v=89">
+<script>/* theme before first paint (no flash) */try{var m=(JSON.parse(localStorage.getItem("bmh_v1")||"{}").theme)||"auto";document.documentElement.setAttribute("data-theme",m==="dark"||(m==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light")}catch(e){}</script>
+<script>/* big screens: scale the whole phone layout up, like the Baby Mo app does on iPad.
+   Touch devices (iPad): through the viewport (a layout ~430–620 px wide shown bigger). The browser scales everything, so
+   finger and element positions always agree. (CSS zoom did the same job, but on iPad Safari it made touch positions and
+   element positions disagree: tracing missed the start dot and dragged pieces lagged behind the finger.)
+   Desktop browsers ignore the viewport tag, so they keep CSS zoom (mouse positions are consistent there). */
+(function(){var mv=document.querySelector('meta[name="viewport"]'),base=mv.getAttribute("content"),de=document.documentElement;
+var touch=(window.matchMedia&&matchMedia("(pointer: coarse)").matches)||navigator.maxTouchPoints>1;
+function fit(){var z=1;
+if(touch){var sw=screen.width,sh=screen.height,o=screen.orientation&&screen.orientation.type,land=o?o.indexOf("landscape")===0:(window.orientation===90||window.orientation===-90);
+var w=land?Math.max(sw,sh):Math.min(sw,sh),h=land?Math.min(sw,sh):Math.max(sw,sh);if(Math.min(w,h)>=700)z=Math.max(1,Math.min(w/430,h/900));
+if(z>1.02){var zs=z.toFixed(3);mv.setAttribute("content","width="+Math.round(w/z)+", initial-scale="+zs+", minimum-scale="+zs+", maximum-scale="+zs+", user-scalable=no, viewport-fit=cover");}else mv.setAttribute("content",base);de.style.zoom="";}
+else{var iw=innerWidth,ih=innerHeight;if(Math.min(iw,ih)>=700)z=Math.max(1,Math.min(iw/430,ih/900));de.style.zoom=z>1.02?z.toFixed(3):"";}
+de.classList.toggle("big",z>1.02);de.style.setProperty("--vz",z>1.02?z:1);}
+fit();addEventListener("resize",fit);addEventListener("orientationchange",function(){setTimeout(fit,120);});})();</script>
+</head>
+<body>
+<div id="app"></div>
+<script src="audio/huruf/voice.js"></script>
+<script src="audio/extra/voice.js?v=46"></script>
+<script src="audio/lines/voice.js?v=47"></script>
+<script src="js/letters.js?v=16"></script>
+<script src="js/quran.js?v=15"></script>
+<script src="js/store.js?v=83"></script>
+<script src="js/icons.js?v=16"></script>
+<script src="js/mapart.js?v=1"></script>
+<script src="js/curriculum.js?v=19"></script>
+<script src="js/audio.js?v=44"></script>
+<script src="js/music.js?v=56"></script>
+<script src="js/juice.js?v=15"></script>
+<script src="js/games.js?v=65"></script>
+<script src="js/ink.js?v=34"></script>
+<script src="js/voice.js?v=15"></script>
+<script src="js/tajwid.js?v=15"></script>
+<script src="js/tajwid2.js?v=1"></script>
+<script src="js/strokes.js?v=15"></script>
+<script src="js/trace.js?v=65"></script>
+<script src="js/toddler.js?v=39"></script>
+<script src="js/bg.js?v=18"></script>
+<script src="js/world.js?v=22"></script>
+<script src="js/fun.js?v=39"></script>
+<script src="js/race3d.js?v=81"></script>
+<script src="js/race.js?v=79"></script>
+<script src="js/extras.js?v=57"></script>
+<script src="js/ambience.js?v=15"></script>
+<script src="js/badges.js?v=59"></script>
+<script src="js/holiday.js?v=56"></script>
+<script src="js/app.js?v=68"></script>
+</body>
+</html>

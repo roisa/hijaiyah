@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Reel editor — Baby Mo Hijaiyah</title>
+<link rel="stylesheet" href="../../assets/fonts/fonts.css"><link rel="stylesheet" href="reel.css">
+<style>
+:root{color-scheme:light;--bg:#F6F7F4;--card:#fff;--ink:#16201B;--soft:#5D6A63;--line:#E2E6E1;--accent:#12A15A}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#101412;--card:#181E1B;--ink:#E9EFEB;--soft:#9DABA3;--line:#28312C;--accent:#4FD08D}}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Nunito',system-ui,sans-serif}
+.wrap{display:grid;grid-template-columns:minmax(320px,1fr) auto;gap:18px;padding:16px;min-height:100vh}
+@media(max-width:860px){.wrap{grid-template-columns:1fr}}
+h1{font-family:'Fredoka',sans-serif;font-size:26px;margin:0}.lead{color:var(--soft);font-size:14px;margin:4px 0 12px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+select,button{font:inherit;font-weight:800;padding:9px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+textarea{width:100%;height:56vh;min-height:320px;font:13px/1.45 ui-monospace,Menlo,monospace;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);resize:vertical}
+.err{color:#D9480F;font-weight:800;font-size:14px;min-height:20px}
+.help{font-size:13.5px;color:var(--soft);line-height:1.5;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+.help code{background:rgba(120,120,128,.14);padding:1px 5px;border-radius:5px}
+.preview{position:sticky;top:16px;align-self:start}
+#box{width:360px;height:640px;border-radius:24px;overflow:hidden;box-shadow:0 20px 50px -20px rgba(0,0,0,.4);background:#fff}
+#root{transform:scale(.3333);transform-origin:0 0;width:1080px;height:1920px}
+.seg{display:flex;gap:4px}.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+</style></head><body>
+<div class="wrap">
+  <div>
+    <h1>Reel editor</h1>
+    <p class="lead">Pick a reel, change the words, poses or timing below, press <b>Play</b> to preview. When you like it, <b>Download</b> the reel and send it to whoever renders the videos (<code>node tools/reels/render.js my-reel.json</code>), or paste it into <code>kit/reels/reels.js</code> to keep it.</p>
+    <div class="bar">
+      <select id="pick"></select>
+      <div class="seg"><button data-l="id" aria-pressed="true">ID</button><button data-l="en" aria-pressed="false">EN</button></div>
+      <button class="pri" id="play">▶ Play</button>
+      <button id="reset">Reset</button>
+      <button id="dl">⬇ Download reel</button>
+      <button id="copy">Copy</button>
+    </div>
+    <div class="err" id="err"></div>
+    <textarea id="code" spellcheck="false"></textarea>
+    <div class="help">
+      <b>How a reel works.</b> <code>steps</code> is a list of <code>[seconds, action, …]</code>. Common edits:
+      change a <code>"title"</code> or <code>"say"</code> text (both languages), change a pose in <code>"mo"</code>
+      (<code>pose-41 yes yeyy pose-02 wow pose-37 ok idea thank-you pose-12 pose-08 pose-20 alright pose-05 run pose-26 pose-33 pose-36 mo2-hug-quran abi-wave umi-welcome</code>)
+      or how Mo moves (<code>in-left in-right jump wave spin pop out</code>), change <code>theme</code>
+      (<code>mint sun sky pink grape gold night</code>), or move a step's time. Game actions: <code>tap</code> (<code>"answer"</code>, <code>"wrong"</code>, <code>"speaker"</code>, <code>"start"</code>, <code>"next"</code>),
+      <code>trace</code> (letter key: <code>alif ba ta tsa jim hha kho dal dzal ro zai sin syin shod dhod tho zho ain ghin fa qof kaf lam mim nun wau ha ya</code>), <code>pop</code>, <code>train</code>, <code>bridge</code>, <code>build</code>, <code>finish</code>.
+      Effects: <code>burst</code>, <code>confetti</code>, <code>letters</code>, <code>big</code>, <code>cta</code>. Give a new reel a new <code>id</code>. The full list is at the top of <code>kit/reels/engine.js</code>.
+    </div>
+  </div>
+  <div class="preview"><div id="box"><div id="root"></div></div></div>
+</div>
+<script>window.HJ = {};</script><script src="../../js/icons.js"></script>
+<script src="engine.js"></script><script src="reels.js"></script>
+<script>
+(function () {
+  var pick = document.getElementById("pick"), code = document.getElementById("code"), err = document.getElementById("err"), lang = "id";
+  REELS.forEach(function (r) { var o = document.createElement("option"); o.value = r.id; o.textContent = r.name + " (" + r.id + ")"; pick.appendChild(o); });
+  var q = new URLSearchParams(location.search); if (q.get("reel")) pick.value = q.get("reel"); if (q.get("lang")) lang = q.get("lang");
+  function fmt(r) { return JSON.stringify(r, null, 1).replace(/\[\n\s+([\d.]+),\n\s+/g, "[$1, ").replace(/",\n\s+(?=["{\[\dnt-])/g, "\", ").replace(/\n\s+\]/g, "]"); }
+  function load() { var r = REELS.filter(function (x) { return x.id === pick.value; })[0]; code.value = fmt(r); play(); }
+  function current() { try { err.textContent = ""; return JSON.parse(code.value); } catch (e) { err.textContent = "Typo in the reel: " + e.message; return null; } }
+  function play() { var r = current(); if (!r) return; REEL.stop(); REEL.play(document.getElementById("root"), r, lang); }
+  pick.onchange = load;
+  document.getElementById("play").onclick = play;
+  document.getElementById("reset").onclick = load;
+  document.querySelectorAll("[data-l]").forEach(function (b) { b.onclick = function () { lang = b.getAttribute("data-l");
+    document.querySelectorAll("[data-l]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); play(); }; });
+  document.getElementById("dl").onclick = function () { var r = current(); if (!r) return;
+    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(r, null, 2)], { type: "application/json" })); a.download = (r.id || "reel") + ".json"; a.click(); };
+  document.getElementById("copy").onclick = function () { navigator.clipboard && navigator.clipboard.writeText(code.value).then(function () { err.textContent = "Copied ✓"; }); };
+  load();
+})();
+</script>
+</body></html>
