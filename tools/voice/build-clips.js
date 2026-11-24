@@ -124,6 +124,7 @@ async function lines() {
       for (let r = 0; r < 25; r++) HJ.allLevels().forEach(lv => HJ.buildSteps(lv).forEach(st => {
         if (st.type === 'intro' && st.say) add(HJ.tr(st.say), 'pembuka level / level intro', 'level ' + lv.id);
         if (st.type === 'sort' && st.say) add(HJ.tr(st.say), 'petunjuk / instructions', 'level ' + lv.id + ' sort');
+        if (st.type === 'rule') st.pages.forEach(pg => add(HJ.games.tajwidVoice(HJ.tr(pg.say), M), 'tajwid (cerita / story)', 'level ' + lv.id + ' story'));
       }));
       // play every level step by step with A.talk hooked: what does it really say?
       const real = A.talk, heard = [];

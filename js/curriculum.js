@@ -13,7 +13,7 @@
   function uniqBy(a, f) { var s = {}, o = []; a.forEach(function (x) { var k = f(x); if (!s[k]) { s[k] = 1; o.push(x); } }); return o; }
   function W(ar, tr, id, en, extra) { var o = { ar: ar, tr: tr, au: ar, id: id, en: en || id }; for (var k in extra || {}) o[k] = extra[k]; return o; }
   // A Qur'an fragment: must be an exact substring of ayah (s, a) in js/quran.js (tools/check-curriculum.js checks it)
-  function Q(ar, s, a, tr, hl, extra) { var o = { ar: ar, tr: tr, au: ar, ref: [s, a], hl: hl, quran: 1 }; for (var k in extra || {}) o[k] = extra[k]; (HJ.QTEXT = HJ.QTEXT || {})[String(ar).normalize("NFC").replace(/\u0640/g, "").replace(/\s+/g, " ").trim()] = 1; return o; }
+  function Q(ar, s, a, tr, hl, extra) { var o = { ar: ar, tr: tr, au: ar, ref: [s, a], hl: hl, quran: 1 }; for (var k in extra || {}) o[k] = extra[k]; (HJ.QTEXT = HJ.QTEXT || {})[String(ar).normalize("NFC").replace(/\u0640/g, "").replace(/\s+/g, " ").trim()] = HJ.QTEXT[String(ar).normalize("NFC").replace(/\u0640/g, "").replace(/\s+/g, " ").trim()] || [s, a]; return o; }   // remembers its ayah (for the recitation)
   function T(id, en) { return { id: id, en: en || id }; }
 
   // options for a "listen and choose" round: the answer plus fair distractors (look-alikes first)
@@ -129,6 +129,7 @@
   }
 
   function bossSteps(lv) {
+    if (lv.lesson) return lv.lesson();
     var pool = lv.items || fat(lv.pool, lv.v);
     var st = [S.intro("pose-37", T("Ujian Jilid! Ada 3 hati. Hati-hati ya!", "Book test! You have 3 hearts. Be careful!"))];
     for (var i = 0; i < 3; i++) st.push(S.pick(pick(pool), pool, 4));
@@ -288,6 +289,7 @@
   function itemsFrom(list) { return list.map(function (x) { return x; }); }
   function wordSteps(lv) {
     var items = lv.items, st = [S.intro(lv.mo || "pose-08", lv.say)];
+    if (items[0] && items[0].quran) return quranWordSteps(lv, st);
     var seen = {};
     if (lv.learnFirst) lv.learnFirst.forEach(function (it) { seen[it.ar] = 1; st.push(S.learn(it, it.note)); });
     var nL = lv.nLearn != null ? lv.nLearn : (lv.learnFirst ? 1 : 3);
@@ -305,14 +307,25 @@
     st.push(S.tashih(shuffle(items).slice(0, 5), T("{k} membaca sendiri, Abi/Umi mendengarkan.", "{k} reads alone, a parent listens.")));
     return st;
   }
+  // Qur'an pieces (Books 5–6): hear the real recitation while the piece glows, read it, play with it by sight
+  function quranWordSteps(lv, st) {
+    var items = lv.items, seen = {};
+    (lv.learnFirst || []).forEach(function (it) { seen[it.ar] = 1; st.push(S.learn(it, it.note)); });
+    shuffle(items).filter(function (it) { return !seen[it.ar]; }).slice(0, lv.nLearn != null ? lv.nLearn : 3).forEach(function (it) { st.push(S.learn(it)); });
+    st.push(S.match(shuffle(items).slice(0, 3).map(function (x) { return [x, x]; })));
+    st.push(S.train(chain(shuffle(items).slice(0, 2))));
+    if (lv.sortBy) st.push(S.sort(lv.sortBy, shuffle(items).slice(0, 6), lv.sortSay));
+    st.push(S.tashih(shuffle(items).slice(0, 5), T("{k} membaca sendiri, Abi/Umi mendengarkan.", "{k} reads alone, a parent listens.")));
+    return st;
+  }
   function sortSteps(lv) {
     var items = lv.items, st = [S.intro(lv.mo || "idea", lv.say)];
     (lv.explain || []).forEach(function (e) { st.push(S.learn(e.item, e.note)); });
     st.push(S.sort(lv.buckets, shuffle(items).slice(0, Math.min(6, items.length)), lv.sortSay));
-    st.push(S.pick(pick(items), items));
+    if (!items[0].quran) st.push(S.pick(pick(items), items));
     st.push(S.train(chain(shuffle(items).slice(0, 2))));
     st.push(S.sort(lv.buckets, shuffle(items).slice(0, Math.min(6, items.length)), lv.sortSay));
-    st.push(S.bridge(items, null, 4));
+    if (!items[0].quran) st.push(S.bridge(items, null, 4));
     st.push(S.tashih(shuffle(items).slice(0, 5), T("{k} membaca, Abi/Umi mendengarkan.", "{k} reads, a parent listens.")));
     return st;
   }
@@ -442,15 +455,31 @@
       "Read shaddah, the nasal ghunnah, the two kinds of al-, the word Allah, and how to stop (waqaf).") });
   lvl(w5, { kind: "words", title: "رَبِّ", items: J5TAS, say: T("Tanda seperti huruf w kecil namanya tasydid: hurufnya dibaca dua kali, ditekan!", "The little w is shaddah: the letter is doubled, pressed!") });
   lvl(w5, { kind: "words", title: "إِنَّ", items: J5GHU, say: T("نّ dan مّ yang bertasydid dibaca berdengung (ghunnah) 2 ketukan. Nnnn!", "Doubled نّ and مّ hum for 2 beats (ghunnah). Nnnn!") });
-  lvl(w5, { kind: "words", title: "الْقَمَرُ", items: J5AL.filter(function (x) { return x.b === QAM; }), say: T("Alif lam qamariyah: lam-nya dibaca jelas. Al-qomar!", "Moon letters: the lam is clear. Al-qamar!") });
-  lvl(w5, { kind: "words", title: "الشَّمْسُ", items: J5AL.filter(function (x) { return x.b === SYM; }), say: T("Alif lam syamsiyah: lam-nya hilang, huruf berikutnya ditasydid. Asy-syams!", "Sun letters: the lam disappears, the next letter doubles. Ash-shams!") });
+  var AL_Q = J5AL.filter(function (x) { return x.b === QAM; }), AL_S = J5AL.filter(function (x) { return x.b === SYM; });
+  function alLesson(items, rule, say, page2) {
+    return function () {
+      return [{ type: "rule", pages: [{ scene: "meet", who: "nun", friend: "ل", rule: rule, title: T("Alif Lam", "Al-"), say: say, ex: items[0] }, page2, { scene: "groups", groups: [QAM, SYM], say: T("14 huruf qamariyah, 14 huruf syamsiyah. Yuk cari teman-temannya!", "14 moon letters, 14 sun letters. Let's find them!") }] },
+        { type: "friends", rule: rule, pool: shuffle(rule === QAM ? AL_Q_POOL : AL_S_POOL), say: rule === QAM ? T("Cari huruf-huruf qamariyah (lam dibaca jelas)!", "Find the moon letters (the lam is clear)!") : T("Cari huruf-huruf syamsiyah (lam hilang)!", "Find the sun letters (the lam goes silent)!") }]
+        .concat(shuffle(items).slice(0, 3).map(function (it) { return S.learn(it); }))
+        .concat([S.match(shuffle(items).slice(0, 3).map(function (x) { return [x, x]; })), S.tashih(shuffle(items).slice(0, 5), T("{k} membaca sendiri, Abi/Umi mendengarkan.", "{k} reads alone, a parent listens."))]);
+    };
+  }
+  var AL_Q_POOL = "ا ب ج ح خ ع ف ق ك ت س ش ر ن".split(" "), AL_S_POOL = "ت س ش ص د ر ن ل ب ج ق ع ه م".split(" ");
+  lvl(w5, { kind: "lesson", title: "الْقَمَرُ", items: AL_Q, lesson: alLesson(AL_Q, QAM, T("Alif lam qamariyah: lam-nya dibaca jelas, seperti bulan yang terang. Al-qomar!", "Moon letters: the lam is said clearly, bright like the moon. Al-qamar!"),
+    { scene: "clear", who: "nun", friend: "ق", rule: QAM, title: T("Qamariyah", "Moon letters"), say: T("Bertemu ق, lam tetap terdengar.", "Before ق the lam is heard."), ex: AL_Q[7] }) });
+  lvl(w5, { kind: "lesson", title: "الشَّمْسُ", items: AL_S, lesson: alLesson(AL_S, SYM, T("Alif lam syamsiyah: lam-nya hilang, seperti bintang yang tertutup cahaya matahari. Asy-syams!", "Sun letters: the lam disappears, like a star in the sunlight. Ash-shams!"),
+    { scene: "merge", who: "nun", friend: "ن", rule: SYM, title: T("Syamsiyah", "Sun letters"), say: T("Bertemu ن, lam masuk dan hurufnya ditasydid.", "Before ن the lam merges and the letter doubles."), ex: AL_S[0] }) });
   var BQS = [{ k: QAM, art: "moon", label: T("Qamariyah (lam jelas)", "Moon letters (clear lam)") }, { k: SYM, art: "sun", label: T("Syamsiyah (lam hilang)", "Sun letters (silent lam)") }];
   lvl(w5, { kind: "sort", title: "الْ", items: J5AL, buckets: BQS, say: T("Bulan atau matahari? Kelompokkan!", "Moon or sun? Sort them!") });
   lvl(w5, { kind: "sort", title: "اللَّهُ", items: J5JAL,
     buckets: [{ k: TAF, label: T("Tebal (tafkhim)", "Full (tafkhim)") }, { k: TAR, label: T("Tipis (tarqiq)", "Light (tarqiq)") }],
     say: T("Lafaz Allah dibaca tebal setelah a / u, dan tipis setelah i.", "Allah is read full after a / u, and light after i.") });
   lvl(w5, { kind: "waqaf", title: "أَحَدْ", say: T("Waqaf = berhenti. Di akhir ayat, harakat terakhir dimatikan.", "Waqaf = stopping. At the end of a verse, the last vowel goes still.") });
-  lvl(w5, { kind: "boss", title: T("Ujian Jilid 5", "Book 5 Test"), items: J5TAS.concat(J5GHU).concat(J5AL) });
+  lvl(w5, { kind: "boss", title: T("Ujian Jilid 5", "Book 5 Test"), items: J5TAS.concat(J5GHU).concat(J5AL), lesson: function () { return [
+    S.intro("pose-37", T("Ujian Kota Tasydid! Bismillah!", "Tasydid Town test! Bismillah!")),
+    S.sort(BQS, shuffle(J5AL).slice(0, 6)), S.match(shuffle(J5TAS.concat(J5GHU)).slice(0, 3).map(function (x) { return [x, x]; })),
+    S.sort([{ k: TAF, label: T("Tebal (tafkhim)", "Full (tafkhim)") }, { k: TAR, label: T("Tipis (tarqiq)", "Light (tarqiq)") }], shuffle(J5JAL).slice(0, 5)),
+    S.train(chain(shuffle(J5TAS).slice(0, 2))), S.tashih(shuffle(J5TAS.concat(J5GHU, J5AL)).slice(0, 8), T("Tashih: {k} membaca, Abi/Umi menilai.", "Reading check: {k} reads, a parent listens."))]; } });
 
   /* Jilid 6 — Istana Tajwid */
   var w6 = world({ n: 6, key: "tajwid", emoji: "🏰", color: "#E0892B", bg: "linear-gradient(180deg,#FFE0B5,#F2A54A)",
@@ -459,20 +488,89 @@
       "Meet the rules of nun sakinah & tanwin (izhar, idgham, iqlab, ikhfa), mim sakinah, and the long mads — inside real verses.") });
   var BNUN = [{ k: IZ, label: T("Izhar (jelas)", "Izhar (clear)") }, { k: IDG, label: T("Idgham (masuk)", "Idgham (merge)") },
     { k: IQL, label: T("Iqlab (jadi m)", "Iqlab (to m)") }, { k: IKH, label: T("Ikhfa (samar)", "Ikhfa (hidden)") }];
+  var BMIM = [{ k: IKS, label: T("Ikhfa syafawi (مْ ب)", "Ikhfa syafawi (مْ ب)") }, { k: IDM, label: T("Idgham mimi (مْ م)", "Idgham mimi (مْ م)") }, { k: IZS, label: T("Izhar syafawi (lainnya)", "Izhar syafawi (others)") }];
+  var BMAD = [{ k: MW, label: T("Mad wajib (satu kata)", "Mad wajib (same word)") }, { k: MJ, label: T("Mad jaiz (beda kata)", "Mad jaiz (next word)") }];
   var by = function (list, b) { return list.filter(function (x) { return x.b === b; }); };
-  lvl(w6, { kind: "words", title: "مِنْ خَوْفٍ", items: by(J6NUN, IZ), say: T("Izhar: nun mati/tanwin bertemu ء ه ع ح غ خ → dibaca JELAS.", "Izhar: before ء ه ع ح غ خ the n is CLEAR.") });
-  lvl(w6, { kind: "words", title: "مِنْ مَسَدٍ", items: by(J6NUN, IDG), say: T("Idgham: bertemu ي ن م و (berdengung) atau ل ر (tanpa dengung) → nun masuk ke huruf berikutnya.", "Idgham: before ي ن م و (with hum) or ل ر (no hum) the n merges in.") });
-  lvl(w6, { kind: "words", title: "لَيُنْبَذَنَّ", items: by(J6NUN, IQL).concat(by(J6MIM, IKS)), say: T("Iqlab: nun mati bertemu ب → berubah jadi bunyi m.", "Iqlab: before ب the n turns into m.") });
-  lvl(w6, { kind: "words", title: "مِنْ شَرِّ", items: by(J6NUN, IKH), say: T("Ikhfa: bertemu 15 huruf lainnya → dibaca samar sambil berdengung.", "Ikhfa: before the other 15 letters the n is hidden, with a hum.") });
-  lvl(w6, { kind: "sort", title: "نْ ـًـٍـٌ", items: J6NUN, buckets: BNUN, say: T("Hukum apa ini? Masukkan ke kotak yang benar!", "Which rule? Put it in the right box!") });
-  lvl(w6, { kind: "sort", title: "مْ", items: J6MIM,
-    buckets: [{ k: IKS, label: T("Ikhfa syafawi (مْ ب)", "Ikhfa syafawi (مْ ب)") }, { k: IDM, label: T("Idgham mimi (مْ م)", "Idgham mimi (مْ م)") }, { k: IZS, label: T("Izhar syafawi (lainnya)", "Izhar syafawi (others)") }],
-    say: T("Mim mati: bertemu ب samar, bertemu م masuk, selain itu jelas.", "Mim sakinah: hidden before ب, merged into م, clear before the rest.") });
-  lvl(w6, { kind: "sort", title: "جَاءَ", items: J6MAD,
-    buckets: [{ k: MW, label: T("Mad wajib (satu kata)", "Mad wajib (same word)") }, { k: MJ, label: T("Mad jaiz (beda kata)", "Mad jaiz (next word)") }],
-    say: T("Mad bertemu hamzah: di kata yang sama = wajib (5 ketukan), di kata berikutnya = jaiz.", "A long vowel before hamzah: same word = wajib (5 beats), next word = jaiz.") });
-  lvl(w6, { kind: "boss", title: T("Ujian Jilid 6", "Book 6 Test"), items: J6NUN.concat(J6MIM).concat(J6MAD),
-    extra: function () { return [S.sort(BNUN, shuffle(J6NUN).slice(0, 6))]; } });
+  var ex = function (list, ar) { return list.filter(function (x) { return x.ar === ar; })[0]; };
+  var READ = T("{k} membaca sendiri, Abi/Umi mendengarkan.", "{k} reads alone, a parent listens.");
+  var POOL12 = function (rule, others) { return shuffle(GROUPS6[rule]).slice(0, 6).concat(shuffle(others).slice(0, 6)); };
+  var GROUPS6 = { izhar: "ء ه ع ح غ خ".split(" "), idgham: "ي ن م و ل ر".split(" "), ikhfa: "ت ث ج د ذ ز س ش ص ض ط ظ ف ق ك".split(" ") };
+  function spot(list, n, kind) { return { type: "spot", items: shuffle(list).slice(0, n), rules: kind === "mim" ? [IKS, IDM, IZS] : uniqBy(list, function (x) { return x.b; }).map(function (x) { return x.b; }).sort(function (a, b) { return [IZ, IDG, IQL, IKH].indexOf(a) - [IZ, IDG, IQL, IKH].indexOf(b); }), kind: kind || "nun" }; }
+  function hold(beats, word, mode, say) { return { type: "hold", beats: beats, word: word, mode: mode || "hum", say: say, times: 3 }; }
+  var HUM2 = T("Tahan tombolnya sambil berdengung “nnn” selama 2 ketukan!", "Hold the button and hum “nnn” for 2 beats!");
+
+  lvl(w6, { kind: "lesson", title: "نْ", lesson: function () { return [
+    { type: "rule", pages: [
+      { scene: "meet", who: "nun", title: T("Kenalan dengan Nuni!", "Meet Nuni!"), say: T("Ini Nuni, nun mati: huruf nun dengan sukun di atasnya. Nuni tidak punya harakat, jadi bunyinya hanya n.", "This is Nuni, a resting nun: a nun with a sukun on top. Nuni has no vowel, so it just says n.") },
+      { scene: "tanwin", title: T("Tanwin juga Nuni", "Tanwin is Nuni too"), say: T("Tanwin, dua harakat kecil di akhir kata, bunyinya juga n: bun sama dengan bu-n. Jadi tanwin juga Nuni!", "Tanwin, the double vowel at the end of a word, also says n: bun is bu-n. So tanwin is Nuni too!") },
+      { scene: "meet", who: "nun", friend: "خ", rule: IZ, title: T("Nuni bertemu teman", "Nuni meets a friend"), say: T("Nuni selalu bertemu huruf sesudahnya. Huruf itulah yang menentukan cara membaca Nuni!", "Nuni always meets the letter after it. That letter decides how we read Nuni!"), ex: ex(J6NUN, "مِنْ خَوْفٍ") },
+      { scene: "groups", groups: [IZ, IDG, IQL, IKH], title: T("4 cara membaca Nuni", "4 ways to read Nuni"), say: T("Ada empat cara: Izhar jelas, Idgham masuk, Iqlab jadi m, dan Ikhfa samar. Kita pelajari satu per satu!", "There are four ways: Izhar clear, Idgham merge, Iqlab turns into m, and Ikhfa hidden. Let's learn them one by one!") }] }]
+    .concat([ex(J6NUN, "مِنْ خَوْفٍ"), ex(J6NUN, "يَكُنْ لَهُ"), ex(J6NUN, "مِنْ شَرِّ")].map(function (it) { return S.learn(it); }))
+    .concat([S.tashih(J6NUN.slice(0, 5), READ)]); } });
+
+  lvl(w6, { kind: "lesson", title: "مِنْ خَوْفٍ", lesson: function () { return [
+    { type: "rule", pages: [
+      { scene: "meet", who: "nun", friend: "خ", rule: IZ, say: T("Nuni bertemu huruf tenggorokan: ء ه ع ح غ خ. Huruf-huruf ini jauh di dalam tenggorokan.", "Nuni meets a throat letter: ء ه ع ح غ خ. These letters live deep in the throat.") },
+      { scene: "clear", who: "nun", friend: "خ", rule: IZ, say: T("Karena jauh, Nuni dibaca JELAS, tanpa dengung. Itu namanya Izhar.", "Because they're far away, Nuni is said CLEARLY, no hum. That is Izhar."), ex: ex(J6NUN, "مِنْ خَوْفٍ") },
+      { scene: "groups", groups: [IZ], say: T("Ingat enam teman Izhar: hamzah, ha, 'ain, ha, ghain, kha.", "Remember Izhar's six friends: hamzah, ha, 'ayn, ḥa, ghayn, kha.") }] },
+    { type: "friends", rule: IZ, pool: POOL12(IZ, "ب ت س ش ك ق ف د ل م".split(" ")), say: T("Cari keenam teman Izhar!", "Find Izhar's six friends!") },
+    spot(by(J6NUN, IZ).concat(by(J6NUN, IKH).slice(0, 2)), 5),
+    S.learn(ex(J6NUN, "أَنْعَمْتَ")), S.tashih(by(J6NUN, IZ), READ)]; } });
+
+  lvl(w6, { kind: "lesson", title: "مِنْ مَسَدٍ", lesson: function () { return [
+    { type: "rule", pages: [
+      { scene: "merge", who: "nun", friend: "م", rule: IDG, say: T("Nuni bertemu ي ن م و: Nuni MASUK ke huruf itu sambil berdengung 2 ketukan. Itu Idgham.", "Nuni meets ي ن م و: Nuni MERGES into it, humming for 2 beats. That is Idgham."), ex: ex(J6NUN, "حَبْلٌ مِنْ مَسَدٍ") },
+      { scene: "merge", who: "nun", friend: "ل", rule: IDG, say: T("Bertemu ل atau ر, Nuni juga masuk, tapi TANPA dengung.", "Before ل or ر, Nuni merges too, but WITHOUT a hum."), ex: ex(J6NUN, "يَكُنْ لَهُ") },
+      { scene: "groups", groups: [IDG], say: T("Enam teman Idgham: ya, nun, mim, wau (berdengung), lam dan ra (tanpa dengung).", "Idgham's six friends: ya, nun, mim, waw (with a hum), lam and ra (no hum).") }] },
+    { type: "friends", rule: IDG, pool: POOL12(IDG, "ء ه ع ح ب ت ش ك ق ف".split(" ")), say: T("Cari keenam teman Idgham!", "Find Idgham's six friends!") },
+    hold(2, ex(J6NUN, "حَبْلٌ مِنْ مَسَدٍ"), "hum", HUM2),
+    spot(by(J6NUN, IDG).concat(by(J6NUN, IZ).slice(0, 2)), 5),
+    S.tashih(by(J6NUN, IDG), READ)]; } });
+
+  lvl(w6, { kind: "lesson", title: "لَيُنْبَذَنَّ", lesson: function () { return [
+    { type: "rule", pages: [
+      { scene: "turn", who: "nun", friend: "ب", rule: IQL, say: T("Nuni bertemu ب: Nuni BERUBAH menjadi bunyi m, sambil berdengung. Itu Iqlab.", "Nuni meets ب: Nuni TURNS INTO an m sound, with a hum. That is Iqlab."), ex: ex(J6NUN, "لَيُنْبَذَنَّ") },
+      { scene: "groups", groups: [IQL], say: T("Teman Iqlab cuma satu: ba. Di mushaf ada mim kecil di atas nun sebagai tanda.", "Iqlab has just one friend: ba. In the mushaf a small mim sits on the nun as a sign.") }] },
+    hold(2, ex(J6NUN, "لَيُنْبَذَنَّ"), "hum", HUM2),
+    spot(by(J6NUN, IQL).concat(by(J6NUN, IZ).slice(0, 2), by(J6NUN, IDG).slice(0, 2)), 5),
+    S.learn(ex(J6NUN, "لَيُنْبَذَنَّ")), S.tashih(by(J6NUN, IQL).concat(by(J6NUN, IDG).slice(0, 2)), READ)]; } });
+
+  lvl(w6, { kind: "lesson", title: "مِنْ شَرِّ", lesson: function () { return [
+    { type: "rule", pages: [
+      { scene: "hide", who: "nun", friend: "ش", rule: IKH, say: T("Nuni bertemu 15 huruf lainnya: Nuni bersembunyi, dibaca SAMAR sambil berdengung. Itu Ikhfa.", "Nuni meets the other 15 letters: Nuni hides, said SOFTLY with a hum. That is Ikhfa."), ex: ex(J6NUN, "مِنْ شَرِّ") },
+      { scene: "groups", groups: [IZ, IDG, IQL, IKH], say: T("Sekarang semua lengkap: Izhar jelas, Idgham masuk, Iqlab jadi m, Ikhfa samar!", "Now we have them all: Izhar clear, Idgham merge, Iqlab to m, Ikhfa hidden!") }] },
+    { type: "friends", rule: IKH, pool: POOL12(IKH, "ء ه ع ح غ خ ي ن م و ل ر ب".split(" ")), say: T("Cari teman-teman Ikhfa!", "Find Ikhfa's friends!") },
+    hold(2, ex(J6NUN, "مِنْ شَرِّ"), "hum", HUM2),
+    spot(J6NUN, 6),
+    S.tashih(by(J6NUN, IKH), READ)]; } });
+
+  lvl(w6, { kind: "lesson", title: "نْ ـًـٍـٌ", lesson: function () { return [S.intro("idea", T("Sekarang monster-monster tajwid lapar! Ingat teman-teman Nuni, lalu beri makan monster yang benar.", "Now the tajwid monsters are hungry! Remember Nuni's friends, then feed the right monster.")),
+    spot(J6NUN, 4), S.sort(BNUN, shuffle(J6NUN).slice(0, 6)), spot(J6NUN, 3), S.sort(BNUN, shuffle(J6NUN).slice(0, 6)), S.tashih(shuffle(J6NUN).slice(0, 5), READ)]; } });
+
+  lvl(w6, { kind: "lesson", title: "مْ", lesson: function () { return [
+    { type: "rule", pages: [
+      { scene: "meet", who: "mim", title: T("Kenalan dengan Mimi!", "Meet Mimi!"), say: T("Ini Mimi, mim mati. Mimi juga punya tiga cara dibaca, tergantung huruf sesudahnya.", "This is Mimi, a resting mim. Mimi also has three ways to be read, depending on the next letter.") },
+      { scene: "hide", who: "mim", friend: "ب", rule: IKS, say: T("Bertemu ب: Mimi samar sambil berdengung. Ikhfa syafawi.", "Before ب: Mimi is soft, with a hum. Ikhfa syafawi."), ex: ex(J6MIM, "تَرْمِيهِمْ بِحِجَارَةٍ") },
+      { scene: "merge", who: "mim", friend: "م", rule: IDM, say: T("Bertemu م: Mimi masuk, berdengung. Idgham mimi.", "Before م: Mimi merges, humming. Idgham mimi."), ex: ex(J6MIM, "أَطْعَمَهُمْ مِنْ جُوعٍ") },
+      { scene: "clear", who: "mim", friend: "د", rule: IZS, say: T("Bertemu huruf lainnya: Mimi dibaca jelas. Izhar syafawi.", "Before any other letter: Mimi is clear. Izhar syafawi."), ex: ex(J6MIM, "لَكُمْ دِينُكُمْ") }] },
+    spot(J6MIM, 5, "mim"),
+    S.sort(BMIM, shuffle(J6MIM).slice(0, 6), T("Mim mati: bertemu ب samar, bertemu م masuk, selain itu jelas.", "Mim sakinah: hidden before ب, merged into م, clear before the rest.")),
+    S.tashih(J6MIM.slice(0, 5), READ)]; } });
+
+  lvl(w6, { kind: "lesson", title: "جَاءَ", lesson: function () { return [
+    { type: "rule", pages: [
+      { scene: "stretch", word: "قَالَ", beats: 2, rule: MJ, title: T("Mad: bacaan panjang", "Mad: long vowels"), say: T("Huruf mad membuat bacaan panjang seperti karet ditarik: biasanya 2 ketukan. Qoola!", "A mad letter stretches the sound like a rubber band: usually 2 beats. Qaala!") },
+      { scene: "stretch", word: "جَاءَ", beats: 5, rule: MW, title: T("Mad wajib", "Mad wajib"), say: T("Kalau sesudah mad ada hamzah di KATA YANG SAMA, tarik lebih panjang: 4 sampai 5 ketukan. Itu mad wajib.", "If a hamzah follows the mad in the SAME word, stretch longer: 4 to 5 beats. That is mad wajib."), ex: ex(J6MAD, "إِذَا جَاءَ") },
+      { scene: "stretch", word: "يَا أَيُّهَا", beats: 4, rule: MJ, title: T("Mad jaiz", "Mad jaiz"), say: T("Kalau hamzahnya ada di KATA BERIKUTNYA, itu mad jaiz: boleh 2 sampai 5 ketukan, ikuti guru ngajimu.", "If the hamzah is in the NEXT word, that is mad jaiz: 2 to 5 beats, follow your teacher."), ex: ex(J6MAD, "قُلْ يَا أَيُّهَا") }] },
+    hold(2, J2MAD[0], "mad", T("Tarik bacaan qoola 2 ketukan: tahan tombolnya!", "Stretch qaala for 2 beats: hold the button!")),
+    hold([4, 5], ex(J6MAD, "إِذَا جَاءَ"), "mad", T("Mad wajib: tahan 4 sampai 5 ketukan!", "Mad wajib: hold for 4 to 5 beats!")),
+    S.sort(BMAD, J6MAD, T("Hamzah di kata yang sama atau kata berikutnya?", "Is the hamzah in the same word or the next one?")),
+    S.tashih(J6MAD, READ)]; } });
+
+  lvl(w6, { kind: "boss", title: T("Ujian Jilid 6", "Book 6 Test"), items: J6NUN.concat(J6MIM).concat(J6MAD), lesson: function () { return [
+    S.intro("pose-37", T("Ujian Istana Tajwid! Ingat Nuni, Mimi, dan mad. Bismillah!", "Tajwid Palace test! Remember Nuni, Mimi and the mads. Bismillah!")),
+    spot(J6NUN, 4), S.sort(BNUN, shuffle(J6NUN).slice(0, 6)), spot(J6MIM, 3, "mim"), S.sort(BMAD, J6MAD), hold([4, 5], ex(J6MAD, "إِذَا جَاءَ"), "mad", T("Mad wajib: tahan 4 sampai 5 ketukan!", "Mad wajib: hold for 4 to 5 beats!")),
+    S.tashih(shuffle(J6NUN.concat(J6MIM)).slice(0, 8), T("Tashih: {k} membaca, Abi/Umi menilai.", "Reading check: {k} reads, a parent listens."))]; } });
 
   /* Jilid 7 — Gerbang Al-Qur'an */
   var w7 = world({ n: 7, key: "quran", emoji: "🕌", color: "#C9A227", bg: "linear-gradient(180deg,#FFF3C4,#E9C25A)",
@@ -504,6 +602,7 @@
       case "waqaf": return waqafSteps(lv);
       case "surah": return surahSteps(lv);
       case "khatam": return [{ type: "khatam" }];
+      case "lesson": return lv.lesson();
     }
     return [];
   };

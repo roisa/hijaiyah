@@ -122,12 +122,20 @@
 
   // say one Arabic text
   function noQ() { if (A.onNoAyah) A.onNoAyah(); return Promise.resolve(); }
+  // a Qur'an word or phrase plays the real recitation of the ayah it comes from (never a computer voice)
+  function playAyah(sNum, aNum) {
+    var f = A.ayahFile(sNum, aNum), local = "audio/quran/" + f, cdn = "https://everyayah.com/data/" + A.reciter + "/" + f;
+    var allowCdn = !window.HJ_APP_BUILD && (HJ.store ? HJ.store.get().settings.cdn !== false : true);
+    return playUrl(local).catch(function () { return allowCdn ? playUrl(cdn).catch(noQ) : noQ(); });
+  }
+  A.qref = function (t) { var r = HJ.QTEXT && HJ.QTEXT[norm(t)]; return Array.isArray(r) ? r : null; };
   function sayOne(t) {
     var c = clipFor(t);
     // Qur'an words are never read by the phone's computer voice: no recorded clip → silence (and the one-time "no audio" note)
     var isQ = HJ.QTEXT && HJ.QTEXT[norm(t)];
     if (c) return playUrl(c).catch(function () { return isQ ? noQ() : false; });      // never the phone voice when Mo's clip exists
-    return isQ ? noQ() : tts(t, "ar");
+    if (isQ) { var ref = A.qref(t), su = ref && HJ.surah && HJ.surah(ref[0]); return su ? playAyah(su.number, ref[1]) : noQ(); }
+    return tts(t, "ar");
   }
 
   // au: "text" | ["text", …] (read one by one, onEach(i) for highlighting)
