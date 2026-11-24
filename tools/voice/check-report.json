@@ -2537,6 +2537,488 @@
   "file": "audio/lines/lines-52f88b47.mp3"
  },
  {
+  "id": "kata-8d24f287",
+  "text": "تَبَ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-8d24f287.mp3"
+ },
+ {
+  "id": "kata-dadaefab",
+  "text": "كَتَ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-dadaefab.mp3"
+ },
+ {
+  "id": "kata-f686a29a",
+  "text": "جَبَ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "جده",
+   "جبه",
+   "جدا"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-f686a29a.mp3"
+ },
+ {
+  "id": "kata-8ba977c1",
+  "text": "نَبَ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "نبا",
+   "نعم",
+   "نبي"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-8ba977c1.mp3"
+ },
+ {
+  "id": "kata-0c4fc907",
+  "text": "سَلَ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-0c4fc907.mp3"
+ },
+ {
+  "id": "kata-ff5385c2",
+  "text": "هَلَ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "هلا",
+   "يا هلا",
+   "هلا هلا"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-ff5385c2.mp3"
+ },
+ {
+  "id": "kata-866929e0",
+  "text": "مَعَ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "مع",
+   "مع مع",
+   "مع من"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-866929e0.mp3"
+ },
+ {
+  "id": "kata-b492f429",
+  "text": "لَمَ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-b492f429.mp3"
+ },
+ {
+  "id": "kata-51f56e4a",
+  "text": "فَتَ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "فتح",
+   "فته",
+   "فتى"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-51f56e4a.mp3"
+ },
+ {
+  "id": "kata-bde81eff",
+  "text": "أَجْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "اج",
+   "حج",
+   "ج"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-bde81eff.mp3"
+ },
+ {
+  "id": "kata-e3dbff24",
+  "text": "إِدْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "جده",
+   "جدا",
+   "جد"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-e3dbff24.mp3"
+ },
+ {
+  "id": "kata-87d66bfd",
+  "text": "إِبْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "اب",
+   "ا ب"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-87d66bfd.mp3"
+ },
+ {
+  "id": "kata-5f70a618",
+  "text": "أَطْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-5f70a618.mp3"
+ },
+ {
+  "id": "kata-c464f0b3",
+  "text": "إِجْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-c464f0b3.mp3"
+ },
+ {
+  "id": "kata-599d2536",
+  "text": "إِطْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-599d2536.mp3"
+ },
+ {
+  "id": "kata-ccdcdb15",
+  "text": "إِقْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-ccdcdb15.mp3"
+ },
+ {
+  "id": "kata-74f04371",
+  "text": "عَيْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-74f04371.mp3"
+ },
+ {
+  "id": "kata-14ec8370",
+  "text": "يَوْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "جو",
+   "جوجو",
+   "جو جو"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-14ec8370.mp3"
+ },
+ {
+  "id": "kata-f7aa47b0",
+  "text": "تَيْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-f7aa47b0.mp3"
+ },
+ {
+  "id": "kata-ab523b75",
+  "text": "بَوْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "الضوء",
+   "ضوء"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-ab523b75.mp3"
+ },
+ {
+  "id": "kata-4fbac4ac",
+  "text": "قَوْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-4fbac4ac.mp3"
+ },
+ {
+  "id": "kata-4d03d012",
+  "text": "خَوْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-4d03d012.mp3"
+ },
+ {
+  "id": "kata-689401a3",
+  "text": "لَوْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "لو",
+   "لولو",
+   "لو لو"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-689401a3.mp3"
+ },
+ {
+  "id": "kata-be021507",
+  "text": "لَيْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-be021507.mp3"
+ },
+ {
+  "id": "kata-22132d6c",
+  "text": "خَيْ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-22132d6c.mp3"
+ },
+ {
+  "id": "kata-5f50af7c",
+  "text": "لَيْلٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "ليلو",
+   "ليل",
+   "ليلى"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-5f50af7c.mp3"
+ },
+ {
+  "id": "kata-10e0ffcc",
+  "text": "يَوْمٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "يوم",
+   "اليوم"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-10e0ffcc.mp3"
+ },
+ {
+  "id": "kata-5b83dd1c",
+  "text": "زَيْتٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "زيتون",
+   "الزيتون",
+   "البيت"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-5b83dd1c.mp3"
+ },
+ {
+  "id": "kata-2b117aca",
+  "text": "مَوْزٌ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "موز",
+   "موزون",
+   "موزونه"
+  ],
+  "ok": true,
+  "file": "audio/extra/kata-2b117aca.mp3"
+ },
+ {
+  "id": "kata-ed6e2ab2",
+  "text": "أَقَّ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-ed6e2ab2.mp3"
+ },
+ {
+  "id": "kata-44d8d47d",
+  "text": "أَتَّ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-44d8d47d.mp3"
+ },
+ {
+  "id": "kata-59f00176",
+  "text": "أَبَّ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "حبه",
+   "هبه",
+   "احبه"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-59f00176.mp3"
+ },
+ {
+  "id": "kata-52b81ddb",
+  "text": "أَكَّ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "مكه",
+   "اوكي"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-52b81ddb.mp3"
+ },
+ {
+  "id": "kata-800960a8",
+  "text": "أَرَّ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "حره",
+   "هره"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-800960a8.mp3"
+ },
+ {
+  "id": "kata-1fae31eb",
+  "text": "أَسَّ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-1fae31eb.mp3"
+ },
+ {
+  "id": "kata-72d84c2e",
+  "text": "أَلَّ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "هلا",
+   "هله",
+   "هلا هلا"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-72d84c2e.mp3"
+ },
+ {
+  "id": "kata-d6aad475",
+  "text": "أَدَّ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [
+   "عده",
+   "عدي",
+   "عدن"
+  ],
+  "ok": false,
+  "file": "audio/extra/kata-d6aad475.mp3"
+ },
+ {
+  "id": "kata-db833f47",
+  "text": "إٍ",
+  "lang": "ar",
+  "sec": "kata",
+  "heard": [],
+  "ok": false,
+  "file": "audio/extra/kata-db833f47.mp3"
+ },
+ {
+  "id": "lines-335a0d16",
+  "text": "Sekarang tiga huruf bergandengan!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "huruf bergandengan",
+   "huruf berjalan dengan"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-335a0d16.mp3"
+ },
+ {
+  "id": "lines-fbbd1fce",
+  "text": "Kasrah lalu ya: dibaca panjang 2 ketukan, bii!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-fbbd1fce.mp3"
+ },
+ {
+  "id": "lines-5feba846",
+  "text": "Dhammah lalu wau: dibaca panjang 2 ketukan, buu!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-5feba846.mp3"
+ },
+ {
+  "id": "lines-1a2585dd",
+  "text": "Sekarang cari pantulannya di ayat Al-Qur'an!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "ayat Alquran",
+   "Alquran",
+   "di ayat al-quran"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-1a2585dd.mp3"
+ },
+ {
+  "id": "lines-2c54a828",
+  "text": "Bacaan lembut ai / au di dalam kata dan ayat.",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [],
+  "ok": false,
+  "file": "audio/lines/lines-2c54a828.mp3"
+ },
+ {
+  "id": "lines-ae8287d1",
+  "text": "Tasydid di dalam ayat Al-Qur'an. Tekan hurufnya!",
+  "lang": "id",
+  "sec": "lines",
+  "heard": [
+   "masjid di dalam ayat Alquran",
+   "di dalam ayat Alquran",
+   "masjid di dalam ayat Al Quran"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-ae8287d1.mp3"
+ },
+ {
   "id": "lines-dd959511",
   "text": "Alif lam qamariyah: lam-nya dibaca jelas, seperti bulan yang terang. Al-qomar!",
   "lang": "id",
@@ -2564,9 +3046,9 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "14 huruf qamariyah 14 huruf Syamsiah",
-   "14 huruf Qomariyah 14 huruf Syamsiah",
-   "14 huruf qamariah 14 huruf Syamsiah"
+   "huruf-huruf Syamsiah",
+   "huruf-huruf Syamsiyah",
+   "huruf huruf Syamsiah"
   ],
   "ok": false,
   "file": "audio/lines/lines-fd2eadbe.mp3"
@@ -2577,10 +3059,11 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "hari",
-   "bintang yang tertutup hari"
+   "seperti bintang yang tertutup cahaya matahari Azzam",
+   "seperti bintang yang tertutup cahaya matahari Azam",
+   "seperti bintang yang tertutup cahaya matahari asam"
   ],
-  "ok": true,
+  "ok": false,
   "file": "audio/lines/lines-6dd39e3a.mp3"
  },
  {
@@ -2589,11 +3072,11 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "bertemu Nun",
-   "bertemu Nun tasydid",
-   "bertemu Nun lama"
+   "bertemu Nun telah masuk dan hurufnya di takdir",
+   "bertemu Nun telah masuk dan hurufnya di taqdim",
+   "bertemu Nun telah masuk dan hurufnya di takdim"
   ],
-  "ok": true,
+  "ok": false,
   "file": "audio/lines/lines-4d676f23.mp3"
  },
  {
@@ -2601,11 +3084,8 @@
   "text": "Ujian Kota Tasydid! Bismillah!",
   "lang": "id",
   "sec": "lines",
-  "heard": [
-   "ujian",
-   "pujian"
-  ],
-  "ok": true,
+  "heard": [],
+  "ok": false,
   "file": "audio/lines/lines-f9801372.mp3"
  },
  {
@@ -2614,11 +3094,11 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "nun mati huruf nun dengan sukun di atasnya tidak punya harokat jadi bunyinya hanya",
-   "nun mati huruf nun dengan sukun di atasnya tidak punya harokat jadi bunyinya hanya m",
-   "nun mati huruf nun dengan sukun di atasnya tidak punya harokat jadi bunyinya hanya n"
+   "huruf nun sukun",
+   "huruf nun",
+   "huruf sukun"
   ],
-  "ok": false,
+  "ok": true,
   "file": "audio/lines/lines-3dee3e07.mp3"
  },
  {
@@ -2627,11 +3107,11 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "bunyinya juga",
-   "bunyinya",
-   "bunyi"
+   "tanwin dua harakat kecil di akhir kata bunyinya juga n = n jadi tanwin juga Nuni",
+   "tanwin dua harokat kecil di akhir kata bunyinya juga n = n jadi tanwin juga Nuni",
+   "tanwin dua harakat kecil di akhir kata bunyinya juga n = n jadi tanwin juga nuny"
   ],
-  "ok": true,
+  "ok": false,
   "file": "audio/lines/lines-27c5f3c0.mp3"
  },
  {
@@ -2652,8 +3132,12 @@
   "text": "Ada empat cara: Izhar jelas, Idgham masuk, Iqlab jadi m, dan Ikhfa samar. Kita pelajari satu per satu!",
   "lang": "id",
   "sec": "lines",
-  "heard": [],
-  "ok": false,
+  "heard": [
+   "kitab",
+   "kita belajar",
+   "kita pelajari"
+  ],
+  "ok": true,
   "file": "audio/lines/lines-54d56133.mp3"
  },
  {
@@ -2662,11 +3146,11 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "huruf tenggorokan huruf-huruf ini",
-   "semua huruf tenggorokan huruf-huruf ini",
-   "huruf tenggorokan huruf-huruf ini Di dalam tenggorokan"
+   "huruf tenggorokan",
+   "semua huruf tenggorokan",
+   "kamu huruf tenggorokan"
   ],
-  "ok": false,
+  "ok": true,
   "file": "audio/lines/lines-b089649c.mp3"
  },
  {
@@ -2693,9 +3177,9 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "Yuni bertemu ya Nun mim wawu huruf itu sambil berdengung dua ketukan",
-   "Yuni bertemu ya Nun mim wawu masuk ke huruf itu sambil berdengung dua ketukan",
-   "Yuni bertemu ya Nun mim wawu masuk ke huruf itu sambil berdengung dua ketukan itu"
+   "Nun bertemu ya Nun mim wawu nony masuk ke huruf itu sambil berdengung dua ketukan itu",
+   "Nun bertemu ya Nun mim wawu Nuni masuk ke huruf itu sambil berdengung dua ketukan itu",
+   "Nun bertemu ya Nun mim wawu nony masuk ke huruf itu sambil berdengung dua ketukan itu idgham"
   ],
   "ok": false,
   "file": "audio/lines/lines-5e3f8472.mp3"
@@ -2705,11 +3189,7 @@
   "text": "Bertemu lam atau ra, Nuni juga masuk, tapi TANPA dengung.",
   "lang": "id",
   "sec": "lines",
-  "heard": [
-   "bertemu lam atau ro",
-   "bertemu lam atau rok",
-   "bertemu lam atau ro lu juga"
-  ],
+  "heard": [],
   "ok": false,
   "file": "audio/lines/lines-db6fada8.mp3"
  },
@@ -2718,7 +3198,11 @@
   "text": "Enam teman Idgham: ya, nun, mim, wau (berdengung), lam dan ra (tanpa dengung).",
   "lang": "id",
   "sec": "lines",
-  "heard": [],
+  "heard": [
+   "Nun mim Wow berdengung",
+   "Nun mim wawu berdengung",
+   "Wow berdengung"
+  ],
   "ok": false,
   "file": "audio/lines/lines-cade95ba.mp3"
  },
@@ -2728,9 +3212,9 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "nun mati bertemu ba berubah menjadi Bunyi m sambil berdengung itu",
-   "nun mati bertemu ba berubah menjadi Bunyi m sambil berdengung itu di",
-   "nun mati bertemu ba berubah menjadi Bunyi m sambil berdengung itu iqlab"
+   "Yuni bertemu Nun berubah menjadi Bunyi m sambil berdengung itu itu",
+   "Nun bertemu Nun berubah menjadi Bunyi m sambil berdengung itu itu",
+   "ini berubah menjadi Bunyi m sambil berdengung itu itu"
   ],
   "ok": false,
   "file": "audio/lines/lines-359bb64f.mp3"
@@ -2750,9 +3234,9 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "Nun bertemu 15 huruf lainnya Nuni bersembunyi dibaca samar sambil berdengung itu ikhfa",
-   "Nun bertemu 15 huruf lainnya Noni bersembunyi dibaca samar sambil berdengung itu ikhfa",
-   "Nun bertemu 15 huruf lainnya nuny bersembunyi dibaca samar sambil berdengung itu ikhfa"
+   "Yuni bertemu 15 huruf lainnya bersembunyi dibaca samar-samar berdengung itu ikhfa",
+   "Uni bertemu 15 huruf lainnya bersembunyi dibaca samar-samar berdengung itu ikhfa",
+   "Yuni bertemu 15 huruf lainnya ini bersembunyi dibaca samar-samar berdengung itu ikhfa"
   ],
   "ok": false,
   "file": "audio/lines/lines-44910e45.mp3"
@@ -2781,9 +3265,9 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "cara dibaca tergantung huruf sesudahnya",
-   "acara dibaca tergantung huruf sesudahnya",
-   "dibaca tergantung huruf sesudahnya"
+   "ini Mimi",
+   "ini ini",
+   "ini Mini"
   ],
   "ok": true,
   "file": "audio/lines/lines-4b39f622.mp3"
@@ -2794,9 +3278,9 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "Mimi Syafawi",
-   "Mimi",
-   "mimik"
+   "sambil berdengung Ikhfa Syafawi",
+   "ambil berdengung Ikhfa Syafawi",
+   "sambil bertemu Ikhfa Syafawi"
   ],
   "ok": true,
   "file": "audio/lines/lines-67f0676b.mp3"
@@ -2806,7 +3290,11 @@
   "text": "Bertemu mim: Mimi masuk, berdengung. Idgham mimi.",
   "lang": "id",
   "sec": "lines",
-  "heard": [],
+  "heard": [
+   "bertemu mim berdengung",
+   "bertemu mim bertemu",
+   "bertemu mim mimpi masuk berdengung"
+  ],
   "ok": false,
   "file": "audio/lines/lines-c74266e4.mp3"
  },
@@ -2847,9 +3335,8 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "boleh 2 sampai 5 ketukan ikuti guru ngaji",
-   "boleh 2 sampai 5 ketukan ikuti guru ngaji mu",
-   "itu boleh 2 sampai 5 ketukan ikuti guru ngaji"
+   "ikuti guru ngaji",
+   "guru ngaji"
   ],
   "ok": true,
   "file": "audio/lines/lines-cf2d9112.mp3"
@@ -2869,12 +3356,90 @@
   "lang": "id",
   "sec": "lines",
   "heard": [
-   "ujian tajwid Mimi dan",
-   "ujian tajwid mim dan",
-   "ujian tajwid Nun mim dan"
+   "Bismillah",
+   "pujian Bismillah",
+   "Bismilah"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-5549f1a0.mp3"
+ },
+ {
+  "id": "lines-c2ba7194",
+  "text": "Now three letters hold hands!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "now 3 letters hold hands",
+   "now 3 letters holed hands",
+   "now 3 letters holde hands"
   ],
   "ok": false,
-  "file": "audio/lines/lines-5549f1a0.mp3"
+  "file": "audio/lines/lines-c2ba7194.mp3"
+ },
+ {
+  "id": "lines-84586e7e",
+  "text": "Kasrah then ya: read it long, 2 beats, bii!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Kasra de read it long 2 beats b i i",
+   "kasrah de read it long 2 beats b i i",
+   "Kasra da read it long 2 beats b i i"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-84586e7e.mp3"
+ },
+ {
+  "id": "lines-efd3803e",
+  "text": "Dhammah then waw: read it long, 2 beats, buu!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "dumber than W read it long 2 beats boo",
+   "dumber than W read it long 2 beats Buu",
+   "dumber than W read it long 2 beets boo"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-efd3803e.mp3"
+ },
+ {
+  "id": "lines-73b29d68",
+  "text": "Now find the bounce in real Qur'an verses!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "Now find the bounce and real Quran verses",
+   "Now find the bounce and reel Quran verses",
+   "Now find the bounced and real Quran verses"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-73b29d68.mp3"
+ },
+ {
+  "id": "lines-f93eeac4",
+  "text": "The soft ai / au inside words and verses.",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "the soft AI Au inside words and verses",
+   "the soft AI aw inside words and verses",
+   "the soft AIU inside words and verses"
+  ],
+  "ok": true,
+  "file": "audio/lines/lines-f93eeac4.mp3"
+ },
+ {
+  "id": "lines-88557895",
+  "text": "Shaddah inside real verses. Press the letter!",
+  "lang": "en",
+  "sec": "lines",
+  "heard": [
+   "shudder inside real verses press the letter",
+   "shudder inside reel verses press the letter",
+   "shudder inside Riyal verses press the letter"
+  ],
+  "ok": false,
+  "file": "audio/lines/lines-88557895.mp3"
  },
  {
   "id": "lines-e6927946",
@@ -2883,8 +3448,8 @@
   "sec": "lines",
   "heard": [
    "Moon letters the lamb is said clearly bright like the moon Alomar",
-   "Moon letters the lamb is said clearly bright like the moon Olimar",
-   "Moon letters the lamb is said clearly bright like the moon Alamar"
+   "Moon letters the lamb is said clearly bright like the Moon alkmaar",
+   "Moon letters the lamb is said clearly bright like the moon Olimar"
   ],
   "ok": false,
   "file": "audio/lines/lines-e6927946.mp3"
@@ -2897,7 +3462,7 @@
   "heard": [
    "before cough the alarm is heard",
    "before Cog the alarm is heard",
-   "before cough the lamb is heard"
+   "before caug the alarm is heard"
   ],
   "ok": false,
   "file": "audio/lines/lines-d0a9b7c8.mp3"
@@ -2921,9 +3486,9 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "Sun letters the lamb disappears like a star in the sunlight Ash shams",
-   "son letters the lamb disappears like a star in the sunlight Ash shams",
-   "Sun letters the lamb disappears like a star in the sunlight as shams"
+   "some letters the lamb disappears like a star in the sunlight",
+   "some letters the lamb disappears like a star in the sunlight a",
+   "sum letters the lamb disappears like a star in the sunlight"
   ],
   "ok": false,
   "file": "audio/lines/lines-c9ca2190.mp3"
@@ -2947,11 +3512,12 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "Tassie did Town test Bismillah",
-   "tasi did Town test Bismillah",
-   "tasse did Town test Bismillah"
+   "to seated Town test",
+   "to seated Town tests",
+   "to seated Towne test",
+   " Bismillah"
   ],
-  "ok": false,
+  "ok": true,
   "file": "audio/lines/lines-15488e6f.mp3"
  },
  {
@@ -2960,14 +3526,11 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "this is Noni a resting none a nun with a sukun on top",
-   "this is Noni a resting nun a nun with a sukun on top",
-   "this is Noni a resting Nunn a nun with a sukun on top",
-   " nuni has no vowel so it just says",
-   " Noonie has no vowel so it just says",
-   " nooney has no vowel so it just says"
+   "this is nuni arresting none a nun with a sukun on top nuni has no vowel so it just says Nu",
+   "this is nuni arresting none a nun with a sukun on top nuni has no vowel so it just says n",
+   "this is nuni arresting none a nun with a sukun on top Noonie has no vowel so it just says Nu"
   ],
-  "ok": true,
+  "ok": false,
   "file": "audio/lines/lines-a8549146.mp3"
  },
  {
@@ -2976,9 +3539,9 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "tanwen the double vowel at the end of a word also says N Bun is b u n so tanwen is Noni 2",
-   "tanwin the double vowel at the end of a word also says N Bun is b u n so tanwen is Noni 2",
-   "tanwen the double vowel at the end of a word also says N Bun is b u n so tanwen is nuni 2"
+   "tan when the double vowel at the end of a word also says N Bun is b u n so 101 is Noni 2",
+   "tan when the double vowel at the end of a word also says N Bun is b u n so 101 is noon 2",
+   "tan when the double vowel at the end of a word also says N Bun is b u n so 101 is non 2"
   ],
   "ok": false,
   "file": "audio/lines/lines-8d2f9885.mp3"
@@ -3015,11 +3578,14 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "nooni meets a throat letter Hamza ha in ha gain K ha these letters live deep in the throat",
-   "nooni meets a throat letter hamzah ha in ha gain K ha these letters live deep in the throat",
-   "nooni meets a throat letter hamzy ha in ha gain K ha these letters live deep in the throat"
+   "Noonie meets a throat letter Hamza ha in ha gain kha",
+   "nuni meets a throat letter Hamza ha in ha gain kha",
+   "Noonie meets a throat letter Hamza ha in ha gain K ha",
+   " these letters live deep in the throat",
+   " these letters lyve deep in the throat",
+   " these letterz live deep in the throat"
   ],
-  "ok": false,
+  "ok": true,
   "file": "audio/lines/lines-dff7c78d.mp3"
  },
  {
@@ -3028,9 +3594,12 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "because they're far away nuni has said clearly know whom that is is hard",
-   "because they're far away Noonie has said clearly know whom that is is hard",
-   "because they're far away nooney has said clearly know whom that is is hard"
+   "because they're far away nuni is said clearly know whom",
+   "because they're far away Noonie is said clearly know whom",
+   "because they're far away nooney is said clearly know whom",
+   " that is ishar",
+   " that is isar",
+   " that is isaar"
   ],
   "ok": false,
   "file": "audio/lines/lines-d517ea3c.mp3"
@@ -3041,9 +3610,9 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
+   "remember ishar 6 friends Hamza ha in ha",
    "remember isar 6 friends Hamza ha in ha",
-   "remember isar 6 friends hamzah ha in ha",
-   "remember isar 6 friends hamzy ha in ha"
+   "remember ishar 6 friends hamzah ha in ha"
   ],
   "ok": false,
   "file": "audio/lines/lines-13a26417.mp3"
@@ -3054,14 +3623,11 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "noney meets ya",
-   "Noonie meets ya",
-   "nuni meets ya",
-   " nun mwa nuni merges into it humming for 2 beats that is IGM",
-   " nun mwa Noonie merges into it humming for 2 beats that is IGM",
-   " nun mwa nooney merges into it humming for 2 beats that is IGM"
+   "noney meets ya nun mewa nuni merges into it humming for 2 beats that is IGM",
+   "noney meets ya nun mewa Noonie merges into it humming for 2 beats that is IGM",
+   "noney meets ya nun meiwa nuni merges into it humming for 2 beats that is IGM"
   ],
-  "ok": true,
+  "ok": false,
   "file": "audio/lines/lines-5f33597f.mp3"
  },
  {
@@ -3070,9 +3636,9 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "before lamb or raw non emerges too but without a hum",
-   "before lamb or raw noon emerges too but without a hum",
-   "before lamb or raw none emerges too but without a hum"
+   "before lamb or raw non emerges to but without a hum",
+   "before lamb or raw new emerges to but without a hum",
+   "before lamb or raw non emerges to but without a whom"
   ],
   "ok": false,
   "file": "audio/lines/lines-697cb468.mp3"
@@ -3083,9 +3649,12 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "agents 6 friends ya none mwa with a hum lamb and raw know whom",
-   "agents 6 friends ya none mwah with a hum lamb and raw know whom",
-   "agents 6 friends ya nun mwa with a hum lamb and raw know whom"
+   "igims 6 friends",
+   "igims 6 friendz",
+   "igims 6 frends",
+   " ya nun meme W with a hum lamb and raw Noam",
+   " ya nun meme W with a whom lamb and raw Noam",
+   " yah nun meme W with a hum lamb and raw Noam"
   ],
   "ok": false,
   "file": "audio/lines/lines-f1d00210.mp3"
@@ -3109,9 +3678,12 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "a club has just 1 friend ba in the musaf a small MIM sits on the nun as a sign",
-   "a club has just 1 friend ba in the musaf a small MIM sits on the none as a sign",
-   "a club has just 1 friend ba in the musaf a small mihm sits on the nun as a sign"
+   "the club has just 1 friend",
+   "the club has just won friend",
+   "the club has just 1 frnd",
+   " ba in the musaf a small MIM sits on the nun as a sign",
+   " ba in the musaf a small MIM sits on the none as a sign",
+   " ba in the musaf a small mihm sits on the nun as a sign"
   ],
   "ok": false,
   "file": "audio/lines/lines-47af84fd.mp3"
@@ -3122,17 +3694,11 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "Noonie meets the other 15 letters",
-   "nuni meets the other 15 letters",
-   "nooney meets the other 15 letters",
-   " nuni hides said softly with a hum",
-   " Noonie hides said softly with a hum",
-   " nooney hides said softly with a hum",
-   " that is VA",
-   " that is Ka",
-   " that is Kaa"
+   "noon meets the other 15 letters nuni hides said softly with a hum that is Ka",
+   "noon meets the other 15 letters Noonie hides said softly with a hum that is Ka",
+   "noon meets the other 15 letters nuni hides said softly with a whom that is Ka"
   ],
-  "ok": true,
+  "ok": false,
   "file": "audio/lines/lines-eeff2b25.mp3"
  },
  {
@@ -3141,9 +3707,9 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "now we have them all is hard clear it come merge iCloud to mha Hidden",
-   "now we have them all is hard clear it come merge iCloud to mka Hidden",
-   "now we have them all is hard clear it come merge iCloud to MFA hidden"
+   "now we have the all ishar clear gum merge a lab to m",
+   "now we have the all ishar clear gum merge iCloud to m",
+   "now we have the awl ishar clear gum merge a lab to m"
   ],
   "ok": false,
   "file": "audio/lines/lines-a212960b.mp3"
@@ -3154,9 +3720,9 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "now the tajweed monsters are hungry remember noon's friends then feed the right monster",
    "now the tajweed monsters are hungry remember nuns friends then feed the right monster",
-   "now the tajweed monsters are hungry remember nones friends then feed the right monster"
+   "now the tajweed monsters are hungry remember nones friends then feed the right monster",
+   "now the tajweed monsters are hungry remember nun's friends then feed the right monster"
   ],
   "ok": false,
   "file": "audio/lines/lines-d235b0fa.mp3"
@@ -3167,14 +3733,11 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "this is Mimi a resting Mim",
-   "this is Mimi a resting mihm",
-   "this is Mimi a resting mimm",
-   " Mimi also has 3 ways to be read depending on the next letter",
-   " Mimi also has 3 ways to be red depending on the next letter",
-   " mimie also has 3 ways to be read depending on the next letter"
+   "this is Mimi arresting MIM Mimi also has 3 ways to be read depending on the next letter",
+   "this is Mimi arresting MIM Mimi also has 3 ways to be red depending on the next letter",
+   "this is Mimi arresting mihm Mimi also has 3 ways to be read depending on the next letter"
   ],
-  "ok": true,
+  "ok": false,
   "file": "audio/lines/lines-7b24d44e.mp3"
  },
  {
@@ -3183,12 +3746,9 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "before",
-   "before ba",
-   "before B",
-   " ba Mimi is soft with a hum",
-   " ba Mimi is soft with a whom",
-   " ba mimie is soft with a hum"
+   "before ba Mimi is soft with the hum",
+   "before ba Mimi is soft with a hum",
+   "before ba Mimi is soft with the whom"
   ],
   "ok": true,
   "file": "audio/lines/lines-3c101f91.mp3"
@@ -3199,9 +3759,9 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "before MIM Mimi merges humming it Mimi",
-   "before MIM Mimi merges humming Mimi",
-   "before mihm Mimi merges humming it Mimi"
+   "before MIM Mimi merges humming idram Mimi",
+   "before mihm Mimi merges humming idram Mimi",
+   "before MIM MIM merges humming idram Mimi"
   ],
   "ok": false,
   "file": "audio/lines/lines-a056df27.mp3"
@@ -3212,17 +3772,11 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "before any other letter",
-   "before any other lettere",
-   "before any other letter'",
-   " Mimi is clear",
-   " mimie is clear",
-   " Mimi is clearer",
-   " is har safawi",
-   " is Harr safawi",
-   " is haar safawi"
+   "before any other letter Mimi is clear is har shafawi",
+   "before any other letter Mimi is clear is Harr shafawi",
+   "before any other letter Mimi is clear is haar shafawi"
   ],
-  "ok": true,
+  "ok": false,
   "file": "audio/lines/lines-df392bb8.mp3"
  },
  {
@@ -3231,11 +3785,14 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "a mad letter stretches the sound like a rubber band usually 2 beats Kala",
-   "a mad letter stretches the sound like a rubber band usually 2 beats Cala",
-   "a mad letter stretches the sound like a rubber band usually 2 beats Kalla"
+   "a mad letter stretches the sound like a rubber band usually 2 Beats",
+   "a mad letter stretches the sound like a rubber band usually 2 beets",
+   "a MADD letter stretches the sound like a rubber band usually 2 Beats",
+   " Kala",
+   " Cala",
+   " Kalla"
   ],
-  "ok": false,
+  "ok": true,
   "file": "audio/lines/lines-a434c6d7.mp3"
  },
  {
@@ -3257,9 +3814,9 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "if the Hamza is in the next word that is mad Jays 2 to 5 beats follow your teacher",
-   "if the hamzah is in the next word that is mad Jays 2 to 5 beats follow your teacher",
-   "if the Hamza is in the next word that is mad JS 2 to 5 beats follow your teacher"
+   "if the Hamza is in the next word that is mad J is 2 to 5 beats follow your teacher",
+   "if the hamzah is in the next word that is mad J is 2 to 5 beats follow your teacher",
+   "if the Hamza is in the next word that is mad Jazz 2 to 5 beats follow your teacher"
   ],
   "ok": false,
   "file": "audio/lines/lines-1d790d8f.mp3"
@@ -3283,11 +3840,11 @@
   "lang": "en",
   "sec": "lines",
   "heard": [
-   "tajwid Palace test remember nuni Mimi and the mads Bismillah",
-   "tajwid Palace test remember Noonie Mimi and the mads Bismillah",
-   "tajwid Palace test remember nooney Mimi and the mads Bismillah"
+   "tajweed Palace test remember nuni nimi and the mads Bismillah",
+   "tajweed Palace test remember Noonie nimi and the mads Bismillah",
+   "tajweed Palace test remember nooney nimi and the mads Bismillah"
   ],
-  "ok": true,
+  "ok": false,
   "file": "audio/lines/lines-9991e06b.mp3"
  }
 ]
